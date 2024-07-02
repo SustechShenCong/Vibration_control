@@ -1,0 +1,212 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../../index.html"><img alt="Logo" class="logo" src="../../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>EVALUATE_FEXT</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-09" name="DC.date"/><meta content="evaluate_Fext.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>EVALUATE_FEXT</h1><pre class="codeinput"><span class="keyword">function</span> Fext = evaluate_Fext(obj,t,z)
+        </pre><p>This function evaluates the external forcing at a given time t for a dynamical system object in the first-order form.</p><p>﻿The quasiperiodic first order system force is given as a Taylor expansion on coordinates of the physical coordinates:</p><p><span class="MathJax_Preview"><img alt="$$ \mathbf {F}(\mathbf{z},\mathbf{\phi}) = \left[\begin{array}{c} F^1(\mathbf{z},\mathbf{\phi})
+    \\ \vdots \\  F^{n}(\mathbf{z},\mathbf{\phi})\end{array}\right], \quad
+    F^i(\mathbf{z},\mathbf{\phi})
+    = \sum_{\mathbf{n}\in \bf{N}^{n}}
+    F^i_{\mathbf{n}}(\mathbf{\phi}) \mathbf{z}^\mathbf{n} $$" src="evaluate_Fext_eq15829553212566558155-Rescaled.png" style="width: 294.0px; height: auto;"/></span><script type="math/tex"> \mathbf {F}(\mathbf{z},\mathbf{\phi}) = \left[\begin{array}{c} F^1(\mathbf{z},\mathbf{\phi})
+    \\ \vdots \\  F^{n}(\mathbf{z},\mathbf{\phi})\end{array}\right], \quad
+    F^i(\mathbf{z},\mathbf{\phi})
+    = \sum_{\mathbf{n}\in \bf{N}^{n}}
+    F^i_{\mathbf{n}}(\mathbf{\phi}) \mathbf{z}^\mathbf{n} </script></p><p>﻿The force coefficients are given as a fourier expansion in terms of the phase variable <span class="MathJax_Preview"><img alt="$\mathbf{\phi} = \mathbf{\Omega}t$" src="evaluate_Fext_eq13351817377717133728-Rescaled.png" style="width: 40.8px; height: auto;"/></span><script type="math/tex">\mathbf{\phi} = \mathbf{\Omega}t</script></p><p><span class="MathJax_Preview"><img alt="$$ F^b_{\mathbf{k}}(\mathbf{\phi}) = \sum_{\mathbf{\phi}
+ \in \bf{Z}^k} F^b_{\mathbf{k},\mathbf{\kappa}}  e^{i \mathbf{\kappa},
+  \mathbf{\phi}} $$" src="evaluate_Fext_eq07975536626364271611-Rescaled.png" style="width: 121.19999999999999px; height: auto;"/></span><script type="math/tex"> F^b_{\mathbf{k}}(\mathbf{\phi}) = \sum_{\mathbf{\phi}
+ \in \bf{Z}^k} F^b_{\mathbf{k},\mathbf{\kappa}}  e^{i \mathbf{\kappa},
+  \mathbf{\phi}} </script></p><pre class="codeinput"><span class="keyword">switch</span> obj.order
+    <span class="keyword">case</span> 1
+        <span class="keyword">if</span> isempty(obj.Fext)
+            Fext = sparse(obj.N,1);
+        <span class="keyword">else</span>
+            assert(~isempty(obj.Omega), <span class="string">' Fext cannot be evaluated as the Omega property of the DS class is empty'</span>)
+            <span class="comment">% This function assumes periodic forcing</span>
+            nt = size(z,2);
+            Fext = zeros(size(obj.N,nt));
+
+            num_kappa = numel(obj.Fext.data);
+
+            <span class="keyword">for</span> i = 1:num_kappa
+                <span class="comment">% Highest order this Force contributes at</span>
+                order = numel(obj.Fext.data(i).F_n_k)-1;
+
+                <span class="comment">% zeroth order</span>
+                F0 = obj.Fext.data(i).F_n_k(1);
+
+                <span class="keyword">if</span> ~isempty(F0) &amp;&amp; ~isempty(F0.coeffs)
+                    Fext = Fext + real( F0.coeffs * exp(1i *  obj.Fext.data(i).kappa * obj.Omega .* t));
+                <span class="keyword">end</span>
+
+                <span class="keyword">for</span> j = 1:order <span class="comment">% array starting at 0</span>
+                    <span class="comment">%Contribution to order j Forcing with harmonic kappa_i</span>
+                    Fij = obj.Fext.data(i).F_n_k(j+1);
+                    Fext = Fext + real(<a href="../../Library/Features/misc/expand_multiindex.html">expand_multiindex</a>(Fij,z) .* <span class="keyword">...</span>
+                        exp(1i *  obj.Fext.data(i).kappa * obj.Omega .* t));
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+            <span class="keyword">if</span> obj.order==2
+            assert(size(obj.Omega,2) == size(obj.fext.epsilon,2),<span class="string">'epsilon and Omega must have same number of columns'</span>);
+            <span class="keyword">else</span>
+            assert(size(obj.Omega,2) == size(obj.Fext.epsilon,2),<span class="string">'epsilon and Omega must have same number of columns'</span>);
+            <span class="keyword">end</span>
+            Fext = Fext * diag(obj.Fext.epsilon);
+            <span class="keyword">if</span> obj.Options.BaseExcitation
+                Fext = Fext*diag((obj.Omega).^2);
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">case</span> 2
+        x  = z(1:obj.n,:);
+        xd  = z(obj.n+1:obj.N,:);
+        nt = size(x,2);
+        Fext = [obj.<a href="../../Library/DynamicalSystem/compute_fext.html">compute_fext</a>(t,x,xd);
+                sparse(obj.n,nt)];
+<span class="keyword">end</span>
+        </pre><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% EVALUATE_FEXT 
+function Fext = evaluate_Fext(obj,t,z)
+%% 
+% This function evaluates the external forcing at a given
+% time t for a dynamical system object in the first-order form.
+%
+% ﻿The quasiperiodic first order system force is given as a Taylor expansion on coordinates of
+% the physical coordinates:
+%   
+% $$ \mathbf {F}(\mathbf{z},\mathbf{\phi}) = \left[\begin{array}{c} F^1(\mathbf{z},\mathbf{\phi})
+%     \\ \vdots \\  F^{n}(\mathbf{z},\mathbf{\phi})\end{array}\right], \quad
+%     F^i(\mathbf{z},\mathbf{\phi})
+%     = \sum_{\mathbf{n}\in \bf{N}^{n}}
+%     F^i_{\mathbf{n}}(\mathbf{\phi}) \mathbf{z}^\mathbf{n} $$
+%
+% ﻿The force coefficients are given as a fourier expansion in terms of the phase variable $\mathbf{\phi} = \mathbf{\Omega}t$
+%   
+% $$ F^b_{\mathbf{k}}(\mathbf{\phi}) = \sum_{\mathbf{\phi}
+%  \in \bf{Z}^k} F^b_{\mathbf{k},\mathbf{\kappa}}  e^{i \mathbf{\kappa},
+%   \mathbf{\phi}} $$
+%
+
+
+switch obj.order
+    case 1
+        if isempty(obj.Fext)
+            Fext = sparse(obj.N,1);
+        else
+            assert(~isempty(obj.Omega), ' Fext cannot be evaluated as the Omega property of the DS class is empty')
+            % This function assumes periodic forcing
+            nt = size(z,2);
+            Fext = zeros(size(obj.N,nt));
+
+            num_kappa = numel(obj.Fext.data);
+
+            for i = 1:num_kappa
+                % Highest order this Force contributes at
+                order = numel(obj.Fext.data(i).F_n_k)-1;
+
+                % zeroth order
+                F0 = obj.Fext.data(i).F_n_k(1);
+
+                if ~isempty(F0) && ~isempty(F0.coeffs)
+                    Fext = Fext + real( F0.coeffs * exp(1i *  obj.Fext.data(i).kappa * obj.Omega .* t));
+                end
+
+                for j = 1:order % array starting at 0
+                    %Contribution to order j Forcing with harmonic kappa_i 
+                    Fij = obj.Fext.data(i).F_n_k(j+1);
+                    Fext = Fext + real(<a href="../../Library/Features/misc/expand_multiindex.html">expand_multiindex</a>(Fij,z) .* ...
+                        exp(1i *  obj.Fext.data(i).kappa * obj.Omega .* t));                    
+                end  
+            end
+            if obj.order==2
+            assert(size(obj.Omega,2) == size(obj.fext.epsilon,2),'epsilon and Omega must have same number of columns');
+            else
+            assert(size(obj.Omega,2) == size(obj.Fext.epsilon,2),'epsilon and Omega must have same number of columns');
+            end                
+            Fext = Fext * diag(obj.Fext.epsilon);
+            if obj.Options.BaseExcitation
+                Fext = Fext*diag((obj.Omega).^2);
+            end
+        end
+    case 2
+        x  = z(1:obj.n,:);
+        xd  = z(obj.n+1:obj.N,:);
+        nt = size(x,2);
+        Fext = [obj.<a href="../../Library/DynamicalSystem/compute_fext.html">compute_fext</a>(t,x,xd);
+                sparse(obj.n,nt)];
+end
+
+
+            ##### SOURCE END #####
+        --></body></html></body></html>

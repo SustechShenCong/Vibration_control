@@ -1,0 +1,677 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../../index.html"><img alt="Logo" class="logo" src="../../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>LINEAR SPECTRAL ANALYSIS</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-09" name="DC.date"/><meta content="linear_spectral_analysis.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>LINEAR SPECTRAL ANALYSIS</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">Linear Spectral Analysis</a></li><li><a href="#17">Sort modes:</a></li><li><a href="#18">Normalize modes:</a></li><li><a href="#19">Remove stiff modes:</a></li><li><a href="#20">Remove zero modes:</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> [V, D, U] = linear_spectral_analysis(obj)
+        </pre><h2 id="2">Linear Spectral Analysis</h2><p>This function performs a (truncated) linear spectral analysis on the linear part of the dynamical system described by the dynamical system object.</p><p>For <b>first order systems</b> the eigenproblems which need to be solved read</p><p><span class="MathJax_Preview"><img alt="$$(\bf{A}- \lambda_j \bf{B})\bf{v}_j = \bf{0}, \quad \bf{u}^*_j(\bf{A}- \lambda_j \bf{B}) = \bf{0}$$" src="linear_spectral_analysis_eq15959680255127613029-Rescaled.png" style="width: 214.79999999999998px; height: auto;"/></span><script type="math/tex">(\bf{A}- \lambda_j \bf{B})\bf{v}_j = \bf{0}, \quad \bf{u}^*_j(\bf{A}- \lambda_j \bf{B}) = \bf{0}</script></p><p>For <b>second order mechanical systems</b> the eigenproblems which need to be solved read</p><p><span class="MathJax_Preview"><img alt="$$(\lambda_j^2 \bf{M} + \lambda_j \bf{C} + \bf{K}) \bf \phi_j =  \bf{0} , \quad
+\quad \bf \theta_j^*  (\lambda_j^2 \bf{M} + \lambda_j \bf{C} + \bf{K})   =  \bf{0}$$" src="linear_spectral_analysis_eq06242151232021780945-Rescaled.png" style="width: 314.4px; height: auto;"/></span><script type="math/tex">(\lambda_j^2 \bf{M} + \lambda_j \bf{C} + \bf{K}) \bf \phi_j =  \bf{0} , \quad
+\quad \bf \theta_j^*  (\lambda_j^2 \bf{M} + \lambda_j \bf{C} + \bf{K})   =  \bf{0}</script></p><p>The choice of <span class="MathJax_Preview"><img alt="$\bf A$" src="linear_spectral_analysis_eq06386255411109827442-Rescaled.png" style="width: 12.0px; height: auto;"/></span><script type="math/tex">\bf A</script> and <span class="MathJax_Preview"><img alt="$\bf B$" src="linear_spectral_analysis_eq01213994516868336983-Rescaled.png" style="width: 10.799999999999999px; height: auto;"/></span><script type="math/tex">\bf B</script> when setting up the <a href="DynamicalSystem.html">Dynamical System</a> results in displacement and velocity variables that are are inherently related, such that</p><p><span class="MathJax_Preview"><img alt="$$ \bf{v}_{j} =  \left(\begin{array}{c} \bf{\phi}_j  \\ \bf{\phi}_j \lambda_{j}
+\end{array} \right) \quad  \bf{u}_{j} = \left(\begin{array}{c} \bf{\theta}_j  \\
+\bf{\theta}_j \bar{\lambda}_{j} \end{array}\right) $$" src="linear_spectral_analysis_eq18005161879209314096-Rescaled.png" style="width: 182.4px; height: auto;"/></span><script type="math/tex"> \bf{v}_{j} =  \left(\begin{array}{c} \bf{\phi}_j  \\ \bf{\phi}_j \lambda_{j}
+\end{array} \right) \quad  \bf{u}_{j} = \left(\begin{array}{c} \bf{\theta}_j  \\
+\bf{\theta}_j \bar{\lambda}_{j} \end{array}\right) </script></p><p>For model reduction only few of these eigenmodes have to be computed as explained in more detail in <a href="../../Theory/2.%20SSM-Theory.html">SSM-Theory</a>. Therefore a parameter <tt>Nmax</tt> is introduced, which allows to compute a reduced set of eigenvectors and eigenvalues. The default for this parameter is set in the <a href="../Features/Options/DSOptions.html">Dynamical System Options</a></p><p>If the dynamical system has less degrees of freedom than <tt>Nmax</tt>, then the full set of modes is computed. Depending on the structure of the system matrix <span class="MathJax_Preview"><img alt="$\bf{A}$" src="linear_spectral_analysis_eq01297802099725863596-Rescaled.png" style="width: 12.0px; height: auto;"/></span><script type="math/tex">\bf{A}</script> and <span class="MathJax_Preview"><img alt="$\bf{B}$" src="linear_spectral_analysis_eq00658378051342478423-Rescaled.png" style="width: 10.799999999999999px; height: auto;"/></span><script type="math/tex">\bf{B}</script>, distinct algorithms are employed.</p><pre class="codeinput"><span class="keyword">if</span> obj.N &lt; obj.Options.Nmax
+        </pre><pre class="codeinput">    <span class="keyword">if</span> ~issparse(obj.A)
+        <span class="keyword">if</span> norm(obj.B-eye(size(obj.B)))&lt;1e-8
+            [V, LAMBDA, U] = eig(obj.A); <span class="comment">% B=I, CONSISTENT WITH SSMTool 1.0</span>
+        <span class="keyword">else</span>
+            [V, LAMBDA, U] = eig(obj.A,obj.B);
+        <span class="keyword">end</span>
+
+    <span class="keyword">else</span>
+        [V, LAMBDA, U] = eig(full(obj.A),full(obj.B));
+    <span class="keyword">end</span>
+        </pre><p>In the case where the full dynamical system is bigger than <tt>Nmax</tt> only a small subset of the full spectrum and eigenmodes are computed.</p><pre class="codeinput"><span class="keyword">else</span>
+        </pre><pre class="codeinput">    E_max = obj.Options.Emax; <span class="comment">% Number of eigenvalues that are checked for resonances, to guarantee existence of SSM</span>
+    n = obj.n;
+        </pre><p>For second order systems that are subject to Rayleigh type linear damping, the damping matrix can be simultaneously diagonalised with the mass and stiffness matrices.</p><p>In this case we first compute the eigenmodes for the conservative system</p><p><span class="MathJax_Preview"><img alt="$$(\lambda_j^2 \bf{M}  + \bf{K}) \bf \phi_j =  \bf{0} , \quad
+\quad \bf \theta_j^*  (\lambda_j^2 \bf{M}  + \bf{K})   =  \bf{0}$$" src="linear_spectral_analysis_eq11267930319686492003-Rescaled.png" style="width: 237.6px; height: auto;"/></span><script type="math/tex">(\lambda_j^2 \bf{M}  + \bf{K}) \bf \phi_j =  \bf{0} , \quad
+\quad \bf \theta_j^*  (\lambda_j^2 \bf{M}  + \bf{K})   =  \bf{0}</script></p><p>The eigenvalues of the full dynamical system then read</p><p><span class="MathJax_Preview"><img alt="$$ \lambda_{j,+/-} = \frac{-\beta_j +/- \sqrt{\beta_j^2 - 4
+\omega_j}}{2} $$" src="linear_spectral_analysis_eq16334924605737600267-Rescaled.png" style="width: 177.6px; height: auto;"/></span><script type="math/tex"> \lambda_{j,+/-} = \frac{-\beta_j +/- \sqrt{\beta_j^2 - 4
+\omega_j}}{2} </script></p><p>where</p><p><span class="MathJax_Preview"><img alt="$$ \omega_j := \bf{\phi}_j^*\bf{K}\bf{\phi}_j / \mu_j, \quad \beta_j := \bf{\phi}_j^*\bf{C}\bf{\phi}_j / \mu_j , \quad \mu_j := \bf{\phi}_j^*\bf{M}\bf{\phi}_j / \mu_j$$" src="linear_spectral_analysis_eq11689767527097278572-Rescaled.png" style="width: 304.8px; height: auto;"/></span><script type="math/tex"> \omega_j := \bf{\phi}_j^*\bf{K}\bf{\phi}_j / \mu_j, \quad \beta_j := \bf{\phi}_j^*\bf{C}\bf{\phi}_j / \mu_j , \quad \mu_j := \bf{\phi}_j^*\bf{M}\bf{\phi}_j / \mu_j</script></p><pre class="codeinput">    <span class="keyword">if</span> obj.order == 2 &amp;&amp; obj.Options.RayleighDamping
+        </pre><pre class="codeinput">        disp([<span class="string">'Due to high-dimensionality, we compute only the first '</span> num2str(E_max) <span class="string">' eigenvalues with the smallest magnitude. These would also be used to compute the spectral quotients'</span>] )
+        <span class="comment">% Computing undamped eigenvalues and eigenvectors</span>
+
+        disp (<span class="string">'Assuming a proportional damping hypthesis with symmetric matrices'</span>)
+        [PHI, ~, NOT_CONVERGED] = eigs(sparse(obj.K),sparse(obj.M),E_max,<span class="string">'smallestabs'</span>);
+
+        <span class="comment">% Assuming proportional damping for estimating damped eigenvectors</span>
+        LAMBDA = zeros(2*E_max,2*E_max);
+        V = zeros(2*n,2*E_max);
+
+        <span class="comment">% Rearranging eigenvalues</span>
+        <span class="keyword">for</span> j = 1:E_max
+            mu_j = PHI(:,j).'* obj.M * PHI(:,j);
+            omega2_j = (PHI(:,j).'* obj.K * PHI(:,j))/mu_j;
+            beta_j = (PHI(:,j).'* obj.C * PHI(:,j))/mu_j;
+
+            fprintf(<span class="string">'modal damping ratio for %d mode is %d\n'</span>, j, beta_j/(2*sqrt(omega2_j)));
+
+            lambda1 = (-beta_j + sqrt(beta_j^2 - 4 * omega2_j) ) / 2;
+            lambda2 = (-beta_j - sqrt(beta_j^2 - 4 * omega2_j) ) / 2;
+
+
+            LAMBDA(2*j-1,2*j-1) = lambda1;
+            LAMBDA(2*j,2*j) = lambda2;
+
+            V(:,2*j-1) = [PHI(:,j); lambda1*PHI(:,j)];
+            V(:,2*j) = [PHI(:,j); lambda2*PHI(:,j)];
+        <span class="keyword">end</span>
+        U = conj(V);
+
+        <span class="keyword">if</span> NOT_CONVERGED
+            error(<span class="string">'The eigenvalue computation did not converge, please adjust the number of eigenvalues to be computed'</span>)
+        <span class="keyword">end</span>
+
+        <span class="keyword">if</span> ~issymmetric(obj.K) || ~issymmetric(obj.M)
+            disp(<span class="string">'the left eigenvectors may be incorrect in case of asymmetry of matrices'</span>)
+            <span class="comment">%         [W, ~] = eigs(A',B',E_max,'smallestabs');</span>
+            <span class="comment">% we assume here that both eigenvalue problems return eigenvalues in</span>
+            <span class="comment">% the same order.</span>
+        <span class="keyword">end</span>
+        </pre><p>If other linear damping models are employed, a simultaneous diagonalisation is not possible and the full system has to be numerically analysed. To compute the eigenmodes around a certain eigenvalue magnitude an additional parameter <tt>sigma</tt> can be set.</p><pre class="codeinput">    <span class="keyword">else</span>
+        </pre><pre class="codeinput">        <span class="comment">% right eigenvectors</span>
+        [V, Dv] = eigs(obj.A,obj.B,E_max,obj.Options.sigma);
+        </pre><pre class="codeinput">        <span class="keyword">if</span> obj.Options.RemoveZeros
+            [V,Dv] = remove_zero_modes(V,Dv);
+        <span class="keyword">end</span>
+        [Lambda_sorted,I] = sort(diag(Dv),<span class="string">'descend'</span>,<span class="string">'ComparisonMethod'</span>,<span class="string">'real'</span>);
+        <span class="comment">% further sort if real parts are equal (very close)</span>
+        [Lambda_sorted,II] = sort_close_real_different_imag(Lambda_sorted);
+        LAMBDA = diag(Lambda_sorted);
+        V = V(:,I(II));
+        <span class="comment">% rescale V w.r.t mass matrix</span>
+        <span class="keyword">if</span> ~isempty(obj.M)
+            <span class="keyword">for</span> j=1:numel(I)
+                vs = V(1:obj.n,j)'*obj.M*V(1:obj.n,j);
+                V(:,j) = V(:,j)/sqrt(abs(vs));
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+        <span class="comment">% left eigenvectors</span>
+        <span class="keyword">if</span> issymmetric(obj.A) &amp;&amp; issymmetric(obj.B)
+            U = conj(V);
+        <span class="keyword">else</span>
+            [U, Dw] = eigs(obj.A',obj.B',E_max,obj.Options.sigma);
+            <span class="keyword">if</span> obj.Options.RemoveZeros
+                [U,Dw] = remove_zero_modes(U,Dw);
+            <span class="keyword">end</span>
+            [Lambda_sorted,I] = sort(diag(Dw),<span class="string">'descend'</span>,<span class="string">'ComparisonMethod'</span>,<span class="string">'real'</span>);
+            <span class="comment">% further sort if real parts are equal (very close)</span>
+            [Lambda_sorted,II] = sort_close_real_different_imag(Lambda_sorted);
+            <span class="comment">% make sure reordered Dw is consistent with reordered Dv</span>
+            lambda_left = diag(LAMBDA);
+            neigs  = min(numel(Lambda_sorted),numel(lambda_left));
+            idxcom = 1:neigs;
+            assert(norm(Lambda_sorted(idxcom)-lambda_left(idxcom))&lt;1e-3*norm(lambda_left(idxcom)),<span class="keyword">...</span>
+                <span class="string">'Orders for W and V are not consistent'</span>);
+            U = U(:,I(II(idxcom)));
+            U = conj(U);
+            V = V(:,idxcom);
+            LAMBDA = LAMBDA(idxcom,idxcom);
+        <span class="keyword">end</span>
+        </pre><pre class="codeinput">    <span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+        </pre><p>After computing the eigenmodes, the results are filtered for stiff or zero valued modes. Furthermore they are sorted and normalised, to ensure that</p><p><span class="MathJax_Preview"><img alt="$$ \bf{u}_j^*\bf{B}\bf{v}_i = \delta_{ij} $$" src="linear_spectral_analysis_eq12200587778028776907-Rescaled.png" style="width: 64.8px; height: auto;"/></span><script type="math/tex"> \bf{u}_j^*\bf{B}\bf{v}_i = \delta_{ij} </script></p><pre class="codeinput">[V,LAMBDA,U] = remove_stiff_modes(V,LAMBDA,U,obj.Options.lambdaThreshold);
+<span class="keyword">if</span> obj.Options.RemoveZeros
+    [V,LAMBDA,U] = remove_zero_modes(V,LAMBDA,U);
+<span class="keyword">end</span>
+[V, D, U] = sort_modes(V, LAMBDA, U);
+[V,U] =  normalize_modes(V,U,obj.B);
+<span class="comment">% check the orthonoramlity of V and W with respect to B</span>
+numColV = size(V,2);
+<span class="keyword">if</span> norm(U'*obj.B*V-eye(numColV),<span class="string">'fro'</span>)/numColV&gt;1e-4
+    warning(<span class="string">'V and W are not orthonormal'</span>);
+<span class="keyword">end</span>
+obj.spectrum.V = V;
+obj.spectrum.W = U;
+obj.spectrum.Lambda = D;
+
+<span class="keyword">if</span> obj.Options.RemoveZeros
+    fprintf(<span class="string">'\n The first %d nonzero eigenvalues are given as \n'</span>,length(D))
+<span class="keyword">else</span>
+    fprintf(<span class="string">'\n The first %d eigenvalues are given as \n'</span>,length(D))
+<span class="keyword">end</span>
+disp(D)
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+        </pre><h2 id="17">Sort modes:</h2><p>This function sorts the left and right eigenvectors <tt>V</tt> and <tt>U</tt> in descending order of the real parts of the corresponding eigenvalues <tt>D</tt>. The resulting eigenvectors are also normalized to unit magnitude.</p><pre class="codeinput"><span class="keyword">function</span> [V, Lambda, U] = sort_modes(V, D, U)
+
+<span class="comment">% obtain the eigenvalues as a vector instead of a diagonal matrix</span>
+Lambda = diag(D);
+<span class="keyword">if</span> ~iscolumn(Lambda)
+    Lambda = transpose(Lambda);
+<span class="keyword">end</span>
+<span class="comment">% sort eigenvalues in the descending order of real parts, incase of tie by</span>
+<span class="comment">% ascending order of magnitude of imaginary parts</span>
+[Lambda_sorted,I] = sortrows([real(Lambda), abs(imag(Lambda)) sign(imag(Lambda))],[1 2],{<span class="string">'descend'</span> <span class="string">'ascend'</span>});
+D = Lambda_sorted(:,1) + 1i * Lambda_sorted(:,2).*Lambda_sorted(:,3);
+D = diag(D);
+<span class="comment">% arrange eigenvectors accordingly</span>
+V = V(:,I);
+U = U(:,I);
+
+<span class="comment">% ensure positive imaginary part first in every complex pair</span>
+Lambda = diag(D);
+skip = false;
+<span class="keyword">for</span> j = 1:length(Lambda)
+    <span class="keyword">if</span> skip
+        skip = false;
+        <span class="keyword">continue</span>;
+    <span class="keyword">end</span>
+    <span class="keyword">if</span> j+1&lt;=length(Lambda) <span class="comment">% make sure Lambda(j+1) exists</span>
+        <span class="keyword">if</span> ~isreal(Lambda(j))&amp;&amp; abs(Lambda(j)-conj(Lambda(j+1)))&lt;1e-8*abs(Lambda(j))
+            <span class="comment">% extract complex eigenpair</span>
+            V0 = V(:,j:j+1);
+            U0 = U(:,j:j+1);
+            Lambda0 = Lambda(j:j+1);
+            <span class="comment">% sort eigenvalues in the descending order of imaginary parts</span>
+            [~,I] = sort(imag(Lambda0),<span class="string">'descend'</span>,<span class="string">'ComparisonMethod'</span>,<span class="string">'real'</span>);
+            <span class="comment">% rearrange the ordre of the pair</span>
+            Lambda([j,j+1]) = Lambda0(I);
+            V(:,[j,j+1]) = V0(:,I);
+            U(:,[j,j+1]) = U0(:,I);
+            <span class="comment">%         Lambda(j) = Lambda0(I(1));</span>
+            <span class="comment">%         V(:,j) = V0(:,I(1));</span>
+            <span class="comment">%         W(:,j) = W0(:,I(1));</span>
+            <span class="comment">% ensure complex conjugate eigenvalues and eigenvectors - not true</span>
+            <span class="comment">% if A and B are not real</span>
+            <span class="comment">%         Lambda(j+1) = conj(Lambda(j));</span>
+            <span class="comment">%         V(:,j+1) = conj(V(:,j));</span>
+            <span class="comment">%         W(:,j+1) = conj(W(:,j));</span>
+            <span class="comment">% move to the next pair of eigenvalues</span>
+            skip = true;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+<span class="comment">% D = diag(Lambda);</span>
+<span class="keyword">end</span>
+        </pre><h2 id="18">Normalize modes:</h2><p>This function normalizes the right and left eigenvectors <tt>W</tt>, <tt>V</tt> with respect to the matrix <tt>B</tt>.</p><pre class="codeinput"><span class="keyword">function</span> [V,U] = normalize_modes(V,U,B)
+
+<span class="comment">% V = V*diag(1./vecnorm(V));</span>
+mu = diag(U'*B*V);
+
+<span class="comment">% V = V*diag(1./sqrt(mu));</span>
+<span class="comment">% W = W*diag(1./(sqrt(mu)'));</span>
+
+U = U*diag(1./(mu'));
+<span class="keyword">end</span>
+        </pre><h2 id="19">Remove stiff modes:</h2><p>This function removes modes with infinite eigenvalues</p><pre class="codeinput"><span class="keyword">function</span> [V,LAMBDA,U] = remove_stiff_modes(V,LAMBDA,U,lambdaThreshold)
+
+D = diag(LAMBDA);
+D = abs(D);
+n = numel(D);
+idx0 = [find(isinf(D));find(isnan(D))]; <span class="comment">% indices with inf and nan eigenvalues</span>
+D(idx0) = lambdaThreshold-1;
+idx1 = find(D&gt;lambdaThreshold);
+idx2 = setdiff(1:n, [idx0;idx1]);
+V = V(:,idx2);
+U = U(:,idx2);
+LAMBDA = LAMBDA(idx2,idx2);
+<span class="keyword">if</span> ~isempty(idx0)
+    fprintf(<span class="string">'%i nan/inf eigenvalues are removed\n'</span>,numel(idx0));
+<span class="keyword">end</span>
+<span class="keyword">if</span> ~isempty(idx1)
+    fprintf(<span class="string">'%i eigenvalues with mangnitude larger than %d are removed\n'</span>,<span class="keyword">...</span>
+        numel(idx1), lambdaThreshold);
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+        </pre><h2 id="20">Remove zero modes:</h2><p>This function removes modes with zero eigenvalues</p><pre class="codeinput"><span class="keyword">function</span> [V,LAMBDA,varargout] = remove_zero_modes(V,LAMBDA,varargin)
+
+D = diag(LAMBDA);
+D = abs(D);
+n = numel(D);
+idx1 = find(D&lt;1e-6*max(D)); <span class="comment">% indices with zero eigenvalues</span>
+idx2 = setdiff(1:n, idx1);
+V = V(:,idx2);
+<span class="keyword">if</span> ~isempty(varargin)
+    W = varargin{1};
+    varargout{1} = W(:,idx2);
+<span class="keyword">end</span>
+LAMBDA = LAMBDA(idx2,idx2);
+<span class="keyword">if</span> ~isempty(idx1) &amp;&amp; ~isempty(varargin)
+    fprintf(<span class="string">'%i zero eigenvalues are removed\n'</span>,numel(idx1));
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> [y,idx] = sort_close_real_different_imag(x)
+realx = real(x);
+imagx = imag(x);
+n = numel(realx);
+
+drealx = realx(2:end)-realx(1:end-1);
+drealx = drealx./(realx(1:end-1)+eps);
+idgap  = find(abs(drealx)&gt;1e-6);
+idgap  = [1; idgap(:); n];
+idx    = [];
+<span class="keyword">for</span> k=1:numel(idgap)-1
+    ida = idgap(k);
+    <span class="keyword">if</span> k&gt;1; ida=ida+1; <span class="keyword">end</span>
+    idb = idgap(k+1);
+    tmp = ida:idb;
+    [~,idab] = sort(imagx(tmp),<span class="string">'descend'</span>);
+    idx = [idx tmp(idab)];
+<span class="keyword">end</span>
+y = x(idx);
+
+<span class="keyword">end</span>
+        </pre><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% LINEAR SPECTRAL ANALYSIS
+%
+%%
+function [V, D, U] = linear_spectral_analysis(obj)
+%% Linear Spectral Analysis
+%
+% This function performs a (truncated) linear spectral analysis on the linear part of
+% the dynamical system described by the dynamical system object.
+%
+% For *first order systems* the eigenproblems which need to be solved read
+%
+% $$(\bf{A}- \lambda_j \bf{B})\bf{v}_j = \bf{0}, \quad \bf{u}^*_j(\bf{A}- \lambda_j \bf{B}) = \bf{0}$$
+%
+% For *second order mechanical systems* the eigenproblems which need to be
+% solved read
+%
+% $$(\lambda_j^2 \bf{M} + \lambda_j \bf{C} + \bf{K}) \bf \phi_j =  \bf{0} , \quad
+% \quad \bf \theta_j^*  (\lambda_j^2 \bf{M} + \lambda_j \bf{C} + \bf{K})   =  \bf{0}$$
+%
+% The choice of $\bf A$ and $\bf B$ when setting up the <DynamicalSystem.html Dynamical System> results in displacement and velocity variables that are are inherently related, such that
+%
+% $$ \bf{v}_{j} =  \left(\begin{array}{c} \bf{\phi}_j  \\ \bf{\phi}_j \lambda_{j}
+% \end{array} \right) \quad  \bf{u}_{j} = \left(\begin{array}{c} \bf{\theta}_j  \\
+% \bf{\theta}_j \bar{\lambda}_{j} \end{array}\right) $$
+%
+%
+% For model reduction only few of these eigenmodes have to be computed as
+% explained in more detail in <../../Theory/2.%20SSM-Theory.html SSM-Theory>. Therefore a parameter
+% |Nmax| is introduced, which allows to compute a reduced set of
+% eigenvectors and eigenvalues. The default for this parameter is set in
+% the <../Features/Options/DSOptions.html Dynamical System Options>
+%
+% If the dynamical system has less degrees of freedom than |Nmax|, then the
+% full set of modes is computed. Depending on the structure of the system
+% matrix $\bf{A}$ and $\bf{B}$, distinct algorithms are employed.
+%
+
+if obj.N < obj.Options.Nmax
+
+    if ~issparse(obj.A)
+        if norm(obj.B-eye(size(obj.B)))<1e-8
+            [V, LAMBDA, U] = eig(obj.A); % B=I, CONSISTENT WITH SSMTool 1.0
+        else
+            [V, LAMBDA, U] = eig(obj.A,obj.B);
+        end
+
+    else
+        [V, LAMBDA, U] = eig(full(obj.A),full(obj.B));
+    end
+
+%%
+% In the case where the full dynamical system is bigger than |Nmax| only a
+% small subset of the full spectrum and eigenmodes are computed.
+   
+else
+
+    E_max = obj.Options.Emax; % Number of eigenvalues that are checked for resonances, to guarantee existence of SSM
+    n = obj.n;
+
+    %%
+    % For second order systems that are subject to Rayleigh type linear
+    % damping, the damping matrix can be simultaneously diagonalised with
+    % the mass and stiffness matrices.
+    %
+    % In this case we first compute the eigenmodes for the conservative system
+    %
+    % $$(\lambda_j^2 \bf{M}  + \bf{K}) \bf \phi_j =  \bf{0} , \quad
+    % \quad \bf \theta_j^*  (\lambda_j^2 \bf{M}  + \bf{K})   =  \bf{0}$$
+    %
+    % The eigenvalues of the full dynamical system then read
+    %
+    % $$ \lambda_{j,+/-} = \frac{-\beta_j +/- \sqrt{\beta_j^2 - 4
+    % \omega_j}}{2} $$
+    %
+    % where
+    %
+    % $$ \omega_j := \bf{\phi}_j^*\bf{K}\bf{\phi}_j / \mu_j, \quad \beta_j := \bf{\phi}_j^*\bf{C}\bf{\phi}_j / \mu_j , \quad \mu_j := \bf{\phi}_j^*\bf{M}\bf{\phi}_j / \mu_j$$
+    %
+
+    if obj.order == 2 && obj.Options.RayleighDamping
+
+        disp(['Due to high-dimensionality, we compute only the first ' num2str(E_max) ' eigenvalues with the smallest magnitude. These would also be used to compute the spectral quotients'] )
+        % Computing undamped eigenvalues and eigenvectors
+
+        disp ('Assuming a proportional damping hypthesis with symmetric matrices')
+        [PHI, ~, NOT_CONVERGED] = eigs(sparse(obj.K),sparse(obj.M),E_max,'smallestabs');
+
+        % Assuming proportional damping for estimating damped eigenvectors
+        LAMBDA = zeros(2*E_max,2*E_max);
+        V = zeros(2*n,2*E_max);
+
+        % Rearranging eigenvalues
+        for j = 1:E_max
+            mu_j = PHI(:,j).'* obj.M * PHI(:,j);
+            omega2_j = (PHI(:,j).'* obj.K * PHI(:,j))/mu_j;
+            beta_j = (PHI(:,j).'* obj.C * PHI(:,j))/mu_j;
+
+            fprintf('modal damping ratio for %d mode is %d\n', j, beta_j/(2*sqrt(omega2_j)));
+
+            lambda1 = (-beta_j + sqrt(beta_j^2 - 4 * omega2_j) ) / 2;
+            lambda2 = (-beta_j - sqrt(beta_j^2 - 4 * omega2_j) ) / 2;
+
+
+            LAMBDA(2*j-1,2*j-1) = lambda1;
+            LAMBDA(2*j,2*j) = lambda2;
+
+            V(:,2*j-1) = [PHI(:,j); lambda1*PHI(:,j)];
+            V(:,2*j) = [PHI(:,j); lambda2*PHI(:,j)];
+        end
+        U = conj(V);
+
+        if NOT_CONVERGED
+            error('The eigenvalue computation did not converge, please adjust the number of eigenvalues to be computed')
+        end
+
+        if ~issymmetric(obj.K) || ~issymmetric(obj.M)
+            disp('the left eigenvectors may be incorrect in case of asymmetry of matrices')
+            %         [W, ~] = eigs(A',B',E_max,'smallestabs');
+            % we assume here that both eigenvalue problems return eigenvalues in
+            % the same order.
+        end
+
+        %%
+        % If other linear damping models are employed, a simultaneous
+        % diagonalisation is not possible and the full system has to be
+        % numerically analysed. To compute the eigenmodes around a certain
+        % eigenvalue magnitude an additional parameter |sigma| can be set.
+        %
+    else
+        % right eigenvectors
+        [V, Dv] = eigs(obj.A,obj.B,E_max,obj.Options.sigma);
+
+
+        %%
+        if obj.Options.RemoveZeros
+            [V,Dv] = remove_zero_modes(V,Dv);
+        end
+        [Lambda_sorted,I] = sort(diag(Dv),'descend','ComparisonMethod','real');
+        % further sort if real parts are equal (very close)
+        [Lambda_sorted,II] = sort_close_real_different_imag(Lambda_sorted);
+        LAMBDA = diag(Lambda_sorted);
+        V = V(:,I(II));
+        % rescale V w.r.t mass matrix
+        if ~isempty(obj.M)
+            for j=1:numel(I)
+                vs = V(1:obj.n,j)'*obj.M*V(1:obj.n,j);
+                V(:,j) = V(:,j)/sqrt(abs(vs));
+            end
+        end
+
+        % left eigenvectors
+        if issymmetric(obj.A) && issymmetric(obj.B)
+            U = conj(V);
+        else
+            [U, Dw] = eigs(obj.A',obj.B',E_max,obj.Options.sigma);
+            if obj.Options.RemoveZeros
+                [U,Dw] = remove_zero_modes(U,Dw);
+            end
+            [Lambda_sorted,I] = sort(diag(Dw),'descend','ComparisonMethod','real');
+            % further sort if real parts are equal (very close)
+            [Lambda_sorted,II] = sort_close_real_different_imag(Lambda_sorted);
+            % make sure reordered Dw is consistent with reordered Dv
+            lambda_left = diag(LAMBDA);
+            neigs  = min(numel(Lambda_sorted),numel(lambda_left));
+            idxcom = 1:neigs;
+            assert(norm(Lambda_sorted(idxcom)-lambda_left(idxcom))<1e-3*norm(lambda_left(idxcom)),...
+                'Orders for W and V are not consistent');
+            U = U(:,I(II(idxcom)));
+            U = conj(U);
+            V = V(:,idxcom);
+            LAMBDA = LAMBDA(idxcom,idxcom);
+        end
+    end
+end
+
+%%
+% After computing the eigenmodes, the results are filtered for stiff or
+% zero valued modes. Furthermore they are sorted and normalised, to ensure
+% that 
+%
+% $$ \bf{u}_j^*\bf{B}\bf{v}_i = \delta_{ij} $$
+%
+
+[V,LAMBDA,U] = remove_stiff_modes(V,LAMBDA,U,obj.Options.lambdaThreshold);
+if obj.Options.RemoveZeros
+    [V,LAMBDA,U] = remove_zero_modes(V,LAMBDA,U);
+end
+[V, D, U] = sort_modes(V, LAMBDA, U);
+[V,U] =  normalize_modes(V,U,obj.B);
+% check the orthonoramlity of V and W with respect to B
+numColV = size(V,2);
+if norm(U'*obj.B*V-eye(numColV),'fro')/numColV>1e-4
+    warning('V and W are not orthonormal');
+end
+obj.spectrum.V = V;
+obj.spectrum.W = U;
+obj.spectrum.Lambda = D;
+
+if obj.Options.RemoveZeros
+    fprintf('\n The first %d nonzero eigenvalues are given as \n',length(D))
+else
+    fprintf('\n The first %d eigenvalues are given as \n',length(D))
+end
+disp(D)
+
+end
+
+%% Sort modes:
+% This function sorts the left and right eigenvectors |V| and |U| in descending order of
+% the real parts of the corresponding eigenvalues |D|. The resulting
+% eigenvectors are also normalized to unit magnitude.
+%
+ 
+function [V, Lambda, U] = sort_modes(V, D, U)
+
+% obtain the eigenvalues as a vector instead of a diagonal matrix
+Lambda = diag(D);
+if ~iscolumn(Lambda)
+    Lambda = transpose(Lambda);
+end
+% sort eigenvalues in the descending order of real parts, incase of tie by
+% ascending order of magnitude of imaginary parts
+[Lambda_sorted,I] = sortrows([real(Lambda), abs(imag(Lambda)) sign(imag(Lambda))],[1 2],{'descend' 'ascend'});
+D = Lambda_sorted(:,1) + 1i * Lambda_sorted(:,2).*Lambda_sorted(:,3);
+D = diag(D);
+% arrange eigenvectors accordingly
+V = V(:,I);
+U = U(:,I);
+
+% ensure positive imaginary part first in every complex pair
+Lambda = diag(D);
+skip = false;
+for j = 1:length(Lambda)
+    if skip
+        skip = false;
+        continue;
+    end
+    if j+1<=length(Lambda) % make sure Lambda(j+1) exists
+        if ~isreal(Lambda(j))&& abs(Lambda(j)-conj(Lambda(j+1)))<1e-8*abs(Lambda(j))
+            % extract complex eigenpair
+            V0 = V(:,j:j+1);
+            U0 = U(:,j:j+1);
+            Lambda0 = Lambda(j:j+1);
+            % sort eigenvalues in the descending order of imaginary parts
+            [~,I] = sort(imag(Lambda0),'descend','ComparisonMethod','real');
+            % rearrange the ordre of the pair
+            Lambda([j,j+1]) = Lambda0(I);
+            V(:,[j,j+1]) = V0(:,I);
+            U(:,[j,j+1]) = U0(:,I);
+            %         Lambda(j) = Lambda0(I(1));
+            %         V(:,j) = V0(:,I(1));
+            %         W(:,j) = W0(:,I(1));
+            % ensure complex conjugate eigenvalues and eigenvectors - not true
+            % if A and B are not real
+            %         Lambda(j+1) = conj(Lambda(j));
+            %         V(:,j+1) = conj(V(:,j));
+            %         W(:,j+1) = conj(W(:,j));
+            % move to the next pair of eigenvalues
+            skip = true;
+        end
+    end
+end
+% D = diag(Lambda);
+end
+
+%% Normalize modes: 
+% This function normalizes the right and left eigenvectors
+% |W|, |V| with respect to the matrix |B|.
+
+function [V,U] = normalize_modes(V,U,B)
+
+% V = V*diag(1./vecnorm(V));
+mu = diag(U'*B*V);
+
+% V = V*diag(1./sqrt(mu));
+% W = W*diag(1./(sqrt(mu)'));
+
+U = U*diag(1./(mu'));
+end
+
+%% Remove stiff modes: 
+% This function removes modes with infinite eigenvalues
+
+function [V,LAMBDA,U] = remove_stiff_modes(V,LAMBDA,U,lambdaThreshold)
+
+D = diag(LAMBDA);
+D = abs(D);
+n = numel(D);
+idx0 = [find(isinf(D));find(isnan(D))]; % indices with inf and nan eigenvalues
+D(idx0) = lambdaThreshold-1;
+idx1 = find(D>lambdaThreshold);
+idx2 = setdiff(1:n, [idx0;idx1]);
+V = V(:,idx2);
+U = U(:,idx2);
+LAMBDA = LAMBDA(idx2,idx2);
+if ~isempty(idx0)
+    fprintf('%i nan/inf eigenvalues are removed\n',numel(idx0));
+end
+if ~isempty(idx1)
+    fprintf('%i eigenvalues with mangnitude larger than %d are removed\n',...
+        numel(idx1), lambdaThreshold);
+end
+end
+
+%% Remove zero modes: 
+% This function removes modes with zero eigenvalues
+
+function [V,LAMBDA,varargout] = remove_zero_modes(V,LAMBDA,varargin)
+
+D = diag(LAMBDA);
+D = abs(D);
+n = numel(D);
+idx1 = find(D<1e-6*max(D)); % indices with zero eigenvalues
+idx2 = setdiff(1:n, idx1);
+V = V(:,idx2);
+if ~isempty(varargin)
+    W = varargin{1};
+    varargout{1} = W(:,idx2);
+end
+LAMBDA = LAMBDA(idx2,idx2);
+if ~isempty(idx1) && ~isempty(varargin)
+    fprintf('%i zero eigenvalues are removed\n',numel(idx1));
+end
+end
+
+function [y,idx] = sort_close_real_different_imag(x)
+realx = real(x);
+imagx = imag(x);
+n = numel(realx);
+
+drealx = realx(2:end)-realx(1:end-1);
+drealx = drealx./(realx(1:end-1)+eps);
+idgap  = find(abs(drealx)>1e-6);
+idgap  = [1; idgap(:); n];
+idx    = [];
+for k=1:numel(idgap)-1
+    ida = idgap(k);
+    if k>1; ida=ida+1; end
+    idb = idgap(k+1);
+    tmp = ida:idb;
+    [~,idab] = sort(imagx(tmp),'descend');
+    idx = [idx tmp(idab)];
+end
+y = x(idx);
+
+end
+            ##### SOURCE END #####
+        --></body></html></body></html>

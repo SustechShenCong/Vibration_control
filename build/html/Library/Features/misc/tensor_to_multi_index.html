@@ -1,0 +1,339 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><body><div class="banner"><a href="../../../index.html"><img src="../../../logo.png" alt="Logo" class="logo" width="200" style="float:right"></a></div><html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>Tensor to multi-index</title><meta name="generator" content="MATLAB 9.14"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2023-09-09"><meta name="DC.source" content="tensor_to_multi_index.m"><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>Tensor to multi-index</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#4">Get multi-indices</a></li><li><a href="#8">get_multiindices 1.0</a></li><li><a href="#9">get_multiindicies 2.0</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> M = tensor_to_multi_index(T)
+        </pre><p>Convert polynomials in tensor format to multiindex format. Here T is a single tensor or a cell array of tensors. For each tensor, the first mode gives the index of polynomial vector, and the rest modes correspond to factors of polymonials, e.g. x^3=x*x*x. The result is return by two matrices, coeffs and ind, which represents coefficient and multiindex respesctively. Specifically, each column in coeffs gives the coefficient vector for a polynomial whose indices are stored as a row vector in ind matrix.</p><pre class="codeinput">M.coeffs = [];
+M.ind = [];
+<span class="keyword">if</span> ~iscell(T)
+    [M.coeffs,M.ind] = get_multiindices(T);
+<span class="keyword">else</span>
+
+<span class="keyword">for</span> j = 1:length(T)
+    [C_j,I_j] = get_multiindices(T{j});
+    M.coeffs = cat(2,M.coeffs,C_j);
+    M.ind = cat(1,M.ind,I_j);
+<span class="keyword">end</span>
+
+<span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+        </pre><h2 id="4">Get multi-indices</h2><pre class="codeinput"><span class="keyword">function</span> [C,I] = get_multiindices(T)
+        </pre><p>This function returns the multi-index coefficients and the corresponding exponents for the given set of multi-dimensional arrays</p><p><b>Outputs:</b></p><div><ul><li><span class="MathJax_Preview"><img src="tensor_to_multi_index_eq11265491646914717690.png" alt="$\mathbf{C} \in \bf{R}^{ n\times n_I}$"></span><script type="math/tex">\mathbf{C} \in \bf{R}^{ n\times n_I}</script>: Array containing multi-index coefficients</li></ul></div><div><ul><li><span class="MathJax_Preview"><img src="tensor_to_multi_index_eq16172309029934413552.png" alt="$\mathbf{I} \in \bf{R}^{ n_I\times r}$"></span><script type="math/tex">\mathbf{I} \in \bf{R}^{ n_I\times r}</script>:  Array containing multi-index exponents</li></ul></div><p><b>Inputs:</b></p><div><ul><li><span class="MathJax_Preview"><img src="tensor_to_multi_index_eq03303154893691968134.png" alt="$\mathbf{T} \in \bf{R}^{ n\times r\times \dots\times r}$"></span><script type="math/tex">\mathbf{T} \in \bf{R}^{ n\times r\times \dots\times r}</script>: <span class="MathJax_Preview"><img src="tensor_to_multi_index_eq16372142347598580038.png" alt="$(d+1)$"></span><script type="math/tex">(d+1)</script>-dimensional array in the form of sptensor object (cf. tensor toolbox)</li></ul></div><p><b>Other variables:</b></p><div><ul><li><span class="MathJax_Preview"><img src="tensor_to_multi_index_eq10180454371744101249.png" alt="$d\in\bf{N}$"></span><script type="math/tex">d\in\bf{N}</script>: degree of tensor polynomial (only uniform single degree supported currently)</li></ul></div><div><ul><li><span class="MathJax_Preview"><img src="tensor_to_multi_index_eq11016187901243124829.png" alt="$r\in\bf{N}$"></span><script type="math/tex">r\in\bf{N}</script>: The numer of variables in the multivariate polynomial</li></ul></div><p>Assuming the tensor array <span class="MathJax_Preview"><img src="tensor_to_multi_index_eq16217582983478984363.png" alt="$\mathbf{T}$"></span><script type="math/tex">\mathbf{T}</script> acts on the vector <span class="MathJax_Preview"><img src="tensor_to_multi_index_eq00678268941302876167.png" alt="$\mathbf{q}\in\bf{R}^{r}$"></span><script type="math/tex">\mathbf{q}\in\bf{R}^{r}</script> along the dimensions <span class="MathJax_Preview"><img src="tensor_to_multi_index_eq14680670173858756075.png" alt="$2,\dots,d+1$"></span><script type="math/tex">2,\dots,d+1</script>. We have the following relationship between the input and output</p><p><span class="MathJax_Preview"><img src="tensor_to_multi_index_eq05863845717202983082.png" alt="$$\sum_{j_1,\dots,j_d=1}^r T_{ij_1\dots j_d} q_{j_1} q_{j_2} \dots q_{j_d}&#xA;= \sum_{\mathbf{p}\in\bf{N}_0^{r},~|\mathbf{p}|=d}C_{i,\mathbf{p}}\mathbf{q}^{\mathbf{p}},\quad&#xA;\mathbf{q}\in\bf{R}^{r},\quad i\in \{1,\dots,n\},\quad d = \textrm{dim}(\texttt{T})&#xA;- 1$$"></span><script type="math/tex">\sum_{j_1,\dots,j_d=1}^r T_{ij_1\dots j_d} q_{j_1} q_{j_2} \dots q_{j_d}
+= \sum_{\mathbf{p}\in\bf{N}_0^{r},~|\mathbf{p}|=d}C_{i,\mathbf{p}}\mathbf{q}^{\mathbf{p}},\quad
+\mathbf{q}\in\bf{R}^{r},\quad i\in \{1,\dots,n\},\quad d = \textrm{dim}(\texttt{T})
+- 1</script></p><p>where <span class="MathJax_Preview"><img src="tensor_to_multi_index_eq03248273660064687487.png" alt="$\mathbf{q}^{\mathbf{p}}=q_1^{p_1}\cdots q_r^{p_r}$"></span><script type="math/tex">\mathbf{q}^{\mathbf{p}}=q_1^{p_1}\cdots q_r^{p_r}</script></p><p>or</p><p><span class="MathJax_Preview"><img src="tensor_to_multi_index_eq06109721508982253918.png" alt="$$\mathbf{T}\mathbf{q}^{\otimes d} = \mathbf{C}\mathbf{q}^{\mathbf{I}}$$"></span><script type="math/tex">\mathbf{T}\mathbf{q}^{\otimes d} = \mathbf{C}\mathbf{q}^{\mathbf{I}}</script></p><p>where the different arrays are organized in the following form:</p><p><span class="MathJax_Preview"><img src="tensor_to_multi_index_eq10963296716437863176.png" alt="$\mathbf{C} =  \left[\begin{array}{c}\mathbf{c}_1\\\vdots\\\mathbf{c}_{n}\end{array}\right]$"></span><script type="math/tex">\mathbf{C} =  \left[\begin{array}{c}\mathbf{c}_1\\\vdots\\\mathbf{c}_{n}\end{array}\right]</script>, where the <span class="MathJax_Preview"><img src="tensor_to_multi_index_eq12589036380752621295.png" alt="$i^{\mathrm{th}}$"></span><script type="math/tex">i^{\mathrm{th}}</script> row represents the coefficients <span class="MathJax_Preview"><img src="tensor_to_multi_index_eq12353222714020707493.png" alt="$\mathbf{c}_i = [C_{i,\mathbf{p}_1},\dots,C_{i,\mathbf{p}_{n_I}}]$"></span><script type="math/tex">\mathbf{c}_i = [C_{i,\mathbf{p}_1},\dots,C_{i,\mathbf{p}_{n_I}}]</script>,</p><p><span class="MathJax_Preview"><img src="tensor_to_multi_index_eq11981439728536848951.png" alt="$\mathbf{I} = \left[\begin{array}{c}\mathbf{p}_1\\\vdots\\\mathbf{p}_{n_I}\end{array}\right]$"></span><script type="math/tex">\mathbf{I} = \left[\begin{array}{c}\mathbf{p}_1\\\vdots\\\mathbf{p}_{n_I}\end{array}\right]</script> is a matrix whose rows contain the multi-indices <span class="MathJax_Preview"><img src="tensor_to_multi_index_eq02379289495948143284.png" alt="$\mathbf{p}\in\bf{N}_0^{r}$"></span><script type="math/tex">\mathbf{p}\in\bf{N}_0^{r}</script> respresented by the tensor <span class="MathJax_Preview"><img src="tensor_to_multi_index_eq16217582983478984363.png" alt="$\mathbf{T}$"></span><script type="math/tex">\mathbf{T}</script>,</p><p><span class="MathJax_Preview"><img src="tensor_to_multi_index_eq09957969338028521660.png" alt="$$\mathbf{q}^{\mathbf{I}} = \left[\begin{array}{c}\mathbf{q}^{\mathbf{p}_1}\\\vdots\\\mathbf{q}^{\mathbf{p}_{n_I}}\end{array}\right]$"></span><script type="math/tex">$\mathbf{q}^{\mathbf{I}} = \left[\begin{array}{c}\mathbf{q}^{\mathbf{p}_1}\\\vdots\\\mathbf{q}^{\mathbf{p}_{n_I}}\end{array}\right]</script>$ .</p><pre class="codeinput">n = size(T,1);
+r = size(T,2);
+[SUBS, VALS] = sparsify(T);
+<span class="keyword">if</span> ~isempty(SUBS)
+        </pre><h2 id="8">get_multiindices 1.0</h2><pre class="codeinput"><span class="comment">    %{
+</span><span class="comment">    multi_indices = <a href="../../../Library/Features/misc/sub2multiind.html">sub2multiind</a>(SUBS(:,2:end), r);
+</span><span class="comment">    [I,~,IC] = unique(multi_indices,'rows');
+</span><span class="comment">
+</span><span class="comment">    n_I = size(I,1);
+</span><span class="comment">    C = sparse(SUBS(:,1),IC,VALS,n,n_I);
+</span><span class="comment">    %}</span>
+        </pre><h2 id="9">get_multiindicies 2.0</h2><p>Instead of creating the multi-indices for all subscripts and then finding unique multi-indices this version finds all unique subscripts up to permutations eg. [1,0,2] and [1,2,0] correspond to the same multi-index and thus the multi-indices are created for only one of them.</p><pre class="codeinput">    <span class="comment">% The main advantage of this method comes from the fact that at order k</span>
+    <span class="comment">% there are only k subscripts for a multi-index, but the corresponding</span>
+    <span class="comment">% multi-indices have the dimension of the space the tensor T maps into</span>
+    <span class="comment">% which may be very high. Performing operations such as unique on multi-indices is thus</span>
+    <span class="comment">% much more expensive than finding the subscripts that those unique</span>
+    <span class="comment">% multi-indices correspond to.</span>
+
+    <span class="comment">% sort each subscript such that subscripts that are the same up to</span>
+    <span class="comment">% permutations are identical.</span>
+    SUBS_un = sort(SUBS(:,2:end),2);
+    <span class="comment">% sort subscripts such that identical subscripts are placed in adjacent rows</span>
+    [SUBS_un, sort_idx] = sortrows(SUBS_un);
+
+    <span class="comment">% by finding the subscripts that are different from their neighbour we</span>
+    <span class="comment">% find the position of all unique subscripts. Note that on top of the</span>
+    <span class="comment">% array SUBS_un we insert a row of zeros to get the right indices since</span>
+    <span class="comment">% diff(r) outputs an array with one row less than r</span>
+    subs_un_idx = any(diff([zeros(1,size(SUBS,2)-1); SUBS_un]),2);
+
+    <span class="comment">% The array multi_indices only contains</span>
+    <span class="comment">% unique multi-indices the resulting multi-indices are in reverse order compared to the</span>
+    <span class="comment">% output of the old version.</span>
+    multi_indices = <a href="../../../Library/Features/misc/sub2multiind.html">sub2multiind</a>(SUBS_un(subs_un_idx,:), r);
+    <span class="comment">% same ordering of multi-indices as in the old version</span>
+    I = flip(multi_indices,1);
+    n_I = size(I,1);
+
+    <span class="comment">% IC contains the position of the multi-index in multi_indices</span>
+    <span class="comment">% that a subscript in SUBS_un corresponds to for all subscripts</span>
+    IC = cumsum(subs_un_idx);
+
+    <span class="comment">% Since the ordering of the subscripts in IC is not the same as in SUBS</span>
+    <span class="comment">% we have to construct an index array that reverts the sorting that has</span>
+    <span class="comment">% been previously applied</span>
+    sort_idx_rev     = zeros(1,length(sort_idx));
+    sort_idx_rev(sort_idx) = 1:length(sort_idx);
+
+    <span class="comment">% Using the reverse index array we put the indices in IC in the</span>
+    <span class="comment">% position of the subscript they correspond to in SUBS</span>
+    IC = IC(sort_idx_rev);
+
+    <span class="comment">% Coefficients are read out in the multi-index format</span>
+    C = sparse(SUBS(:,1),IC,VALS,n,n_I);
+    <span class="comment">% Also put coefficients in same ordering as the output of the old version</span>
+    C = flip(C,2);
+    <span class="comment">%}</span>
+        </pre><pre class="codeinput"><span class="keyword">else</span>
+    C = [];
+    I = [];
+<span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">function</span> [subs,vals] = sparsify(T)
+<span class="keyword">if</span> isa(T,<span class="string">'sptensor'</span>)
+    subs = T.subs;
+    vals = T.vals;
+<span class="keyword">else</span>
+    SIZE = size(T);
+    subs = tt_ind2sub(SIZE, (1:prod(SIZE))');
+    vals = T(:);
+<span class="keyword">end</span>
+
+<span class="keyword">end</span>
+        </pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2023a</a><br></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% Tensor to multi-index
+%
+%%
+function M = tensor_to_multi_index(T)
+%%
+% Convert polynomials in tensor format to multiindex format. Here T is a
+% single tensor or a cell array of tensors. For each tensor, the first mode
+% gives the index of polynomial vector, and the rest modes correspond to
+% factors of polymonials, e.g. x^3=x*x*x.
+% The result is return by two matrices, coeffs and ind, which represents
+% coefficient and multiindex respesctively. Specifically, each column in
+% coeffs gives the coefficient vector for a polynomial whose indices are
+% stored as a row vector in ind matrix.
+
+M.coeffs = [];
+M.ind = [];
+if ~iscell(T)
+    [M.coeffs,M.ind] = get_multiindices(T);
+else
+    
+for j = 1:length(T)    
+    [C_j,I_j] = get_multiindices(T{j});
+    M.coeffs = cat(2,M.coeffs,C_j);
+    M.ind = cat(1,M.ind,I_j);    
+end
+
+end
+end
+%% Get multi-indices
+%
+function [C,I] = get_multiindices(T)
+%% 
+% This function returns the multi-index coefficients and the corresponding exponents 
+% for the given set of multi-dimensional arrays 
+% 
+% *Outputs:* 
+%% 
+% * $\mathbf{C} \in \bf{R}^{ n\times n_I}$: Array containing multi-index 
+% coefficients
+%
+% * $\mathbf{I} \in \bf{R}^{ n_I\times r}$:  Array containing multi-index 
+% exponents
+%
+% *Inputs:*
+%% 
+% * $\mathbf{T} \in \bf{R}^{ n\times r\times \dots\times r}$: $(d+1)$-dimensional 
+% array in the form of sptensor object (cf. tensor toolbox)
+%
+% *Other variables:*
+%
+% * $d\in\bf{N}$: degree of tensor polynomial (only uniform single 
+% degree supported currently)
+%
+% * $r\in\bf{N}$: The numer of variables in the multivariate polynomial     
+%
+% Assuming the tensor array $\mathbf{T}$ acts on the vector $\mathbf{q}\in\bf{R}^{r}$ 
+% along the dimensions $2,\dots,d+1$. We have the following relationship between 
+% the input and output
+% 
+% $$\sum_{j_1,\dots,j_d=1}^r T_{ij_1\dots j_d} q_{j_1} q_{j_2} \dots q_{j_d} 
+% = \sum_{\mathbf{p}\in\bf{N}_0^{r},~|\mathbf{p}|=d}C_{i,\mathbf{p}}\mathbf{q}^{\mathbf{p}},\quad 
+% \mathbf{q}\in\bf{R}^{r},\quad i\in \{1,\dots,n\},\quad d = \textrm{dim}(\texttt{T}) 
+% - 1$$ 
+%
+% where $\mathbf{q}^{\mathbf{p}}=q_1^{p_1}\cdots q_r^{p_r}$
+% 
+% or
+% 
+% $$\mathbf{T}\mathbf{q}^{\otimes d} = \mathbf{C}\mathbf{q}^{\mathbf{I}}$$
+% 
+% where the different arrays are organized in the following form:
+% 
+% $\mathbf{C} =  \left[\begin{array}{c}\mathbf{c}_1\\\vdots\\\mathbf{c}_{n}\end{array}\right]$, 
+% where the $i^{\mathrm{th}}$ row represents the coefficients $\mathbf{c}_i = 
+% [C_{i,\mathbf{p}_1},\dots,C_{i,\mathbf{p}_{n_I}}]$,
+% 
+% $\mathbf{I} = \left[\begin{array}{c}\mathbf{p}_1\\\vdots\\\mathbf{p}_{n_I}\end{array}\right]$ 
+% is a matrix whose rows contain the multi-indices $\mathbf{p}\in\bf{N}_0^{r}$ 
+% respresented by the tensor $\mathbf{T}$, 
+% 
+% $$\mathbf{q}^{\mathbf{I}} =
+% \left[\begin{array}{c}\mathbf{q}^{\mathbf{p}_1}\\\vdots\\\mathbf{q}^{\mathbf{p}_{n_I}}\end{array}\right]$$
+% .
+%
+n = size(T,1);
+r = size(T,2);
+[SUBS, VALS] = sparsify(T);
+if ~isempty(SUBS)
+    %% get_multiindices 1.0
+    %{
+    multi_indices = <a href="../../../Library/Features/misc/sub2multiind.html">sub2multiind</a>(SUBS(:,2:end), r);
+    [I,~,IC] = unique(multi_indices,'rows');
+    
+    n_I = size(I,1);
+    C = sparse(SUBS(:,1),IC,VALS,n,n_I);
+    %}
+    
+    %% get_multiindicies 2.0 
+    % Instead of creating the multi-indices for all subscripts and then
+    % finding unique multi-indices this version finds all unique subscripts
+    % up to permutations 
+    % eg. [1,0,2] and [1,2,0] correspond to the same multi-index and thus
+    % the multi-indices are created for only one of them.
+    
+    % The main advantage of this method comes from the fact that at order k
+    % there are only k subscripts for a multi-index, but the corresponding 
+    % multi-indices have the dimension of the space the tensor T maps into 
+    % which may be very high. Performing operations such as unique on multi-indices is thus
+    % much more expensive than finding the subscripts that those unique
+    % multi-indices correspond to.
+    
+    % sort each subscript such that subscripts that are the same up to
+    % permutations are identical.
+    SUBS_un = sort(SUBS(:,2:end),2);
+    % sort subscripts such that identical subscripts are placed in adjacent rows    
+    [SUBS_un, sort_idx] = sortrows(SUBS_un);
+    
+    % by finding the subscripts that are different from their neighbour we
+    % find the position of all unique subscripts. Note that on top of the
+    % array SUBS_un we insert a row of zeros to get the right indices since
+    % diff(r) outputs an array with one row less than r
+    subs_un_idx = any(diff([zeros(1,size(SUBS,2)-1); SUBS_un]),2);
+
+    % The array multi_indices only contains
+    % unique multi-indices the resulting multi-indices are in reverse order compared to the
+    % output of the old version.
+    multi_indices = <a href="../../../Library/Features/misc/sub2multiind.html">sub2multiind</a>(SUBS_un(subs_un_idx,:), r);
+    % same ordering of multi-indices as in the old version
+    I = flip(multi_indices,1); 
+    n_I = size(I,1);
+    
+    % IC contains the position of the multi-index in multi_indices
+    % that a subscript in SUBS_un corresponds to for all subscripts
+    IC = cumsum(subs_un_idx);
+    
+    % Since the ordering of the subscripts in IC is not the same as in SUBS
+    % we have to construct an index array that reverts the sorting that has
+    % been previously applied
+    sort_idx_rev     = zeros(1,length(sort_idx));
+    sort_idx_rev(sort_idx) = 1:length(sort_idx);
+    
+    % Using the reverse index array we put the indices in IC in the
+    % position of the subscript they correspond to in SUBS
+    IC = IC(sort_idx_rev);
+    
+    % Coefficients are read out in the multi-index format 
+    C = sparse(SUBS(:,1),IC,VALS,n,n_I);
+    % Also put coefficients in same ordering as the output of the old version
+    C = flip(C,2); 
+    %}
+else 
+    C = [];
+    I = [];
+end
+end
+%% 
+% 
+function [subs,vals] = sparsify(T)
+if isa(T,'sptensor')
+    subs = T.subs;
+    vals = T.vals;
+else
+    SIZE = size(T);
+    subs = tt_ind2sub(SIZE, (1:prod(SIZE))');
+    vals = T(:);
+end
+
+end
+            ##### SOURCE END #####
+        --></body></html></body></html>

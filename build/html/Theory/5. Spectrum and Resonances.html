@@ -1,0 +1,299 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../index.html"><img alt="Logo" class="logo" src="../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>Spectrum and Resonances</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-07" name="DC.date"/><meta content="Spectrum.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>Spectrum and Resonances</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">Resonance Conditions</a></li><li><a href="#3">Resonance of SSM-modes</a></li><li><a href="#4">Resonance of external modes</a></li><li><a href="#7">Internal resonances and mode selection</a></li></ul></div><p>In the section on the <a href="2.%20SSM-Theory.html">existence and uniqueness of SSMs</a>, we have defined the relative spectral quotient of a spectral subspace <span class="MathJax_Preview"><img alt="$\mathcal{E}$" src="Spectrum_eq07367169325332904049-Rescaled.png" style="width: 8.4px; height: auto;"/></span><script type="math/tex">\mathcal{E}</script> as</p><p><span class="MathJax_Preview"><img alt="$$\sigma(\mathcal{E})= \frac{\textrm{min}_{\lambda \notin \textrm{Spec}(\mathcal{E})}
+\textrm{Re} \lambda }{\textrm{max}_{\lambda \in \textrm{Spec}(\mathcal{E})} \textrm{Re}
+\lambda}$$" src="Spectrum_eq17967750256748516709-Rescaled.png" style="width: 145.2px; height: auto;"/></span><script type="math/tex">\sigma(\mathcal{E})= \frac{\textrm{min}_{\lambda \notin \textrm{Spec}(\mathcal{E})}
+\textrm{Re} \lambda }{\textrm{max}_{\lambda \in \textrm{Spec}(\mathcal{E})} \textrm{Re}
+\lambda}</script></p><p>From a purely theoretical perspective, the integer part of this quotient gives the maximal degree of smoothness of general type invariant manifolds of the dynamical system. The SSM is the unique manifold which has a degree of smoothness higher than <span class="MathJax_Preview"><img alt="$\sigma(\mathcal{E})$" src="Spectrum_eq14698909838005973949-Rescaled.png" style="width: 25.2px; height: auto;"/></span><script type="math/tex">\sigma(\mathcal{E})</script>. For the computation of the SSM an approximation of order equal or higher than the relative spectral quotient thus guarantees that the computed manifold indeed is the unique smoothest invariant manifold.</p><p>This spectral qutioent, however, also has further implications about the global dynamics. Especially in the case of slow SSMs, which are constructed over the slowest spectral subspaces, the relative spectral quotient gives indications about how strongly nearby trajectories are attracted to the SSM. In this case the quotient is a measure of the spectral separation of the linear part of the dynamics on, and orthogonal to the master spectral subspaces. The larger the quotient, the faster full system trajectories collapse onto the SSM. At the same time, distinguishing the SSM from other, less smooth, invariant manifolds becomes harder, as the order of approximation in the computation has to be pushed higher.</p><p>Note that the relative spectral quotient does not influence the validity of the computed forced response on the SSM or other system characteristics obtained from it -it is still invariant and produces an exact ROM for the full system. It merely describes linear decay characteristics of the system. The periodic orbits and other properties that are computed on the invariant manifold, exist in the full system as well - precisely due to the invariance of the manifold.</p><p>An illustration of the  dynamics of a sample system, depending on the magnitude of the relative spectral quotient this is given in the following figure (<a href="http://www.georgehaller.com/reprints/SSMtool.pdf">Ponsioen, Pedergnana &amp; Haller, 2018</a>).</p><p><img alt="" hspace="5" src="SpecQuotFig_Pons2018.png" style="width: 600px; height: auto;" vspace="5"/> </p><p>A similar quotient is also defined for the existence of non-autonomous SSMs, details are provided by <a href="http://www.georgehaller.com/reprints/NNM.pdf">Haller &amp; Ponsioen 2016</a>.</p><h2 id="2">Resonance Conditions</h2><p>In this section we try to motivate how the resonance conditions that are imposed for the existence of an SSM can be understood in the context of the computational procedures for the manifold. For this we consider a first order dynamical system. The eigenproblem for the linear part of this dynamical system reads</p><p><span class="MathJax_Preview"><img alt="$$(\mathbf{A} - \lambda_j \mathbf{B} ) \mathbf{v}_j
+=  \mathbf{0}   $$" src="Spectrum_eq14224432275191691280-Rescaled.png" style="width: 98.39999999999999px; height: auto;"/></span><script type="math/tex">(\mathbf{A} - \lambda_j \mathbf{B} ) \mathbf{v}_j
+=  \mathbf{0}   </script></p><p><span class="MathJax_Preview"><img alt="$$\mathbf{u}_j^*(\mathbf{A} - \lambda_j \mathbf{B})
+=  \mathbf{0}$$" src="Spectrum_eq12918786012518242171-Rescaled.png" style="width: 99.6px; height: auto;"/></span><script type="math/tex">\mathbf{u}_j^*(\mathbf{A} - \lambda_j \mathbf{B})
+=  \mathbf{0}</script></p><p>The invariance equation for the computation of the autonomous SSM for a multi-index <span class="MathJax_Preview"><img alt="$\mathbf{m}$" src="Spectrum_eq03598573572044437231-Rescaled.png" style="width: 12.0px; height: auto;"/></span><script type="math/tex">\mathbf{m}</script> reads (cf. <a href="https://arxiv.org/abs/2307.10240">Thurnher, Haller &amp; Jain, 2023</a>)</p><p><span class="MathJax_Preview"><img alt="$\underbrace{ \bigg(\mathbf{A}  -  \langle \mathbf{\Lambda} ,{\mathbf m}\rangle \mathbf{B}\bigg) }_{:= \mathbf{L}_{\mathbf{m}}}  \mathbf{W}_{\mathbf m}  = \sum_{j=1}^M \mathbf{B} \mathbf{v}_j R^j_{\mathbf m} + \mathbf{C}_{\mathbf m}$" src="Spectrum_eq05855937942975109258-Rescaled.png" style="width: 255.6px; height: auto;"/></span><script type="math/tex">\underbrace{ \bigg(\mathbf{A}  -  \langle \mathbf{\Lambda} ,{\mathbf m}\rangle \mathbf{B}\bigg) }_{:= \mathbf{L}_{\mathbf{m}}}  \mathbf{W}_{\mathbf m}  = \sum_{j=1}^M \mathbf{B} \mathbf{v}_j R^j_{\mathbf m} + \mathbf{C}_{\mathbf m}</script></p><p>The vector <span class="MathJax_Preview"><img alt="$\mathbf{C}_{\mathbf m}$" src="Spectrum_eq04541322477088046352-Rescaled.png" style="width: 19.2px; height: auto;"/></span><script type="math/tex">\mathbf{C}_{\mathbf m}</script> contains all the contributions of lower order coefficients and the nonlinear functions and is introduced for notational convenience. For more details on the derivation and properties of this expression, as well as a specific treatment for second order mechanical systems see for instance <a href="http://www.georgehaller.com/reprints/JainHaller_HowToComputeInvariantManifolds.pdf">Jain &amp; Haller, 2021</a> and <a href="https://arxiv.org/abs/2307.10240">Thurnher, Haller &amp; Jain, 2023</a>. The vector <span class="MathJax_Preview"><img alt="$\mathbf{\Lambda}$" src="Spectrum_eq03436952789306242750-Rescaled.png" style="width: 10.799999999999999px; height: auto;"/></span><script type="math/tex">\mathbf{\Lambda}</script> contains the eigenvalues that correspond to the master modes. If the resonance condition <span class="MathJax_Preview"><img alt="$\langle \mathbf{\Lambda} ,{\mathbf m}\rangle = \lambda_j$" src="Spectrum_eq03595991923401712311-Rescaled.png" style="width: 67.2px; height: auto;"/></span><script type="math/tex">\langle \mathbf{\Lambda} ,{\mathbf m}\rangle = \lambda_j</script> is fulfilled, then <span class="MathJax_Preview"><img alt="$\mathbf{L_m}$" src="Spectrum_eq16943427319323715914-Rescaled.png" style="width: 19.2px; height: auto;"/></span><script type="math/tex">\mathbf{L_m}</script> is singular and the equation is ill defined. For damped systems the configurations which lead to such a resonance form a volume zero set - the probability of such an exact resonance occurring is therefore zero. However, especially in the case of lightly damped structures, near resonances of the form</p><p><span class="MathJax_Preview"><img alt="$$\langle \mathbf{\Lambda} ,{\mathbf m}\rangle \approx \lambda_j$$" src="Spectrum_eq04486690550840665331-Rescaled.png" style="width: 67.2px; height: auto;"/></span><script type="math/tex">\langle \mathbf{\Lambda} ,{\mathbf m}\rangle \approx \lambda_j</script></p><p>are common. In fact, due to the complex conjugacy relations of mode-pairs, this condition is always fulfilled for lightly damped modes up to certain orders of <span class="MathJax_Preview"><img alt="$\mathbf{m}$" src="Spectrum_eq03598573572044437231-Rescaled.png" style="width: 12.0px; height: auto;"/></span><script type="math/tex">\mathbf{m}</script> (cf. <a href="http://www.georgehaller.com/reprints/ModelIdentification.pdf">Szalai, Ehrhardt &amp; Haller, 2017</a>). For instance</p><p><span class="MathJax_Preview"><img alt="$$(l+1)\lambda_j + l\bar \lambda_j \approx \lambda_j$$" src="Spectrum_eq11160211254040403563-Rescaled.png" style="width: 110.39999999999999px; height: auto;"/></span><script type="math/tex">(l+1)\lambda_j + l\bar \lambda_j \approx \lambda_j</script></p><p>is always fulfilled for small enough <span class="MathJax_Preview"><img alt="$l$" src="Spectrum_eq17216086743898025322-Rescaled.png" style="width: 3.5999999999999996px; height: auto;"/></span><script type="math/tex">l</script>. These resonances do not impair the existence of the SSMs, but do reduce the domain of convergence of the power series which approximate them, as they lead to very large coefficients in the parametrisation of the manifold. This is where the choice for computing the reduced dynamics comes into play. There are two cases which need to be distinguished: the first includes resonances which occur for modes which form part of the master spectral subspace over which the SSM is computed. The second includes resonances with all other modes, ie. the ones that are not part of the underlying spectral subspace.</p><h2 id="3">Resonance of SSM-modes</h2><p>In this case the resonance condition is fulfilled for a mode within the master spectral subspace, ie.</p><p><span class="MathJax_Preview"><img alt="$$\langle \mathbf{\Lambda} , \mathbf{m} \rangle \approx \lambda_i, \quad \lambda_i
+\in \textrm{Spec}(\mathcal{E})$$" src="Spectrum_eq16901111774035228873-Rescaled.png" style="width: 158.4px; height: auto;"/></span><script type="math/tex">\langle \mathbf{\Lambda} , \mathbf{m} \rangle \approx \lambda_i, \quad \lambda_i
+\in \textrm{Spec}(\mathcal{E})</script></p><p>The coefficient matrix <span class="MathJax_Preview"><img alt="$\mathbf{L_m}$" src="Spectrum_eq16943427319323715914-Rescaled.png" style="width: 19.2px; height: auto;"/></span><script type="math/tex">\mathbf{L_m}</script> is thus nearly singular. In other words, the projection of the invariance equation onto the subspace spanned by the eigenvector <span class="MathJax_Preview"><img alt="$\mathbf{v}_i$" src="Spectrum_eq01181717560532207300-Rescaled.png" style="width: 10.799999999999999px; height: auto;"/></span><script type="math/tex">\mathbf{v}_i</script> is nearly singular. Solving this equation numerically will thus lead to large coefficients in the SSM parametrisation <span class="MathJax_Preview"><img alt="$\mathbf{W_m}$" src="Spectrum_eq12315308127707716855-Rescaled.png" style="width: 25.2px; height: auto;"/></span><script type="math/tex">\mathbf{W_m}</script>. This issue can, however, be avoided by choosing a normal form of the reduced dynamics. To do so we demand the equation be trivial on this subspace by invoking</p><p><span class="MathJax_Preview"><img alt="$$\mathbf{u}_i^* \mathbf{L_mW_m} = \mathbf{0}$$" src="Spectrum_eq07279346422866289417-Rescaled.png" style="width: 81.6px; height: auto;"/></span><script type="math/tex">\mathbf{u}_i^* \mathbf{L_mW_m} = \mathbf{0}</script></p><p>For the reduced dynamics <span class="MathJax_Preview"><img alt="$\mathbf{R_m}$" src="Spectrum_eq04333112817243735904-Rescaled.png" style="width: 20.4px; height: auto;"/></span><script type="math/tex">\mathbf{R_m}</script> this implies that they must be chosen such as to satisfy</p><p><span class="MathJax_Preview"><img alt="$$\mathbf{u}_i^* \mathbf{D_mR_m} = -  \mathbf{u}_i^*\mathbf{C_m}$$" src="Spectrum_eq09473110020485874364-Rescaled.png" style="width: 116.39999999999999px; height: auto;"/></span><script type="math/tex">\mathbf{u}_i^* \mathbf{D_mR_m} = -  \mathbf{u}_i^*\mathbf{C_m}</script></p><p>The freedom to choose the reduced dynamics in order to lift the singularity which arises due to the resonance stems from the underdeterminancy of the invariance equation. It is formed by a system of <span class="MathJax_Preview"><img alt="$N = \textrm{dim}(\mathbf{A})$" src="Spectrum_eq10662945192618039213-Rescaled.png" style="width: 73.2px; height: auto;"/></span><script type="math/tex">N = \textrm{dim}(\mathbf{A})</script> equations, but the number of unknows is <span class="MathJax_Preview"><img alt="$N+M =  \textrm{dim}(\mathbf{W_m}) +  \textrm{dim}(\mathbf{R_m})$" src="Spectrum_eq04409823566238002470-Rescaled.png" style="width: 186.0px; height: auto;"/></span><script type="math/tex">N+M =  \textrm{dim}(\mathbf{W_m}) +  \textrm{dim}(\mathbf{R_m})</script>. This is leveraged to choose the normal form reduced dynamics.</p><p>An alternative form of computing the coefficients is given by the graph style parametrisation (cf. <a href="http://www.georgehaller.com/reprints/JainHaller_HowToComputeInvariantManifolds.pdf">Jain &amp; Haller, 2021</a> ).</p><h2 id="4">Resonance of external modes</h2><p>In the case of a resonance of the master-modes with external modes, the resonance condition which is fulfilled reads</p><p><span class="MathJax_Preview"><img alt="$$\langle \mathbf{\Lambda} , \mathbf{m} \rangle \approx \lambda_i, \quad \lambda_i
+\notin \textrm{Spec}(\mathcal{E})$$" src="Spectrum_eq17947612260325677358-Rescaled.png" style="width: 158.4px; height: auto;"/></span><script type="math/tex">\langle \mathbf{\Lambda} , \mathbf{m} \rangle \approx \lambda_i, \quad \lambda_i
+\notin \textrm{Spec}(\mathcal{E})</script></p><p>In this case, the theorem on the existence of SSMs does not guarantee the existence of the manifold. As we will see shortly, it cannot be computed due to singular equations. Intuitively, in <b>physcial terms</b> this also makes sense. If modes on the SSM are resonant with other system modes, then there will be considerable energy transfers between the modes, which couples them. These modes thus also get excited if the master mode is active so taking them and their nonlinear continuations into account is inevitable if an invariant ROM is to be achieved.</p><p>In <b>mathematical terms</b>: any invariant object, that does not take these resonant modes into account, would be orthogonal to the linear subspaces spanned by these resonant eigenmodes, at the linear order. Including nonlinear terms would thus never be able to account for the nonlinear couplings, as the SSM is tangent to the subspace over which it is constructed.</p><p>In <b>algorithmic terms</b>, there is no redundancy which can be exploited in this case to make the SSM coefficients computable. Due to the structure of the vector, <span class="MathJax_Preview"><img alt="$\mathbf{D_m}$" src="Spectrum_eq14768842583613422155-Rescaled.png" style="width: 21.599999999999998px; height: auto;"/></span><script type="math/tex">\mathbf{D_m}</script> lies in the master spectral subspace and is thus orthogonal to <span class="MathJax_Preview"><img alt="$\mathbf{v}_j$" src="Spectrum_eq07370737483859000141-Rescaled.png" style="width: 12.0px; height: auto;"/></span><script type="math/tex">\mathbf{v}_j</script> for any mode that is not part of that subspace. The projection onto the equations thus leads to</p><p><span class="MathJax_Preview"><img alt="$$\mathbf{u}_j^* \mathbf{L_mw_m} =  \mathbf{u}_j^*\mathbf{C_m}$$" src="Spectrum_eq02664544751664871540-Rescaled.png" style="width: 103.2px; height: auto;"/></span><script type="math/tex">\mathbf{u}_j^* \mathbf{L_mw_m} =  \mathbf{u}_j^*\mathbf{C_m}</script></p><p>which is still a nearly singular equation. On the theoretical side the resonances in the spectrum hinder the existence of the manifolds due to the couplings that they bring about, in practice this impedes the computation of the manifold parametrisation. In such a case where the full dynamical system possesses <i>internal resonances</i>, all resonant modes have to be included to the master subspace. Once included, the arising resonances can be treated with the methodology that we use for the resonance of SSM-modes.</p><p>In our toolbox the tolerance for the occurence of these resonances is set with the <tt>reltol</tt> parameter, which indicates below which value a resonance is triggered. This is used to check for the existence of a specified SSM before starting its computation. It can be set via</p><pre class="codeinput">set(S.<a href="../Library/Features/Options/Options.html">Options</a>, <span class="string">'reltol'</span>, reltol)
+        </pre><p>The absolute tolerance, beyond which resonances are triggered is defined as</p><pre class="codeinput">abstol = reltol * min(abs(lambda_M))
+        </pre><p>Whether a resonance is detected for a mode <span class="MathJax_Preview"><img alt="$j$" src="Spectrum_eq06791872479074567463-Rescaled.png" style="width: 6.0px; height: auto;"/></span><script type="math/tex">j</script> is thus determined by</p><p><span class="MathJax_Preview"><img alt="$|\langle \mathbf{m}, \mathbf{\Lambda} \rangle -  \lambda_j| &lt; \textrm{abstol}$" src="Spectrum_eq17325271732109213745-Rescaled.png" style="width: 126.0px; height: auto;"/></span><script type="math/tex">|\langle \mathbf{m}, \mathbf{\Lambda} \rangle -  \lambda_j| < \textrm{abstol}</script></p><h2 id="7">Internal resonances and mode selection</h2><p>For a system where internal resonances are present, the master subspace <span class="MathJax_Preview"><img alt="$\mathcal{E}$" src="Spectrum_eq07367169325332904049-Rescaled.png" style="width: 8.4px; height: auto;"/></span><script type="math/tex">\mathcal{E}</script> needs to include all resonant modes. As a result, the ROM and the SSM which results will have dimension higher than two.</p><p>The parameter <tt>IRtol</tt> is used to control which modes effectively get included to a manifold computation, given a specified mode over which the SSM is to be constructed. For this, the ratio <span class="MathJax_Preview"><img alt="$\textrm{rat}(k)&gt;1$" src="Spectrum_eq13955440712210289440-Rescaled.png" style="width: 58.8px; height: auto;"/></span><script type="math/tex">\textrm{rat}(k)>1</script> of a mode <span class="MathJax_Preview"><img alt="$k$" src="Spectrum_eq12829740475467572519-Rescaled.png" style="width: 7.199999999999999px; height: auto;"/></span><script type="math/tex">k</script> to the master mode with index <span class="MathJax_Preview"><img alt="$m$" src="Spectrum_eq18216620034067401164-Rescaled.png" style="width: 12.0px; height: auto;"/></span><script type="math/tex">m</script> is defined as</p><p><span class="MathJax_Preview"><img alt="$$\textrm{rat}(k):=  \omega_m / \omega_k, \quad \omega_m  &gt; \omega_k$$" src="Spectrum_eq13950496940746147429-Rescaled.png" style="width: 160.79999999999998px; height: auto;"/></span><script type="math/tex">\textrm{rat}(k):=  \omega_m / \omega_k, \quad \omega_m  > \omega_k</script></p><p><span class="MathJax_Preview"><img alt="$$\textrm{rat}(k):= \omega_k / \omega_m, \quad \omega_k &gt; \omega_m$$" src="Spectrum_eq11876800359113272220-Rescaled.png" style="width: 159.6px; height: auto;"/></span><script type="math/tex">\textrm{rat}(k):= \omega_k / \omega_m, \quad \omega_k > \omega_m</script></p><p>A mode is then included into the master subspace and taken into account for SSM computation if <span class="MathJax_Preview"><img alt="$\textrm{rat}(k)&lt;5$" src="Spectrum_eq01541565879309090884-Rescaled.png" style="width: 58.8px; height: auto;"/></span><script type="math/tex">\textrm{rat}(k)<5</script> and</p><p><span class="MathJax_Preview"><img alt="$|\textrm{rat}(k) - \textrm{Round(rat}(k))| &lt; \textrm{IRtol}$" src="Spectrum_eq13632295226771290979-Rescaled.png" style="width: 187.2px; height: auto;"/></span><script type="math/tex">|\textrm{rat}(k) - \textrm{Round(rat}(k))| < \textrm{IRtol}</script>. This parameter is set via</p><pre class="codeinput">set(S.<a href="../Library/Features/Options/Options.html">Options</a>, <span class="string">'IRtol'</span>, IRtol)
+        </pre><p>The set of modes, which is chosen as a basis of the master spectral subspace for model reduction when searching for the resonant forced response should thus in general include all modes that</p><div><ul><li>assume a resonance relationship with any of the external excitation frequencies</li><li>assume a resonance relationship with a mode, that is already included in the master spectral subspace <span class="MathJax_Preview"><img alt="$\mathcal{E}$" src="Spectrum_eq07367169325332904049-Rescaled.png" style="width: 8.4px; height: auto;"/></span><script type="math/tex">\mathcal{E}</script></li></ul></div><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% Spectrum and Resonances
+%
+%%
+% In the section on the <2.%20SSM-Theory.html existence and uniqueness of SSMs>, we have defined 
+% the relative spectral quotient of a spectral subspace $\mathcal{E}$ as
+% 
+% $$\sigma(\mathcal{E})= \frac{\textrm{min}_{\lambda \notin \textrm{Spec}(\mathcal{E})} 
+% \textrm{Re} \lambda }{\textrm{max}_{\lambda \in \textrm{Spec}(\mathcal{E})} \textrm{Re} 
+% \lambda}$$
+% 
+% From a purely theoretical perspective, the integer part of this quotient gives 
+% the maximal degree of smoothness of general type invariant manifolds of the 
+% dynamical system. The SSM is the unique manifold which has a degree of smoothness 
+% higher than $\sigma(\mathcal{E})$. For the computation of the SSM an approximation 
+% of order equal or higher than the relative spectral quotient thus guarantees 
+% that the computed manifold indeed is the unique smoothest invariant manifold.
+% 
+% This spectral qutioent, however, also has further implications about the global 
+% dynamics. Especially in the case of slow SSMs, which are constructed over the 
+% slowest spectral subspaces, the relative spectral quotient gives indications 
+% about how strongly nearby trajectories are attracted to the SSM. In this case 
+% the quotient is a measure of the spectral separation of the linear part of the 
+% dynamics on, and orthogonal to the master spectral subspaces. The larger the 
+% quotient, the faster full system trajectories collapse onto the SSM. At the 
+% same time, distinguishing the SSM from other, less smooth, invariant manifolds 
+% becomes harder, as the order of approximation in the computation has to be pushed 
+% higher.
+% 
+% Note that the relative spectral quotient does not influence the validity of 
+% the computed forced response on the SSM or other system characteristics obtained 
+% from it -it is still invariant and produces an exact ROM for the full system. It merely describes linear decay characteristics of the system. The 
+% periodic orbits and other properties that are computed on the invariant 
+% manifold, exist in the full system as well - precisely due to the invariance 
+% of the manifold. 
+% 
+% An illustration of the  dynamics of a sample system, depending on the magnitude 
+% of the relative spectral quotient this is given in the following figure (<http://www.georgehaller.com/reprints/SSMtool.pdf Ponsioen, 
+% Pedergnana & Haller, 2018>).
+% 
+% <<SpecQuotFig_Pons2018.png>>
+% 
+% A similar quotient is also defined for the existence of non-autonomous SSMs, 
+% details are provided by <http://www.georgehaller.com/reprints/NNM.pdf Haller & Ponsioen 2016>.
+%% Resonance Conditions
+% In this section we try to motivate how the resonance conditions that are imposed 
+% for the existence of an SSM can be understood in the context of the computational 
+% procedures for the manifold. For this we consider a first order dynamical 
+% system. The eigenproblem for the linear part of this dynamical system reads
+% 
+% $$(\mathbf{A} - \lambda_j \mathbf{B} ) \mathbf{v}_j 
+% =  \mathbf{0}   $$
+% 
+% $$\mathbf{u}_j^*(\mathbf{A} - \lambda_j \mathbf{B}) 
+% =  \mathbf{0}$$
+% 
+% The invariance equation for the computation of the autonomous SSM for a multi-index $\mathbf{m}$ reads (cf. <https://arxiv.org/abs/2307.10240 Thurnher, Haller & Jain, 2023>)
+% 
+% $\underbrace{ \bigg(\mathbf{A}  -  \langle \mathbf{\Lambda} ,{\mathbf m}\rangle \mathbf{B}\bigg) }_{:= \mathbf{L}_{\mathbf{m}}}  \mathbf{W}_{\mathbf m}  = \sum_{j=1}^M \mathbf{B} \mathbf{v}_j R^j_{\mathbf m} + \mathbf{C}_{\mathbf m}$
+% 
+% The vector $\mathbf{C}_{\mathbf m}$ contains all the contributions of lower order coefficients and the nonlinear functions and is introduced for notational convenience.
+% For more details on the derivation and properties of this expression, as well as a specific treatment for second order mechanical systems see for instance <http://www.georgehaller.com/reprints/JainHaller_HowToComputeInvariantManifolds.pdf Jain & Haller, 2021> and <https://arxiv.org/abs/2307.10240 Thurnher, Haller & Jain, 2023>. The vector $\mathbf{\Lambda}$ contains the eigenvalues that correspond to 
+% the master modes. If the resonance condition $\langle \mathbf{\Lambda} ,{\mathbf 
+% m}\rangle = \lambda_j$ is fulfilled, then $\mathbf{L_m}$ is singular and the 
+% equation is ill defined. For damped systems the configurations which lead to 
+% such a resonance form a volume zero set - the probability of such an exact resonance 
+% occurring is therefore zero. However, especially in the case of lightly damped 
+% structures, near resonances of the form 
+% 
+% $$\langle \mathbf{\Lambda} ,{\mathbf m}\rangle \approx \lambda_j$$
+% 
+% are common. In fact, due to the complex conjugacy relations of mode-pairs, 
+% this condition is always fulfilled for lightly damped modes up to certain orders 
+% of $\mathbf{m}$ (cf. <http://www.georgehaller.com/reprints/ModelIdentification.pdf Szalai, Ehrhardt & Haller, 2017>). For instance
+% 
+% $$(l+1)\lambda_j + l\bar \lambda_j \approx \lambda_j$$
+% 
+% is always fulfilled for small enough $l$. These resonances do not impair the 
+% existence of the SSMs, but do reduce the domain of convergence of the power 
+% series which approximate them, as they lead to very large coefficients in the 
+% parametrisation of the manifold. This is where the choice for 
+% computing the reduced dynamics comes into play. There are two cases which need 
+% to be distinguished: the first includes resonances which occur for modes which 
+% form part of the master spectral subspace over which the SSM is computed. The 
+% second includes resonances with all other modes, ie. the ones that are not part 
+% of the underlying spectral subspace.
+% 
+% 
+%% Resonance of SSM-modes
+%
+% In this case the resonance condition is fulfilled for a mode within the master 
+% spectral subspace, ie.
+% 
+% $$\langle \mathbf{\Lambda} , \mathbf{m} \rangle \approx \lambda_i, \quad \lambda_i 
+% \in \textrm{Spec}(\mathcal{E})$$
+% 
+% The coefficient matrix $\mathbf{L_m}$ is thus nearly singular. In other words, 
+% the projection of the invariance equation onto the subspace spanned by the eigenvector 
+% $\mathbf{v}_i$ is nearly singular. Solving this equation numerically will 
+% thus lead to large coefficients in the SSM parametrisation $\mathbf{W_m}$. This 
+% issue can, however, be avoided by choosing a normal form of the reduced dynamics. 
+% To do so we demand the equation be trivial on this subspace by invoking
+% 
+% $$\mathbf{u}_i^* \mathbf{L_mW_m} = \mathbf{0}$$
+% 
+% For the reduced dynamics $\mathbf{R_m}$ this implies that they must be chosen 
+% such as to satisfy
+% 
+% $$\mathbf{u}_i^* \mathbf{D_mR_m} = -  \mathbf{u}_i^*\mathbf{C_m}$$
+% 
+% The freedom to choose the reduced dynamics in order to lift the singularity 
+% which arises due to the resonance stems from the underdeterminancy of the invariance 
+% equation. It is formed by a system of $N = \textrm{dim}(\mathbf{A})$ equations, 
+% but the number of unknows is $N+M =  \textrm{dim}(\mathbf{W_m}) +  \textrm{dim}(\mathbf{R_m})$. 
+% This is leveraged to choose the normal form reduced dynamics.
+% 
+% 
+% 
+% An alternative form of computing the coefficients is given by the graph style 
+% parametrisation (cf. <http://www.georgehaller.com/reprints/JainHaller_HowToComputeInvariantManifolds.pdf Jain & Haller, 2021> ).
+% 
+%% Resonance of external modes
+% In the case of a resonance of the master-modes with external modes, the resonance 
+% condition which is fulfilled reads
+% 
+% $$\langle \mathbf{\Lambda} , \mathbf{m} \rangle \approx \lambda_i, \quad \lambda_i 
+% \notin \textrm{Spec}(\mathcal{E})$$
+% 
+% In this case, the theorem on the existence of SSMs does not guarantee the 
+% existence of the manifold. As we will see shortly, it cannot be computed due 
+% to singular equations. Intuitively, in *physcial terms* this also makes sense. If modes on the SSM 
+% are resonant with other system modes, then there will be considerable energy 
+% transfers between the modes, which couples them. These modes thus also get excited 
+% if the master mode is active so taking them and their nonlinear continuations 
+% into account is inevitable if an invariant ROM is to be achieved. 
+% 
+% In *mathematical terms*: any invariant object, that does not take these resonant modes into account, would be 
+% orthogonal to the linear subspaces spanned by these resonant eigenmodes,
+% at the linear order. Including nonlinear terms would thus never be able
+% to account for the nonlinear couplings, as the SSM is tangent to the
+% subspace over which it is constructed.
+% 
+% In *algorithmic terms*, there is no redundancy which can be exploited in this 
+% case to make the SSM coefficients computable. Due to the structure of the vector, 
+% $\mathbf{D_m}$ lies in the master spectral subspace and is thus orthogonal to 
+% $\mathbf{v}_j$ for any mode that is not part of that subspace. The projection 
+% onto the equations thus leads to
+% 
+% $$\mathbf{u}_j^* \mathbf{L_mw_m} =  \mathbf{u}_j^*\mathbf{C_m}$$
+% 
+% which is still a nearly singular equation. On the theoretical side the resonances 
+% in the spectrum hinder the existence of the manifolds due to the couplings that 
+% they bring about, in practice this impedes the computation of the manifold parametrisation. 
+% In such a case where the full dynamical system possesses _internal resonances_, 
+% all resonant modes have to be included to the master subspace. Once included, 
+% the arising resonances can be treated with the methodology that we use for the 
+% resonance of SSM-modes.
+% 
+% In our toolbox the tolerance for the occurence of these resonances is set 
+% with the |reltol| parameter, which indicates below which value a resonance is 
+% triggered. This is used to check for the existence of a specified SSM before 
+% starting its computation. It can be set via
+
+set(S.<a href="../Library/Features/Options/Options.html">Options</a>, 'reltol', reltol)
+%% 
+% The absolute tolerance, beyond which resonances are triggered is defined as 
+
+abstol = reltol * min(abs(lambda_M))
+%% 
+% Whether a resonance is detected for a mode $j$ is thus determined by
+% 
+% $|\langle \mathbf{m}, \mathbf{\Lambda} \rangle -  \lambda_j| < \textrm{abstol}$
+% 
+%% Internal resonances and mode selection
+%
+% For a system where internal resonances are present, the master subspace $\mathcal{E}$ 
+% needs to include all resonant modes. As a result, the ROM and the SSM which 
+% results will have dimension higher than two. 
+% 
+% The parameter |IRtol| is used to control which modes effectively get included 
+% to a manifold computation, given a specified mode over which the SSM is to be 
+% constructed. For this, the ratio $\textrm{rat}(k)>1$ of a mode $k$ to the master 
+% mode with index $m$ is defined as
+% 
+% $$\textrm{rat}(k):=  \omega_m / \omega_k, \quad \omega_m  > \omega_k$$
+%
+% $$\textrm{rat}(k):= \omega_k / \omega_m, \quad \omega_k > \omega_m$$
+% 
+% A mode is then included into the master subspace and taken into account for 
+% SSM computation if $\textrm{rat}(k)<5$ and 
+% 
+% $|\textrm{rat}(k) - \textrm{Round(rat}(k))| < \textrm{IRtol}$. This parameter 
+% is set via
+
+set(S.<a href="../Library/Features/Options/Options.html">Options</a>, 'IRtol', IRtol)
+%% 
+% The set of modes, which is chosen as a basis of the master spectral subspace 
+% for model reduction when searching for the resonant forced response should thus 
+% in general include all modes that
+%% 
+% * assume a resonance relationship with any of the external excitation frequencies
+% * assume a resonance relationship with a mode, that is already included in 
+% the master spectral subspace $\mathcal{E}$
+%% 
+%
+            ##### SOURCE END #####
+        --></body></html></body></html>

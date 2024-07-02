@@ -1,0 +1,147 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../../../index.html"><img alt="Logo" class="logo" src="../../../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>Tensor composition</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-09" name="DC.date"/><meta content="tensor_composition.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>Tensor composition</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">TENSOR_COMPOSITION</a></li><li><a href="#4">TENSOR_PRODUCT</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> AB = tensor_composition(A,B,P,SIZE)
+        </pre><h2 id="2">TENSOR_COMPOSITION</h2><p>This function computes the composite product of sparse tensor <tt>A</tt> with the sparse tensors contained in the cell array <tt>B</tt> in the order specified by the rows of index array P. The returned tensor <tt>AB</tt> of size <tt>SIZE</tt> is obtained by summing over the products for each row of indices.</p><p>Let the input <tt>A</tt>  be an <span class="MathJax_Preview"><img alt="$(n+1)-$" src="tensor_composition_eq01410019427296460071-Rescaled.png" style="width: 50.4px; height: auto;"/></span><script type="math/tex">(n+1)-</script> dimensional tensor <span class="MathJax_Preview"><img alt="$\mathbf{A}$" src="tensor_composition_eq15190527482521674856-Rescaled.png" style="width: 12.0px; height: auto;"/></span><script type="math/tex">\mathbf{A}</script> and the input <tt>B</tt> be a $s-$cell array <span class="MathJax_Preview"><img alt="$(s\ge n)$" src="tensor_composition_eq07330438004655013783-Rescaled.png" style="width: 39.6px; height: auto;"/></span><script type="math/tex">(s\ge n)</script> contain tensors <span class="MathJax_Preview"><img alt="$\mathbf{B}^{(1)},\dots,\mathbf{B}^{(s)}$" src="tensor_composition_eq04369570652774058560-Rescaled.png" style="width: 74.39999999999999px; height: auto;"/></span><script type="math/tex">\mathbf{B}^{(1)},\dots,\mathbf{B}^{(s)}</script> and the  input <tt>P</tt> be an <span class="MathJax_Preview"><img alt="$r\times n$" src="tensor_composition_eq15610900976328931316-Rescaled.png" style="width: 30.0px; height: auto;"/></span><script type="math/tex">r\times n</script> index matrix <span class="MathJax_Preview"><img alt="$\mathbf{P}=\left[\begin{array}{c}\mathbf{p}_{1}\\\vdots\\\mathbf{p}_{r}\end{array}\right]$" src="tensor_composition_eq13566038950023243830-Rescaled.png" style="width: 68.39999999999999px; height: auto;"/></span><script type="math/tex">\mathbf{P}=\left[\begin{array}{c}\mathbf{p}_{1}\\\vdots\\\mathbf{p}_{r}\end{array}\right]</script>. We denote <span class="MathJax_Preview"><img alt="$\mathbf{B}_{\mathbf{p}_j}=\mathbf{B}^{(p_{j1})}\circ\dots\circ\mathbf{B}^{(p_{jn})}$" src="tensor_composition_eq15137300944681651474-Rescaled.png" style="width: 139.2px; height: auto;"/></span><script type="math/tex">\mathbf{B}_{\mathbf{p}_j}=\mathbf{B}^{(p_{j1})}\circ\dots\circ\mathbf{B}^{(p_{jn})}</script> and compute the tensor composition</p><p><span class="MathJax_Preview"><img alt="$$\mathbf{AB} = \sum_{j=1}^{r}\mathbf{A}\cdot\mathbf{B}_{\mathbf{p}_j},$$" src="tensor_composition_eq14186300106345760591-Rescaled.png" style="width: 106.8px; height: auto;"/></span><script type="math/tex">\mathbf{AB} = \sum_{j=1}^{r}\mathbf{A}\cdot\mathbf{B}_{\mathbf{p}_j},</script></p><p>where <span class="MathJax_Preview"><img alt="$\mathbf{A} \cdot \mathbf{B} = \mathbf{A} \times_{2} \mathbf{B}^{(1)} \times_3 \mathbf{B}^{(2)}\dots \times_{n+1} \mathbf{B}^{(n)}$" src="tensor_composition_eq05053138655799726810-Rescaled.png" style="width: 224.4px; height: auto;"/></span><script type="math/tex">\mathbf{A} \cdot \mathbf{B} = \mathbf{A} \times_{2} \mathbf{B}^{(1)} \times_3 \mathbf{B}^{(2)}\dots \times_{n+1} \mathbf{B}^{(n)}</script> is a Tucker-type product.</p><pre class="codeinput">AB = sptensor(SIZE);
+<span class="keyword">parfor</span> j_p = 1:size(P,1)
+    p = P(j_p,:);
+    AB_p = tensor_product(A,B(p));
+    AB = AB + AB_p;
+<span class="keyword">end</span>
+AB = sptensor(AB);
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+
+<span class="keyword">function</span> [AB] = tensor_product(A,B)
+        </pre><h2 id="4">TENSOR_PRODUCT</h2><p>This function uses the Sandia Tensor Toolbox to compute the product of sparse tensor <tt>A</tt> with the sparse tensors contained in the cell array <tt>B</tt>.</p><p>The outer product <span class="MathJax_Preview"><img alt="$\mathbf{B}=\mathbf{B}^{(1)}\circ\dots\circ\mathbf{B}^{(n)}$" src="tensor_composition_eq00129691100159064043-Rescaled.png" style="width: 115.19999999999999px; height: auto;"/></span><script type="math/tex">\mathbf{B}=\mathbf{B}^{(1)}\circ\dots\circ\mathbf{B}^{(n)}</script> has dimensionality <span class="MathJax_Preview"><img alt="$s=s_1+\dots+s_n$" src="tensor_composition_eq07342528045576015576-Rescaled.png" style="width: 93.6px; height: auto;"/></span><script type="math/tex">s=s_1+\dots+s_n</script>. We compute the Tucker-type tensor product <span class="MathJax_Preview"><img alt="$\mathbf{A} \cdot\mathbf{B} = \mathbf{A} \times_{2} \mathbf{B}^{(1)} \times_3 \mathbf{B}^{(2)} \dots \times_{n+1}\mathbf{B}^{(n)}$" src="tensor_composition_eq17260861160382608386-Rescaled.png" style="width: 224.4px; height: auto;"/></span><script type="math/tex">\mathbf{A} \cdot\mathbf{B} = \mathbf{A} \times_{2} \mathbf{B}^{(1)} \times_3 \mathbf{B}^{(2)} \dots \times_{n+1}\mathbf{B}^{(n)}</script> by multiplying the last <span class="MathJax_Preview"><img alt="$n$" src="tensor_composition_eq17555110721583917243-Rescaled.png" style="width: 8.4px; height: auto;"/></span><script type="math/tex">n</script> modes of <span class="MathJax_Preview"><img alt="$\mathbf{A}$" src="tensor_composition_eq15190527482521674856-Rescaled.png" style="width: 12.0px; height: auto;"/></span><script type="math/tex">\mathbf{A}</script> with the first modes of <span class="MathJax_Preview"><img alt="$\mathbf{B}^{(1)},\dots,\mathbf{B}^{(n)}$" src="tensor_composition_eq13531453380776197756-Rescaled.png" style="width: 75.6px; height: auto;"/></span><script type="math/tex">\mathbf{B}^{(1)},\dots,\mathbf{B}^{(n)}</script> respectively. The resulting tensor has size <span class="MathJax_Preview"><img alt="$n+1-2n+s = s-n+1$" src="tensor_composition_eq01126553831680200153-Rescaled.png" style="width: 154.79999999999998px; height: auto;"/></span><script type="math/tex">n+1-2n+s = s-n+1</script>. The same is achieved by the following:</p><pre class="codeinput">AB = A;
+<span class="keyword">for</span> k = 1:length(B)
+    AB = sptensor(ttt(AB,B{k},2,1));
+<span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+        </pre><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% Tensor composition
+%
+%%
+function AB = tensor_composition(A,B,P,SIZE)
+%%  TENSOR_COMPOSITION 
+% 
+% This function computes the composite product of sparse tensor |A| with the sparse 
+% tensors contained in the cell array |B| in the order specified by the rows of 
+% index array P. The returned tensor |AB| of size |SIZE| is obtained by summing over 
+% the products for each row of indices.
+% 
+% Let the input |A|  be an $(n+1)-$ dimensional tensor $\mathbf{A}$ 
+% and the input |B| be a $s-$cell array $(s\ge n)$ contain tensors $\mathbf{B}^{(1)},\dots,\mathbf{B}^{(s)}$ 
+% and the  input |P| be an $r\times n$ index matrix $\mathbf{P}=\left[\begin{array}{c}\mathbf{p}_{1}\\\vdots\\\mathbf{p}_{r}\end{array}\right]$. 
+% We denote $\mathbf{B}_{\mathbf{p}_j}=\mathbf{B}^{(p_{j1})}\circ\dots\circ\mathbf{B}^{(p_{jn})}$ 
+% and compute the tensor composition 
+% 
+% $$\mathbf{AB} = \sum_{j=1}^{r}\mathbf{A}\cdot\mathbf{B}_{\mathbf{p}_j},$$
+% 
+% where $\mathbf{A} \cdot \mathbf{B} = \mathbf{A} \times_{2} \mathbf{B}^{(1)} \times_3 \mathbf{B}^{(2)}\dots \times_{n+1} \mathbf{B}^{(n)}$ 
+% is a Tucker-type product. 
+%
+
+AB = sptensor(SIZE);
+parfor j_p = 1:size(P,1)
+    p = P(j_p,:);
+    AB_p = tensor_product(A,B(p));
+    AB = AB + AB_p;
+end
+AB = sptensor(AB);
+end
+
+function [AB] = tensor_product(A,B)
+%%  TENSOR_PRODUCT 
+% 
+% This function uses the Sandia Tensor Toolbox to compute the product of sparse 
+% tensor |A| with the sparse tensors contained in the cell array |B|.
+% 
+% The outer product $\mathbf{B}=\mathbf{B}^{(1)}\circ\dots\circ\mathbf{B}^{(n)}$ 
+% has dimensionality $s=s_1+\dots+s_n$. We compute the Tucker-type tensor product 
+% $\mathbf{A} \cdot\mathbf{B} = \mathbf{A} \times_{2} \mathbf{B}^{(1)} \times_3 \mathbf{B}^{(2)} \dots \times_{n+1}\mathbf{B}^{(n)}$ 
+% by multiplying the last $n$ modes of $\mathbf{A}$ with the first modes of $\mathbf{B}^{(1)},\dots,\mathbf{B}^{(n)}$ 
+% respectively. The resulting tensor has size $n+1-2n+s = s-n+1$. The same is 
+% achieved by the following:
+%
+
+AB = A;
+for k = 1:length(B)
+    AB = sptensor(ttt(AB,B{k},2,1));
+end
+end
+            ##### SOURCE END #####
+        --></body></html></body></html>

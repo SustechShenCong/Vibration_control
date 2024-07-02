@@ -1,0 +1,480 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../../../index.html"><img alt="Logo" class="logo" src="../../../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>PO_FULL_RESULTS</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-11" name="DC.date"/><meta content="po_full_results.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>PO_FULL_RESULTS</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">This function extract results of reduced dynamics at</a></li><li><a href="#3">extract results of reduced dynamics at sampled frequency/forcing</a></li><li><a href="#4">Append if results come from secondary branch</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> FRC = po_full_results(runid,sampStyle,ispolar,ampNames,saveIC,branch,varargin)
+        </pre><h2 id="2">This function extract results of reduced dynamics at</h2><p>sampled forcing frequencies/amplitudes in continuation of periodic orbits The response is computed in the full system</p><p>FULLSAMP = PO_REDUCED_RESULTS(RUNID,SAMPSTYLE,ISPOLAR,ISOMEGA,AMPNAMES,SAVEIC,BRANCH,VARARGIN)</p><div><ul><li>runid:     id of continuation run of equilibrium points</li></ul></div><div><ul><li>sampStyle: samping style of excitation frequencies</li></ul></div><div><ul><li>ispolar:   coordinate representation of reduced dynamics</li></ul></div><div><ul><li>ampNames:  names of the amplitudes that are output to FRC computation</li></ul></div><div><ul><li>saveIC:    whether to save initial condition of FRC orbits in full            coordinates</li></ul></div><div><ul><li>branch:    if branch = primary   -&gt; primary branch            if branch = secondary -&gt; append results from secondary branch</li></ul></div><div><ul><li>varargin:  FRC struct array of primary branch</li></ul></div><h2 id="3">extract results of reduced dynamics at sampled frequency/forcing</h2><pre class="codeinput">bd = coco_bd_read(runid);
+m  = numel(ampNames)-1; <span class="comment">% last one is Znorm</span>
+
+Aout_frc = [];
+Znorm_frc = [];
+
+<span class="keyword">if</span> strcmp(sampStyle,<span class="string">'cocoBD'</span>)
+    om  = coco_bd_col(bd, <span class="string">'om'</span>);
+
+    <span class="keyword">if</span> ispolar
+        <span class="comment">% Not implemented yet</span>
+    <span class="keyword">else</span>
+        <span class="keyword">for</span> k=1:m
+            <span class="comment">% Read amplitudes of outdofs</span>
+            Aout_k =  coco_bd_col(bd, ampNames{k});
+            Aout_frc = [Aout_frc; Aout_k];
+
+        <span class="keyword">end</span>
+        Znorm_frc = coco_bd_col(bd, <span class="string">'Znorm'</span>);
+        <span class="keyword">if</span> saveIC
+        Z0_frc = coco_bd_col(bd, <span class="string">'IC'</span>);
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+    epsf = coco_bd_col(bd, <span class="string">'eps'</span>);
+
+
+    <span class="comment">% Floquet multiplier give stability</span>
+    stab  = ~coco_bd_col(bd, <span class="string">'po.test.USTAB'</span>);
+
+    SNidx = coco_bd_idxs(bd, <span class="string">'SN'</span>);
+    PDidx = coco_bd_idxs(bd, <span class="string">'PD'</span>);
+    TRidx = coco_bd_idxs(bd, <span class="string">'TR'</span>);
+    BPidx = coco_bd_idxs(bd, <span class="string">'BP'</span>);
+
+<span class="keyword">else</span>
+    <span class="keyword">if</span> strcmp(sampStyle, <span class="string">'uniform'</span>)
+        error(<span class="string">'Sampling Style "uniform" not supported for po'</span>);
+    <span class="keyword">elseif</span> strcmp(omegaSampStyle, <span class="string">'cocoOut'</span>)
+        error(<span class="string">'Sampling Style "cocoOut" not supported for po'</span>);
+    <span class="keyword">end</span>
+
+<span class="keyword">end</span>
+        </pre><h2 id="4">Append if results come from secondary branch</h2><pre class="codeinput"><span class="keyword">switch</span> branch
+    <span class="keyword">case</span> <span class="string">'primary'</span>
+        FRC = struct();
+        FRC.om  = om;
+        FRC.Aout  = Aout_frc;
+        FRC.Zout  = []; <span class="comment">% Not stored for po</span>
+        FRC.Znorm = Znorm_frc;
+        FRC.ep  = epsf;
+        FRC.stability  = stab;
+        FRC.SNidx = SNidx;
+        FRC.PDidx = PDidx;
+        FRC.TRidx = TRidx;
+        FRC.BPidx = BPidx;
+
+        <span class="keyword">if</span> saveIC
+            FRC.Z0_frc    = Z0_frc; <span class="comment">% initial state</span>
+        <span class="keyword">else</span>
+            FRC.Z0_frc    = []; <span class="comment">% initial state</span>
+
+        <span class="keyword">end</span>
+
+    <span class="keyword">case</span> <span class="string">'secondary'</span>
+        FRC = varargin{1};
+        FRC.om        = [FRC.om;om];
+        FRC.Aout  = [FRC.Aout_frc;Aout_frc];
+        FRC.Zout  = []; <span class="comment">% Not stored for po</span>
+        FRC.Znorm = [FRC.Znorm_frc;Znorm_frc];
+        FRC.ep        = [FRC.ep;epsf];
+        FRC.stability    = [FRC.st;stab];
+        FRC.SNidx = [FRC.SNidx,SNidx];
+        FRC.PDidx = [FRC.PDidx,PDidx];
+        FRC.TRidx = [FRC.TRidx,TRidx];
+        FRC.BPidx = [FRC.BPidx,BPidx];
+
+        <span class="keyword">if</span> saveIC
+            FRC.Z0_frc    = [FRC.Z0_frc;Z0_frc]; <span class="comment">% initial state</span>
+        <span class="keyword">end</span>
+<span class="keyword">end</span>
+<span class="comment">%{
+</span><span class="comment">if numel(varargin)==1
+</span><span class="comment">
+</span><span class="comment">%% plot continuation results in normal coordinates
+</span><span class="comment">thm = struct( 'special', {{'SN', 'HB'}});
+</span><span class="comment">thm.SN = {'LineStyle', 'none', 'LineWidth', 2, ...
+</span><span class="comment">  'Color', 'cyan', 'Marker', 'o', 'MarkerSize', 8, 'MarkerEdgeColor', ...
+</span><span class="comment">  'cyan', 'MarkerFaceColor', 'white'};
+</span><span class="comment">thm.HB = {'LineStyle', 'none', 'LineWidth', 2, ...
+</span><span class="comment">  'Color', 'black', 'Marker', 's', 'MarkerSize', 8, 'MarkerEdgeColor', ...
+</span><span class="comment">  'black', 'MarkerFaceColor', 'white'};
+</span><span class="comment">figure;
+</span><span class="comment">for k=1:m
+</span><span class="comment">    subplot(m,1,k)
+</span><span class="comment">    if ispolar
+</span><span class="comment">        rhok = strcat('rho',num2str(k));
+</span><span class="comment">        if isempty(isomega)
+</span><span class="comment">            coco_plot_bd(thm, runid, 'om', 'eps', rhok, @(x) abs(x)); hold on
+</span><span class="comment">        else
+</span><span class="comment">            if isomega
+</span><span class="comment">                coco_plot_bd(thm, runid, 'om', rhok, @(x) abs(x)); hold on
+</span><span class="comment">            else
+</span><span class="comment">                coco_plot_bd(thm, runid, 'eps', rhok, @(x) abs(x)); hold on
+</span><span class="comment">            end
+</span><span class="comment">        end
+</span><span class="comment">    else
+</span><span class="comment">        Rezk = strcat('Rez',num2str(k));
+</span><span class="comment">        Imzk = strcat('Imz',num2str(k));
+</span><span class="comment">        if isempty(isomega)
+</span><span class="comment">            coco_plot_bd(thm, runid, 'om', 'eps', {Rezk,Imzk}, @(x,y) sqrt(x.^2+y.^2)); hold on
+</span><span class="comment">        else
+</span><span class="comment">            if isomega
+</span><span class="comment">                coco_plot_bd(thm, runid, 'om', {Rezk,Imzk}, @(x,y) sqrt(x.^2+y.^2)); hold on
+</span><span class="comment">            else
+</span><span class="comment">                coco_plot_bd(thm, runid, 'eps', {Rezk,Imzk}, @(x,y) sqrt(x.^2+y.^2)); hold on
+</span><span class="comment">            end
+</span><span class="comment">        end
+</span><span class="comment">    end
+</span><span class="comment">    grid on; box on;
+</span><span class="comment">    set(gca,'LineWidth',1.2);
+</span><span class="comment">    set(gca,'FontSize',14);
+</span><span class="comment">    if isempty(isomega)
+</span><span class="comment">        xlabel('$\Omega$','interpreter','latex','FontSize',16);
+</span><span class="comment">        ylabel('$\epsilon$','interpreter','latex','FontSize',16);
+</span><span class="comment">        zlabel(strcat('$\rho_',num2str(k),'$'),'interpreter','latex','FontSize',16);
+</span><span class="comment">    else
+</span><span class="comment">        if isomega
+</span><span class="comment">            xlabel('$\Omega$','interpreter','latex','FontSize',16);
+</span><span class="comment">        else
+</span><span class="comment">            xlabel('$\epsilon$','interpreter','latex','FontSize',16);
+</span><span class="comment">        end
+</span><span class="comment">        ylabel(strcat('$\rho_',num2str(k),'$'),'interpreter','latex','FontSize',16);
+</span><span class="comment">    end
+</span><span class="comment">end
+</span><span class="comment">
+</span><span class="comment">
+</span><span class="comment">figure;
+</span><span class="comment">for k=1:m
+</span><span class="comment">    subplot(m,1,k)
+</span><span class="comment">    if ispolar
+</span><span class="comment">        rhok = strcat('rho',num2str(k));
+</span><span class="comment">        thk  = strcat('th',num2str(k));
+</span><span class="comment">        if isempty(isomega)
+</span><span class="comment">            coco_plot_bd(thm, runid, 'om', 'eps', {thk, rhok}, @(x,y) x+0.5*(1-sign(y))*pi); hold on
+</span><span class="comment">        else
+</span><span class="comment">            if isomega
+</span><span class="comment">                coco_plot_bd(thm, runid, 'om', {thk, rhok}, @(x,y) x+0.5*(1-sign(y))*pi); hold on
+</span><span class="comment">            else
+</span><span class="comment">                coco_plot_bd(thm, runid, 'eps', {thk, rhok}, @(x,y) x+0.5*(1-sign(y))*pi); hold on
+</span><span class="comment">            end
+</span><span class="comment">        end
+</span><span class="comment">    else
+</span><span class="comment">        Rezk = strcat('Rez',num2str(k));
+</span><span class="comment">        Imzk = strcat('Imz',num2str(k));
+</span><span class="comment">        if isempty(isomega)
+</span><span class="comment">            coco_plot_bd(thm, runid, 'om', 'eps', {Rezk,Imzk}, @(x,y) atan2(y,x)); hold on
+</span><span class="comment">        else
+</span><span class="comment">            if isomega
+</span><span class="comment">                coco_plot_bd(thm, runid, 'om', {Rezk,Imzk}, @(x,y) atan2(y,x)); hold on
+</span><span class="comment">            else
+</span><span class="comment">                coco_plot_bd(thm, runid, 'eps', {Rezk,Imzk}, @(x,y) atan2(y,x)); hold on
+</span><span class="comment">            end
+</span><span class="comment">        end
+</span><span class="comment">    end
+</span><span class="comment">    grid on; box on;
+</span><span class="comment">    set(gca,'LineWidth',1.2);
+</span><span class="comment">    set(gca,'FontSize',14);
+</span><span class="comment">    if isempty(isomega)
+</span><span class="comment">        xlabel('$\Omega$','interpreter','latex','FontSize',16);
+</span><span class="comment">        ylabel('$\epsilon$','interpreter','latex','FontSize',16);
+</span><span class="comment">        zlabel(strcat('$\theta_',num2str(k),'$'),'interpreter','latex','FontSize',16);
+</span><span class="comment">    else
+</span><span class="comment">        if isomega
+</span><span class="comment">            xlabel('$\Omega$','interpreter','latex','FontSize',16);
+</span><span class="comment">        else
+</span><span class="comment">            xlabel('$\epsilon$','interpreter','latex','FontSize',16);
+</span><span class="comment">        end
+</span><span class="comment">        ylabel(strcat('$\theta_',num2str(k),'$'),'interpreter','latex','FontSize',16);
+</span><span class="comment">    end
+</span><span class="comment">end
+</span><span class="comment">
+</span><span class="comment">end
+</span><span class="comment">%}</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+        </pre><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% PO_FULL_RESULTS 
+%
+%%
+function FRC = po_full_results(runid,sampStyle,ispolar,ampNames,saveIC,branch,varargin)
+%% This function extract results of reduced dynamics at
+% sampled forcing frequencies/amplitudes in continuation of periodic orbits
+% The response is computed in the full system
+%
+% FULLSAMP =
+% PO_REDUCED_RESULTS(RUNID,SAMPSTYLE,ISPOLAR,ISOMEGA,AMPNAMES,SAVEIC,BRANCH,VARARGIN)
+%
+% * runid:     id of continuation run of equilibrium points
+% 
+% * sampStyle: samping style of excitation frequencies
+% 
+% * ispolar:   coordinate representation of reduced dynamics
+% 
+% * ampNames:  names of the amplitudes that are output to FRC computation
+% 
+% * saveIC:    whether to save initial condition of FRC orbits in full
+%            coordinates
+% 
+% * branch:    if branch = primary   -> primary branch
+%            if branch = secondary -> append results from secondary branch
+% 
+% * varargin:  FRC struct array of primary branch
+
+%% extract results of reduced dynamics at sampled frequency/forcing
+bd = coco_bd_read(runid);
+m  = numel(ampNames)-1; % last one is Znorm 
+
+Aout_frc = [];
+Znorm_frc = [];
+
+if strcmp(sampStyle,'cocoBD')
+    om  = coco_bd_col(bd, 'om');
+    
+    if ispolar
+        % Not implemented yet
+    else
+        for k=1:m    
+            % Read amplitudes of outdofs
+            Aout_k =  coco_bd_col(bd, ampNames{k});            
+            Aout_frc = [Aout_frc; Aout_k];
+           
+        end
+        Znorm_frc = coco_bd_col(bd, 'Znorm'); 
+        if saveIC
+        Z0_frc = coco_bd_col(bd, 'IC');
+        end
+    end
+    epsf = coco_bd_col(bd, 'eps');
+    
+
+    % Floquet multiplier give stability
+    stab  = ~coco_bd_col(bd, 'po.test.USTAB');
+
+    SNidx = coco_bd_idxs(bd, 'SN');
+    PDidx = coco_bd_idxs(bd, 'PD');
+    TRidx = coco_bd_idxs(bd, 'TR');
+    BPidx = coco_bd_idxs(bd, 'BP');
+
+else
+    if strcmp(sampStyle, 'uniform')
+        error('Sampling Style "uniform" not supported for po');
+    elseif strcmp(omegaSampStyle, 'cocoOut')
+        error('Sampling Style "cocoOut" not supported for po');
+    end
+
+end
+%% Append if results come from secondary branch
+
+switch branch
+    case 'primary'
+        FRC = struct();
+        FRC.om  = om;
+        FRC.Aout  = Aout_frc;
+        FRC.Zout  = []; % Not stored for po
+        FRC.Znorm = Znorm_frc;
+        FRC.ep  = epsf;
+        FRC.stability  = stab;
+        FRC.SNidx = SNidx;
+        FRC.PDidx = PDidx;
+        FRC.TRidx = TRidx;
+        FRC.BPidx = BPidx;
+        
+        if saveIC
+            FRC.Z0_frc    = Z0_frc; % initial state
+        else
+            FRC.Z0_frc    = []; % initial state
+            
+        end
+        
+    case 'secondary'
+        FRC = varargin{1};
+        FRC.om        = [FRC.om;om];
+        FRC.Aout  = [FRC.Aout_frc;Aout_frc];
+        FRC.Zout  = []; % Not stored for po
+        FRC.Znorm = [FRC.Znorm_frc;Znorm_frc];
+        FRC.ep        = [FRC.ep;epsf];
+        FRC.stability    = [FRC.st;stab];
+        FRC.SNidx = [FRC.SNidx,SNidx];
+        FRC.PDidx = [FRC.PDidx,PDidx];
+        FRC.TRidx = [FRC.TRidx,TRidx];
+        FRC.BPidx = [FRC.BPidx,BPidx];
+        
+        if saveIC
+            FRC.Z0_frc    = [FRC.Z0_frc;Z0_frc]; % initial state
+        end
+end
+%{
+if numel(varargin)==1
+    
+%% plot continuation results in normal coordinates
+thm = struct( 'special', {{'SN', 'HB'}});
+thm.SN = {'LineStyle', 'none', 'LineWidth', 2, ...
+  'Color', 'cyan', 'Marker', 'o', 'MarkerSize', 8, 'MarkerEdgeColor', ...
+  'cyan', 'MarkerFaceColor', 'white'};
+thm.HB = {'LineStyle', 'none', 'LineWidth', 2, ...
+  'Color', 'black', 'Marker', 's', 'MarkerSize', 8, 'MarkerEdgeColor', ...
+  'black', 'MarkerFaceColor', 'white'};
+figure;
+for k=1:m
+    subplot(m,1,k)
+    if ispolar
+        rhok = strcat('rho',num2str(k));
+        if isempty(isomega)
+            coco_plot_bd(thm, runid, 'om', 'eps', rhok, @(x) abs(x)); hold on
+        else
+            if isomega
+                coco_plot_bd(thm, runid, 'om', rhok, @(x) abs(x)); hold on
+            else
+                coco_plot_bd(thm, runid, 'eps', rhok, @(x) abs(x)); hold on
+            end
+        end
+    else
+        Rezk = strcat('Rez',num2str(k));
+        Imzk = strcat('Imz',num2str(k));
+        if isempty(isomega)
+            coco_plot_bd(thm, runid, 'om', 'eps', {Rezk,Imzk}, @(x,y) sqrt(x.^2+y.^2)); hold on
+        else
+            if isomega
+                coco_plot_bd(thm, runid, 'om', {Rezk,Imzk}, @(x,y) sqrt(x.^2+y.^2)); hold on
+            else
+                coco_plot_bd(thm, runid, 'eps', {Rezk,Imzk}, @(x,y) sqrt(x.^2+y.^2)); hold on
+            end
+        end
+    end
+    grid on; box on; 
+    set(gca,'LineWidth',1.2);
+    set(gca,'FontSize',14);
+    if isempty(isomega)
+        xlabel('$\Omega$','interpreter','latex','FontSize',16);
+        ylabel('$\epsilon$','interpreter','latex','FontSize',16);
+        zlabel(strcat('$\rho_',num2str(k),'$'),'interpreter','latex','FontSize',16);
+    else
+        if isomega
+            xlabel('$\Omega$','interpreter','latex','FontSize',16);
+        else
+            xlabel('$\epsilon$','interpreter','latex','FontSize',16);
+        end
+        ylabel(strcat('$\rho_',num2str(k),'$'),'interpreter','latex','FontSize',16);
+    end
+end
+
+
+figure;
+for k=1:m
+    subplot(m,1,k)
+    if ispolar
+        rhok = strcat('rho',num2str(k));
+        thk  = strcat('th',num2str(k));
+        if isempty(isomega)
+            coco_plot_bd(thm, runid, 'om', 'eps', {thk, rhok}, @(x,y) x+0.5*(1-sign(y))*pi); hold on
+        else
+            if isomega
+                coco_plot_bd(thm, runid, 'om', {thk, rhok}, @(x,y) x+0.5*(1-sign(y))*pi); hold on
+            else
+                coco_plot_bd(thm, runid, 'eps', {thk, rhok}, @(x,y) x+0.5*(1-sign(y))*pi); hold on
+            end
+        end
+    else
+        Rezk = strcat('Rez',num2str(k));
+        Imzk = strcat('Imz',num2str(k));
+        if isempty(isomega)
+            coco_plot_bd(thm, runid, 'om', 'eps', {Rezk,Imzk}, @(x,y) atan2(y,x)); hold on
+        else
+            if isomega
+                coco_plot_bd(thm, runid, 'om', {Rezk,Imzk}, @(x,y) atan2(y,x)); hold on
+            else
+                coco_plot_bd(thm, runid, 'eps', {Rezk,Imzk}, @(x,y) atan2(y,x)); hold on
+            end
+        end
+    end
+    grid on; box on; 
+    set(gca,'LineWidth',1.2);
+    set(gca,'FontSize',14);
+    if isempty(isomega)
+        xlabel('$\Omega$','interpreter','latex','FontSize',16);
+        ylabel('$\epsilon$','interpreter','latex','FontSize',16);
+        zlabel(strcat('$\theta_',num2str(k),'$'),'interpreter','latex','FontSize',16);
+    else
+        if isomega
+            xlabel('$\Omega$','interpreter','latex','FontSize',16);
+        else
+            xlabel('$\epsilon$','interpreter','latex','FontSize',16);
+        end
+        ylabel(strcat('$\theta_',num2str(k),'$'),'interpreter','latex','FontSize',16);
+    end
+end
+
+end
+%}
+end
+
+            ##### SOURCE END #####
+        --></body></html></body></html>

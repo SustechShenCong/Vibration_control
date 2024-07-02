@@ -1,0 +1,1168 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><html><body><div class="banner"><a href="../../../../index.html"><img alt="Logo" class="logo" src="../../../../logo.png" style="float:right" width="200"/></a></div></body></html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Mass oscillating in a cube.</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-02" name="DC.date"/><meta content="Three_DOFs_constrained_by_Cube.m" name="DC.source"/><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Mass oscillating in a cube.</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#3">Setup model</a></li><li><a href="#5">Autonomous SSM</a></li><li><a href="#10">Reference solutions from forward simulation</a></li><li><a href="#19">Non-autonomous -  forced response curve</a></li><li><a href="#22">Validation</a></li></ul></div><p>Consider the following system with 3 dofs</p><p><img alt="" src="model.png" style="width:30%;"/> </p><p>reproduced from [1]</p><p>The equation of motion for the system is given by</p><p><img alt="$$\ddot{x}_1+2\zeta_1\omega_1\dot{x}_1+\omega_1^2x_1+\frac{\omega_1^2}{2}(3x_1^2+x_2^2
++ x_3^2)+\omega_2^2x_1x_2+\omega_3^2x_1x_3+\frac{\omega_1^2+\omega_2^2 + \omega_3^2}{2}x_1(x_1^2+x_2^2+x_3^2)=\epsilon
+f_1\cos\Omega t$$" src="Three_DOFs_constrained_by_Cube_eq00562400917638185582-Rescaled.png" style="width: 607.1999999999999px; height: auto;"/></p><p><img alt="$$\ddot{x}_2+2\zeta_2\omega_2\dot{x}_2+\omega_2^2x_2+\frac{\omega_2^2}{2}(3x_2^2+x_1^2
++ x_3^2)+\omega_1^2x_1x_2+ \omega_3^2x_2 x_3 + \frac{\omega_1^2+\omega_2^2 +
+\omega_3^2}{2}x_2(x_1^2+x_2^2+ x_3^2)=0$$" src="Three_DOFs_constrained_by_Cube_eq01239233222420170090-Rescaled.png" style="width: 559.1999999999999px; height: auto;"/></p><p><img alt="$$\ddot{x}_3+2\zeta_3\omega_3\dot{x}_3+\omega_3^2x_3+\frac{\omega_3^2}{2}(3x_3^2+x_1^2
++ x_2^2)+\omega_1^2x_1x_3+ \omega_2^2x_2x_3 +\frac{\omega_1^2+\omega_2^2 + \omega_3^2}{2}x_3(x_1^2+x_2^2+
+x_3^2)=0$$" src="Three_DOFs_constrained_by_Cube_eq18220274917095552986-Rescaled.png" style="width: 559.1999999999999px; height: auto;"/></p><p>Here we also consider a configuration constraint <img alt="$g(x_1,x_2,x_3)=0$" src="Three_DOFs_constrained_by_Cube_eq12635938796795011873-Rescaled.png" style="width: 91.2px; height: auto;"/> that satisfies <img alt="$g(0,0,0)=0$" src="Three_DOFs_constrained_by_Cube_eq05027406865407668017-Rescaled.png" style="width: 73.2px; height: auto;"/>. The equation of motion is updated as</p><p><img alt="$$\ddot{x}_1+2\zeta_1\omega_1\dot{x}_1+\omega_1^2x_1+\frac{\omega_1^2}{2}(3x_1^2+x_2^2
++ x_3^2)+\omega_2^2x_1x_2+\omega_3^2x_1x_3+\frac{\omega_1^2+\omega_2^2 + \omega_3^2}{2}x_1(x_1^2+x_2^2+x_3^2)+\lambda
+\frac{\partial g(x_1,x_2,x_3)}{\partial{x_1}}=\epsilon f_1\cos\Omega t$$" src="Three_DOFs_constrained_by_Cube_eq15780009702347936072-Rescaled.png" style="width: 709.1999999999999px; height: auto;"/></p><p><img alt="$$\ddot{x}_2+2\zeta_2\omega_2\dot{x}_2+\omega_2^2x_2+\frac{\omega_2^2}{2}(3x_2^2+x_1^2
++ x_3^2)+\omega_1^2x_1x_2+ \omega_3^2x_2 x_3 + \frac{\omega_1^2+\omega_2^2 +
+\omega_3^2}{2}x_2(x_1^2+x_2^2+ x_3^2)+\lambda \frac{\partial g(x_1,x_2,x_3)}{\partial{x_2}}=0$$" src="Three_DOFs_constrained_by_Cube_eq16711421245402857203-Rescaled.png" style="width: 661.1999999999999px; height: auto;"/></p><p><img alt="$$\ddot{x}_3+2\zeta_3\omega_3\dot{x}_3+\omega_3^2x_3+\frac{\omega_3^2}{2}(3x_3^2+x_1^2
++ x_2^2)+\omega_1^2x_1x_3+ \omega_2^2x_2x_3 +\frac{\omega_1^2+\omega_2^2 + \omega_3^2}{2}x_3(x_1^2+x_2^2+
+x_3^2)+\lambda \frac{\partial g(x_1,x_2,x_3)}{\partial{x_3}}=0,g(x_1,x_2,x_3)=0.$$" src="Three_DOFs_constrained_by_Cube_eq10381177244152196603-Rescaled.png" style="width: 762.0px; height: auto;"/></p><p>We consider configuration constraint has the form</p><p><img alt="$$g(x_1,x_2,x_3)=x_3-x_1^3-x_2^3$$" src="Three_DOFs_constrained_by_Cube_eq07491802281099053499-Rescaled.png" style="width: 154.79999999999998px; height: auto;"/></p><p>which gives</p><p><img alt="$$\frac{\partial g(x_1,x_2,x_3)}{\partial{x_1}}=-3x_1^2,\,\frac{\partial g(x_1,x_2,x_3)}{\partial{x_2}}=-3x_2^2,\,\frac{\partial
+g(x_1,x_2,x_3)}{\partial{x_3}}=1$$" src="Three_DOFs_constrained_by_Cube_eq05437627323568184838-Rescaled.png" style="width: 368.4px; height: auto;"/></p><pre class="codeinput">figure;
+[q1,q2]=meshgrid(-0.1:0.01:0.1,-0.1:0.01:0.1);
+surf(q1,q2,q1.^3+q2.^3,<span class="string">'FaceColor'</span>, 0.9*[1 1 1], <span class="string">'FaceAlpha'</span>, 1.0, <span class="keyword">...</span>
+    <span class="string">'LineStyle'</span>, <span class="string">'-'</span>, <span class="string">'EdgeColor'</span>, 0.6*[1 1 1], <span class="keyword">...</span>
+    <span class="string">'LineWidth'</span>, 0.5);
+xlabel(<span class="string">'$q_1$'</span>,<span class="string">'Interpreter'</span>,<span class="string">"latex"</span>,<span class="string">'FontSize'</span>,14);
+ylabel(<span class="string">'$q_2$'</span>,<span class="string">'Interpreter'</span>,<span class="string">"latex"</span>,<span class="string">'FontSize'</span>,14);
+zlabel(<span class="string">'$q_3$'</span>,<span class="string">'Interpreter'</span>,<span class="string">"latex"</span>,<span class="string">'FontSize'</span>,14);
+</pre><img alt="" hspace="5" src="Three_DOFs_constrained_by_Cube_01.png" vspace="5"/> <p>Configuration constraint <img alt="$x_3=x_1^3+x_2^3$" src="Three_DOFs_constrained_by_Cube_eq10790965642693295602-Rescaled.png" style="width: 70.8px; height: auto;"/></p><p>[1] Buza, G., Jain, S., &amp; Haller, G. (2021). Using spectral submanifolds for optimal mode selection in nonlinear model reduction. <i>Proceedings of the Royal Society A</i>, <i>477</i>(2246), 20200725.</p><pre class="codeinput">clear <span class="string">all</span>
+</pre><h2 id="3">Setup model</h2><pre class="codeinput">om1 = 2;
+om2 = 3;
+om3 = 5;
+zeta1 = 0.01;
+zeta2 = 0.05;
+zeta3 = 0.05; <span class="comment">% 0.1</span>
+f1    = 1;
+[B,A,Fnl,Fext] = build_model(om1,om2,om3,zeta1,zeta2,zeta3,f1,<span class="string">'cubic'</span>);
+DS = <a href="../../../../Library/DynamicalSystem/DynamicalSystem.html">DynamicalSystem</a>();
+set(DS,<span class="string">'B'</span>,B,<span class="string">'A'</span>,A,<span class="string">'fnl'</span>,Fnl);
+set(DS.<a href="../../../../Library/Features/Options/Options.html">Options</a>,<span class="string">'Emax'</span>,8,<span class="string">'Nmax'</span>,10,<span class="string">'notation'</span>,<span class="string">'multiindex'</span>)
+</pre><p><b>Linear Modal analysis</b></p><pre class="codeinput">[V,D,W] = DS.<a href="../../../../Library/DynamicalSystem/linear_spectral_analysis.html">linear_spectral_analysis</a>();
+</pre><pre class="codeoutput">3 nan/inf eigenvalues are removed
+
+ The first 4 nonzero eigenvalues are given as 
+  -0.0200 + 1.9999i
+  -0.0200 - 1.9999i
+  -0.1500 + 2.9962i
+  -0.1500 - 2.9962i
+
+</pre><h2 id="5">Autonomous SSM</h2><pre class="codeinput">S = SSM(DS);
+set(S.<a href="../../../../Library/Features/Options/Options.html">Options</a>, <span class="string">'reltol'</span>, 1,<span class="string">'notation'</span>,<span class="string">'multiindex'</span>);
+resonant_modes = [1 2]; <span class="comment">% choose master spectral subspace</span>
+order = 13;                  <span class="comment">% SSM expansion order</span>
+S.<a href="../../../../Library/Manifold/choose_E.html">choose_E</a>(resonant_modes)
+[W0,R0] = S.<a href="../../../../Library/Manifold/compute_whisker.html">compute_whisker</a>(order);
+<span class="comment">% Reduced dynamics in symbolic form</span>
+
+lamdMaster = DS.spectrum.Lambda(resonant_modes);
+options = struct();
+options.isauto = true;
+options.isdamped = false;
+options.numDigits = 4;
+y = <a href="../../../../Library/Features/misc/reduced_dynamics_symbolic.html">reduced_dynamics_symbolic</a>(lamdMaster,R0,options)
+</pre><pre class="codeoutput">(near) outer resonance detected for the following combination of master eigenvalues
+     2     0
+     2     1
+     3     1
+     3     2
+     4     2
+     4     3
+     0     2
+     1     2
+     1     3
+     2     3
+     2     4
+     3     4
+
+These are in resonance with the follwing eigenvalues of the slave subspace
+  -0.1500 + 2.9962i
+  -0.1500 + 2.9962i
+  -0.1500 + 2.9962i
+  -0.1500 + 2.9962i
+  -0.1500 + 2.9962i
+  -0.1500 + 2.9962i
+  -0.1500 - 2.9962i
+  -0.1500 - 2.9962i
+  -0.1500 - 2.9962i
+  -0.1500 - 2.9962i
+  -0.1500 - 2.9962i
+  -0.1500 - 2.9962i
+
+sigma_out = 7
+(near) inner resonance detected for the following combination of master eigenvalues
+     2     1
+     3     2
+     4     3
+     1     2
+     2     3
+     3     4
+
+These are in resonance with the follwing eigenvalues of the master subspace
+  -0.0200 + 1.9999i
+  -0.0200 + 1.9999i
+  -0.0200 + 1.9999i
+  -0.0200 - 1.9999i
+  -0.0200 - 1.9999i
+  -0.0200 - 1.9999i
+
+sigma_in = 7
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Manifold computation time at order 2 = 00:00:01
+Estimated memory usage at order  2 = 1.51E-02 MB
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 1.71E-02 MB
+Manifold computation time at order 4 = 00:00:00
+Estimated memory usage at order  4 = 2.14E-02 MB
+Manifold computation time at order 5 = 00:00:00
+Estimated memory usage at order  5 = 2.56E-02 MB
+Manifold computation time at order 6 = 00:00:00
+Estimated memory usage at order  6 = 3.28E-02 MB
+Manifold computation time at order 7 = 00:00:00
+Estimated memory usage at order  7 = 3.99E-02 MB
+Manifold computation time at order 8 = 00:00:00
+Estimated memory usage at order  8 = 5.09E-02 MB
+Manifold computation time at order 9 = 00:00:00
+Estimated memory usage at order  9 = 6.20E-02 MB
+Manifold computation time at order 10 = 00:00:00
+Estimated memory usage at order  10 = 7.77E-02 MB
+Manifold computation time at order 11 = 00:00:00
+Estimated memory usage at order  11 = 9.35E-02 MB
+Manifold computation time at order 12 = 00:00:00
+Estimated memory usage at order  12 = 1.15E-01 MB
+Manifold computation time at order 13 = 00:00:00
+Estimated memory usage at order  13 = 1.36E-01 MB
+ 
+y =
+ 
+214.2*rho_1^13 - 27.97*rho_1^11 + 5.913*rho_1^9 - 1.029*rho_1^7 + 0.02972*rho_1^5 - 0.02188*rho_1^3 - 0.02*rho_1
+        - 882.8*rho_1^12 - 7.963*rho_1^10 - 66.98*rho_1^8 + 3.485*rho_1^6 - 8.958*rho_1^4 + 0.8168*rho_1^2 + 2.0
+ 
+</pre><p>Symbolic string to latex</p><pre class="codeinput"><span class="comment">% sympref('FloatingPointOutput',true);</span>
+<span class="comment">% rho1dot = latex(y(1))</span>
+<span class="comment">% theta1dot = latex(y(2))</span>
+</pre><p><b>Convergence of backbone curve</b></p><pre class="codeinput"><span class="comment">% 3.467*rho_1^6 - 8.963*rho_1^4 + 0.8168*rho_1^2 + 2.0</span>
+syms <span class="string">rho_1</span> <span class="string">positive</span>
+[coeffs,powers]=coeffs(y(2));
+tmp = simplify(log(powers));
+exp_idx = double(tmp./log(rho_1));
+</pre><pre class="codeinput">rhosamp = 0:0.01:0.4;
+orders = [3 5 7 9 11 13];
+<a href="../../../../Library/Features/misc/plot_backbone_curves.html">plot_backbone_curves</a>(double(coeffs),exp_idx,rhosamp,orders)
+<span class="comment">% visualization of 2D SSM</span>
+
+rhosamp = 0:0.01:0.35;
+plotdofs = [1 5 6];
+<a href="../../../../Library/Features/misc/plot_2D_auto_SSM.html">plot_2D_auto_SSM</a>(W0,rhosamp,plotdofs,{<span class="string">'$x_1$'</span>,<span class="string">'$\dot{x}_2$'</span>,<span class="string">'$\dot{x}_3$'</span>});
+plotdofs = [1 2 5];
+<a href="../../../../Library/Features/misc/plot_2D_auto_SSM.html">plot_2D_auto_SSM</a>(W0,rhosamp,plotdofs,{<span class="string">'$x_1$'</span>,<span class="string">'${x}_2$'</span>,<span class="string">'$\dot{x}_2$'</span>});
+plotdofs = [1 4 5];
+<a href="../../../../Library/Features/misc/plot_2D_auto_SSM.html">plot_2D_auto_SSM</a>(W0,rhosamp,plotdofs,{<span class="string">'$x_1$'</span>,<span class="string">'$\dot{x}_1$'</span>,<span class="string">'$\dot{x}_2$'</span>});
+figssm = gcf;
+</pre><img alt="" hspace="5" src="Three_DOFs_constrained_by_Cube_02.png" vspace="5"/> <img alt="" hspace="5" src="Three_DOFs_constrained_by_Cube_03.png" vspace="5"/> <img alt="" hspace="5" src="Three_DOFs_constrained_by_Cube_04.png" vspace="5"/> <img alt="" hspace="5" src="Three_DOFs_constrained_by_Cube_05.png" vspace="5"/> <p><b>Transient response validation</b></p><p>We take an initial condition on SSM and perform forward simulation using both the reduced-order model and the full model</p><pre class="codeinput">tf = 50;
+nsteps = 1000;
+q0 = 0.35*exp(1i*0.5);
+q0 = [q0;conj(q0)];
+z0 = <a href="../../../../Library/Features/misc/reduced_to_full_traj.html">reduced_to_full_traj</a>(0,q0,W0);
+traj = <a href="../../../../Library/Features/misc/transient_traj_on_auto_ssm.html">transient_traj_on_auto_ssm</a>(DS, resonant_modes, W0, R0, tf, nsteps, 1:6, [], q0);
+</pre><h2 id="10">Reference solutions from forward simulation</h2><pre class="codeinput">options = odeset(<span class="string">'RelTol'</span>,1e-8,<span class="string">'AbsTol'</span>,1e-10);
+epf = 0; omega = 2*pi;
+psp = [epf; omega];
+[tInt1, zInt1] = ode15s(@(t,x) spring_ode(t,x,psp,<span class="string">'cubic'</span>), [0 tf], z0(1:6),options); <span class="comment">% Transients</span>
+</pre><pre class="codeinput">figure;
+plot(traj.time,traj.phy(:,5),<span class="string">'r-'</span>,<span class="string">'LineWidth'</span>,1.5); hold <span class="string">on</span>
+plot(tInt1,zInt1(:,5),<span class="string">'b--'</span>,<span class="string">'LineWidth'</span>,1.5);
+legend(<span class="string">'SSM-prediction'</span>,<span class="string">'Full system'</span>)
+xlabel(<span class="string">'$t$'</span>,<span class="string">'Interpreter'</span>,<span class="string">"latex"</span>,<span class="string">'FontSize'</span>,14);
+ylabel(<span class="string">'$z_5$'</span>,<span class="string">'Interpreter'</span>,<span class="string">"latex"</span>,<span class="string">'FontSize'</span>,14);
+figure(figssm); hold <span class="string">on</span>
+hold <span class="string">on</span>
+plot3(traj.phy(:,plotdofs(1)),traj.phy(:,plotdofs(2)),traj.phy(:,plotdofs(3)),<span class="string">'r-'</span>,<span class="string">'LineWidth'</span>,1.5);
+plot3(zInt1(:,plotdofs(1)),zInt1(:,plotdofs(2)),zInt1(:,plotdofs(3)),<span class="string">'b--'</span>,<span class="string">'LineWidth'</span>,1.5);
+legend(<span class="string">'SSM-$\mathcal{O}(13)$'</span>,<span class="string">'Reduced'</span>,<span class="string">'Full'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>);
+legend <span class="string">boxoff</span>
+<span class="comment">% Transient response prediction</span>
+
+tf = 50;
+nsteps = 1000;
+z0 = 0.15*[1 0.2 0.2 1 0.1 0.1 0]';
+<span class="comment">% consistent initial condition</span>
+z0(3) = z0(1)^3+z0(2)^3;
+z0(6) = 3*z0(1)^2*z0(4)+3*z0(2)^2*z0(5);
+z0(7) = lambda_constraints(0,z0(1:6),[0;1],<span class="string">'cubic'</span>);
+traj2 = <a href="../../../../Library/Features/misc/transient_traj_on_auto_ssm.html">transient_traj_on_auto_ssm</a>(DS, resonant_modes, W0, R0, tf, nsteps, 1:6, z0);
+</pre><img alt="" hspace="5" src="Three_DOFs_constrained_by_Cube_06.png" vspace="5"/> <img alt="" hspace="5" src="Three_DOFs_constrained_by_Cube_07.png" vspace="5"/> <p>Reference solution from forward simulation</p><pre class="codeinput">options = odeset(<span class="string">'RelTol'</span>,1e-8,<span class="string">'AbsTol'</span>,1e-10);
+epf = 0; omega = 2*pi;
+psp = [epf; omega];
+[tInt2, zInt2] = ode15s(@(t,x) spring_ode(t,x,psp,<span class="string">'cubic'</span>), [0 tf], z0(1:6),options); <span class="comment">% Transients</span>
+</pre><pre class="codeinput">figure;
+plot(traj2.time,traj2.phy(:,5),<span class="string">'r-'</span>); hold <span class="string">on</span>
+plot(tInt2,zInt2(:,5),<span class="string">'b-'</span>);
+xlabel(<span class="string">'$t$'</span>,<span class="string">'Interpreter'</span>,<span class="string">"latex"</span>,<span class="string">'FontSize'</span>,14);
+ylabel(<span class="string">'$z_5$'</span>,<span class="string">'Interpreter'</span>,<span class="string">"latex"</span>,<span class="string">'FontSize'</span>,14);
+<span class="comment">% Visualization of 2D SSM</span>
+
+rhosamp = 0:0.01:0.3;
+plotdofs = [1 4 5];
+<a href="../../../../Library/Features/misc/plot_2D_auto_SSM.html">plot_2D_auto_SSM</a>(W0,rhosamp,plotdofs);
+hold <span class="string">on</span>
+plot3(traj2.phy(:,plotdofs(1)),traj2.phy(:,plotdofs(2)),traj2.phy(:,plotdofs(3)),<span class="string">'r-'</span>);
+plot3(zInt2(:,plotdofs(1)),zInt2(:,plotdofs(2)),zInt2(:,plotdofs(3)),<span class="string">'b-'</span>);
+
+rhosamp = 0:0.01:0.3;
+plotdofs = [1 2 4];
+<a href="../../../../Library/Features/misc/plot_2D_auto_SSM.html">plot_2D_auto_SSM</a>(W0,rhosamp,plotdofs);
+hold <span class="string">on</span>
+plot3(traj2.phy(:,plotdofs(1)),traj2.phy(:,plotdofs(2)),traj2.phy(:,plotdofs(3)),<span class="string">'r-'</span>);
+plot3(zInt2(:,plotdofs(1)),zInt2(:,plotdofs(2)),zInt2(:,plotdofs(3)),<span class="string">'b-'</span>);
+</pre><img alt="" hspace="5" src="Three_DOFs_constrained_by_Cube_08.png" vspace="5"/> <img alt="" hspace="5" src="Three_DOFs_constrained_by_Cube_09.png" vspace="5"/> <img alt="" hspace="5" src="Three_DOFs_constrained_by_Cube_10.png" vspace="5"/> <p>Plot configuration constraints</p><pre class="codeinput">figure;
+[q1,q2]=meshgrid(-0.2:0.01:0.2,-0.05:0.01:0.05);
+surf(q1,q2,q1.^3+q2.^3,<span class="string">'FaceColor'</span>, 0.9*[1 1 1], <span class="string">'FaceAlpha'</span>, 1.0, <span class="keyword">...</span>
+    <span class="string">'LineStyle'</span>, <span class="string">'-'</span>, <span class="string">'EdgeColor'</span>, 0.6*[1 1 1], <span class="keyword">...</span>
+    <span class="string">'LineWidth'</span>, 0.5);
+hold <span class="string">on</span>
+plot3(traj2.phy(:,1),traj2.phy(:,2),traj2.phy(:,3),<span class="string">'r-'</span>);
+plot3(zInt2(:,1),zInt2(:,2),zInt2(:,3),<span class="string">'b-'</span>);
+xlabel(<span class="string">'$q_1$'</span>,<span class="string">'Interpreter'</span>,<span class="string">"latex"</span>,<span class="string">'FontSize'</span>,14);
+ylabel(<span class="string">'$q_2$'</span>,<span class="string">'Interpreter'</span>,<span class="string">"latex"</span>,<span class="string">'FontSize'</span>,14);
+zlabel(<span class="string">'$q_3$'</span>,<span class="string">'Interpreter'</span>,<span class="string">"latex"</span>,<span class="string">'FontSize'</span>,14);
+<span class="comment">% Backbone curve</span>
+<span class="comment">% SSM prediction</span>
+
+set(S.<a href="../../../../Library/Features/Options/Options.html">FRCOptions</a>,<span class="string">'outDOF'</span>,1);
+freqRange = [1.85 2.1];
+rhomax = 0.35;
+BB = S.<a href="../../../../Library/Features/Wrappers/cocoWrapper/extract_backbone.html">extract_backbone</a>(resonant_modes, freqRange, order, rhomax);
+figbc = gcf;
+</pre><pre class="codeoutput">(near) outer resonance detected for the following combination of master eigenvalues
+     2     0
+     2     1
+     3     1
+     3     2
+     4     2
+     4     3
+     0     2
+     1     2
+     1     3
+     2     3
+     2     4
+     3     4
+
+These are in resonance with the follwing eigenvalues of the slave subspace
+  -0.1500 + 2.9962i
+  -0.1500 + 2.9962i
+  -0.1500 + 2.9962i
+  -0.1500 + 2.9962i
+  -0.1500 + 2.9962i
+  -0.1500 + 2.9962i
+  -0.1500 - 2.9962i
+  -0.1500 - 2.9962i
+  -0.1500 - 2.9962i
+  -0.1500 - 2.9962i
+  -0.1500 - 2.9962i
+  -0.1500 - 2.9962i
+
+sigma_out = 7
+(near) inner resonance detected for the following combination of master eigenvalues
+     2     1
+     3     2
+     4     3
+     1     2
+     2     3
+     3     4
+
+These are in resonance with the follwing eigenvalues of the master subspace
+  -0.0200 + 1.9999i
+  -0.0200 + 1.9999i
+  -0.0200 + 1.9999i
+  -0.0200 - 1.9999i
+  -0.0200 - 1.9999i
+  -0.0200 - 1.9999i
+
+sigma_in = 7
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 1.51E-02 MB
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 1.71E-02 MB
+Manifold computation time at order 4 = 00:00:00
+Estimated memory usage at order  4 = 2.14E-02 MB
+Manifold computation time at order 5 = 00:00:00
+Estimated memory usage at order  5 = 2.56E-02 MB
+Manifold computation time at order 6 = 00:00:00
+Estimated memory usage at order  6 = 3.28E-02 MB
+Manifold computation time at order 7 = 00:00:00
+Estimated memory usage at order  7 = 3.99E-02 MB
+Manifold computation time at order 8 = 00:00:00
+Estimated memory usage at order  8 = 5.09E-02 MB
+Manifold computation time at order 9 = 00:00:00
+Estimated memory usage at order  9 = 6.20E-02 MB
+Manifold computation time at order 10 = 00:00:00
+Estimated memory usage at order  10 = 7.77E-02 MB
+Manifold computation time at order 11 = 00:00:00
+Estimated memory usage at order  11 = 9.35E-02 MB
+Manifold computation time at order 12 = 00:00:00
+Estimated memory usage at order  12 = 1.15E-01 MB
+Manifold computation time at order 13 = 00:00:00
+Estimated memory usage at order  13 = 1.36E-01 MB
+gamma = 
+   1.0e+02 *
+
+  -0.0002 + 0.0082i
+   0.0003 - 0.0896i
+  -0.0103 + 0.0349i
+   0.0591 - 0.6698i
+  -0.2797 - 0.0796i
+   2.1422 - 8.8281i
+
+Total time spent on backbone curve computation = 00:00:02
+</pre><img alt="" hspace="5" src="Three_DOFs_constrained_by_Cube_11.png" vspace="5"/> <img alt="" hspace="5" src="Three_DOFs_constrained_by_Cube_12.png" vspace="5"/> <img alt="" hspace="5" src="Three_DOFs_constrained_by_Cube_13.png" vspace="5"/> <p>THE PFF should be the same as SSM if the invariance relation is satisfied [amp,freq,damp,time] = PFF(tInt1,zInt1(:,1)); hold on; plot(2*pi*freq,amp,'k*') Backbone curve in conservative limit (using COCO)</p><pre class="codeinput">options = odeset(<span class="string">'RelTol'</span>,1e-8,<span class="string">'AbsTol'</span>,1e-10,<span class="string">'Events'</span>,@zero_crossing_event);
+zeta = 0;
+[tauto, xauto,te,ye] = ode15s(@(t,x) spring_ode_auto(x,zeta,<span class="string">'cubic'</span>), [0 10], traj.phy(end,:)',options);   <span class="comment">% Approximate periodic orbit</span>
+</pre><pre class="codeinput">[~,idx1] = min(abs(tauto-te(1)));
+[~,idx2] = min(abs(tauto-te(2)));
+figure;
+plot(tauto(idx1:idx2),xauto(idx1:idx2,1),<span class="string">'r.-'</span>);
+figure
+plot(xauto(idx1:idx2,1),xauto(idx1:idx2,4),<span class="string">'b.'</span>);
+</pre><img alt="" hspace="5" src="Three_DOFs_constrained_by_Cube_14.png" vspace="5"/> <img alt="" hspace="5" src="Three_DOFs_constrained_by_Cube_15.png" vspace="5"/> <p>Continuation of periodic orbits with po-toolbox of COCO</p><pre class="codeinput">prob = coco_prob();
+prob = coco_set(prob, <span class="string">'cont'</span>, <span class="string">'NAdapt'</span>, 2);
+<span class="comment">% prob = coco_set(prob, 'cont', 'NAdapt', 5, 'h_max', 50, 'PtMX', 250);</span>
+prob = coco_set(prob, <span class="string">'coll'</span>, <span class="string">'NTST'</span>, 10);
+prob = coco_set(prob, <span class="string">'po'</span>, <span class="string">'bifus'</span>, <span class="string">'off'</span>);
+odefun = @(x,p) spring_ode_auto(x,p,<span class="string">'cubic'</span>);
+funcs  = {odefun};
+coll_args = [funcs, {tauto(idx1:idx2)-tauto(idx1), xauto(idx1:idx2,:), {<span class="string">'zeta'</span>}, 0}];
+prob = ode_isol2po(prob, <span class="string">''</span>, coll_args{:});
+[data, uidx] = coco_get_func_data(prob, <span class="string">'po.orb.coll'</span>, <span class="string">'data'</span>, <span class="string">'uidx'</span>);
+maps = data.coll_seg.maps;
+ampdata.dof  = 1;
+ampdata.zdim = 6;
+prob = coco_add_func(prob, <span class="string">'amp1'</span>, @amplitude, ampdata, <span class="string">'regular'</span>, <span class="string">'x1'</span>,<span class="keyword">...</span>
+    <span class="string">'uidx'</span>, uidx(maps.xbp_idx), <span class="string">'remesh'</span>, @amplitude_remesh);
+ampdata.dof  = 2;
+prob = coco_add_func(prob, <span class="string">'amp2'</span>, @amplitude, ampdata, <span class="string">'regular'</span>, <span class="string">'x2'</span>,<span class="keyword">...</span>
+    <span class="string">'uidx'</span>, uidx(maps.xbp_idx), <span class="string">'remesh'</span>, @amplitude_remesh);
+
+Tmin = 2*pi/max([BB.Omega]);
+Tmax = 2*pi/min([BB.Omega]);
+cont_args = {1, {<span class="string">'zeta'</span> <span class="string">'po.period'</span> <span class="string">'x1'</span> <span class="string">'x2'</span>}, {[],[0.95*Tmin,1*Tmax]}};
+
+fprintf(<span class="string">'\n Run=''%s'': Continue primary family of periodic orbits.\n'</span>, <span class="keyword">...</span>
+  <span class="string">'backbone_coco'</span>);
+
+bd0  = coco(prob, <span class="string">'backbone_coco'</span>, [], cont_args{:});
+</pre><pre class="codeoutput">
+ Run='backbone_coco': Continue primary family of periodic orbits.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          1.59e-03  4.53e+00    0.0    0.0    0.0
+   1   1  1.00e+00  8.55e-03  3.09e-06  4.53e+00    0.0    0.0    0.0
+   2   1  1.00e+00  1.97e-05  1.45e-11  4.53e+00    0.0    0.0    0.0
+   3   1  1.00e+00  3.21e-11  4.24e-16  4.53e+00    0.0    0.0    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE          zeta    po.period           x1           x2
+    0  00:00:00   4.5343e+00      1  EP     -3.0520e-10   3.1258e+00   9.3979e-02   4.6005e-03
+   10  00:00:01   6.0914e+00      2  EP     -1.0648e-10   3.2161e+00   3.1462e-01   4.9402e-02
+
+ STEP      TIME        ||U||  LABEL  TYPE          zeta    po.period           x1           x2
+    0  00:00:01   4.5343e+00      3  EP     -3.0520e-10   3.1258e+00   9.3979e-02   4.6005e-03
+   10  00:00:01   5.2599e+00      4         -1.5141e-10   3.1306e+00   2.3896e-01   2.7615e-02
+   14  00:00:01   6.0199e+00      5  EP     -1.1988e-10   3.2161e+00   3.1450e-01   4.9383e-02
+</pre><pre class="codeinput">figure(figbc); hold <span class="string">on</span>
+<span class="comment">% plot([BB.Omega],[BB.Aout],'b-'); hold on</span>
+bd = coco_bd_read(<span class="string">'backbone_coco'</span>);
+amp_auto_coco = coco_bd_col(bd,<span class="string">'x1'</span>);
+om_auto_coco = 2*pi./coco_bd_col(bd,<span class="string">'po.period'</span>);
+plot(om_auto_coco,amp_auto_coco,<span class="string">'ko'</span>,<span class="string">'LineWidth'</span>,1.5,<span class="string">'MarkerSize'</span>,6,<span class="string">'DisplayName'</span>,<span class="string">'Conservative (COCO)'</span>)
+</pre><img alt="" hspace="5" src="Three_DOFs_constrained_by_Cube_16.png" vspace="5"/> <h2 id="19">Non-autonomous -  forced response curve</h2><p>Add forcing</p><pre class="codeinput">epsilon = 0.02;
+kappas = [1; -1];
+coeffs = [Fext Fext]/2;
+DS.<a href="../../../../Library/DynamicalSystem/add_forcing.html">add_forcing</a>(coeffs, kappas, epsilon);
+S = SSM(DS);
+set(S.<a href="../../../../Library/Features/Options/Options.html">Options</a>, <span class="string">'reltol'</span>, 1,<span class="string">'notation'</span>,<span class="string">'multiindex'</span>);
+resonant_modes = [1 2]; <span class="comment">% choose master spectral subspace</span>
+mFreq = 1;              <span class="comment">% internal resonance relation vector</span>
+order = 7;              <span class="comment">% order 7 nearly converge         % SSM expansion order</span>
+outdof = 1;             <span class="comment">% outdof</span>
+</pre><pre class="codeinput">set(S.<a href="../../../../Library/Features/Options/Options.html">FRCOptions</a>, <span class="string">'initialSolver'</span>, <span class="string">'fsolve'</span>,<span class="string">'outdof'</span>,outdof);     <span class="comment">% initial solution scheme</span>
+set(S.contOptions, <span class="string">'PtMX'</span>, 200, <span class="string">'h_max'</span>, 0.1);                    <span class="comment">% continuation setting</span>
+set(S.<a href="../../../../Library/Features/Options/Options.html">FRCOptions</a>, <span class="string">'method'</span>, <span class="string">'continuation ep'</span>,<span class="string">'p0'</span>,[],<span class="string">'z0'</span>,[]);
+freqRange = [1.7 2.2];
+epsRange  = [0.01 3]*epsilon;
+S.<a href="../../../../Library/Features/Wrappers/cocoWrapper/extract_FRC.html">extract_FRC</a>(<span class="string">'freq'</span>,freqRange,[3 7 9 13]);
+figssm = gcf;
+</pre>
+<h2>FRC from Order 3 SSM Computation</h2>
+<pre class="codeoutput"><pre class="codeoutput">*****************************************
+Calculating FRC using SSM with master subspace: [1  2]
+(near) outer resonance detected for the following combination of master eigenvalues
+     2     0
+     2     1
+     3     1
+     3     2
+     4     2
+     4     3
+     0     2
+     1     2
+     1     3
+     2     3
+     2     4
+     3     4
+
+These are in resonance with the follwing eigenvalues of the slave subspace
+  -0.1500 + 2.9962i
+  -0.1500 + 2.9962i
+  -0.1500 + 2.9962i
+  -0.1500 + 2.9962i
+  -0.1500 + 2.9962i
+  -0.1500 + 2.9962i
+  -0.1500 - 2.9962i
+  -0.1500 - 2.9962i
+  -0.1500 - 2.9962i
+  -0.1500 - 2.9962i
+  -0.1500 - 2.9962i
+  -0.1500 - 2.9962i
+
+sigma_out = 7
+(near) inner resonance detected for the following combination of master eigenvalues
+     2     1
+     3     2
+     4     3
+     1     2
+     2     3
+     3     4
+
+These are in resonance with the follwing eigenvalues of the master subspace
+  -0.0200 + 1.9999i
+  -0.0200 + 1.9999i
+  -0.0200 + 1.9999i
+  -0.0200 - 1.9999i
+  -0.0200 - 1.9999i
+  -0.0200 - 1.9999i
+
+sigma_in = 7
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 9.65E-03 MB
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 1.16E-02 MB
+
+Equation solved.
+
+fsolve completed because the vector of function values is near zero
+as measured by the value of the function tolerance, and
+the problem appears regular as measured by the gradient.
+
+
+ Run='freqSubint1.ep': Continue equilibria along primary branch.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          6.96e-14  5.86e+00    0.0    0.0    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   5.8641e+00      1  EP      1.9999e+00   1.8853e-01   3.6275e+00   2.0000e-02
+   10  00:00:00   6.3820e+00      2          1.8530e+00   4.4894e-02   4.1145e+00   2.0000e-02
+   18  00:00:00   6.3845e+00      3  EP      1.7000e+00   2.2363e-02   4.1821e+00   2.0000e-02
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   5.8641e+00      4  EP      1.9999e+00   1.8853e-01   3.6275e+00   2.0000e-02
+   10  00:00:00   5.0911e+00      5          2.0662e+00   2.9699e-01   2.9329e+00   2.0000e-02
+   17  00:00:00   4.6171e+00      6  FP      2.0780e+00   3.0130e-01   2.4999e+00   2.0000e-02
+   17  00:00:00   4.6171e+00      7  SN      2.0780e+00   3.0130e-01   2.4999e+00   2.0000e-02
+   20  00:00:00   4.3221e+00      8          2.0740e+00   2.7915e-01   2.2272e+00   2.0000e-02
+   29  00:00:00   3.7418e+00      9  SN      2.0573e+00   1.6993e-01   1.6549e+00   2.0000e-02
+   29  00:00:00   3.7417e+00     10  FP      2.0573e+00   1.6991e-01   1.6548e+00   2.0000e-02
+   30  00:00:00   3.6388e+00     11          2.0599e+00   1.3704e-01   1.5356e+00   2.0000e-02
+   40  00:00:00   3.5309e+00     12          2.1781e+00   3.7768e-02   1.2197e+00   2.0000e-02
+   42  00:00:00   3.5493e+00     13  EP      2.2000e+00   3.3624e-02   1.2072e+00   2.0000e-02
+*****************************************
+</pre>
+<h2>FRC from Order 7 SSM Computation</h2>
+<pre class="codeoutput">
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 1.17E-02 MB
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 1.36E-02 MB
+Manifold computation time at order 4 = 00:00:00
+Estimated memory usage at order  4 = 1.80E-02 MB
+Manifold computation time at order 5 = 00:00:00
+Estimated memory usage at order  5 = 2.21E-02 MB
+Manifold computation time at order 6 = 00:00:00
+Estimated memory usage at order  6 = 2.93E-02 MB
+Manifold computation time at order 7 = 00:00:00
+Estimated memory usage at order  7 = 3.64E-02 MB
+
+Equation solved.
+
+fsolve completed because the vector of function values is near zero
+as measured by the value of the function tolerance, and
+the problem appears regular as measured by the gradient.
+
+
+ Run='freqSubint1.ep': Continue equilibria along primary branch.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          7.77e-13  5.56e+00    0.0    0.0    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   5.5561e+00      1  EP      1.9999e+00   2.4174e-01   3.3730e+00   2.0000e-02
+   10  00:00:00   6.3225e+00      2          1.9072e+00   6.8412e-02   4.0429e+00   2.0000e-02
+   20  00:00:00   6.3916e+00      3          1.7334e+00   2.5140e-02   4.1738e+00   2.0000e-02
+   21  00:00:00   6.3845e+00      4  EP      1.7000e+00   2.2363e-02   4.1821e+00   2.0000e-02
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   5.5561e+00      5  EP      1.9999e+00   2.4174e-01   3.3730e+00   2.0000e-02
+    3  00:00:00   5.3559e+00      6  SN      2.0012e+00   2.6716e-01   3.2042e+00   2.0000e-02
+    3  00:00:00   5.3559e+00      7  FP      2.0012e+00   2.6716e-01   3.2042e+00   2.0000e-02
+    6  00:00:00   5.0749e+00      8  SN      2.0007e+00   2.9019e-01   2.9649e+00   2.0000e-02
+    6  00:00:00   5.0749e+00      9  FP      2.0007e+00   2.9019e-01   2.9648e+00   2.0000e-02
+   10  00:00:00   4.7391e+00     10          2.0038e+00   2.9957e-01   2.6691e+00   2.0000e-02
+   20  00:00:00   4.0176e+00     11          2.0364e+00   2.3885e-01   1.9663e+00   2.0000e-02
+   30  00:00:00   3.5026e+00     12          2.1020e+00   6.6900e-02   1.3082e+00   2.0000e-02
+   38  00:00:00   3.5493e+00     13  EP      2.2000e+00   3.3622e-02   1.2072e+00   2.0000e-02
+*****************************************
+</pre>
+<h2>FRC from Order 9 SSM Computation</h2>
+<pre class="codeoutput">
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 1.28E-02 MB
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 1.47E-02 MB
+Manifold computation time at order 4 = 00:00:00
+Estimated memory usage at order  4 = 1.91E-02 MB
+Manifold computation time at order 5 = 00:00:00
+Estimated memory usage at order  5 = 2.32E-02 MB
+Manifold computation time at order 6 = 00:00:00
+Estimated memory usage at order  6 = 3.04E-02 MB
+Manifold computation time at order 7 = 00:00:00
+Estimated memory usage at order  7 = 3.75E-02 MB
+Manifold computation time at order 8 = 00:00:00
+Estimated memory usage at order  8 = 4.86E-02 MB
+Manifold computation time at order 9 = 00:00:00
+Estimated memory usage at order  9 = 5.96E-02 MB
+
+Equation solved.
+
+fsolve completed because the vector of function values is near zero
+as measured by the value of the function tolerance, and
+the problem appears regular as measured by the gradient.
+
+
+ Run='freqSubint1.ep': Continue equilibria along primary branch.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          6.20e-05  5.44e+00    0.0    0.0    0.0
+   1   1  1.00e+00  3.49e-03  1.90e-05  5.44e+00    0.0    0.0    0.0
+   2   1  1.00e+00  2.66e-05  7.22e-11  5.44e+00    0.0    0.0    0.0
+   3   1  1.00e+00  1.01e-10  2.42e-16  5.44e+00    0.0    0.0    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   5.4395e+00      1  EP      1.9995e+00   2.5857e-01   3.2755e+00   2.0000e-02
+    7  00:00:00   4.9272e+00      2  FP      1.9951e+00   3.0057e-01   2.8404e+00   2.0000e-02
+    7  00:00:00   4.9271e+00      3  SN      1.9951e+00   3.0057e-01   2.8403e+00   2.0000e-02
+   10  00:00:00   4.6261e+00      4          2.0000e+00   3.0246e-01   2.5707e+00   2.0000e-02
+   20  00:00:00   3.9271e+00      5          2.0405e+00   2.2074e-01   1.8704e+00   2.0000e-02
+   30  00:00:00   3.5005e+00      6          2.1212e+00   5.5854e-02   1.2744e+00   2.0000e-02
+   37  00:00:00   3.5493e+00      7  EP      2.2000e+00   3.3622e-02   1.2072e+00   2.0000e-02
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   5.4395e+00      8  EP      1.9995e+00   2.5857e-01   3.2755e+00   2.0000e-02
+    1  00:00:00   5.4628e+00      9  FP      1.9995e+00   2.5553e-01   3.2950e+00   2.0000e-02
+    1  00:00:00   5.4628e+00     10  SN      1.9995e+00   2.5553e-01   3.2950e+00   2.0000e-02
+   10  00:00:00   6.2351e+00     11          1.9389e+00   9.5338e-02   3.9585e+00   2.0000e-02
+   20  00:00:00   6.3965e+00     12          1.7726e+00   2.9414e-02   4.1610e+00   2.0000e-02
+   23  00:00:00   6.3845e+00     13  EP      1.7000e+00   2.2363e-02   4.1821e+00   2.0000e-02
+  </pre>
+  <h2>FRC from Order 13 SSM Computation</h2>
+  <pre class="codeoutput">
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 1.51E-02 MB
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 1.71E-02 MB
+Manifold computation time at order 4 = 00:00:00
+Estimated memory usage at order  4 = 2.14E-02 MB
+Manifold computation time at order 5 = 00:00:00
+Estimated memory usage at order  5 = 2.56E-02 MB
+Manifold computation time at order 6 = 00:00:00
+Estimated memory usage at order  6 = 3.28E-02 MB
+Manifold computation time at order 7 = 00:00:00
+Estimated memory usage at order  7 = 3.99E-02 MB
+Manifold computation time at order 8 = 00:00:00
+Estimated memory usage at order  8 = 5.09E-02 MB
+Manifold computation time at order 9 = 00:00:00
+Estimated memory usage at order  9 = 6.20E-02 MB
+Manifold computation time at order 10 = 00:00:00
+Estimated memory usage at order  10 = 7.77E-02 MB
+Manifold computation time at order 11 = 00:00:00
+Estimated memory usage at order  11 = 9.35E-02 MB
+Manifold computation time at order 12 = 00:00:00
+Estimated memory usage at order  12 = 1.15E-01 MB
+Manifold computation time at order 13 = 00:00:00
+Estimated memory usage at order  13 = 1.36E-01 MB
+
+Equation solved.
+
+fsolve completed because the vector of function values is near zero
+as measured by the value of the function tolerance, and
+the problem appears regular as measured by the gradient.
+
+
+ Run='freqSubint1.ep': Continue equilibria along primary branch.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          5.11e-06  5.46e+00    0.0    0.0    0.0
+   1   1  1.00e+00  2.86e-04  1.28e-07  5.46e+00    0.0    0.0    0.0
+   2   1  1.00e+00  1.81e-07  3.80e-15  5.46e+00    0.0    0.0    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   5.4630e+00      1  EP      1.9995e+00   2.5532e-01   3.2953e+00   2.0000e-02
+    7  00:00:00   4.9241e+00      2  FP      1.9949e+00   3.0008e-01   2.8379e+00   2.0000e-02
+    7  00:00:00   4.9241e+00      3  SN      1.9949e+00   3.0008e-01   2.8379e+00   2.0000e-02
+   10  00:00:00   4.6475e+00      4          1.9991e+00   3.0234e-01   2.5907e+00   2.0000e-02
+   20  00:00:00   3.9452e+00      5          2.0395e+00   2.2470e-01   1.8900e+00   2.0000e-02
+   30  00:00:00   3.5001e+00      6          2.1166e+00   5.8144e-02   1.2813e+00   2.0000e-02
+   37  00:00:00   3.5493e+00      7  EP      2.2000e+00   3.3622e-02   1.2072e+00   2.0000e-02
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   5.4630e+00      8  EP      1.9995e+00   2.5532e-01   3.2953e+00   2.0000e-02
+    1  00:00:00   5.4649e+00      9  FP      1.9995e+00   2.5508e-01   3.2968e+00   2.0000e-02
+    1  00:00:00   5.4649e+00     10  SN      1.9995e+00   2.5508e-01   3.2968e+00   2.0000e-02
+   10  00:00:00   6.2550e+00     11          1.9335e+00   8.9538e-02   3.9769e+00   2.0000e-02
+   20  00:00:00   6.3958e+00     12          1.7631e+00   2.8247e-02   4.1645e+00   2.0000e-02
+   22  00:00:00   6.3845e+00     13  EP      1.7000e+00   2.2363e-02   4.1821e+00   2.0000e-02
+Total time spent on FRC computation upto O(3) = 00:00:02
+Total time spent on FRC computation upto O(7) = 00:00:01
+Total time spent on FRC computation upto O(9) = 00:00:00
+Total time spent on FRC computation upto O(13) = 00:00:01
+</pre><img alt="" hspace="5" src="Three_DOFs_constrained_by_Cube_17.png" vspace="5"/> <img alt="" hspace="5" src="Three_DOFs_constrained_by_Cube_18.png" vspace="5"/> 
+
+<pre class="codeinput">
+set(S.<a href="../../../../Library/Features/Options/Options.html">Options</a>,'contribNonAuto',false) 
+S.<a href="../../../../Library/SSM/SSM_isol2ep.html">SSM_isol2ep</a>('isol',resonant_modes,order+2,1,'freq',freqRange,outdof)</pre>
+<h2 id="22">Validation</h2><p>A general form of DAE above is given by</p><p><img alt="$M\ddot{q}+G^\top \lambda=F(t,q,\dot{q}),\quad g(q)=0$" src="Three_DOFs_constrained_by_Cube_eq12324857416379695097-Rescaled.png" style="width: 196.79999999999998px; height: auto;"/>.</p><p>Differentiate the configuration constraint twice yields</p><p><img alt="$G\dot{q}=0,\quad G\ddot{q}+\dot{G}\dot{q}=0$" src="Three_DOFs_constrained_by_Cube_eq17994829398668694973-Rescaled.png" style="width: 134.4px; height: auto;"/> and hence <img alt="$G\ddot{q}=c$" src="Three_DOFs_constrained_by_Cube_eq04886086070302668437-Rescaled.png" style="width: 39.6px; height: auto;"/>.</p><p>We have</p><p><img alt="$$\left\lbrack \begin{array}{cc}M &amp; G^T \\G &amp; 0\end{array}\right\rbrack \left\lbrack
+\begin{array}{c}\ddot{x} \\\lambda \;\end{array}\right\rbrack =\left\lbrack
+\begin{array}{c}F\\c\end{array}\right\rbrack$$" src="Three_DOFs_constrained_by_Cube_eq02090448110407759988-Rescaled.png" style="width: 162.0px; height: auto;"/></p><p>from which we obtain</p><p><img alt="$$\lambda=-(GM^{-1}G^\top)^{-1}\left(c-GM^{-1}F\right)$$" src="Three_DOFs_constrained_by_Cube_eq11520770718380699753-Rescaled.png" style="width: 194.4px; height: auto;"/></p><p>and</p><p><img alt="$M\ddot{q}=F+G^\top (GM^{-1}G^\top)^{-1}(c-GM^{-1}F)$" src="Three_DOFs_constrained_by_Cube_eq14794767470617506935-Rescaled.png" style="width: 240.0px; height: auto;"/>.</p><p>In this example, we have</p><p><img alt="$G=[-3q_1^2,-3q_2^2,1]$" src="Three_DOFs_constrained_by_Cube_eq02280659533337437734-Rescaled.png" style="width: 109.2px; height: auto;"/>, <img alt="$GM^{-1}G^\top=9q_1^4+9q_2^4+1$" src="Three_DOFs_constrained_by_Cube_eq17427132520950865514-Rescaled.png" style="width: 147.6px; height: auto;"/>, <img alt="$c=-\dot{G}\dot{q}=6q_1\dot{q}_1^2+6q_2\dot{q}_2^2$" src="Three_DOFs_constrained_by_Cube_eq01722126327887345344-Rescaled.png" style="width: 141.6px; height: auto;"/>, <img alt="$c-GM^{-1}F=c+3 q_1^2F_1+3 q_2^2F_2-F_3$" src="Three_DOFs_constrained_by_Cube_eq18372656341796916009-Rescaled.png" style="width: 218.4px; height: auto;"/></p><p>and then</p><p><img alt="$G^\top (GM^{-1}G^\top)^{-1}(c-GM^{-1}F)=\frac{c+3 q_1^2F_1+3 q_2^2F_2-F_3}{9q_1^4+9q_2^4+1} G^\top$" src="Three_DOFs_constrained_by_Cube_eq04905291219008675704-Rescaled.png" style="width: 295.2px; height: auto;"/>.</p><p><b>Note that the transformed system can have more than one equilibria.</b></p><p>Forward simulation of transformed system</p><pre class="codeinput">options = odeset(<span class="string">'RelTol'</span>,1e-8,<span class="string">'AbsTol'</span>,1e-10);
+epf = Fext(1)*epsilon; omega = 1.8; T = 2*pi/omega;
+psp = [epf; omega];
+[~, x0] = ode15s(@(t,x) spring_ode(t,x,psp,<span class="string">'cubic'</span>), [0 200*T], zeros(6,1),options); <span class="comment">% Transients</span>
+[ttor, xtor] = ode15s(@(t,x) spring_ode(t,x,psp,<span class="string">'cubic'</span>), [0 T], x0(end,:)',options);   <span class="comment">% Approximate periodic orbit</span>
+</pre><pre class="codeinput">figure;
+plot(xtor(:,1),xtor(:,4),<span class="string">'r.-'</span>)
+</pre><img alt="" hspace="5" src="Three_DOFs_constrained_by_Cube_19.png" vspace="5"/> <p>Continuation of periodic orbits with po-toolbox of COCO</p><pre class="codeinput">prob = coco_prob();
+prob = coco_set(prob, <span class="string">'ode'</span>, <span class="string">'autonomous'</span>, false);
+prob = coco_set(prob, <span class="string">'cont'</span>, <span class="string">'NAdapt'</span>, 2);
+<span class="comment">% prob = coco_set(prob, 'cont', 'NAdapt', 5, 'h_max', 50, 'PtMX', 250);</span>
+prob = coco_set(prob, <span class="string">'coll'</span>, <span class="string">'NTST'</span>, 10);
+odefun = @(t,x,p) spring_ode(t,x,p,<span class="string">'cubic'</span>);
+funcs  = {odefun};
+coll_args = [funcs, {ttor, xtor, {<span class="string">'eps'</span> <span class="string">'Omega'</span>}, psp}];
+prob = ode_isol2po(prob, <span class="string">''</span>, coll_args{:});
+[data, uidx] = coco_get_func_data(prob, <span class="string">'po.orb.coll'</span>, <span class="string">'data'</span>, <span class="string">'uidx'</span>);
+maps = data.coll_seg.maps;
+prob = coco_add_func(prob, <span class="string">'OmegaT'</span>, @OmegaT, @OmegaT_du, [], <span class="string">'zero'</span>,<span class="keyword">...</span>
+    <span class="string">'uidx'</span>, [uidx(maps.T_idx), uidx(maps.p_idx(2))]);
+ampdata.dof  = 1;
+ampdata.zdim = 6;
+prob = coco_add_func(prob, <span class="string">'amp1'</span>, @amplitude, ampdata, <span class="string">'regular'</span>, <span class="string">'x1'</span>,<span class="keyword">...</span>
+    <span class="string">'uidx'</span>, uidx(maps.xbp_idx), <span class="string">'remesh'</span>, @amplitude_remesh);
+ampdata.dof  = 2;
+prob = coco_add_func(prob, <span class="string">'amp2'</span>, @amplitude, ampdata, <span class="string">'regular'</span>, <span class="string">'x2'</span>,<span class="keyword">...</span>
+    <span class="string">'uidx'</span>, uidx(maps.xbp_idx), <span class="string">'remesh'</span>, @amplitude_remesh);
+
+cont_args = {1, {<span class="string">'Omega'</span> <span class="string">'po.period'</span> <span class="string">'x1'</span> <span class="string">'x2'</span> <span class="string">'eps'</span>}, freqRange};
+
+fprintf(<span class="string">'\n Run=''%s'': Continue primary family of periodic orbits.\n'</span>, <span class="keyword">...</span>
+  <span class="string">'freq_resp'</span>);
+
+bd1  = coco(prob, <span class="string">'freq_resp'</span>, [], cont_args{:});
+</pre><pre class="codeoutput">
+ Run='freq_resp': Continue primary family of periodic orbits.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          5.83e-05  5.56e+00    0.0    0.0    0.0
+   1   1  1.00e+00  3.64e-05  7.35e-11  5.56e+00    0.0    0.0    0.0
+   2   1  1.00e+00  1.62e-10  1.06e-16  5.56e+00    0.0    0.0    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE         Omega    po.period           x1           x2          eps
+    0  00:00:00   5.5602e+00      1  EP      1.8000e+00   3.4907e+00   2.6291e-02   5.4500e-04   2.0000e-02
+    4  00:00:00   5.7558e+00      2  EP      1.7000e+00   3.6960e+00   1.8017e-02   3.4453e-04   2.0000e-02
+
+ STEP      TIME        ||U||  LABEL  TYPE         Omega    po.period           x1           x2          eps
+    0  00:00:00   5.5602e+00      3  EP      1.8000e+00   3.4907e+00   2.6291e-02   5.4500e-04   2.0000e-02
+   10  00:00:00   5.3951e+00      4          1.9277e+00   3.2594e+00   6.4942e-02   2.5613e-03   2.0000e-02
+   20  00:00:01   5.5022e+00      5          1.9861e+00   3.1636e+00   1.4077e-01   1.0814e-02   2.0000e-02
+   30  00:00:01   5.7868e+00      6          2.0017e+00   3.1389e+00   1.9904e-01   2.0975e-02   2.0000e-02
+   40  00:00:01   5.9431e+00      7          2.0045e+00   3.1345e+00   2.3189e-01   2.8458e-02   2.0000e-02
+   50  00:00:02   6.0760e+00      8          2.0140e+00   3.1197e+00   2.3241e-01   2.8318e-02   2.0000e-02
+   60  00:00:02   5.8697e+00      9          2.0324e+00   3.0916e+00   1.9828e-01   2.0360e-02   2.0000e-02
+   70  00:00:02   5.4968e+00     10          2.0477e+00   3.0683e+00   1.3769e-01   9.7095e-03   2.0000e-02
+   80  00:00:03   5.2150e+00     11          2.0916e+00   3.0041e+00   5.5730e-02   1.5557e-03   2.0000e-02
+   89  00:00:03   5.1042e+00     12  EP      2.2000e+00   2.8560e+00   2.3948e-02   2.6794e-04   2.0000e-02
+</pre><p>Plot results</p><pre class="codeinput">figure(figssm); hold <span class="string">on</span>
+omcoco = coco_bd_col(bd1,<span class="string">'Omega'</span>); x1coco = coco_bd_col(bd1,<span class="string">'x1'</span>);
+eigcoco = coco_bd_col(bd1,<span class="string">'eigs'</span>); stab = all(abs(eigcoco)&lt;1,1);
+plot(omcoco(stab),x1coco(stab),<span class="string">'ro'</span>,<span class="string">'DisplayName'</span>,<span class="string">'COCO-stable'</span>);
+plot(omcoco(~stab),x1coco(~stab),<span class="string">'ms'</span>,<span class="string">'DisplayName'</span>,<span class="string">'COCO-unstable'</span>);
+<span class="comment">% xlabel('$\Omega$','Interpreter','latex'); ylabel('$||x_1||_\infty$','Interpreter','latex');</span>
+<span class="comment">% set(gca,'FontSize',14); grid on, axis tight; legend boxoff;</span>
+</pre><img alt="" hspace="5" src="Three_DOFs_constrained_by_Cube_20.png" vspace="5"/> <p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></pre></div><!--
+##### SOURCE BEGIN #####
+%% Mass oscillating in a cube. 
+%
+%%
+% Consider the following system with 3 dofs
+% 
+% <<model.png>>
+%
+% reproduced from [1]
+% 
+% The equation of motion for the system is given by
+% 
+% $$\ddot{x}_1+2\zeta_1\omega_1\dot{x}_1+\omega_1^2x_1+\frac{\omega_1^2}{2}(3x_1^2+x_2^2 
+% + x_3^2)+\omega_2^2x_1x_2+\omega_3^2x_1x_3+\frac{\omega_1^2+\omega_2^2 + \omega_3^2}{2}x_1(x_1^2+x_2^2+x_3^2)=\epsilon 
+% f_1\cos\Omega t$$
+% 
+% $$\ddot{x}_2+2\zeta_2\omega_2\dot{x}_2+\omega_2^2x_2+\frac{\omega_2^2}{2}(3x_2^2+x_1^2 
+% + x_3^2)+\omega_1^2x_1x_2+ \omega_3^2x_2 x_3 + \frac{\omega_1^2+\omega_2^2 + 
+% \omega_3^2}{2}x_2(x_1^2+x_2^2+ x_3^2)=0$$
+% 
+% $$\ddot{x}_3+2\zeta_3\omega_3\dot{x}_3+\omega_3^2x_3+\frac{\omega_3^2}{2}(3x_3^2+x_1^2 
+% + x_2^2)+\omega_1^2x_1x_3+ \omega_2^2x_2x_3 +\frac{\omega_1^2+\omega_2^2 + \omega_3^2}{2}x_3(x_1^2+x_2^2+ 
+% x_3^2)=0$$
+% 
+% Here we also consider a configuration constraint $g(x_1,x_2,x_3)=0$ that satisfies 
+% $g(0,0,0)=0$. The equation of motion is updated as
+% 
+% $$\ddot{x}_1+2\zeta_1\omega_1\dot{x}_1+\omega_1^2x_1+\frac{\omega_1^2}{2}(3x_1^2+x_2^2 
+% + x_3^2)+\omega_2^2x_1x_2+\omega_3^2x_1x_3+\frac{\omega_1^2+\omega_2^2 + \omega_3^2}{2}x_1(x_1^2+x_2^2+x_3^2)+\lambda 
+% \frac{\partial g(x_1,x_2,x_3)}{\partial{x_1}}=\epsilon f_1\cos\Omega t$$
+% 
+% $$\ddot{x}_2+2\zeta_2\omega_2\dot{x}_2+\omega_2^2x_2+\frac{\omega_2^2}{2}(3x_2^2+x_1^2 
+% + x_3^2)+\omega_1^2x_1x_2+ \omega_3^2x_2 x_3 + \frac{\omega_1^2+\omega_2^2 + 
+% \omega_3^2}{2}x_2(x_1^2+x_2^2+ x_3^2)+\lambda \frac{\partial g(x_1,x_2,x_3)}{\partial{x_2}}=0$$
+% 
+% $$\ddot{x}_3+2\zeta_3\omega_3\dot{x}_3+\omega_3^2x_3+\frac{\omega_3^2}{2}(3x_3^2+x_1^2 
+% + x_2^2)+\omega_1^2x_1x_3+ \omega_2^2x_2x_3 +\frac{\omega_1^2+\omega_2^2 + \omega_3^2}{2}x_3(x_1^2+x_2^2+ 
+% x_3^2)+\lambda \frac{\partial g(x_1,x_2,x_3)}{\partial{x_3}}=0,g(x_1,x_2,x_3)=0.$$
+% 
+% We consider configuration constraint has the form
+% 
+% $$g(x_1,x_2,x_3)=x_3-x_1^3-x_2^3$$
+% 
+% which gives
+% 
+% $$\frac{\partial g(x_1,x_2,x_3)}{\partial{x_1}}=-3x_1^2,\,\frac{\partial g(x_1,x_2,x_3)}{\partial{x_2}}=-3x_2^2,\,\frac{\partial 
+% g(x_1,x_2,x_3)}{\partial{x_3}}=1$$
+
+figure;
+[q1,q2]=meshgrid(-0.1:0.01:0.1,-0.1:0.01:0.1);
+surf(q1,q2,q1.^3+q2.^3,'FaceColor', 0.9*[1 1 1], 'FaceAlpha', 1.0, ...
+    'LineStyle', '-', 'EdgeColor', 0.6*[1 1 1], ...
+    'LineWidth', 0.5);
+xlabel('$q_1$','Interpreter',"latex",'FontSize',14);
+ylabel('$q_2$','Interpreter',"latex",'FontSize',14);
+zlabel('$q_3$','Interpreter',"latex",'FontSize',14);
+%% 
+% Configuration constraint $x_3=x_1^3+x_2^3$
+% 
+% [1] Buza, G., Jain, S., & Haller, G. (2021). Using spectral submanifolds for 
+% optimal mode selection in nonlinear model reduction. _Proceedings of the Royal 
+% Society A_, _477_(2246), 20200725.
+
+clear all
+%% Setup model
+
+om1 = 2;
+om2 = 3;
+om3 = 5;
+zeta1 = 0.01;
+zeta2 = 0.05;
+zeta3 = 0.05; % 0.1
+f1    = 1;
+[B,A,Fnl,Fext] = build_model(om1,om2,om3,zeta1,zeta2,zeta3,f1,'cubic');
+DS = <a href="../../../../Library/DynamicalSystem/DynamicalSystem.html">DynamicalSystem</a>();
+set(DS,'B',B,'A',A,'fnl',Fnl);
+set(DS.<a href="../../../../Library/Features/Options/Options.html">Options</a>,'Emax',8,'Nmax',10,'notation','multiindex')
+%% 
+% *Linear Modal analysis*
+
+[V,D,W] = DS.<a href="../../../../Library/DynamicalSystem/linear_spectral_analysis.html">linear_spectral_analysis</a>();
+%% Autonomous SSM 
+
+S = SSM(DS);
+set(S.<a href="../../../../Library/Features/Options/Options.html">Options</a>, 'reltol', 1,'notation','multiindex');
+resonant_modes = [1 2]; % choose master spectral subspace
+order = 13;                  % SSM expansion order
+S.<a href="../../../../Library/Manifold/choose_E.html">choose_E</a>(resonant_modes)
+[W0,R0] = S.<a href="../../../../Library/Manifold/compute_whisker.html">compute_whisker</a>(order);
+% Reduced dynamics in symbolic form
+
+lamdMaster = DS.spectrum.Lambda(resonant_modes);
+options = struct();
+options.isauto = true; 
+options.isdamped = false;
+options.numDigits = 4;
+y = <a href="../../../../Library/Features/misc/reduced_dynamics_symbolic.html">reduced_dynamics_symbolic</a>(lamdMaster,R0,options)
+%% 
+% Symbolic string to latex 
+
+% sympref('FloatingPointOutput',true);
+% rho1dot = latex(y(1))
+% theta1dot = latex(y(2))
+%% 
+% *Convergence of backbone curve*
+
+% 3.467*rho_1^6 - 8.963*rho_1^4 + 0.8168*rho_1^2 + 2.0
+syms rho_1 positive
+[coeffs,powers]=coeffs(y(2));
+tmp = simplify(log(powers));
+exp_idx = double(tmp./log(rho_1));
+%%
+rhosamp = 0:0.01:0.4;
+orders = [3 5 7 9 11 13];
+<a href="../../../../Library/Features/misc/plot_backbone_curves.html">plot_backbone_curves</a>(double(coeffs),exp_idx,rhosamp,orders)
+% visualization of 2D SSM
+
+rhosamp = 0:0.01:0.35;
+plotdofs = [1 5 6]; 
+<a href="../../../../Library/Features/misc/plot_2D_auto_SSM.html">plot_2D_auto_SSM</a>(W0,rhosamp,plotdofs,{'$x_1$','$\dot{x}_2$','$\dot{x}_3$'});
+plotdofs = [1 2 5]; 
+<a href="../../../../Library/Features/misc/plot_2D_auto_SSM.html">plot_2D_auto_SSM</a>(W0,rhosamp,plotdofs,{'$x_1$','${x}_2$','$\dot{x}_2$'});
+plotdofs = [1 4 5]; 
+<a href="../../../../Library/Features/misc/plot_2D_auto_SSM.html">plot_2D_auto_SSM</a>(W0,rhosamp,plotdofs,{'$x_1$','$\dot{x}_1$','$\dot{x}_2$'});
+figssm = gcf;
+%%
+% *Transient response validation*
+%
+% We take an initial condition on SSM and perform forward simulation using both 
+% the reduced-order model and the full model
+
+tf = 50;
+nsteps = 1000;
+q0 = 0.35*exp(1i*0.5);
+q0 = [q0;conj(q0)];
+z0 = <a href="../../../../Library/Features/misc/reduced_to_full_traj.html">reduced_to_full_traj</a>(0,q0,W0);
+traj = <a href="../../../../Library/Features/misc/transient_traj_on_auto_ssm.html">transient_traj_on_auto_ssm</a>(DS, resonant_modes, W0, R0, tf, nsteps, 1:6, [], q0);
+%% Reference solutions from forward simulation
+
+options = odeset('RelTol',1e-8,'AbsTol',1e-10);
+epf = 0; omega = 2*pi; 
+psp = [epf; omega];
+[tInt1, zInt1] = ode15s(@(t,x) spring_ode(t,x,psp,'cubic'), [0 tf], z0(1:6),options); % Transients
+%%
+figure;
+plot(traj.time,traj.phy(:,5),'r-','LineWidth',1.5); hold on
+plot(tInt1,zInt1(:,5),'bREPLACE_WITH_DASH_DASH','LineWidth',1.5);
+legend('SSM-prediction','Full system')
+xlabel('$t$','Interpreter',"latex",'FontSize',14);
+ylabel('$z_5$','Interpreter',"latex",'FontSize',14);
+figure(figssm); hold on
+hold on
+plot3(traj.phy(:,plotdofs(1)),traj.phy(:,plotdofs(2)),traj.phy(:,plotdofs(3)),'r-','LineWidth',1.5);
+plot3(zInt1(:,plotdofs(1)),zInt1(:,plotdofs(2)),zInt1(:,plotdofs(3)),'bREPLACE_WITH_DASH_DASH','LineWidth',1.5);
+legend('SSM-$\mathcal{O}(13)$','Reduced','Full','interpreter','latex');
+legend boxoff
+% Transient response prediction
+
+tf = 50;
+nsteps = 1000;
+z0 = 0.15*[1 0.2 0.2 1 0.1 0.1 0]';
+% consistent initial condition
+z0(3) = z0(1)^3+z0(2)^3;
+z0(6) = 3*z0(1)^2*z0(4)+3*z0(2)^2*z0(5);
+z0(7) = lambda_constraints(0,z0(1:6),[0;1],'cubic');
+traj2 = <a href="../../../../Library/Features/misc/transient_traj_on_auto_ssm.html">transient_traj_on_auto_ssm</a>(DS, resonant_modes, W0, R0, tf, nsteps, 1:6, z0);
+%% 
+% Reference solution from forward simulation
+
+options = odeset('RelTol',1e-8,'AbsTol',1e-10);
+epf = 0; omega = 2*pi; 
+psp = [epf; omega];
+[tInt2, zInt2] = ode15s(@(t,x) spring_ode(t,x,psp,'cubic'), [0 tf], z0(1:6),options); % Transients
+%%
+figure;
+plot(traj2.time,traj2.phy(:,5),'r-'); hold on
+plot(tInt2,zInt2(:,5),'b-');
+xlabel('$t$','Interpreter',"latex",'FontSize',14);
+ylabel('$z_5$','Interpreter',"latex",'FontSize',14);
+% Visualization of 2D SSM
+
+rhosamp = 0:0.01:0.3;
+plotdofs = [1 4 5];
+<a href="../../../../Library/Features/misc/plot_2D_auto_SSM.html">plot_2D_auto_SSM</a>(W0,rhosamp,plotdofs);
+hold on
+plot3(traj2.phy(:,plotdofs(1)),traj2.phy(:,plotdofs(2)),traj2.phy(:,plotdofs(3)),'r-');
+plot3(zInt2(:,plotdofs(1)),zInt2(:,plotdofs(2)),zInt2(:,plotdofs(3)),'b-');
+
+rhosamp = 0:0.01:0.3;
+plotdofs = [1 2 4];
+<a href="../../../../Library/Features/misc/plot_2D_auto_SSM.html">plot_2D_auto_SSM</a>(W0,rhosamp,plotdofs);
+hold on
+plot3(traj2.phy(:,plotdofs(1)),traj2.phy(:,plotdofs(2)),traj2.phy(:,plotdofs(3)),'r-');
+plot3(zInt2(:,plotdofs(1)),zInt2(:,plotdofs(2)),zInt2(:,plotdofs(3)),'b-');
+%% 
+% Plot configuration constraints
+
+figure;
+[q1,q2]=meshgrid(-0.2:0.01:0.2,-0.05:0.01:0.05);
+surf(q1,q2,q1.^3+q2.^3,'FaceColor', 0.9*[1 1 1], 'FaceAlpha', 1.0, ...
+    'LineStyle', '-', 'EdgeColor', 0.6*[1 1 1], ...
+    'LineWidth', 0.5);
+hold on
+plot3(traj2.phy(:,1),traj2.phy(:,2),traj2.phy(:,3),'r-');
+plot3(zInt2(:,1),zInt2(:,2),zInt2(:,3),'b-');
+xlabel('$q_1$','Interpreter',"latex",'FontSize',14);
+ylabel('$q_2$','Interpreter',"latex",'FontSize',14);
+zlabel('$q_3$','Interpreter',"latex",'FontSize',14);
+% Backbone curve 
+% SSM prediction
+
+set(S.<a href="../../../../Library/Features/Options/Options.html">FRCOptions</a>,'outDOF',1);
+freqRange = [1.85 2.1];
+rhomax = 0.35;
+BB = S.<a href="../../../../Library/Features/Wrappers/cocoWrapper/extract_backbone.html">extract_backbone</a>(resonant_modes, freqRange, order, rhomax);
+figbc = gcf;
+%%
+% THE PFF should be the same as SSM if the invariance relation is satisfied
+% [amp,freq,damp,time] = PFF(tInt1,zInt1(:,1));
+% hold on;
+% plot(2*pi*freq,amp,'k*')
+% Backbone curve in conservative limit (using COCO)
+
+options = odeset('RelTol',1e-8,'AbsTol',1e-10,'Events',@zero_crossing_event);
+zeta = 0;
+[tauto, xauto,te,ye] = ode15s(@(t,x) spring_ode_auto(x,zeta,'cubic'), [0 10], traj.phy(end,:)',options);   % Approximate periodic orbit
+%%
+[~,idx1] = min(abs(tauto-te(1)));
+[~,idx2] = min(abs(tauto-te(2)));
+figure;
+plot(tauto(idx1:idx2),xauto(idx1:idx2,1),'r.-');
+figure
+plot(xauto(idx1:idx2,1),xauto(idx1:idx2,4),'b.');
+%% 
+% Continuation of periodic orbits with po-toolbox of COCO
+
+prob = coco_prob();
+prob = coco_set(prob, 'cont', 'NAdapt', 2);
+% prob = coco_set(prob, 'cont', 'NAdapt', 5, 'h_max', 50, 'PtMX', 250);
+prob = coco_set(prob, 'coll', 'NTST', 10);
+prob = coco_set(prob, 'po', 'bifus', 'off');
+odefun = @(x,p) spring_ode_auto(x,p,'cubic');
+funcs  = {odefun};
+coll_args = [funcs, {tauto(idx1:idx2)-tauto(idx1), xauto(idx1:idx2,:), {'zeta'}, 0}];
+prob = ode_isol2po(prob, '', coll_args{:});
+[data, uidx] = coco_get_func_data(prob, 'po.orb.coll', 'data', 'uidx');
+maps = data.coll_seg.maps;
+ampdata.dof  = 1;
+ampdata.zdim = 6;
+prob = coco_add_func(prob, 'amp1', @amplitude, ampdata, 'regular', 'x1',...
+    'uidx', uidx(maps.xbp_idx), 'remesh', @amplitude_remesh);
+ampdata.dof  = 2;
+prob = coco_add_func(prob, 'amp2', @amplitude, ampdata, 'regular', 'x2',...
+    'uidx', uidx(maps.xbp_idx), 'remesh', @amplitude_remesh);
+
+Tmin = 2*pi/max([BB.Omega]);
+Tmax = 2*pi/min([BB.Omega]);
+cont_args = {1, {'zeta' 'po.period' 'x1' 'x2'}, {[],[0.95*Tmin,1*Tmax]}};
+
+fprintf('\n Run=''%s'': Continue primary family of periodic orbits.\n', ...
+  'backbone_coco');
+
+bd0  = coco(prob, 'backbone_coco', [], cont_args{:});
+%%
+figure(figbc); hold on
+% plot([BB.Omega],[BB.Aout],'b-'); hold on
+bd = coco_bd_read('backbone_coco');
+amp_auto_coco = coco_bd_col(bd,'x1');
+om_auto_coco = 2*pi./coco_bd_col(bd,'po.period');
+plot(om_auto_coco,amp_auto_coco,'ko','LineWidth',1.5,'MarkerSize',6,'DisplayName','Conservative (COCO)')
+%% Non-autonomous -  forced response curve
+% Add forcing
+
+epsilon = 0.02;
+kappas = [1; -1];
+coeffs = [Fext Fext]/2;
+DS.<a href="../../../../Library/DynamicalSystem/add_forcing.html">add_forcing</a>(coeffs, kappas, epsilon);
+S = SSM(DS);
+set(S.<a href="../../../../Library/Features/Options/Options.html">Options</a>, 'reltol', 1,'notation','multiindex');
+resonant_modes = [1 2]; % choose master spectral subspace
+mFreq = 1;              % internal resonance relation vector
+order = 7;              % order 7 nearly converge         % SSM expansion order
+outdof = 1;             % outdof
+%%
+set(S.<a href="../../../../Library/Features/Options/Options.html">FRCOptions</a>, 'initialSolver', 'fsolve','outdof',outdof);     % initial solution scheme
+set(S.contOptions, 'PtMX', 200, 'h_max', 0.1);                    % continuation setting
+set(S.<a href="../../../../Library/Features/Options/Options.html">FRCOptions</a>, 'method', 'continuation ep','p0',[],'z0',[]);
+freqRange = [1.7 2.2];
+epsRange  = [0.01 3]*epsilon;
+S.<a href="../../../../Library/Features/Wrappers/cocoWrapper/extract_FRC.html">extract_FRC</a>('freq',freqRange,[3 7 9 13]);
+figssm = gcf;
+%%
+% set(S.<a href="../../../../Library/Features/Options/Options.html">Options</a>,'contribNonAuto',false)
+% S.<a href="../../../../Library/SSM/SSM_isol2ep.html">SSM_isol2ep</a>('isol',resonant_modes,order+2,1,'freq',freqRange,outdof)
+%% Validation
+% A general form of DAE above is given by
+% 
+% $M\ddot{q}+G^\top \lambda=F(t,q,\dot{q}),\quad g(q)=0$.
+% 
+% Differentiate the configuration constraint twice yields
+% 
+% $G\dot{q}=0,\quad G\ddot{q}+\dot{G}\dot{q}=0$ and hence $G\ddot{q}=c$. 
+% 
+% We have
+% 
+% $$\left\lbrack \begin{array}{cc}M & G^T \\G & 0\end{array}\right\rbrack \left\lbrack 
+% \begin{array}{c}\ddot{x} \\\lambda \;\end{array}\right\rbrack =\left\lbrack 
+% \begin{array}{c}F\\c\end{array}\right\rbrack$$
+% 
+% from which we obtain
+% 
+% $$\lambda=-(GM^{-1}G^\top)^{-1}\left(c-GM^{-1}F\right)$$
+% 
+% and
+% 
+% $M\ddot{q}=F+G^\top (GM^{-1}G^\top)^{-1}(c-GM^{-1}F)$.
+% 
+% In this example, we have
+% 
+% $G=[-3q_1^2,-3q_2^2,1]$, $GM^{-1}G^\top=9q_1^4+9q_2^4+1$, $c=-\dot{G}\dot{q}=6q_1\dot{q}_1^2+6q_2\dot{q}_2^2$, 
+% $c-GM^{-1}F=c+3 q_1^2F_1+3 q_2^2F_2-F_3$
+% 
+% and then
+% 
+% $G^\top (GM^{-1}G^\top)^{-1}(c-GM^{-1}F)=\frac{c+3 q_1^2F_1+3 q_2^2F_2-F_3}{9q_1^4+9q_2^4+1} 
+% G^\top$.
+% 
+% *Note that the transformed system can have more than one equilibria.*
+%% 
+% Forward simulation of transformed system
+
+options = odeset('RelTol',1e-8,'AbsTol',1e-10);
+epf = Fext(1)*epsilon; omega = 1.8; T = 2*pi/omega;
+psp = [epf; omega];
+[~, x0] = ode15s(@(t,x) spring_ode(t,x,psp,'cubic'), [0 200*T], zeros(6,1),options); % Transients
+[ttor, xtor] = ode15s(@(t,x) spring_ode(t,x,psp,'cubic'), [0 T], x0(end,:)',options);   % Approximate periodic orbit
+%%
+figure;
+plot(xtor(:,1),xtor(:,4),'r.-')
+%% 
+% Continuation of periodic orbits with po-toolbox of COCO
+
+prob = coco_prob();
+prob = coco_set(prob, 'ode', 'autonomous', false);
+prob = coco_set(prob, 'cont', 'NAdapt', 2);
+% prob = coco_set(prob, 'cont', 'NAdapt', 5, 'h_max', 50, 'PtMX', 250);
+prob = coco_set(prob, 'coll', 'NTST', 10);
+odefun = @(t,x,p) spring_ode(t,x,p,'cubic');
+funcs  = {odefun};
+coll_args = [funcs, {ttor, xtor, {'eps' 'Omega'}, psp}];
+prob = ode_isol2po(prob, '', coll_args{:});
+[data, uidx] = coco_get_func_data(prob, 'po.orb.coll', 'data', 'uidx');
+maps = data.coll_seg.maps;
+prob = coco_add_func(prob, 'OmegaT', @OmegaT, @OmegaT_du, [], 'zero',...
+    'uidx', [uidx(maps.T_idx), uidx(maps.p_idx(2))]);
+ampdata.dof  = 1;
+ampdata.zdim = 6;
+prob = coco_add_func(prob, 'amp1', @amplitude, ampdata, 'regular', 'x1',...
+    'uidx', uidx(maps.xbp_idx), 'remesh', @amplitude_remesh);
+ampdata.dof  = 2;
+prob = coco_add_func(prob, 'amp2', @amplitude, ampdata, 'regular', 'x2',...
+    'uidx', uidx(maps.xbp_idx), 'remesh', @amplitude_remesh);
+
+cont_args = {1, {'Omega' 'po.period' 'x1' 'x2' 'eps'}, freqRange};
+
+fprintf('\n Run=''%s'': Continue primary family of periodic orbits.\n', ...
+  'freq_resp');
+
+bd1  = coco(prob, 'freq_resp', [], cont_args{:});
+%% 
+% Plot results
+
+figure(figssm); hold on
+omcoco = coco_bd_col(bd1,'Omega'); x1coco = coco_bd_col(bd1,'x1');
+eigcoco = coco_bd_col(bd1,'eigs'); stab = all(abs(eigcoco)<1,1);
+plot(omcoco(stab),x1coco(stab),'ro','DisplayName','COCO-stable');
+plot(omcoco(~stab),x1coco(~stab),'ms','DisplayName','COCO-unstable');
+% xlabel('$\Omega$','Interpreter','latex'); ylabel('$||x_1||_\infty$','Interpreter','latex');
+% set(gca,'FontSize',14); grid on, axis tight; legend boxoff;
+##### SOURCE END #####
+--></body></html>

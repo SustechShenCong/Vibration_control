@@ -1,0 +1,204 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../index.html"><img alt="Logo" class="logo" src="../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>Invariant Manifolds</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-07" name="DC.date"/><meta content="SetupManifold_Explanation.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>Invariant Manifolds</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#7">Autonomous manifold</a></li><li><a href="#8">Non-autonomous manifold</a></li><li><a href="#9">Options</a></li><li><a href="#15">Other methods</a></li></ul></div><p>A object of the invariant manifold class requires an underlying dynamical system to be initialised as</p><pre class="codeinput">M = <a href="../Library/Manifold/Manifold.html">Manifold</a>(DS);
+        </pre><p>The class allows to compute general invariant manifolds, such as Center Manifolds, Lyapunov Subcenter Manifolds (LSM) and Spectral Submanifolds (SSM).</p><p>The spectral subspace belonging to a set of modes over which the invariant manifold is to be constructed is denoted as <span class="MathJax_Preview"><img alt="$\texttt{E}$" src="SetupManifold_Explanation_eq11930479584341141884-Rescaled.png" style="width: 7.199999999999999px; height: auto;"/></span><script type="math/tex">\texttt{E}</script>. The set of modes is indexed into an array <span class="MathJax_Preview"><img alt="$\texttt{modes}$" src="SetupManifold_Explanation_eq11112829629368768254-Rescaled.png" style="width: 34.8px; height: auto;"/></span><script type="math/tex">\texttt{modes}</script> which allows to choose the spectral subspace via the class method</p><pre class="codeinput">M.<a href="../Library/Manifold/choose_E.html">choose_E</a>(modes)
+        </pre><p>So for instance, if the Manifold is to be constructed over the first pair of modes in the spectrum, which has been computed in advance by the <a href="../Library/DynamicalSystem/linear_spectral_analysis.html">linear_spectral_analysis</a> function, then the array would be</p><pre class="codeinput">modes = [1,2]
+        </pre><p><b>Manifold construction</b></p><p>For the theoretical background to the computation of invariant manifolds please refer to <a href="../Theory/2.%20SSM-Theory.html">SSM-Theory</a>.</p><p><b>Resonances</b></p><p>For the existence of a given manifold the resonance conditions explained in  <a href="../Theory/5.%20Spectrum%20and%20Resonances.html">Spectrum and Resonances</a> need to be fulfilled. When choosing the spectral subspace <span class="MathJax_Preview"><img alt="$\texttt{E}$" src="SetupManifold_Explanation_eq11930479584341141884-Rescaled.png" style="width: 7.199999999999999px; height: auto;"/></span><script type="math/tex">\texttt{E}</script> over which the invariant manifold is to be constructed, a struct array which contains the information on inner and outer resonances is constructed and may be utilised to verify whether SSM analysis is applicable. Any near outer resonance will render the cohomological equations nearly singular which leads to poor convergence of the SSM computation.</p><h2 id="7">Autonomous manifold</h2><p>The autonomous parametrisation of the manifold and the reduced dynamics on it, which are stored in struct arrays <tt>W0</tt> and <tt>R0</tt>, are computed automatically up to a desired order using the method</p><pre class="codeinput">[W0, R0] = M.<a href="../Library/Manifold/compute_whisker.html">compute_whisker</a>(order)
+        </pre><h2 id="8">Non-autonomous manifold</h2><p>In order to obtain the non-autonomous parametrisation of the manifold and reduced dynamics the non-autonomous invariance equation has to be solved. This computation is fully automated and can be carried out as follows. Note that this is only supported in the multi-index based computation. The non-autonomous reduced dynamics and SSM coefficients are stored in struct arrays <span class="MathJax_Preview"><img alt="$\texttt{R1}$" src="SetupManifold_Explanation_eq09356274980153226083-Rescaled.png" style="width: 13.2px; height: auto;"/></span><script type="math/tex">\texttt{R1}</script> and <span class="MathJax_Preview"><img alt="$\texttt{W1}$" src="SetupManifold_Explanation_eq14483906330714919918-Rescaled.png" style="width: 13.2px; height: auto;"/></span><script type="math/tex">\texttt{W1}</script> respectively.</p><pre class="codeinput"> [W1, R1] = M.<a href="../Library/Manifold/compute_perturbed_whisker.html">compute_perturbed_whisker</a>( order,W0,R0,varargin)
+        </pre><h2 id="9">Options</h2><p>The options for the computation of the invariant manifold can be set as follows. They are introduced along with the default parameters that are set for them.</p><pre class="codeinput">set(M.Options,<span class="string">'notation'</span>,<span class="string">'tensor'</span>)        <span class="comment">% Notation which is used in manifold computation. Should be either 'tensor' or 'multiindex' and the same as is set in the DS class options.</span>
+        </pre><p>The two methods which may be chosen for the computation of the invariant manifold are a graph style and a normal form type of parametrisation. The parametrisation style can be chosen via setting</p><pre class="codeinput">set(M.Options,<span class="string">'paramStyle'</span>,<span class="string">'normalform'</span>)        <span class="comment">% Computation of the manifold in graph or normalform style parametrisation. See</span>
+        </pre><p>The graph style is only available for a tensor based computation.</p><p>For the computation of the manifold either the full non-autonoomous contributions may be computed, or a leading order approximation can be chosen. This leading order computation only computes an approximation of the reduced dynamics as</p><p><span class="MathJax_Preview"><img alt="$$ \mathbf{\dot{p}} = \sum_{\mathbf{m}\in \mathbf{N}^M} \mathbf{R}_{\mathbf{m}} \mathbf{p}^\mathbf{m} + \epsilon  \sum_{\mathbf\kappa \in \mathbf{Z}^k} \mathbf{S}_{\mathbf{0},\mathbf\kappa }e^{i \langle \mathbf\kappa , \mathbf\Omega   \rangle t}$$" src="SetupManifold_Explanation_eq17150147519622694890-Rescaled.png" style="width: 204.0px; height: auto;"/></span><script type="math/tex"> \mathbf{\dot{p}} = \sum_{\mathbf{m}\in \mathbf{N}^M} \mathbf{R}_{\mathbf{m}} \mathbf{p}^\mathbf{m} + \epsilon  \sum_{\mathbf\kappa \in \mathbf{Z}^k} \mathbf{S}_{\mathbf{0},\mathbf\kappa }e^{i \langle \mathbf\kappa , \mathbf\Omega   \rangle t}</script></p><p>The results are then mapped to the full physical space using the autonomous SSM parametrisation <span class="MathJax_Preview"><img alt="$\mathbf{W(p)}$" src="SetupManifold_Explanation_eq03001482981748780833-Rescaled.png" style="width: 33.6px; height: auto;"/></span><script type="math/tex">\mathbf{W(p)}</script> only.</p><pre class="codeinput">set(M.Options, <span class="string">'contribNonAuto'</span>, true)      <span class="comment">% whether to compute non-autonomous contributions to the manifold and the reduced dynamics.</span>
+                                   <span class="comment">% if set to false, only the leading order non-autonomous reduced dynamics are computed</span>
+        </pre><p>Further important settings include the tolerances for the resonance analysis. As we have seen in <a href="../Theory/5.%20Spectrum%20and%20Resonances.html">Spectrum and Resonances</a> both the existence of the SSM as well as the normal form of the reduced dynamics on it depend crucially on a detailled understanding of the resonance relationship that the modes assume relative to each other. To set the relative tolerance for determining when a mode is resonant the following option may be set</p><pre class="codeinput">set(M.Options,<span class="string">'reltol'</span>,0.5)
+        </pre><p>The absolute tolerance below which a resonance is trigered is then <span class="MathJax_Preview"><img alt="$\texttt{abstol = reltol * abs(min}(\Lambda_M))$" src="SetupManifold_Explanation_eq07988520667699511479-Rescaled.png" style="width: 207.6px; height: auto;"/></span><script type="math/tex">\texttt{abstol = reltol * abs(min}(\Lambda_M))</script>. So, if a integer combination of modes in the master or restricted space adds up to a value closer to any mastermode than this absolute tolerance, then it is considered to be in resonance.</p><p>For setting the tolerance for the control of internal resonances one may tune</p><pre class="codeinput">set(M.Options,<span class="string">'IRtol'</span>,0.05)
+        </pre><h2 id="15">Other methods</h2><p>Further methods which are provided for the treatment of invariant manifolds are</p><pre class="codeinput">[rho] = M.<a href="../Library/Manifold/compute_analyticity_domain.html">compute_analyticity_domain</a>(appr_order)
+        </pre><p>which computes the analyticity domain of an SSM at approximation order appr_order, the invariance error</p><pre class="codeinput">err = M.<a href="../Library/Manifold/compute_auto_invariance_error.html">compute_auto_invariance_error</a>(W,R,rhosamp,orders,ntheta,varargin);
+        </pre><p>and</p><pre class="codeinput">M.<a href="../Library/Manifold/cohomological_solution.html">cohomological_solution</a>(obj, i,  W_0, R_0,multi_input,DStype);
+        </pre><p>which solves the <span class="MathJax_Preview"><img alt="$i$" src="SetupManifold_Explanation_eq08984912804010224726-Rescaled.png" style="width: 4.8px; height: auto;"/></span><script type="math/tex">i</script>-th order of the autonomous cohomological equations. It is used by the <tt>computed_whisker</tt> routine.</p><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% Invariant Manifolds
+%
+%%
+% A object of the invariant manifold class requires an underlying dynamical system to be initialised as
+
+M = <a href="../Library/Manifold/Manifold.html">Manifold</a>(DS);
+
+%%
+% The class allows to compute general invariant manifolds, such as Center Manifolds, Lyapunov Subcenter Manifolds (LSM) and Spectral Submanifolds (SSM).
+
+%% 
+% The spectral subspace belonging to a set of modes over which the invariant manifold is to be constructed is denoted as $\texttt{E}$. The set of modes is indexed into an array $\texttt{modes}$ which allows to choose the spectral subspace via the class method
+
+M.<a href="../Library/Manifold/choose_E.html">choose_E</a>(modes)
+
+%%
+% So for instance, if the Manifold is to be constructed over the first pair of modes in the spectrum, which has been computed in advance by the <../Library/DynamicalSystem/linear_spectral_analysis.html linear_spectral_analysis> function, then the array would be 
+
+modes = [1,2]
+
+
+%%% 
+% *Manifold construction*
+%
+% For the theoretical background to the computation of invariant manifolds please refer to <../Theory/2.%20SSM-Theory.html SSM-Theory>.
+
+%%
+% *Resonances*
+%
+% For the existence of a given manifold the resonance conditions explained in  <../Theory/5.%20Spectrum%20and%20Resonances.html Spectrum and Resonances> need to be fulfilled. When choosing the spectral subspace $\texttt{E}$ over which
+% the invariant manifold is to be constructed, a struct array which contains the information on inner and outer resonances is constructed and may be utilised to verify whether SSM analysis is applicable. Any near outer resonance will render the cohomological equations nearly singular which leads to poor convergence of the SSM computation.
+
+%%  Autonomous manifold
+%
+% The autonomous parametrisation of the manifold and the reduced dynamics on it, which are stored in struct arrays |W0| and |R0|, are computed automatically up to a desired order using the method
+%
+
+[W0, R0] = M.<a href="../Library/Manifold/compute_whisker.html">compute_whisker</a>(order)
+
+
+%% Non-autonomous manifold
+% 
+% In order to obtain the non-autonomous parametrisation of the manifold and reduced dynamics the non-autonomous invariance equation has to be solved. 
+% This computation is fully automated and can be carried out as follows. Note that this is only supported in the multi-index based computation. The 
+% non-autonomous reduced dynamics and SSM coefficients are stored in struct arrays $\texttt{R1}$ and $\texttt{W1}$ respectively.
+
+ [W1, R1] = M.<a href="../Library/Manifold/compute_perturbed_whisker.html">compute_perturbed_whisker</a>( order,W0,R0,varargin)
+
+%%% Options
+% The options for the computation of the invariant manifold can be set as follows. They are introduced along with the default parameters that are set for them.
+
+
+set(M.Options,'notation','tensor')        % Notation which is used in manifold computation. Should be either 'tensor' or 'multiindex' and the same as is set in the DS class options.
+
+%% 
+% The two methods which may be chosen for the computation of the invariant manifold are a graph style and a normal form type of parametrisation.
+% The parametrisation style can be chosen via setting
+
+set(M.Options,'paramStyle','normalform')        % Computation of the manifold in graph or normalform style parametrisation. See 
+      
+%% 
+% The graph style is only available for a tensor based computation.
+%
+% For the computation of the manifold either the full non-autonoomous contributions may be computed, or a leading order approximation can be chosen. This leading order computation only computes 
+% an approximation of the reduced dynamics as
+%
+% $$ \mathbf{\dot{p}} = \sum_{\mathbf{m}\in \mathbf{N}^M} \mathbf{R}_{\mathbf{m}} \mathbf{p}^\mathbf{m} + \epsilon  \sum_{\mathbf\kappa \in \mathbf{Z}^k} \mathbf{S}_{\mathbf{0},\mathbf\kappa }e^{i \langle \mathbf\kappa , \mathbf\Omega   \rangle t}$$
+%
+% The results are then mapped to the full physical space using the autonomous SSM parametrisation $\mathbf{W(p)}$ only.
+
+
+set(M.Options, 'contribNonAuto', true)      % whether to compute non-autonomous contributions to the manifold and the reduced dynamics.
+                                   % if set to false, only the leading order non-autonomous reduced dynamics are computed
+                                   
+%% 
+% Further important settings include the tolerances for the resonance analysis. As we have seen in <../Theory/5.%20Spectrum%20and%20Resonances.html Spectrum and Resonances> both the existence of the SSM as well as the normal form
+% of the reduced dynamics on it depend crucially on a detailled understanding of the resonance relationship that the modes assume relative to each other.
+% To set the relative tolerance for determining when a mode is resonant the following option may be set
+
+set(M.Options,'reltol',0.5)
+
+%%
+% The absolute tolerance below which a resonance is trigered is then $\texttt{abstol = reltol * abs(min}(\Lambda_M))$. So, if a integer combination of modes in the master or restricted 
+% space adds up to a value closer to any mastermode than this absolute tolerance, then it is considered to be in resonance.
+
+%%
+% For setting the tolerance for the control of internal resonances one may tune 
+
+set(M.Options,'IRtol',0.05) 
+
+%%% Other methods
+%
+% Further methods which are provided for the treatment of invariant manifolds are
+           
+[rho] = M.<a href="../Library/Manifold/compute_analyticity_domain.html">compute_analyticity_domain</a>(appr_order) 
+
+%%
+% which computes the analyticity domain of an SSM at approximation order appr_order, the invariance error
+        
+err = M.<a href="../Library/Manifold/compute_auto_invariance_error.html">compute_auto_invariance_error</a>(W,R,rhosamp,orders,ntheta,varargin);
+
+%%
+% and 
+
+M.<a href="../Library/Manifold/cohomological_solution.html">cohomological_solution</a>(obj, i,  W_0, R_0,multi_input,DStype);
+
+%%
+% which solves the $i$-th order of the autonomous cohomological equations.
+% It is used by the |computed_whisker| routine.
+
+            ##### SOURCE END #####
+        --></body></html></body></html>

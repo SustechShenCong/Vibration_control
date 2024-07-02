@@ -1,0 +1,133 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../../../index.html"><img alt="Logo" class="logo" src="../../../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>Plot backbone curve</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-09" name="DC.date"/><meta content="plot_backbone_curves.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>Plot backbone curve</h1><!--introduction--><!--/introduction--><pre class="codeinput"><span class="keyword">function</span> plot_backbone_curves(coeffs,exp_idx,rhosamp,orders)
+        </pre><p>This function plots the backbone curves on reduced coordinates with allowing for various orders of approximation to be displayed at once. It only supports 2D SSMs.</p><pre class="codeinput"><span class="keyword">if</span> exp_idx(1)&gt;exp_idx(2)
+    exp_idx = flip(exp_idx);
+    coeffs  = flip(coeffs);
+<span class="keyword">end</span>
+figure; hold <span class="string">on</span>
+y = 0;
+<span class="keyword">for</span> k=1:numel(exp_idx)
+    y = y+coeffs(k)*rhosamp.^(exp_idx(k));
+    orderk = exp_idx(k)+1;
+    <span class="keyword">if</span> any(orderk==orders)
+        plot(y,rhosamp,<span class="string">'LineWidth'</span>,1.5,<span class="string">'DisplayName'</span>,[<span class="string">'SSM-O('</span>,num2str(orderk),<span class="string">')'</span>]);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+legend(<span class="string">'show'</span>,<span class="string">'Location'</span>, <span class="string">'Best'</span>);
+legend <span class="string">boxoff</span>
+set(gca,<span class="string">'FontSize'</span>,14);
+set(gca,<span class="string">'LineWidth'</span>,1.2);
+grid <span class="string">on</span>
+xlabel(<span class="string">'$\Omega$'</span>,<span class="string">'Interpreter'</span>,<span class="string">"latex"</span>,<span class="string">'FontSize'</span>,16);
+ylabel(<span class="string">'$\rho$'</span>,<span class="string">'Interpreter'</span>,<span class="string">"latex"</span>,<span class="string">'FontSize'</span>,16);
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+        </pre><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% Plot backbone curve
+%
+%%
+function plot_backbone_curves(coeffs,exp_idx,rhosamp,orders)
+%%
+% This function plots the backbone curves on reduced coordinates with
+% allowing for various orders of approximation to be displayed at once. It
+% only supports 2D SSMs.
+%
+
+if exp_idx(1)>exp_idx(2)
+    exp_idx = flip(exp_idx);
+    coeffs  = flip(coeffs);
+end
+figure; hold on
+y = 0;
+for k=1:numel(exp_idx)
+    y = y+coeffs(k)*rhosamp.^(exp_idx(k));
+    orderk = exp_idx(k)+1;
+    if any(orderk==orders)
+        plot(y,rhosamp,'LineWidth',1.5,'DisplayName',['SSM-O(',num2str(orderk),')']);
+    end
+end
+legend('show','Location', 'Best'); 
+legend boxoff
+set(gca,'FontSize',14);
+set(gca,'LineWidth',1.2);
+grid on
+xlabel('$\Omega$','Interpreter',"latex",'FontSize',16);
+ylabel('$\rho$','Interpreter',"latex",'FontSize',16);
+end
+            ##### SOURCE END #####
+        --></body></html></body></html>

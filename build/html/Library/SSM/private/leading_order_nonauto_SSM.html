@@ -1,0 +1,258 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../../../index.html"><img alt="Logo" class="logo" src="../../../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>LEADING_ORDER_NONAUTO_SSM</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-11" name="DC.date"/><meta content="leading_order_nonauto_SSM.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>LEADING_ORDER_NONAUTO_SSM</h1><!--introduction--><!--/introduction--><pre class="codeinput"><span class="keyword">function</span> W1 = leading_order_nonauto_<a href="../../../Library/SSM/SSM.html">SSM</a>(A,B,W_M,V_M,Lambda_M_vector,kappa_set,F_kappa,reltol,kNonauto,iNonauto,rNonauto,om)
+        </pre><p>This function is adapted from compute_perturbed_wisker for the purpose of parallel computation. The reader may refer to the compute_perturbed_wisker for more details about this function.</p><pre class="codeinput"><span class="comment">% *Near external resonances and Leading order reduced dynamics*</span>
+F_kappacol = F_kappa(:);
+[N,mm] = size(V_M);
+numOm  = numel(om);
+W1 = cell(numOm,1);
+<span class="keyword">parfor</span> j=1:numOm
+    Omega = om(j);
+    <span class="comment">% *Near external resonances and Leading order reduced dynamics*</span>
+    [K, ~] = size(kappa_set);
+    lambda_C_10 = 1i*repmat((kappa_set*Omega).',[mm 1]) - repmat(Lambda_M_vector,[1,K]);
+    ref = min(abs(Lambda_M_vector));
+    abstol = reltol * ref;
+    <span class="comment">% check external resonance</span>
+    [P, Q] = find(abs(lambda_C_10)&lt;abstol);
+    r_ext = length(Q);
+
+    <span class="keyword">if</span> r_ext
+        E_P = sparse(P, (1:r_ext).', true(r_ext,1), mm, r_ext );
+        E_Q = sparse(Q, (1:r_ext).', true(r_ext,1), K, r_ext );
+        W_P = W_M(:,P);
+        G_10 = <a href="../../../Library/Features/misc/khatri_rao_product.html">khatri_rao_product</a>(E_Q,E_P)';
+        K_10 = <a href="../../../Library/Features/misc/khatri_rao_product.html">khatri_rao_product</a>(E_Q,W_P);
+        f_10 = G_10.' * (K_10' * F_kappacol);
+        f_10 = reshape(f_10,mm,[]);
+        l_10 = F_kappa - B * V_M * f_10;
+    <span class="keyword">else</span>
+        l_10 = F_kappa;
+        f_10 = [];
+    <span class="keyword">end</span>
+    assert(~isempty(f_10), <span class="string">'Near resonance does not occur, you may tune tol'</span>);
+    f = f_10((kNonauto-1)*mm+2*iNonauto-1);
+    assert(norm(f-rNonauto)&lt;1e-3*norm(f), <span class="string">'inner resonance assumption does not hold'</span>);
+
+    <span class="comment">% solving linear equations</span>
+    W10 = zeros(N,K);
+    <span class="comment">% Use conjugacy to reduce computations: fe^{i&lt;kappa,omega&gt;t} + \bar{f}e^{i&lt;-kappa,omega&gt;t}</span>
+    [redConj,mapConj] = conj_red(kappa_set, F_kappa);
+    <span class="comment">% Here redConj gives the reduced kappa sets by accounting for</span>
+    <span class="comment">% complex conjugate, and mapConj is a cell array, where each entry maps to the</span>
+    <span class="comment">% possible conjugacy pairs</span>
+    <span class="keyword">for</span> jj = 1:numel(redConj)
+        C_j  =  1i*dot(Omega,kappa_set(redConj(jj),:))*B - A;
+        W10j = lsqminnorm(C_j,l_10(:,redConj(jj)));
+        mapj = mapConj{jj};
+        <span class="keyword">switch</span> numel(mapj)
+            <span class="keyword">case</span> 1
+                W10(:,mapj) = W10j;
+            <span class="keyword">case</span> 2
+                W10(:,mapj(1)) = W10j;
+                W10(:,mapj(2)) = conj(W10j);
+            <span class="keyword">otherwise</span>
+                error(<span class="string">'there exist redundancy in kappa of external forcing'</span>);
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+    W1j = struct();
+    W1j.coeffs = W10; W1j.kappas = kappa_set;
+    W1{j} = W1j;
+<span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+
+<span class="keyword">function</span> [redConj,mapConj] = conj_red(kappa_set,F_kappa)
+<span class="comment">% This function detects complex conjugate relations between forcing. For instance,</span>
+<span class="comment">% when kappa_set = [1,-1,2,3,-3] and F_kappa = [1;1;2;3;4], it will return</span>
+<span class="comment">% redConj = [1,3,4,5] with mapConj = {[1 2],3,4,5}</span>
+redConj = [];
+mapConj = [];
+assert(numel(kappa_set)==numel(unique(kappa_set)),<span class="string">'there exist redundancy in kappa of external forcing'</span>);
+kappa = kappa_set;
+<span class="keyword">while</span> ~isempty(kappa)
+    ka = kappa(1);
+    ka_redConj = find(kappa_set==ka);
+    redConj = [redConj;ka_redConj];
+    <span class="comment">% find the conjugate one if it exists</span>
+    ka_conj = find(kappa_set==-ka);
+    <span class="keyword">if</span> ~isempty(ka_conj) &amp;&amp; norm(conj(F_kappa(:,ka_redConj))-F_kappa(:,ka_conj))&lt;1e-6*norm(F_kappa(:,ka_conj))
+        mapConj = [mapConj, {[ka_redConj,ka_conj]}];
+        kappa = setdiff(kappa,[ka,-ka],<span class="string">'stable'</span>);
+    <span class="keyword">else</span>
+        mapConj = [mapConj, {ka_redConj}];
+        kappa = setdiff(kappa,ka,<span class="string">'stable'</span>);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+        </pre><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% LEADING_ORDER_NONAUTO_SSM
+%
+%%
+function W1 = leading_order_nonauto_<a href="../../../Library/SSM/SSM.html">SSM</a>(A,B,W_M,V_M,Lambda_M_vector,kappa_set,F_kappa,reltol,kNonauto,iNonauto,rNonauto,om)
+%%
+% This function is adapted from compute_perturbed_wisker for the purpose of
+% parallel computation. The reader may refer to the
+% compute_perturbed_wisker for more details about this function.
+
+% *Near external resonances and Leading order reduced dynamics*
+F_kappacol = F_kappa(:);
+[N,mm] = size(V_M);
+numOm  = numel(om);
+W1 = cell(numOm,1);
+parfor j=1:numOm
+    Omega = om(j);
+    % *Near external resonances and Leading order reduced dynamics*
+    [K, ~] = size(kappa_set);
+    lambda_C_10 = 1i*repmat((kappa_set*Omega).',[mm 1]) - repmat(Lambda_M_vector,[1,K]);
+    ref = min(abs(Lambda_M_vector));
+    abstol = reltol * ref;
+    % check external resonance
+    [P, Q] = find(abs(lambda_C_10)<abstol);
+    r_ext = length(Q);
+
+    if r_ext    
+        E_P = sparse(P, (1:r_ext).', true(r_ext,1), mm, r_ext );
+        E_Q = sparse(Q, (1:r_ext).', true(r_ext,1), K, r_ext );
+        W_P = W_M(:,P);
+        G_10 = <a href="../../../Library/Features/misc/khatri_rao_product.html">khatri_rao_product</a>(E_Q,E_P)';
+        K_10 = <a href="../../../Library/Features/misc/khatri_rao_product.html">khatri_rao_product</a>(E_Q,W_P);
+        f_10 = G_10.' * (K_10' * F_kappacol);
+        f_10 = reshape(f_10,mm,[]);
+        l_10 = F_kappa - B * V_M * f_10;
+    else
+        l_10 = F_kappa;
+        f_10 = [];
+    end
+    assert(~isempty(f_10), 'Near resonance does not occur, you may tune tol');
+    f = f_10((kNonauto-1)*mm+2*iNonauto-1);
+    assert(norm(f-rNonauto)<1e-3*norm(f), 'inner resonance assumption does not hold');
+
+    % solving linear equations
+    W10 = zeros(N,K);
+    % Use conjugacy to reduce computations: fe^{i<kappa,omega>t} + \bar{f}e^{i<-kappa,omega>t}
+    [redConj,mapConj] = conj_red(kappa_set, F_kappa);
+    % Here redConj gives the reduced kappa sets by accounting for
+    % complex conjugate, and mapConj is a cell array, where each entry maps to the
+    % possible conjugacy pairs
+    for jj = 1:numel(redConj)
+        C_j  =  1i*dot(Omega,kappa_set(redConj(jj),:))*B - A;
+        W10j = lsqminnorm(C_j,l_10(:,redConj(jj)));
+        mapj = mapConj{jj};
+        switch numel(mapj)
+            case 1
+                W10(:,mapj) = W10j;
+            case 2
+                W10(:,mapj(1)) = W10j;
+                W10(:,mapj(2)) = conj(W10j);
+            otherwise
+                error('there exist redundancy in kappa of external forcing');
+        end
+    end
+    W1j = struct();
+    W1j.coeffs = W10; W1j.kappas = kappa_set;
+    W1{j} = W1j;
+end    
+end
+
+function [redConj,mapConj] = conj_red(kappa_set,F_kappa)
+% This function detects complex conjugate relations between forcing. For instance,
+% when kappa_set = [1,-1,2,3,-3] and F_kappa = [1;1;2;3;4], it will return
+% redConj = [1,3,4,5] with mapConj = {[1 2],3,4,5}
+redConj = [];
+mapConj = [];
+assert(numel(kappa_set)==numel(unique(kappa_set)),'there exist redundancy in kappa of external forcing');
+kappa = kappa_set;
+while ~isempty(kappa)
+    ka = kappa(1);
+    ka_redConj = find(kappa_set==ka);
+    redConj = [redConj;ka_redConj];
+    % find the conjugate one if it exists
+    ka_conj = find(kappa_set==-ka);
+    if ~isempty(ka_conj) && norm(conj(F_kappa(:,ka_redConj))-F_kappa(:,ka_conj))<1e-6*norm(F_kappa(:,ka_conj))
+        mapConj = [mapConj, {[ka_redConj,ka_conj]}];
+        kappa = setdiff(kappa,[ka,-ka],'stable');
+    else
+        mapConj = [mapConj, {ka_redConj}];
+        kappa = setdiff(kappa,ka,'stable');
+    end
+end
+end
+
+
+            ##### SOURCE END #####
+        --></body></html></body></html>

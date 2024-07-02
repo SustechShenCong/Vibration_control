@@ -1,0 +1,563 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../../../index.html"><img alt="Logo" class="logo" src="../../../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>COEFFS_COMPOSITION</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-09" name="DC.date"/><meta content="coeffs_composition.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>COEFFS_COMPOSITION</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">Composition coefficients for power series</a></li><li><a href="#5">Algorithm for unique multi-indices up to conjugation</a></li><li><a href="#25">General Algorithm</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> [Hk] = coeffs_composition(W_0,H,multi_input)
+        </pre><h2 id="2">Composition coefficients for power series</h2><p>Calculates the composition coefficients of power series as given in <a href="https://doi.org/10.1016/j.jsv.2020.115640">https://doi.org/10.1016/j.jsv.2020.115640</a> , Appendix C</p><pre class="codeinput"><span class="keyword">switch</span> multi_input.ordering
+    <span class="keyword">case</span> <span class="string">'conjugate'</span>
+        <span class="comment">%Coefficients in conjugate ordering, used in cohomological solution</span>
+        <span class="comment">%for computing autonomous coefficients</span>
+        Hk = conjugate_computation(W_0,H,multi_input);
+    <span class="keyword">case</span> <span class="string">'revlex'</span>
+        <span class="comment">%Restoring coefficients for nonautonomous calculations given the</span>
+        <span class="comment">%calculated SSM coefficients.</span>
+        Hk = rev_lexicographic_computation(W_0,H,multi_input.k);
+    <span class="keyword">case</span> <span class="string">'lex'</span>
+        Hk = lexicographic_computation(W_0,H,multi_input.k);
+<span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+
+<span class="keyword">function</span> [Hk] = conjugate_computation(W_0,H,multi_input)
+        </pre><h2 id="5">Algorithm for unique multi-indices up to conjugation</h2><p>This function computes the coefficients for the composition of a multivariate polynomial power series.</p><p>Take the expansion of row <span class="MathJax_Preview"><img alt="$i$" src="coeffs_composition_eq08984912804010224726-Rescaled.png" style="width: 4.8px; height: auto;"/></span><script type="math/tex">i</script> of a vector valued function <span class="MathJax_Preview"><img alt="$(\mathbf{S(p)} )_i= \sum_{\mathbf{u}}S_{\mathbf{u},i}\mathbf{p^u}$" src="coeffs_composition_eq10658855689590118853-Rescaled.png" style="width: 115.19999999999999px; height: auto;"/></span><script type="math/tex">(\mathbf{S(p)} )_i= \sum_{\mathbf{u}}S_{\mathbf{u},i}\mathbf{p^u}</script> .</p><p>If this power series is multiplied with itself <span class="MathJax_Preview"><img alt="$s$" src="coeffs_composition_eq04799535687386240985-Rescaled.png" style="width: 6.0px; height: auto;"/></span><script type="math/tex">s</script> times, it can be written like <span class="MathJax_Preview"><img alt="$((\mathbf{S(p)} )_i)^s= \bigg( \ \sum_{\mathbf{u}}S_{\mathbf{u},i}\mathbf{p^u}\bigg)^s= \sum_{\mathbf{h}}H_{i,s,\mathbf{h}}\mathbf{p^h}$" src="coeffs_composition_eq17411373639889196472-Rescaled.png" style="width: 247.2px; height: auto;"/></span><script type="math/tex">((\mathbf{S(p)} )_i)^s= \bigg( \ \sum_{\mathbf{u}}S_{\mathbf{u},i}\mathbf{p^u}\bigg)^s= \sum_{\mathbf{h}}H_{i,s,\mathbf{h}}\mathbf{p^h}</script></p><p>This function computes <span class="MathJax_Preview"><img alt="$H_{i,s,\mathbf{k}_f} = \frac{s}{k_{f,j}} \sum_{ \mathbf{u &lt; k}_f} u_j S_{i,\mathbf{u}} H_{i,s-1,\mathbf{k}_f-\mathbf{u}}$" src="coeffs_composition_eq05859996453881181264-Rescaled.png" style="width: 204.0px; height: auto;"/></span><script type="math/tex">H_{i,s,\mathbf{k}_f} = \frac{s}{k_{f,j}} \sum_{ \mathbf{u < k}_f} u_j S_{i,\mathbf{u}} H_{i,s-1,\mathbf{k}_f-\mathbf{u}}</script> for all multi-index vectors <span class="MathJax_Preview"><img alt="$\mathbf{k}_f$" src="coeffs_composition_eq12788223238356508156-Rescaled.png" style="width: 14.399999999999999px; height: auto;"/></span><script type="math/tex">\mathbf{k}_f</script> of a given order <span class="MathJax_Preview"><img alt="$k$" src="coeffs_composition_eq12829740475467572519-Rescaled.png" style="width: 7.199999999999999px; height: auto;"/></span><script type="math/tex">k</script>.</p><pre class="codeinput">Z_cci = multi_input.Z_cci;
+N = multi_input.N;
+K = multi_input.K;
+revlex2conj = multi_input.revlex2conj;
+l = size(K,1);
+k = sum(K(:,1),1);
+string = <span class="string">'conjugate'</span>;
+z_k    = Z_cci(k);
+
+Hk = zeros(N,z_k,k);
+[kj,Ikj] = min(K +(k+1)*(K ==0)); <span class="comment">%find nonzero minima of all multi-indices of order k</span>
+        </pre><p>Loop over all orders of multi-indices that are potentially nonzero and do not require the knowledge of the order <span class="MathJax_Preview"><img alt="$k$" src="coeffs_composition_eq12829740475467572519-Rescaled.png" style="width: 7.199999999999999px; height: auto;"/></span><script type="math/tex">k</script> coefficients of the SSM parametrisation.</p><pre class="codeinput"><span class="keyword">for</span> ord = 1:k-1
+        </pre><p>Create all multi-indices of order <span class="MathJax_Preview"><img alt="$k-u$" src="coeffs_composition_eq02406998225708922500-Rescaled.png" style="width: 30.0px; height: auto;"/></span><script type="math/tex">k-u</script></p><pre class="codeinput">    g       = flip(sortrows(<a href="../../../Library/Features/misc/nsumk.html">nsumk</a>(l,k-ord,<span class="string">'nonnegative'</span>)).',2);
+
+    g       = g(:,revlex2conj{k-ord});
+
+    [gmink,I_k,I_g] = <a href="../../../Library/Manifold/private/multi_subtraction.html">multi_subtraction</a>(K,g,<span class="string">'Parametrised'</span>);
+        </pre><p>Now all the positions of the order <span class="MathJax_Preview"><img alt="$m$" src="coeffs_composition_eq18216620034067401164-Rescaled.png" style="width: 12.0px; height: auto;"/></span><script type="math/tex">m</script> multi-indices are calculated. Assume the vector <span class="MathJax_Preview"><img alt="$\texttt{gmink}$" src="coeffs_composition_eq14607687463853719912-Rescaled.png" style="width: 34.8px; height: auto;"/></span><script type="math/tex">\texttt{gmink}</script> has <span class="MathJax_Preview"><img alt="$u_\alpha$" src="coeffs_composition_eq13932622948758853418-Rescaled.png" style="width: 13.2px; height: auto;"/></span><script type="math/tex">u_\alpha</script> columns.</p><pre class="codeinput">    I_gmk     = <a href="../../../Library/Manifold/private/multi_index_2_ordering.html">multi_index_2_ordering</a>(gmink,string,revlex2conj);
+        </pre><p>We read out all the values <span class="MathJax_Preview"><img alt="$u_j$" src="coeffs_composition_eq12343738143801453558-Rescaled.png" style="width: 10.799999999999999px; height: auto;"/></span><script type="math/tex">u_j</script> positions of minimal entries</p><pre class="codeinput">    pos     = Ikj(I_k);                 <span class="comment">%find row for every vector in mv</span>
+    sz      = size(I_k,2);
+    poslin  = sub2ind([l,sz],pos,1:sz); <span class="comment">%create linear index array</span>
+    <span class="comment">% read out minimal entries</span>
+    gmk_j     = gmink(poslin);            <span class="comment">%has to be a row vector</span>
+        </pre><p>One thing that is redundant is all the calculations where <span class="MathJax_Preview"><img alt="$u_j$" src="coeffs_composition_eq12343738143801453558-Rescaled.png" style="width: 10.799999999999999px; height: auto;"/></span><script type="math/tex">u_j</script> is zero. The corresponding values could be ignored, by taking the indices corresponding to <span class="MathJax_Preview"><img alt="$u_j$" src="coeffs_composition_eq12343738143801453558-Rescaled.png" style="width: 10.799999999999999px; height: auto;"/></span><script type="math/tex">u_j</script>= 0 out of calculations .</p><p>Consequently, the coefficients <span class="MathJax_Preview"><img alt="$u_jS_{i,\mathbf{u}} H_{i,s-1,\mathbf{k}_f-\mathbf{u}}$" src="coeffs_composition_eq08810123903967872573-Rescaled.png" style="width: 92.39999999999999px; height: auto;"/></span><script type="math/tex">u_jS_{i,\mathbf{u}} H_{i,s-1,\mathbf{k}_f-\mathbf{u}}</script> are calculated. In the array <tt>Hk</tt> the first row corresponds to the phase space dimension, the third one to the scalar exponents.</p><p><span class="MathJax_Preview"><img alt="$\texttt{H}_{k-u}(:,\texttt{I}_{g},:)$" src="coeffs_composition_eq11317132205247973219-Rescaled.png" style="width: 66.0px; height: auto;"/></span><script type="math/tex">\texttt{H}_{k-u}(:,\texttt{I}_{g},:)</script> is a matrix in <span class="MathJax_Preview"><img alt="$\mathbf{C}^{2n \times \texttt{sz} \times k-1}$" src="coeffs_composition_eq12056563557153522564-Rescaled.png" style="width: 66.0px; height: auto;"/></span><script type="math/tex">\mathbf{C}^{2n \times \texttt{sz} \times k-1}</script>. Contribution of coefficients where <span class="MathJax_Preview"><img alt="$s=1$" src="coeffs_composition_eq05229683836800440738-Rescaled.png" style="width: 28.799999999999997px; height: auto;"/></span><script type="math/tex">s=1</script> explicitly depend on the SSM coefficients of the order that is calculated and will be added in the end after the highest order coefficients of the SSM parametrisation have been computed,but fortunately are not needed for the calculations of themselves. Finally <span class="MathJax_Preview"><img alt="$\texttt{S\{ord\}}(:,\texttt{gmk\_I}) \in \mathbf{C}^{2n \times \texttt{sz} }$" src="coeffs_composition_eq09685103335812609619-Rescaled.png" style="width: 151.2px; height: auto;"/></span><script type="math/tex">\texttt{S\{ord\}}(:,\texttt{gmk\_I}) \in \mathbf{C}^{2n \times \texttt{sz} }</script>.</p><p>Now, since we want to make use of the symmetry in the SSM coefficients, we split all contributions such that in conjugate multi-index ordering, all of the indices at order <span class="MathJax_Preview"><img alt="$\texttt{ord}$" src="coeffs_composition_eq14418500408339030549-Rescaled.png" style="width: 20.4px; height: auto;"/></span><script type="math/tex">\texttt{ord}</script> that are smaller or equal than <span class="MathJax_Preview"><img alt="$\texttt{Z(ord)}$" src="coeffs_composition_eq14016069694022199420-Rescaled.png" style="width: 39.6px; height: auto;"/></span><script type="math/tex">\texttt{Z(ord)}</script> are read out normally, and the ones that are bigger are changed to their conjugate counterpart.</p><pre class="codeinput">    coeff       = zeros(N,sz,k-ord);
+
+    z_o   = nchoosek(ord+l-1,l-1);
+    z_ko  = nchoosek(k-ord+l-1,l-1);
+    z_cci_o = Z_cci(ord);
+    z_cci_ko = Z_cci(k-ord);
+
+    <span class="comment">% determine which coefficients correspond to multi-indices bigger</span>
+    <span class="comment">% than the conjugate center index at order o and k-o.</span>
+
+    I_g_a = I_g &lt;= z_cci_ko;
+    I_gmk_a = I_gmk &lt;= z_cci_o;
+    <span class="comment">% where g_I &lt;= z_ko_2, and gmk_I &lt;= z_k_2</span>
+    aa = I_g_a &amp; I_gmk_a;
+    <span class="comment">% where g_I &gt; z_ko_2, but gmk_I &lt;= z_k_2</span>
+    ab = ~I_g_a &amp; I_gmk_a;
+    <span class="comment">% where g_I &lt;= z_ko_2, but gmk_I &gt; z_k_2</span>
+    ba = I_g_a &amp; ~I_gmk_a;
+    <span class="comment">% where g_I &gt; z_ko_2, and gmk_I &gt; z_k_2</span>
+    bb = ~ I_g_a &amp; ~I_gmk_a;
+
+    <span class="comment">%read out contributions using symmetries</span>
+    W0_coeffs = W_0(ord).coeffs;
+
+    coeff(:,aa,:)   = W0_coeffs(:,I_gmk(aa)).* gmk_j(aa)             .* H{k-ord}(:,I_g(aa),:);
+    coeff(:,ab,:)   = W0_coeffs(:,I_gmk(ab)).* gmk_j(ab)             .* conj(H{k-ord}(:,z_ko-I_g(ab)+1,:));
+    coeff(:,ba,:)   = conj(W0_coeffs(:,z_o-I_gmk(ba)+1)).* gmk_j(ba) .* H{k-ord}(:,I_g(ba),:);
+    coeff(:,bb,:)   = conj(W0_coeffs(:,z_o-I_gmk(bb)+1)).* gmk_j(bb) .* conj(H{k-ord}(:,z_ko-I_g(bb)+1,:));
+        </pre><p><span class="MathJax_Preview"><img alt="$\texttt{coeff} \in \mathbf{C}^{2n \times \texttt{sz} \times k-1}$" src="coeffs_composition_eq08481668085705086521-Rescaled.png" style="width: 116.39999999999999px; height: auto;"/></span><script type="math/tex">\texttt{coeff} \in \mathbf{C}^{2n \times \texttt{sz} \times k-1}</script>. What is left now is to add up all the parts corresponding to a specific multi-index of order  <span class="MathJax_Preview"><img alt="$k$" src="coeffs_composition_eq12829740475467572519-Rescaled.png" style="width: 7.199999999999999px; height: auto;"/></span><script type="math/tex">k</script> and multiply with the <span class="MathJax_Preview"><img alt="$s$" src="coeffs_composition_eq04799535687386240985-Rescaled.png" style="width: 6.0px; height: auto;"/></span><script type="math/tex">s</script> the slice corresponds to. We want to add all the columns corresponding to where <span class="MathJax_Preview"><img alt="$\texttt{I}_{k}$" src="coeffs_composition_eq11469353977631571020-Rescaled.png" style="width: 12.0px; height: auto;"/></span><script type="math/tex">\texttt{I}_{k}</script> has the same values (the columns contain coefficients that contribute to the same order <span class="MathJax_Preview"><img alt="$k$" src="coeffs_composition_eq12829740475467572519-Rescaled.png" style="width: 7.199999999999999px; height: auto;"/></span><script type="math/tex">k</script> multi-index).</p><pre class="codeinput">    <span class="keyword">for</span> f = unique(I_k)
+        Hk(:,f,2:(k-ord+1)) = Hk(:,f,2:(k-ord+1)) + sum(coeff(:,I_k==f,:),2);
+    <span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+<span class="comment">%multiplication with s and kj</span>
+s  = 1:k;
+<span class="comment">%match dimensions for pointiwse multiplication</span>
+Hk = permute(Hk,[2,3,1]) .* ((1./kj).' * s);
+Hk = permute(Hk,[3,1,2]);
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+
+
+<span class="keyword">function</span> [Hk] = lexicographic_computation(W_0,H,k)
+        </pre><pre class="codeinput">l = size(H{1},2);
+z_k = nchoosek(k+l-1,l-1);
+N = size(H{1},1);
+K = sortrows(<a href="../../../Library/Features/misc/nsumk.html">nsumk</a>(l,k,<span class="string">'nonnegative'</span>)).';
+
+string = <span class="string">'lex'</span>;
+Hk = zeros(N,z_k,k);
+
+<span class="comment">%find nonzero minima of all multi-indices of order k</span>
+[kj,Ikj] = min(K +(k+1)*(K ==0));
+        </pre><p>Loop over all orders of multi-indices that are potentially nonzero and do not require the knowledge of the order <span class="MathJax_Preview"><img alt="$k$" src="coeffs_composition_eq12829740475467572519-Rescaled.png" style="width: 7.199999999999999px; height: auto;"/></span><script type="math/tex">k</script> coefficients of the SSM parametrisation.</p><pre class="codeinput"><span class="keyword">for</span> ord = 1:k-1
+        </pre><pre class="codeinput">    <span class="keyword">if</span> isempty(W_0{ord}.coeffs)
+        <span class="keyword">continue</span>
+    <span class="keyword">end</span>
+        </pre><p>Create all multi-indices of order <span class="MathJax_Preview"><img alt="$k-u$" src="coeffs_composition_eq02406998225708922500-Rescaled.png" style="width: 30.0px; height: auto;"/></span><script type="math/tex">k-u</script></p><pre class="codeinput">    <span class="keyword">if</span> l &gt;1
+        g       = sortrows(<a href="../../../Library/Features/misc/nsumk.html">nsumk</a>(l,k-ord,<span class="string">'nonnegative'</span>)).'; <span class="comment">%lexicographic!!</span>
+    <span class="keyword">else</span>
+        g = k-ord;
+    <span class="keyword">end</span>
+    [gmink,I_k,I_g] = <a href="../../../Library/Manifold/private/multi_subtraction.html">multi_subtraction</a>(K,g,<span class="string">'Parametrised'</span>);
+        </pre><p>Now all the positions of the order <span class="MathJax_Preview"><img alt="$m$" src="coeffs_composition_eq18216620034067401164-Rescaled.png" style="width: 12.0px; height: auto;"/></span><script type="math/tex">m</script> multi-indices are calculated. Assume the vector <span class="MathJax_Preview"><img alt="$\texttt{gmink}$" src="coeffs_composition_eq14607687463853719912-Rescaled.png" style="width: 34.8px; height: auto;"/></span><script type="math/tex">\texttt{gmink}</script> has <span class="MathJax_Preview"><img alt="$u_\alpha$" src="coeffs_composition_eq13932622948758853418-Rescaled.png" style="width: 13.2px; height: auto;"/></span><script type="math/tex">u_\alpha</script> columns.</p><pre class="codeinput">    I_gmk     = <a href="../../../Library/Manifold/private/multi_index_2_ordering.html">multi_index_2_ordering</a>(gmink,string,[]);
+        </pre><p>We read out all the values <span class="MathJax_Preview"><img alt="$u_j$" src="coeffs_composition_eq12343738143801453558-Rescaled.png" style="width: 10.799999999999999px; height: auto;"/></span><script type="math/tex">u_j</script> positions of minimal entries</p><pre class="codeinput">    pos     = Ikj(I_k);                 <span class="comment">%find row for every vector in mv</span>
+    sz      = size(I_k,2);
+    poslin  = sub2ind([l,sz],pos,1:sz); <span class="comment">%create linear index array</span>
+    <span class="comment">% read out minimal entries</span>
+    gmk_j     = gmink(poslin);            <span class="comment">%has to be a row vector</span>
+        </pre><p>One thing that is redundant is all the calculations where <span class="MathJax_Preview"><img alt="$u_j$" src="coeffs_composition_eq12343738143801453558-Rescaled.png" style="width: 10.799999999999999px; height: auto;"/></span><script type="math/tex">u_j</script> is zero. The corresponding values could be ignored, by taking the indices corresponding to <span class="MathJax_Preview"><img alt="$u_j$" src="coeffs_composition_eq12343738143801453558-Rescaled.png" style="width: 10.799999999999999px; height: auto;"/></span><script type="math/tex">u_j</script>= 0 out of calculations .</p><p>Consequently, the coefficients <span class="MathJax_Preview"><img alt="$u_jS_{i,\mathbf{u}} H_{i,s-1,\mathbf{k}_f-\mathbf{u}} $  are calculated. In the array $\texttt{Hk}$" src="coeffs_composition_eq04750779915754935798-Rescaled.png" style="width: 274.8px; height: auto;"/></span><script type="math/tex">u_jS_{i,\mathbf{u}} H_{i,s-1,\mathbf{k}_f-\mathbf{u}} $  are calculated. In the array $\texttt{Hk}</script> the first row corresponds to the phase space dimension, the third one to the scalar exponents.</p><p><span class="MathJax_Preview"><img alt="$\texttt{H}_{k-u}(:,\texttt{I}_{g},:)$" src="coeffs_composition_eq11317132205247973219-Rescaled.png" style="width: 66.0px; height: auto;"/></span><script type="math/tex">\texttt{H}_{k-u}(:,\texttt{I}_{g},:)</script> is a matrix in <span class="MathJax_Preview"><img alt="$\mathbf{C}^{2n \times \texttt{sz} \times k-1}$" src="coeffs_composition_eq12056563557153522564-Rescaled.png" style="width: 66.0px; height: auto;"/></span><script type="math/tex">\mathbf{C}^{2n \times \texttt{sz} \times k-1}</script>. Contribution of coefficients where <span class="MathJax_Preview"><img alt="$s=1$" src="coeffs_composition_eq05229683836800440738-Rescaled.png" style="width: 28.799999999999997px; height: auto;"/></span><script type="math/tex">s=1</script> explicitly depend on the SSM coefficients of the order that is calculated and will be added in the end after the highest order coefficients of the SSM parametrisation have been computed,but fortunately are not needed for the calculations of themselves. Finally <span class="MathJax_Preview"><img alt="$\texttt{S\{ord\}}(:,\texttt{gmk\_I}) \in \mathbf{C}^{2n \times \texttt{sz} }$" src="coeffs_composition_eq09685103335812609619-Rescaled.png" style="width: 151.2px; height: auto;"/></span><script type="math/tex">\texttt{S\{ord\}}(:,\texttt{gmk\_I}) \in \mathbf{C}^{2n \times \texttt{sz} }</script>.</p><pre class="codeinput">    <span class="comment">%read out contributions</span>
+
+    coeff   = W_0(ord).coeffs(:,I_gmk).* gmk_j .* H{k-ord}(:,I_g,:);
+        </pre><p><span class="MathJax_Preview"><img alt="$\texttt{coeff} \in \mathbf{C}^{2n \times \texttt{sz} \times k-1}$" src="coeffs_composition_eq08481668085705086521-Rescaled.png" style="width: 116.39999999999999px; height: auto;"/></span><script type="math/tex">\texttt{coeff} \in \mathbf{C}^{2n \times \texttt{sz} \times k-1}</script>. What is left now is to add up all the parts corresponding to a specific multi-index of order  <span class="MathJax_Preview"><img alt="$k$" src="coeffs_composition_eq12829740475467572519-Rescaled.png" style="width: 7.199999999999999px; height: auto;"/></span><script type="math/tex">k</script> and multiply with the <span class="MathJax_Preview"><img alt="$s$" src="coeffs_composition_eq04799535687386240985-Rescaled.png" style="width: 6.0px; height: auto;"/></span><script type="math/tex">s</script> the slice corresponds to. We want to add all the columns corresponding to where <span class="MathJax_Preview"><img alt="$\texttt{I}_{k}$" src="coeffs_composition_eq11469353977631571020-Rescaled.png" style="width: 12.0px; height: auto;"/></span><script type="math/tex">\texttt{I}_{k}</script> has the same values (the columns contain coefficients that contribute to the same order <span class="MathJax_Preview"><img alt="$k$" src="coeffs_composition_eq12829740475467572519-Rescaled.png" style="width: 7.199999999999999px; height: auto;"/></span><script type="math/tex">k</script> multi-index).</p><pre class="codeinput">    <span class="keyword">for</span> f = unique(I_k)
+        Hk(:,f,2:(k-ord+1)) = Hk(:,f,2:(k-ord+1)) + sum(coeff(:,I_k==f,:),2);
+    <span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+<span class="comment">%multiplication with s and kj</span>
+s  = 1:k;
+<span class="comment">%match dimensions for pointiwse multiplication</span>
+Hk = permute(Hk,[2,3,1]) .* ((1./kj).' * s);
+Hk = permute(Hk,[3,1,2]);
+
+<span class="comment">% Since we reconstruct we already know the SSM coefficients at that order</span>
+<span class="keyword">if</span> ~isempty(W_0{k}) &amp;&amp; ~isempty(W_0{k}.coeffs)
+    Hk(:,:,1) = W_0(k).coeffs;
+<span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+
+
+<span class="keyword">function</span> [Hk] = rev_lexicographic_computation(W_0,H,k)
+        </pre><h2 id="25">General Algorithm</h2><pre class="codeinput">l = size(H{1},2);
+z_k = nchoosek(k+l-1,l-1);
+N = size(H{1},1);
+K = flip(sortrows(<a href="../../../Library/Features/misc/nsumk.html">nsumk</a>(l,k,<span class="string">'nonnegative'</span>)).',2);
+
+string = <span class="string">'revlex'</span>;
+Hk = zeros(N,z_k,k);
+
+<span class="comment">%find nonzero minima of all multi-indices of order k</span>
+[kj,Ikj] = min(K +(k+1)*(K ==0));
+        </pre><p>Loop over all orders of multi-indices that are potentially nonzero and do not require the knowledge of the order <span class="MathJax_Preview"><img alt="$k$" src="coeffs_composition_eq12829740475467572519-Rescaled.png" style="width: 7.199999999999999px; height: auto;"/></span><script type="math/tex">k</script> coefficients of the SSM parametrisation.</p><pre class="codeinput"><span class="keyword">for</span> ord = 1:k-1
+        </pre><pre class="codeinput">    <span class="keyword">if</span> isempty(W_0(ord).coeffs)
+        <span class="keyword">continue</span>
+    <span class="keyword">end</span>
+        </pre><p>Create all multi-indices of order <span class="MathJax_Preview"><img alt="$k-u$" src="coeffs_composition_eq02406998225708922500-Rescaled.png" style="width: 30.0px; height: auto;"/></span><script type="math/tex">k-u</script></p><pre class="codeinput">    <span class="keyword">if</span> l &gt; 1
+        g       = flip(sortrows(<a href="../../../Library/Features/misc/nsumk.html">nsumk</a>(l,k-ord,<span class="string">'nonnegative'</span>)).',2); <span class="comment">%rev-lexicographic!!</span>
+    <span class="keyword">else</span>
+        g = k-ord;
+    <span class="keyword">end</span>
+    [gmink,I_k,I_g] = <a href="../../../Library/Manifold/private/multi_subtraction.html">multi_subtraction</a>(K,g,<span class="string">'Parametrised'</span>);
+        </pre><p>Now all the positions of the order <span class="MathJax_Preview"><img alt="$m$" src="coeffs_composition_eq18216620034067401164-Rescaled.png" style="width: 12.0px; height: auto;"/></span><script type="math/tex">m</script> multi-indices are calculated. Assume the vector <span class="MathJax_Preview"><img alt="$\texttt{gmink}$" src="coeffs_composition_eq14607687463853719912-Rescaled.png" style="width: 34.8px; height: auto;"/></span><script type="math/tex">\texttt{gmink}</script> has <span class="MathJax_Preview"><img alt="$u_\alpha$" src="coeffs_composition_eq13932622948758853418-Rescaled.png" style="width: 13.2px; height: auto;"/></span><script type="math/tex">u_\alpha</script> columns.</p><pre class="codeinput">    I_gmk     = <a href="../../../Library/Manifold/private/multi_index_2_ordering.html">multi_index_2_ordering</a>(gmink,string,[]);
+        </pre><p>We read out all the values <span class="MathJax_Preview"><img alt="$u_j$" src="coeffs_composition_eq12343738143801453558-Rescaled.png" style="width: 10.799999999999999px; height: auto;"/></span><script type="math/tex">u_j</script> positions of minimal entries</p><pre class="codeinput">    pos     = Ikj(I_k);                 <span class="comment">%find row for every vector in mv</span>
+    sz      = size(I_k,2);
+    poslin  = sub2ind([l,sz],pos,1:sz); <span class="comment">%create linear index array</span>
+    <span class="comment">% read out minimal entries</span>
+    gmk_j     = gmink(poslin);            <span class="comment">%has to be a row vector</span>
+        </pre><p>One thing that is redundant is all the calculations where <span class="MathJax_Preview"><img alt="$u_j$" src="coeffs_composition_eq12343738143801453558-Rescaled.png" style="width: 10.799999999999999px; height: auto;"/></span><script type="math/tex">u_j</script> is zero. The corresponding values could be ignored, by taking the indices corresponding to <span class="MathJax_Preview"><img alt="$u_j$" src="coeffs_composition_eq12343738143801453558-Rescaled.png" style="width: 10.799999999999999px; height: auto;"/></span><script type="math/tex">u_j</script>= 0 out of calculations .</p><p>Consequently, the coefficients <span class="MathJax_Preview"><img alt="$u_jS_{i,\mathbf{u}} H_{i,s-1,\mathbf{k}_f-\mathbf{u}} $  are calculated. In the array $\texttt{Hk}$" src="coeffs_composition_eq04750779915754935798-Rescaled.png" style="width: 274.8px; height: auto;"/></span><script type="math/tex">u_jS_{i,\mathbf{u}} H_{i,s-1,\mathbf{k}_f-\mathbf{u}} $  are calculated. In the array $\texttt{Hk}</script> the first row corresponds to the phase space dimension, the third one to the scalar exponents.</p><p><span class="MathJax_Preview"><img alt="$\texttt{H}_{k-u}(:,\texttt{I}_{g},:)$" src="coeffs_composition_eq11317132205247973219-Rescaled.png" style="width: 66.0px; height: auto;"/></span><script type="math/tex">\texttt{H}_{k-u}(:,\texttt{I}_{g},:)</script> is a matrix in <span class="MathJax_Preview"><img alt="$\mathbf{C}^{2n \times \texttt{sz} \times k-1}$" src="coeffs_composition_eq12056563557153522564-Rescaled.png" style="width: 66.0px; height: auto;"/></span><script type="math/tex">\mathbf{C}^{2n \times \texttt{sz} \times k-1}</script>. Contribution of coefficients where <span class="MathJax_Preview"><img alt="$s=1$" src="coeffs_composition_eq05229683836800440738-Rescaled.png" style="width: 28.799999999999997px; height: auto;"/></span><script type="math/tex">s=1</script> explicitly depend on the SSM coefficients of the order that is calculated and will be added in the end after the highest order coefficients of the SSM parametrisation have been computed,but fortunately are not needed for the calculations of themselves. Finally <span class="MathJax_Preview"><img alt="$\texttt{S\{ord\}}(:,\texttt{gmk\_I}) \in \mathbf{C}^{2n \times \texttt{sz} }$" src="coeffs_composition_eq09685103335812609619-Rescaled.png" style="width: 151.2px; height: auto;"/></span><script type="math/tex">\texttt{S\{ord\}}(:,\texttt{gmk\_I}) \in \mathbf{C}^{2n \times \texttt{sz} }</script>.</p><pre class="codeinput">    <span class="comment">%read out contributions</span>
+
+    coeff   = W_0(ord).coeffs(:,I_gmk).* gmk_j .* H{k-ord}(:,I_g,:);
+        </pre><p><span class="MathJax_Preview"><img alt="$\texttt{coeff} \in \mathbf{C}^{2n \times \texttt{sz} \times k-1}$" src="coeffs_composition_eq08481668085705086521-Rescaled.png" style="width: 116.39999999999999px; height: auto;"/></span><script type="math/tex">\texttt{coeff} \in \mathbf{C}^{2n \times \texttt{sz} \times k-1}</script>. What is left now is to add up all the parts corresponding to a specific multi-index of order  <span class="MathJax_Preview"><img alt="$k$" src="coeffs_composition_eq12829740475467572519-Rescaled.png" style="width: 7.199999999999999px; height: auto;"/></span><script type="math/tex">k</script> and multiply with the <span class="MathJax_Preview"><img alt="$s$" src="coeffs_composition_eq04799535687386240985-Rescaled.png" style="width: 6.0px; height: auto;"/></span><script type="math/tex">s</script> the slice corresponds to. We want to add all the columns corresponding to where <span class="MathJax_Preview"><img alt="$\texttt{I}_{k}$" src="coeffs_composition_eq11469353977631571020-Rescaled.png" style="width: 12.0px; height: auto;"/></span><script type="math/tex">\texttt{I}_{k}</script> has the same values (the columns contain coefficients that contribute to the same order <span class="MathJax_Preview"><img alt="$k$" src="coeffs_composition_eq12829740475467572519-Rescaled.png" style="width: 7.199999999999999px; height: auto;"/></span><script type="math/tex">k</script> multi-index).</p><pre class="codeinput">    <span class="keyword">for</span> f = unique(I_k)
+        Hk(:,f,2:(k-ord+1)) = Hk(:,f,2:(k-ord+1)) + sum(coeff(:,I_k==f,:),2);
+    <span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+<span class="comment">%multiplication with s and kj</span>
+s  = 1:k;
+<span class="comment">%match dimensions for pointiwse multiplication</span>
+Hk = permute(Hk,[2,3,1]) .* ((1./kj).' * s);
+Hk = permute(Hk,[3,1,2]);
+
+<span class="comment">% Since we reconstruct we already know the SSM coefficients at that order</span>
+<span class="keyword">if</span> ~isempty(W_0(k)) &amp;&amp; ~isempty(W_0(k).coeffs)
+    Hk(:,:,1) = W_0(k).coeffs;
+<span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+        </pre><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% COEFFS_COMPOSITION
+%
+%%
+function [Hk] = coeffs_composition(W_0,H,multi_input)
+%% Composition coefficients for power series
+% Calculates the composition coefficients of power series as given in 
+% https://doi.org/10.1016/j.jsv.2020.115640
+% , Appendix C
+
+switch multi_input.ordering
+    case 'conjugate'
+        %Coefficients in conjugate ordering, used in cohomological solution
+        %for computing autonomous coefficients
+        Hk = conjugate_computation(W_0,H,multi_input);
+    case 'revlex'
+        %Restoring coefficients for nonautonomous calculations given the
+        %calculated SSM coefficients.
+        Hk = rev_lexicographic_computation(W_0,H,multi_input.k);
+    case 'lex'
+        Hk = lexicographic_computation(W_0,H,multi_input.k);
+end
+end
+
+function [Hk] = conjugate_computation(W_0,H,multi_input)
+
+%% Algorithm for unique multi-indices up to conjugation
+% This function computes the coefficients for the composition of a multivariate
+% polynomial power series.
+%
+% Take the expansion of row $i$ of a vector valued function $(\mathbf{S(p)}
+% )_i= \sum_{\mathbf{u}}S_{\mathbf{u},i}\mathbf{p^u}$ .
+%
+% If this power series is multiplied with itself $s$ times, it can be written
+% like $((\mathbf{S(p)} )_i)^s= \bigg( \ \sum_{\mathbf{u}}S_{\mathbf{u},i}\mathbf{p^u}\bigg)^s=
+% \sum_{\mathbf{h}}H_{i,s,\mathbf{h}}\mathbf{p^h}$
+%
+% This function computes $H_{i,s,\mathbf{k}_f} = \frac{s}{k_{f,j}} \sum_{ \mathbf{u
+% < k}_f} u_j S_{i,\mathbf{u}} H_{i,s-1,\mathbf{k}_f-\mathbf{u}}$ for all multi-index
+% vectors $\mathbf{k}_f$ of a given order $k$.
+%
+Z_cci = multi_input.Z_cci;
+N = multi_input.N;
+K = multi_input.K;
+revlex2conj = multi_input.revlex2conj;
+l = size(K,1);
+k = sum(K(:,1),1);
+string = 'conjugate';
+z_k    = Z_cci(k);
+
+Hk = zeros(N,z_k,k);
+[kj,Ikj] = min(K +(k+1)*(K ==0)); %find nonzero minima of all multi-indices of order k
+%%
+% Loop over all orders of multi-indices that are potentially nonzero and do
+% not require the knowledge of the order $k$ coefficients of the SSM parametrisation.
+for ord = 1:k-1
+    %%
+    % Create all multi-indices of order $k-u$
+    g       = flip(sortrows(<a href="../../../Library/Features/misc/nsumk.html">nsumk</a>(l,k-ord,'nonnegative')).',2);
+    
+    g       = g(:,revlex2conj{k-ord});
+    
+    [gmink,I_k,I_g] = <a href="../../../Library/Manifold/private/multi_subtraction.html">multi_subtraction</a>(K,g,'Parametrised');
+    %%
+    % Now all the positions of the order $m$ multi-indices are calculated. Assume
+    % the vector $\texttt{gmink}$ has $u_\alpha$ columns.
+    I_gmk     = <a href="../../../Library/Manifold/private/multi_index_2_ordering.html">multi_index_2_ordering</a>(gmink,string,revlex2conj);
+    %%
+    % We read out all the values $u_j$ positions of minimal entries
+    pos     = Ikj(I_k);                 %find row for every vector in mv
+    sz      = size(I_k,2);
+    poslin  = sub2ind([l,sz],pos,1:sz); %create linear index array
+    % read out minimal entries
+    gmk_j     = gmink(poslin);            %has to be a row vector
+    %%
+    % One thing that is redundant is all the calculations where $u_j$ is zero. The
+    % corresponding values could be ignored, by taking the indices corresponding to
+    % $u_j$= 0 out of calculations .
+    %
+    % Consequently, the coefficients $u_jS_{i,\mathbf{u}}
+    % H_{i,s-1,\mathbf{k}_f-\mathbf{u}}$
+    % are calculated. In the array |Hk| the first row corresponds to the
+    % phase space dimension, the third one to the scalar exponents.
+    %
+    % $\texttt{H}_{k-u}(:,\texttt{I}_{g},:)$ is a matrix in $\mathbf{C}^{2n \times
+    % \texttt{sz} \times k-1}$. Contribution of coefficients where $s=1$ explicitly
+    % depend on the SSM coefficients of the order that is calculated and will be added
+    % in the end after the highest order coefficients of the SSM parametrisation have
+    % been computed,but fortunately are not needed for the calculations of themselves.
+    % Finally $\texttt{S\{ord\}}(:,\texttt{gmk\_I}) \in \mathbf{C}^{2n \times \texttt{sz}
+    % }$.
+    
+    %%
+    % Now, since we want to make use of the symmetry in the SSM coefficients, we
+    % split all contributions such that in conjugate multi-index ordering, all of
+    % the indices at order $\texttt{ord}$ that are smaller or equal than $\texttt{Z(ord)}$
+    % are read out normally, and the ones that are bigger are changed to their conjugate
+    % counterpart.
+    coeff       = zeros(N,sz,k-ord);
+    
+    z_o   = nchoosek(ord+l-1,l-1);
+    z_ko  = nchoosek(k-ord+l-1,l-1);
+    z_cci_o = Z_cci(ord);
+    z_cci_ko = Z_cci(k-ord);
+    
+    % determine which coefficients correspond to multi-indices bigger
+    % than the conjugate center index at order o and k-o.
+    
+    I_g_a = I_g <= z_cci_ko;
+    I_gmk_a = I_gmk <= z_cci_o;
+    % where g_I <= z_ko_2, and gmk_I <= z_k_2
+    aa = I_g_a & I_gmk_a;
+    % where g_I > z_ko_2, but gmk_I <= z_k_2
+    ab = ~I_g_a & I_gmk_a;
+    % where g_I <= z_ko_2, but gmk_I > z_k_2
+    ba = I_g_a & ~I_gmk_a;
+    % where g_I > z_ko_2, and gmk_I > z_k_2
+    bb = ~ I_g_a & ~I_gmk_a;
+    
+    %read out contributions using symmetries
+    W0_coeffs = W_0(ord).coeffs;
+
+    coeff(:,aa,:)   = W0_coeffs(:,I_gmk(aa)).* gmk_j(aa)             .* H{k-ord}(:,I_g(aa),:);
+    coeff(:,ab,:)   = W0_coeffs(:,I_gmk(ab)).* gmk_j(ab)             .* conj(H{k-ord}(:,z_ko-I_g(ab)+1,:));
+    coeff(:,ba,:)   = conj(W0_coeffs(:,z_o-I_gmk(ba)+1)).* gmk_j(ba) .* H{k-ord}(:,I_g(ba),:);
+    coeff(:,bb,:)   = conj(W0_coeffs(:,z_o-I_gmk(bb)+1)).* gmk_j(bb) .* conj(H{k-ord}(:,z_ko-I_g(bb)+1,:));
+    
+    %%
+    % $\texttt{coeff} \in \mathbf{C}^{2n \times \texttt{sz} \times k-1}$. What is
+    % left now is to add up all the parts corresponding to a specific multi-index
+    % of order  $k$ and multiply with the $s$ the slice corresponds to. We want to
+    % add all the columns corresponding to where $\texttt{I}_{k}$ has the same values
+    % (the columns contain coefficients that contribute to the same order $k$ multi-index).
+    for f = unique(I_k)
+        Hk(:,f,2:(k-ord+1)) = Hk(:,f,2:(k-ord+1)) + sum(coeff(:,I_k==f,:),2);
+    end
+end
+%multiplication with s and kj
+s  = 1:k;
+%match dimensions for pointiwse multiplication
+Hk = permute(Hk,[2,3,1]) .* ((1./kj).' * s);
+Hk = permute(Hk,[3,1,2]);
+
+end
+
+
+function [Hk] = lexicographic_computation(W_0,H,k)
+l = size(H{1},2);
+z_k = nchoosek(k+l-1,l-1);
+N = size(H{1},1);
+K = sortrows(<a href="../../../Library/Features/misc/nsumk.html">nsumk</a>(l,k,'nonnegative')).';
+
+string = 'lex';
+Hk = zeros(N,z_k,k);
+
+%find nonzero minima of all multi-indices of order k
+[kj,Ikj] = min(K +(k+1)*(K ==0)); 
+%%
+% Loop over all orders of multi-indices that are potentially nonzero and do
+% not require the knowledge of the order $k$ coefficients of the SSM parametrisation.
+for ord = 1:k-1
+    if isempty(W_0{ord}.coeffs)
+        continue
+    end
+    %%
+    % Create all multi-indices of order $k-u$
+    if l >1
+        g       = sortrows(<a href="../../../Library/Features/misc/nsumk.html">nsumk</a>(l,k-ord,'nonnegative')).'; %lexicographic!!
+    else 
+        g = k-ord;
+    end
+    [gmink,I_k,I_g] = <a href="../../../Library/Manifold/private/multi_subtraction.html">multi_subtraction</a>(K,g,'Parametrised');
+    
+    %%
+    % Now all the positions of the order $m$ multi-indices are calculated. Assume
+    % the vector $\texttt{gmink}$ has $u_\alpha$ columns.
+    I_gmk     = <a href="../../../Library/Manifold/private/multi_index_2_ordering.html">multi_index_2_ordering</a>(gmink,string,[]);
+    %%
+    % We read out all the values $u_j$ positions of minimal entries
+    pos     = Ikj(I_k);                 %find row for every vector in mv
+    sz      = size(I_k,2);
+    poslin  = sub2ind([l,sz],pos,1:sz); %create linear index array
+    % read out minimal entries
+    gmk_j     = gmink(poslin);            %has to be a row vector
+    %%
+    % One thing that is redundant is all the calculations where $u_j$ is zero. The
+    % corresponding values could be ignored, by taking the indices corresponding to
+    % $u_j$= 0 out of calculations .
+    %
+    % Consequently, the coefficients $u_jS_{i,\mathbf{u}} H_{i,s-1,\mathbf{k}_f-\mathbf{u}}
+    % $  are calculated. In the array $\texttt{Hk}$ the first row corresponds to the
+    % phase space dimension, the third one to the scalar exponents.
+    %
+    % $\texttt{H}_{k-u}(:,\texttt{I}_{g},:)$ is a matrix in $\mathbf{C}^{2n \times
+    % \texttt{sz} \times k-1}$. Contribution of coefficients where $s=1$ explicitly
+    % depend on the SSM coefficients of the order that is calculated and will be added
+    % in the end after the highest order coefficients of the SSM parametrisation have
+    % been computed,but fortunately are not needed for the calculations of themselves.
+    % Finally $\texttt{S\{ord\}}(:,\texttt{gmk\_I}) \in \mathbf{C}^{2n \times \texttt{sz}
+    % }$.
+    
+    %read out contributions
+    
+    coeff   = W_0(ord).coeffs(:,I_gmk).* gmk_j .* H{k-ord}(:,I_g,:);
+
+    
+    %%
+    % $\texttt{coeff} \in \mathbf{C}^{2n \times \texttt{sz} \times k-1}$. What is
+    % left now is to add up all the parts corresponding to a specific multi-index
+    % of order  $k$ and multiply with the $s$ the slice corresponds to. We want to
+    % add all the columns corresponding to where $\texttt{I}_{k}$ has the same values
+    % (the columns contain coefficients that contribute to the same order $k$ multi-index).
+    for f = unique(I_k)
+        Hk(:,f,2:(k-ord+1)) = Hk(:,f,2:(k-ord+1)) + sum(coeff(:,I_k==f,:),2);
+    end
+end
+%multiplication with s and kj
+s  = 1:k;
+%match dimensions for pointiwse multiplication
+Hk = permute(Hk,[2,3,1]) .* ((1./kj).' * s);
+Hk = permute(Hk,[3,1,2]);
+
+% Since we reconstruct we already know the SSM coefficients at that order
+if ~isempty(W_0{k}) && ~isempty(W_0{k}.coeffs)
+    Hk(:,:,1) = W_0(k).coeffs;
+end
+end
+
+
+function [Hk] = rev_lexicographic_computation(W_0,H,k)
+%% General Algorithm
+
+l = size(H{1},2);
+z_k = nchoosek(k+l-1,l-1);
+N = size(H{1},1);
+K = flip(sortrows(<a href="../../../Library/Features/misc/nsumk.html">nsumk</a>(l,k,'nonnegative')).',2);
+
+string = 'revlex';
+Hk = zeros(N,z_k,k);
+
+%find nonzero minima of all multi-indices of order k
+[kj,Ikj] = min(K +(k+1)*(K ==0)); 
+%% 
+% Loop over all orders of multi-indices that are potentially nonzero and do
+% not require the knowledge of the order $k$ coefficients of the SSM parametrisation.
+for ord = 1:k-1
+    if isempty(W_0(ord).coeffs)
+        continue
+    end
+    %%
+    % Create all multi-indices of order $k-u$
+    if l > 1 
+        g       = flip(sortrows(<a href="../../../Library/Features/misc/nsumk.html">nsumk</a>(l,k-ord,'nonnegative')).',2); %rev-lexicographic!!
+    else
+        g = k-ord;
+    end
+    [gmink,I_k,I_g] = <a href="../../../Library/Manifold/private/multi_subtraction.html">multi_subtraction</a>(K,g,'Parametrised');
+    
+    %%
+    % Now all the positions of the order $m$ multi-indices are calculated. Assume
+    % the vector $\texttt{gmink}$ has $u_\alpha$ columns.
+    I_gmk     = <a href="../../../Library/Manifold/private/multi_index_2_ordering.html">multi_index_2_ordering</a>(gmink,string,[]);
+    %%
+    % We read out all the values $u_j$ positions of minimal entries
+    pos     = Ikj(I_k);                 %find row for every vector in mv
+    sz      = size(I_k,2);
+    poslin  = sub2ind([l,sz],pos,1:sz); %create linear index array
+    % read out minimal entries
+    gmk_j     = gmink(poslin);            %has to be a row vector
+    %%
+    % One thing that is redundant is all the calculations where $u_j$ is zero. The
+    % corresponding values could be ignored, by taking the indices corresponding to
+    % $u_j$= 0 out of calculations .
+    %
+    % Consequently, the coefficients $u_jS_{i,\mathbf{u}} H_{i,s-1,\mathbf{k}_f-\mathbf{u}}
+    % $  are calculated. In the array $\texttt{Hk}$ the first row corresponds to the
+    % phase space dimension, the third one to the scalar exponents.
+    %
+    % $\texttt{H}_{k-u}(:,\texttt{I}_{g},:)$ is a matrix in $\mathbf{C}^{2n \times
+    % \texttt{sz} \times k-1}$. Contribution of coefficients where $s=1$ explicitly
+    % depend on the SSM coefficients of the order that is calculated and will be added
+    % in the end after the highest order coefficients of the SSM parametrisation have
+    % been computed,but fortunately are not needed for the calculations of themselves.
+    % Finally $\texttt{S\{ord\}}(:,\texttt{gmk\_I}) \in \mathbf{C}^{2n \times \texttt{sz}
+    % }$.
+    
+    %read out contributions
+    
+    coeff   = W_0(ord).coeffs(:,I_gmk).* gmk_j .* H{k-ord}(:,I_g,:);
+
+    
+    %%
+    % $\texttt{coeff} \in \mathbf{C}^{2n \times \texttt{sz} \times k-1}$. What is
+    % left now is to add up all the parts corresponding to a specific multi-index
+    % of order  $k$ and multiply with the $s$ the slice corresponds to. We want to
+    % add all the columns corresponding to where $\texttt{I}_{k}$ has the same values
+    % (the columns contain coefficients that contribute to the same order $k$ multi-index).
+    for f = unique(I_k)
+        Hk(:,f,2:(k-ord+1)) = Hk(:,f,2:(k-ord+1)) + sum(coeff(:,I_k==f,:),2);
+    end
+end
+%multiplication with s and kj
+s  = 1:k;
+%match dimensions for pointiwse multiplication
+Hk = permute(Hk,[2,3,1]) .* ((1./kj).' * s);
+Hk = permute(Hk,[3,1,2]);
+
+% Since we reconstruct we already know the SSM coefficients at that order
+if ~isempty(W_0(k)) && ~isempty(W_0(k).coeffs)
+    Hk(:,:,1) = W_0(k).coeffs;
+end
+end
+
+            ##### SOURCE END #####
+        --></body></html></body></html>

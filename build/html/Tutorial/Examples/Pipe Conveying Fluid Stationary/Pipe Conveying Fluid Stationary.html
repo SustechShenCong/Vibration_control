@@ -1,0 +1,839 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><html><body><div class="banner"><a href="../../../index.html"><img alt="Logo" class="logo" src="../../../logo.png" style="float:right" width="200"/></a></div></body></html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Stationary Pipe Conveying Fluid</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-08-31" name="DC.date"/><meta content="Pipe_Conveying_Fluid_Stationary.m" name="DC.source"/><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Stationary Pipe Conveying Fluid</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">Example setup</a></li><li><a href="#6">Convergence of backbone curve</a></li><li><a href="#8">Transient response prediction</a></li><li><a href="#10">Forced response - periodic orbit</a></li></ul></div><p>We consider a geometrically nonlinear cantilever pipe conveying fluid [1]. We set the flow velocity to be zero and then construct a 2D stable SSM around the stable straight configuration. More details about the construction can be found in [2]</p><p>[1] Paidoussis, M. P. (1998). <i>Fluid-structure interactions: slender structures and axial flow</i> (Vol. 1). Academic press.</p><p>[2] M. Li, H. Yan, L. Wang: Nonlinear model reduction for a cantilevered pipe conveying fluid: A system with asymmetric damping and stiffness matrices. MSSP. 2023. <a href="https://doi.org/10.1016/j.ymssp.2022.109993">https://doi.org/10.1016/j.ymssp.2022.109993</a></p><pre class="codeinput">clearvars
+close <span class="string">all</span>
+</pre><h2 id="2">Example setup</h2><p>The <img alt="$N$" src="Pipe_Conveying_Fluid_Stationary_eq05705075896852816573-Rescaled.png" style="width: 12.0px; height: auto;"/>-degree of freedom dynamical system is of the form</p><p><img alt="$$\mathbf{M\ddot{q}} + \mathbf{C\dot{q}} + \mathbf{Kq} + \mathbf{f}(\mathbf{q},\mathbf{\dot{q}})
+= \mathbf{0}$$" src="Pipe_Conveying_Fluid_Stationary_eq05722453829365457849-Rescaled.png" style="width: 172.79999999999998px; height: auto;"/></p><p>where <img alt="$\mathbf{f}=\mathcal{O}(|\mathbf{q}|^2,|\mathbf{\dot{q}}|^2,|\mathbf{q}||\mathbf{\dot{q}}|)$" src="Pipe_Conveying_Fluid_Stationary_eq04663313490233047960-Rescaled.png" style="width: 128.4px; height: auto;"/> represents the nonlinearities and <img alt="$\mathbf{M}$" src="Pipe_Conveying_Fluid_Stationary_eq01518063970584319034-Rescaled.png" style="width: 14.399999999999999px; height: auto;"/>, <img alt="$\mathbf{C}$" src="Pipe_Conveying_Fluid_Stationary_eq02937190007318983775-Rescaled.png" style="width: 9.6px; height: auto;"/>, and <img alt="$\mathbf{K}$" src="Pipe_Conveying_Fluid_Stationary_eq00188235697049862736-Rescaled.png" style="width: 12.0px; height: auto;"/> are the <img alt="$n\times n$" src="Pipe_Conveying_Fluid_Stationary_eq03291229203450527278-Rescaled.png" style="width: 32.4px; height: auto;"/> mass, stiffness, and damping matrices, respectively. Here, both the damping and stiffness matrices are not symmetric.</p><pre class="codeinput">clear <span class="string">all</span>;
+nmodes = 4;
+fcload = 1;
+flowspeed = 0.0;
+miu = 0;
+Gamma=0;
+alpha=0.001;
+beta=0.2;
+[M, C, K, fnl, fext] = build_model(nmodes,flowspeed,beta,miu,Gamma,alpha,<span class="string">'clamped-free'</span>,<span class="string">'nonlinear_damp'</span>);
+n = size(M,1);    <span class="comment">% mechanical dofs (axial def, transverse def, angle)</span>
+[F, lambda] = functionFromTensors(M, C, K, fnl);
+lambda = sort(lambda);
+</pre><pre class="codeoutput">Getting linear and nonlinearity coefficients
+Loaded coefficients from storage
+</pre><p>Create dynamical system</p><pre class="codeinput">DS = <a href="../../../Library/DynamicalSystem/DynamicalSystem.html">DynamicalSystem</a>();
+set(DS,<span class="string">'M'</span>,M,<span class="string">'C'</span>,C,<span class="string">'K'</span>,K,<span class="string">'fnl'</span>,fnl);
+set(DS.<a href="../../../Library/Features/Options/Options.html">Options</a>,<span class="string">'Emax'</span>,10,<span class="string">'Nmax'</span>,10,<span class="string">'notation'</span>,<span class="string">'multiindex'</span>)
+set(DS.<a href="../../../Library/Features/Options/Options.html">Options</a>,<span class="string">'RayleighDamping'</span>,false)
+[V,D,W] = DS.<a href="../../../Library/DynamicalSystem/linear_spectral_analysis.html">linear_spectral_analysis</a>();
+</pre><pre class="codeoutput">
+ The first 8 nonzero eigenvalues are given as 
+   1.0e+02 *
+
+  -0.0001 + 0.0352i
+  -0.0001 - 0.0352i
+  -0.0024 + 0.2203i
+  -0.0024 - 0.2203i
+  -0.0190 + 0.6167i
+  -0.0190 - 0.6167i
+  -0.0731 + 1.2068i
+  -0.0731 - 1.2068i
+
+</pre><p>Choose Master subspace (perform resonance analysis)</p><p>We take the first pair of modes as the master subspace and compute the corresponding 2D stable SSM</p><pre class="codeinput">S = SSM(DS);
+set(S.<a href="../../../Library/Features/Options/Options.html">Options</a>, <span class="string">'reltol'</span>, 1,<span class="string">'notation'</span>,<span class="string">'multiindex'</span>);
+order = 7;
+resonant_modes = [1,2];
+S.<a href="../../../Library/Manifold/choose_E.html">choose_E</a>(resonant_modes);
+[W0,R0] = S.<a href="../../../Library/Manifold/compute_whisker.html">compute_whisker</a>(order);
+</pre><pre class="codeoutput">(near) outer resonance detected for the following combination of master eigenvalues
+     6     0
+     7     0
+     7     1
+     8     1
+     8     2
+     0     6
+     0     7
+     1     7
+     1     8
+     2     8
+
+These are in resonance with the follwing eigenvalues of the slave subspace
+  -0.2428 +22.0332i
+  -0.2428 +22.0332i
+  -0.2428 +22.0332i
+  -0.2428 +22.0332i
+  -0.2428 +22.0332i
+  -0.2428 -22.0332i
+  -0.2428 -22.0332i
+  -0.2428 -22.0332i
+  -0.2428 -22.0332i
+  -0.2428 -22.0332i
+
+sigma_out = 1182
+(near) inner resonance detected for the following combination of master eigenvalues
+     2     1
+     3     2
+     4     3
+     5     4
+     1     2
+     2     3
+     3     4
+     4     5
+
+These are in resonance with the follwing eigenvalues of the master subspace
+  -0.0062 + 3.5160i
+  -0.0062 + 3.5160i
+  -0.0062 + 3.5160i
+  -0.0062 + 3.5160i
+  -0.0062 - 3.5160i
+  -0.0062 - 3.5160i
+  -0.0062 - 3.5160i
+  -0.0062 - 3.5160i
+
+sigma_in = 1182
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 1.74E-02 MB
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 1.99E-02 MB
+Manifold computation time at order 4 = 00:00:00
+Estimated memory usage at order  4 = 2.39E-02 MB
+Manifold computation time at order 5 = 00:00:00
+Estimated memory usage at order  5 = 2.91E-02 MB
+Manifold computation time at order 6 = 00:00:00
+Estimated memory usage at order  6 = 3.62E-02 MB
+Manifold computation time at order 7 = 00:00:00
+Estimated memory usage at order  7 = 4.51E-02 MB
+</pre><p><b>Reduced dynamics in symbolic form</b></p><pre class="codeinput">lamdMaster = DS.spectrum.Lambda(resonant_modes);
+options = struct();
+options.isauto = true;
+options.isdamped = true;
+options.numDigits = 4;
+y = <a href="../../../Library/Features/misc/reduced_dynamics_symbolic.html">reduced_dynamics_symbolic</a>(lamdMaster,R0,options)
+</pre><pre class="codeoutput"> 
+y =
+ 
+0.001971*rho_1^7 + 0.0008166*rho_1^5 + 0.001503*rho_1^3 - 0.006181*rho_1
+                1.114*rho_1^6 + 0.7655*rho_1^4 + 0.05768*rho_1^2 + 3.516
+ 
+</pre><h2 id="6">Convergence of backbone curve</h2><pre class="codeinput">syms <span class="string">rho_1</span> <span class="string">positive</span>
+[coeffs,powers]=coeffs(y(2));
+tmp = simplify(log(powers));
+exp_idx = double(tmp./log(rho_1));
+</pre><pre class="codeinput">rhosamp = 0:0.01:0.12;
+orders = [3 5 7];
+<a href="../../../Library/Features/misc/plot_backbone_curves.html">plot_backbone_curves</a>(double(coeffs),exp_idx,rhosamp,orders)
+</pre><img alt="" hspace="5" src="Pipe_Conveying_Fluid_Stationary_01.png" vspace="5"/> <h2 id="8">Transient response prediction</h2><p>We apply a static force at the free end and then release the beam to observe the free vibration of the pipe</p><pre class="codeinput">phiend = zeros(n,1);
+lamda  = zeros(n,1);
+lamda(1)=1.8751040687119611664453082410782141625701117335311;
+lamda(2)=4.6940911329741745764363917780198120493898967375458;
+lamda(3)=7.8547574382376125648610085827645704578485419292300;
+lamda(4)=10.995540734875466990667349107854702939612972774652;
+lamda(5)=14.137168391046470580917046812551772068603076792975;
+lamda(6)=17.278759532088236333543928414375822085934519635550;
+lamda(7)=20.420352251041250994415811947947837046137288894544;
+lamda(8)=23.561944901806443501520253240198075517031265990051;
+lamda(9)=26.703537555518298805445478738088174009227496691444;
+lamda(10)=29.845130209102817263788730907430405063369916050237;
+lamda(11)=32.986722862692838446168314183853683000367036041646;
+lamda(12)=36.128315516282621834281162204648446323089539352502;
+<span class="keyword">for</span> k=1:n
+   x    = 1;
+   phin = cos(lamda(k)*x)-cosh(lamda(k)*x)-(cos(lamda(k))+cosh(lamda(k)))/(sin(lamda(k))+sinh(lamda(k)))*<span class="keyword">...</span>
+        (sin(lamda(k)*x)-sinh(lamda(k)*x));<span class="comment">%clamped-free</span>
+   phiend(k) = phin;
+<span class="keyword">end</span>
+loads = 1;
+loadvector = loads.*phiend;
+IC = getStaticResponse(K, M, F, loadvector);
+</pre><p>Forward simulation with given IC</p><pre class="codeinput">tf = 100;
+nsteps = 2000;
+outdof = [1 2 n+1];
+redtic = tic;
+traj = <a href="../../../Library/Features/misc/transient_traj_on_auto_ssm.html">transient_traj_on_auto_ssm</a>(DS, resonant_modes, W0, R0, tf, nsteps, outdof, IC);
+timered = toc(redtic)
+fulltic = tic;
+[tInt,zInt] = <a href="../../../Library/Features/Wrappers/time_integration_transient.html">time_integration_transient</a>(DS,0,<span class="keyword">...</span>
+    <span class="string">'nSteps'</span>, nsteps, <span class="string">'nCycles'</span>, ceil(tf/2/pi), <span class="keyword">...</span>
+    <span class="string">'integrationMethod'</span>,<span class="string">'ode45'</span>,<span class="string">'outdof'</span>,outdof,<span class="string">'init'</span>,IC);
+timefull = toc(fulltic)
+
+figure;
+subplot(2,1,1)
+plot(traj.time,traj.phy(:,1),<span class="string">'r-'</span>,<span class="string">'LineWidth'</span>,1); hold <span class="string">on</span>
+plot(tInt,zInt(:,1),<span class="string">'b--'</span>,<span class="string">'LineWidth'</span>,1);
+ylabel(<span class="string">'$q_1$'</span>,<span class="string">'Interpreter'</span>,<span class="string">"latex"</span>,<span class="string">'FontSize'</span>,14);
+set(gca,<span class="string">'FontSize'</span>,14); grid <span class="string">on</span>
+xlim([0,min(traj.time(end),tInt(end))]);
+subplot(2,1,2)
+plot(traj.time,traj.phy(:,2),<span class="string">'r-'</span>,<span class="string">'LineWidth'</span>,1); hold <span class="string">on</span>
+plot(tInt,zInt(:,2),<span class="string">'b--'</span>,<span class="string">'LineWidth'</span>,1);
+xlabel(<span class="string">'$\tau$'</span>,<span class="string">'Interpreter'</span>,<span class="string">"latex"</span>,<span class="string">'FontSize'</span>,14);
+ylabel(<span class="string">'$q_2$'</span>,<span class="string">'Interpreter'</span>,<span class="string">"latex"</span>,<span class="string">'FontSize'</span>,14);
+set(gca,<span class="string">'FontSize'</span>,14); grid <span class="string">on</span>
+legend(<span class="string">'SSM'</span>,<span class="string">'Full'</span>)
+xlim([0,min(traj.time(end),tInt(end))]);
+
+rhosamp = [0:0.01:0.5];
+plotdofs = [1 2 3];
+<a href="../../../Library/Features/misc/plot_2D_auto_SSM.html">plot_2D_auto_SSM</a>(W0,rhosamp,outdof(plotdofs));
+view([30 30])
+hold <span class="string">on</span>
+plot3(traj.phy(:,plotdofs(1)),traj.phy(:,plotdofs(2)),traj.phy(:,plotdofs(3)),<span class="string">'r-'</span>);
+plot3(zInt(:,plotdofs(1)),zInt(:,plotdofs(2)),zInt(:,plotdofs(3)),<span class="string">'b--'</span>);
+</pre><pre class="codeoutput">
+timered =
+
+    0.7018
+
+
+timefull =
+
+   19.5664
+
+</pre><img alt="" hspace="5" src="Pipe_Conveying_Fluid_Stationary_02.png" vspace="5"/> <img alt="" hspace="5" src="Pipe_Conveying_Fluid_Stationary_03.png" vspace="5"/> <h2 id="10">Forced response - periodic orbit</h2><pre class="codeinput"><span class="comment">% add Forcing</span>
+kappas = [-1; 1];
+coeffs = [fext fext]/2;
+epsilon = 0.0006;
+DS.<a href="../../../Library/DynamicalSystem/add_forcing.html">add_forcing</a>(coeffs, kappas, epsilon);
+set(DS.<a href="../../../Library/Features/Options/Options.html">Options</a>,<span class="string">'BaseExcitation'</span>,true);
+<span class="comment">% set up obervables</span>
+<span class="comment">% disp at the free end</span>
+obsfun = @(x,mapx,nmodes) mapx*x(1:nmodes,:);
+obs = @(x) obsfun(x,phiend',n);
+
+<span class="comment">% set up FRC options</span>
+freqrange = [0.99 1.01]*imag(D(1));
+set(S.<a href="../../../Library/Features/Options/Options.html">FRCOptions</a>, <span class="string">'nCycle'</span>,500, <span class="string">'initialSolver'</span>, <span class="string">'fsolve'</span>);
+set(S.contOptions, <span class="string">'PtMX'</span>, 300, <span class="string">'h_max'</span>, 0.1);
+set(S.<a href="../../../Library/Features/Options/Options.html">FRCOptions</a>, <span class="string">'omegaSampStyle'</span>, <span class="string">'cocoBD'</span>);
+set(S.<a href="../../../Library/Features/Options/Options.html">FRCOptions</a>, <span class="string">'outdof'</span>,obs,<span class="string">'method'</span>,<span class="string">'continuation ep'</span>,<span class="string">'p0'</span>,[]);
+S.<a href="../../../Library/Features/Wrappers/cocoWrapper/extract_FRC.html">extract_FRC</a>(<span class="string">'freq'</span>,freqrange,[3,5,7]);
+figfrc = gcf;
+</pre><pre class="codeoutput">*****************************************
+Calculating FRC using SSM with master subspace: [1  2]
+(near) outer resonance detected for the following combination of master eigenvalues
+     6     0
+     7     0
+     7     1
+     8     1
+     8     2
+     0     6
+     0     7
+     1     7
+     1     8
+     2     8
+
+These are in resonance with the follwing eigenvalues of the slave subspace
+  -0.2428 +22.0332i
+  -0.2428 +22.0332i
+  -0.2428 +22.0332i
+  -0.2428 +22.0332i
+  -0.2428 +22.0332i
+  -0.2428 -22.0332i
+  -0.2428 -22.0332i
+  -0.2428 -22.0332i
+  -0.2428 -22.0332i
+  -0.2428 -22.0332i
+
+sigma_out = 1182
+(near) inner resonance detected for the following combination of master eigenvalues
+     2     1
+     3     2
+     4     3
+     5     4
+     1     2
+     2     3
+     3     4
+     4     5
+
+These are in resonance with the follwing eigenvalues of the master subspace
+  -0.0062 + 3.5160i
+  -0.0062 + 3.5160i
+  -0.0062 + 3.5160i
+  -0.0062 + 3.5160i
+  -0.0062 - 3.5160i
+  -0.0062 - 3.5160i
+  -0.0062 - 3.5160i
+  -0.0062 - 3.5160i
+
+sigma_in = 1182
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 1.54E-02 MB
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 1.78E-02 MB
+
+Equation solved.
+
+fsolve completed because the vector of function values is near zero
+as measured by the value of the function tolerance, and
+the problem appears regular as measured by the gradient.
+
+
+ Run='freqSubint1.ep': Continue equilibria along primary branch.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          4.65e-13  5.00e+00    0.0    0.0    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   4.9994e+00      1  EP      3.5160e+00   2.5252e-01   2.6656e-01   6.0000e-04
+   10  00:00:00   5.1313e+00      2          3.4990e+00   9.5678e-02   9.5544e-01   6.0000e-04
+   13  00:00:00   5.1719e+00      3  EP      3.4808e+00   4.9107e-02   1.1204e+00   6.0000e-04
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   4.9994e+00      4  EP      3.5160e+00   2.5252e-01   2.6656e-01   6.0000e-04
+   10  00:00:00   5.0364e+00      5          3.5220e+00   2.9387e-01  -4.3806e-01   6.0000e-04
+   20  00:00:00   5.2454e+00      6          3.5253e+00   1.9228e-01  -1.1369e+00   6.0000e-04
+   28  00:00:01   5.5522e+00      7  EP      3.5512e+00   5.1525e-02  -1.6732e+00   6.0000e-04
+*****************************************
+Calculating FRC using SSM with master subspace: [1  2]
+(near) outer resonance detected for the following combination of master eigenvalues
+     6     0
+     7     0
+     7     1
+     8     1
+     8     2
+     0     6
+     0     7
+     1     7
+     1     8
+     2     8
+
+These are in resonance with the follwing eigenvalues of the slave subspace
+  -0.2428 +22.0332i
+  -0.2428 +22.0332i
+  -0.2428 +22.0332i
+  -0.2428 +22.0332i
+  -0.2428 +22.0332i
+  -0.2428 -22.0332i
+  -0.2428 -22.0332i
+  -0.2428 -22.0332i
+  -0.2428 -22.0332i
+  -0.2428 -22.0332i
+
+sigma_out = 1182
+(near) inner resonance detected for the following combination of master eigenvalues
+     2     1
+     3     2
+     4     3
+     5     4
+     1     2
+     2     3
+     3     4
+     4     5
+
+These are in resonance with the follwing eigenvalues of the master subspace
+  -0.0062 + 3.5160i
+  -0.0062 + 3.5160i
+  -0.0062 + 3.5160i
+  -0.0062 + 3.5160i
+  -0.0062 - 3.5160i
+  -0.0062 - 3.5160i
+  -0.0062 - 3.5160i
+  -0.0062 - 3.5160i
+
+sigma_in = 1182
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 1.64E-02 MB
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 1.88E-02 MB
+Manifold computation time at order 4 = 00:00:00
+Estimated memory usage at order  4 = 2.29E-02 MB
+Manifold computation time at order 5 = 00:00:00
+Estimated memory usage at order  5 = 2.81E-02 MB
+
+Equation solved.
+
+fsolve completed because the vector of function values is near zero
+as measured by the value of the function tolerance, and
+the problem appears regular as measured by the gradient.
+
+
+ Run='freqSubint1.ep': Continue equilibria along primary branch.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          9.41e-12  5.02e+00    0.0    0.0    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   5.0166e+00      1  EP      3.5160e+00   2.2725e-01   4.1138e-01   6.0000e-04
+   10  00:00:00   5.1677e+00      2          3.4853e+00   5.6028e-02   1.0963e+00   6.0000e-04
+   11  00:00:00   5.1719e+00      3  EP      3.4808e+00   4.9101e-02   1.1205e+00   6.0000e-04
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   5.0166e+00      4  EP      3.5160e+00   2.2725e-01   4.1138e-01   6.0000e-04
+   10  00:00:00   5.0233e+00      5          3.5274e+00   2.9916e-01  -2.9084e-01   6.0000e-04
+   13  00:00:00   5.0478e+00      6  FP      3.5278e+00   2.9426e-01  -4.5599e-01   6.0000e-04
+   13  00:00:00   5.0478e+00      7  SN      3.5278e+00   2.9426e-01  -4.5601e-01   6.0000e-04
+   20  00:00:00   5.1901e+00      8          3.5261e+00   2.2325e-01  -9.9277e-01   6.0000e-04
+   21  00:00:00   5.2029e+00      9  SN      3.5261e+00   2.1624e-01  -1.0273e+00   6.0000e-04
+   21  00:00:00   5.2029e+00     10  FP      3.5261e+00   2.1624e-01  -1.0273e+00   6.0000e-04
+   30  00:00:00   5.5521e+00     11  EP      3.5512e+00   5.1533e-02  -1.6732e+00   6.0000e-04
+*****************************************
+Calculating FRC using SSM with master subspace: [1  2]
+(near) outer resonance detected for the following combination of master eigenvalues
+     6     0
+     7     0
+     7     1
+     8     1
+     8     2
+     0     6
+     0     7
+     1     7
+     1     8
+     2     8
+
+These are in resonance with the follwing eigenvalues of the slave subspace
+  -0.2428 +22.0332i
+  -0.2428 +22.0332i
+  -0.2428 +22.0332i
+  -0.2428 +22.0332i
+  -0.2428 +22.0332i
+  -0.2428 -22.0332i
+  -0.2428 -22.0332i
+  -0.2428 -22.0332i
+  -0.2428 -22.0332i
+  -0.2428 -22.0332i
+
+sigma_out = 1182
+(near) inner resonance detected for the following combination of master eigenvalues
+     2     1
+     3     2
+     4     3
+     5     4
+     1     2
+     2     3
+     3     4
+     4     5
+
+These are in resonance with the follwing eigenvalues of the master subspace
+  -0.0062 + 3.5160i
+  -0.0062 + 3.5160i
+  -0.0062 + 3.5160i
+  -0.0062 + 3.5160i
+  -0.0062 - 3.5160i
+  -0.0062 - 3.5160i
+  -0.0062 - 3.5160i
+  -0.0062 - 3.5160i
+
+sigma_in = 1182
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 1.74E-02 MB
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 1.99E-02 MB
+Manifold computation time at order 4 = 00:00:00
+Estimated memory usage at order  4 = 2.39E-02 MB
+Manifold computation time at order 5 = 00:00:00
+Estimated memory usage at order  5 = 2.91E-02 MB
+Manifold computation time at order 6 = 00:00:00
+Estimated memory usage at order  6 = 3.62E-02 MB
+Manifold computation time at order 7 = 00:00:00
+Estimated memory usage at order  7 = 4.51E-02 MB
+
+Equation solved.
+
+fsolve completed because the vector of function values is near zero
+as measured by the value of the function tolerance, and
+the problem appears regular as measured by the gradient.
+
+
+ Run='freqSubint1.ep': Continue equilibria along primary branch.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          3.83e-12  5.02e+00    0.0    0.0    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   5.0176e+00      1  EP      3.5160e+00   2.2597e-01   4.1806e-01   6.0000e-04
+   10  00:00:00   5.1689e+00      2          3.4842e+00   5.4179e-02   1.1027e+00   6.0000e-04
+   11  00:00:00   5.1719e+00      3  EP      3.4808e+00   4.9101e-02   1.1205e+00   6.0000e-04
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   5.0176e+00      4  EP      3.5160e+00   2.2597e-01   4.1806e-01   6.0000e-04
+   10  00:00:00   5.0236e+00      5          3.5282e+00   2.9940e-01  -2.8399e-01   6.0000e-04
+   13  00:00:00   5.0446e+00      6  FP      3.5286e+00   2.9576e-01  -4.3092e-01   6.0000e-04
+   13  00:00:00   5.0446e+00      7  SN      3.5286e+00   2.9576e-01  -4.3093e-01   6.0000e-04
+   20  00:00:00   5.1879e+00      8          3.5262e+00   2.2462e-01  -9.8603e-01   6.0000e-04
+   21  00:00:00   5.2098e+00      9  FP      3.5262e+00   2.1257e-01  -1.0450e+00   6.0000e-04
+   21  00:00:00   5.2098e+00     10  SN      3.5262e+00   2.1257e-01  -1.0450e+00   6.0000e-04
+   30  00:00:00   5.5499e+00     11          3.5507e+00   5.2273e-02  -1.6706e+00   6.0000e-04
+   31  00:00:00   5.5521e+00     12  EP      3.5512e+00   5.1533e-02  -1.6732e+00   6.0000e-04
+Total time spent on FRC computation upto O(3) = 00:00:02
+Total time spent on FRC computation upto O(5) = 00:00:01
+Total time spent on FRC computation upto O(7) = 00:00:01
+</pre><img alt="" hspace="5" src="Pipe_Conveying_Fluid_Stationary_04.png" vspace="5"/> <img alt="" hspace="5" src="Pipe_Conveying_Fluid_Stationary_05.png" vspace="5"/> <p>adding backbone curve</p><pre class="codeinput">BB = S.<a href="../../../Library/Features/Wrappers/cocoWrapper/extract_backbone.html">extract_backbone</a>(resonant_modes, freqrange, order);
+numPts = numel([BB.Omega]);
+numOutdof = numel([BB.Aout])/numPts;
+Aout = reshape([BB.Aout], [numOutdof, numPts]);
+Aout = Aout';
+figure(figfrc); hold <span class="string">on</span>
+plot([BB.Omega],Aout(:,1),<span class="string">'k-'</span>,<span class="string">'DisplayName'</span>,<span class="string">'backbone'</span>);
+<span class="comment">% Validation using collocation method from COCO</span>
+
+nCycles = 500;
+coco = <a href="../../../Library/Features/Wrappers/cocoWrapper/cocoWrapper.html">cocoWrapper</a>(DS, nCycles, obs);
+set(coco.<a href="../../../Library/Features/Options/Options.html">Options</a>, <span class="string">'PtMX'</span>, 1000, <span class="string">'NTST'</span>,10, <span class="string">'dir_name'</span>, <span class="string">'bd_ld_v0p01'</span>);
+set(coco.<a href="../../../Library/Features/Options/Options.html">Options</a>, <span class="string">'NAdapt'</span>, 0, <span class="string">'h_max'</span>, 200, <span class="string">'MaxRes'</span>, 1);
+coco.initialGuess = <span class="string">'linear'</span>;
+start = tic;
+bd_ld = coco.<a href="../../../Library/Features/Wrappers/cocoWrapper/extract_FRC.html">extract_FRC</a>(freqrange);
+timings.cocoFRCbd_ld = toc(start)
+<span class="comment">% Exercies</span>
+</pre><pre class="codeoutput">(near) outer resonance detected for the following combination of master eigenvalues
+     6     0
+     7     0
+     7     1
+     8     1
+     8     2
+     0     6
+     0     7
+     1     7
+     1     8
+     2     8
+
+These are in resonance with the follwing eigenvalues of the slave subspace
+  -0.2428 +22.0332i
+  -0.2428 +22.0332i
+  -0.2428 +22.0332i
+  -0.2428 +22.0332i
+  -0.2428 +22.0332i
+  -0.2428 -22.0332i
+  -0.2428 -22.0332i
+  -0.2428 -22.0332i
+  -0.2428 -22.0332i
+  -0.2428 -22.0332i
+
+sigma_out = 1182
+(near) inner resonance detected for the following combination of master eigenvalues
+     2     1
+     3     2
+     4     3
+     5     4
+     1     2
+     2     3
+     3     4
+     4     5
+
+These are in resonance with the follwing eigenvalues of the master subspace
+  -0.0062 + 3.5160i
+  -0.0062 + 3.5160i
+  -0.0062 + 3.5160i
+  -0.0062 + 3.5160i
+  -0.0062 - 3.5160i
+  -0.0062 - 3.5160i
+  -0.0062 - 3.5160i
+  -0.0062 - 3.5160i
+
+sigma_in = 1182
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 1.74E-02 MB
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 1.99E-02 MB
+Manifold computation time at order 4 = 00:00:00
+Estimated memory usage at order  4 = 2.39E-02 MB
+Manifold computation time at order 5 = 00:00:00
+Estimated memory usage at order  5 = 2.91E-02 MB
+Manifold computation time at order 6 = 00:00:00
+Estimated memory usage at order  6 = 3.62E-02 MB
+Manifold computation time at order 7 = 00:00:00
+Estimated memory usage at order  7 = 4.51E-02 MB
+gamma = 
+   0.0015 + 0.0577i
+   0.0008 + 0.7655i
+   0.0020 + 1.1141i
+
+Total time spent on backbone curve computation = 00:00:00
+
+ Run='bd_ld_v0p01.FRC0.0006': Continue primary family of periodic orbits.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          2.55e-03  5.55e+00    0.0    0.0    0.0
+   1   1  6.44e-01  3.79e-01  9.44e-04  5.55e+00    0.0    0.0    0.0
+   2   1  1.00e+00  1.33e-01  7.47e-05  5.56e+00    0.0    0.1    0.0
+   3   1  1.00e+00  4.88e-04  1.30e-09  5.56e+00    0.0    0.1    0.0
+   4   1  1.00e+00  2.57e-08  1.36e-16  5.56e+00    0.0    0.1    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE         omega    po.period          eps         amp1
+    0  00:00:00   5.5604e+00      1  EP      3.4808e+00   1.8051e+00   6.0000e-04   4.5345e-02
+   10  00:00:01   5.7238e+00      2          3.5084e+00   1.7909e+00   6.0000e-04   1.4375e-01
+   20  00:00:02   5.9329e+00      3          3.5180e+00   1.7860e+00   6.0000e-04   2.1958e-01
+   30  00:00:03   6.0747e+00      4          3.5251e+00   1.7824e+00   6.0000e-04   2.5915e-01
+   40  00:00:04   6.0739e+00      5  FP      3.5273e+00   1.7813e+00   6.0000e-04   2.5809e-01
+   40  00:00:04   6.0666e+00      6          3.5273e+00   1.7813e+00   6.0000e-04   2.5555e-01
+   50  00:00:05   5.9158e+00      7          3.5261e+00   1.7819e+00   6.0000e-04   2.1145e-01
+   53  00:00:05   5.8741e+00      8  FP      3.5260e+00   1.7820e+00   6.0000e-04   1.9708e-01
+   60  00:00:06   5.7184e+00      9          3.5284e+00   1.7807e+00   6.0000e-04   1.3143e-01
+   69  00:00:07   5.6278e+00     10  EP      3.5512e+00   1.7693e+00   6.0000e-04   4.7136e-02
+
+timings = 
+
+  struct with fields:
+
+    cocoFRCbd_ld: 7.8049
+
+</pre><img alt="" hspace="5" src="Pipe_Conveying_Fluid_Stationary_06.png" vspace="5"/> <img alt="" hspace="5" src="Pipe_Conveying_Fluid_Stationary_07.png" vspace="5"/> <img alt="" hspace="5" src="Pipe_Conveying_Fluid_Stationary_08.png" vspace="5"/> <div><ul><li>Change flow speed to 0.01 and observe how the forced response curve is affected by the flow speed. You can find the discussions on the effects in [2].</li></ul></div><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+##### SOURCE BEGIN #####
+%% Stationary Pipe Conveying Fluid
+%
+%% 
+% We consider a geometrically nonlinear cantilever pipe conveying fluid [1]. 
+% We set the flow velocity to be zero and then construct a 2D stable SSM around 
+% the stable straight configuration. More details about the construction can be 
+% found in [2]
+% 
+% [1] Paidoussis, M. P. (1998). _Fluid-structure interactions: slender structures 
+% and axial flow_ (Vol. 1). Academic press. 
+% 
+% [2] M. Li, H. Yan, L. Wang: Nonlinear model reduction for a cantilevered pipe 
+% conveying fluid: A system with asymmetric damping and stiffness matrices. MSSP. 
+% 2023. https://doi.org/10.1016/j.ymssp.2022.109993
+
+clearvars
+close all
+%% Example setup
+% The $N$-degree of freedom dynamical system is of the form
+% 
+% $$\mathbf{M\ddot{q}} + \mathbf{C\dot{q}} + \mathbf{Kq} + \mathbf{f}(\mathbf{q},\mathbf{\dot{q}}) 
+% = \mathbf{0}$$
+% 
+% where $\mathbf{f}=\mathcal{O}(|\mathbf{q}|^2,|\mathbf{\dot{q}}|^2,|\mathbf{q}||\mathbf{\dot{q}}|)$ 
+% represents the nonlinearities and $\mathbf{M}$, $\mathbf{C}$, and $\mathbf{K}$ 
+% are the $n\times n$ mass, stiffness, and damping matrices, respectively. Here, 
+% both the damping and stiffness matrices are not symmetric.
+
+clear all;
+nmodes = 4;
+fcload = 1;
+flowspeed = 0.0;
+miu = 0;
+Gamma=0;
+alpha=0.001;
+beta=0.2;
+[M, C, K, fnl, fext] = build_model(nmodes,flowspeed,beta,miu,Gamma,alpha,'clamped-free','nonlinear_damp');
+n = size(M,1);    % mechanical dofs (axial def, transverse def, angle)
+[F, lambda] = functionFromTensors(M, C, K, fnl);
+lambda = sort(lambda);
+%% 
+% Create dynamical system 
+
+DS = <a href="../../../Library/DynamicalSystem/DynamicalSystem.html">DynamicalSystem</a>();
+set(DS,'M',M,'C',C,'K',K,'fnl',fnl);
+set(DS.<a href="../../../Library/Features/Options/Options.html">Options</a>,'Emax',10,'Nmax',10,'notation','multiindex')
+set(DS.<a href="../../../Library/Features/Options/Options.html">Options</a>,'RayleighDamping',false)
+[V,D,W] = DS.<a href="../../../Library/DynamicalSystem/linear_spectral_analysis.html">linear_spectral_analysis</a>();
+%% 
+% Choose Master subspace (perform resonance analysis)
+% 
+% We take the first pair of modes as the master subspace and compute the corresponding 
+% 2D stable SSM
+
+S = SSM(DS);
+set(S.<a href="../../../Library/Features/Options/Options.html">Options</a>, 'reltol', 1,'notation','multiindex');
+order = 7;
+resonant_modes = [1,2]; 
+S.<a href="../../../Library/Manifold/choose_E.html">choose_E</a>(resonant_modes);
+[W0,R0] = S.<a href="../../../Library/Manifold/compute_whisker.html">compute_whisker</a>(order);
+%% 
+% *Reduced dynamics in symbolic form*
+lamdMaster = DS.spectrum.Lambda(resonant_modes);
+options = struct();
+options.isauto = true; 
+options.isdamped = true;
+options.numDigits = 4;
+y = <a href="../../../Library/Features/misc/reduced_dynamics_symbolic.html">reduced_dynamics_symbolic</a>(lamdMaster,R0,options)
+%% Convergence of backbone curve
+
+syms rho_1 positive
+[coeffs,powers]=coeffs(y(2));
+tmp = simplify(log(powers));
+exp_idx = double(tmp./log(rho_1));
+%%
+rhosamp = 0:0.01:0.12;
+orders = [3 5 7];
+<a href="../../../Library/Features/misc/plot_backbone_curves.html">plot_backbone_curves</a>(double(coeffs),exp_idx,rhosamp,orders)
+%% Transient response prediction
+% We apply a static force at the free end and then release the beam to observe 
+% the free vibration of the pipe
+
+phiend = zeros(n,1);
+lamda  = zeros(n,1);
+lamda(1)=1.8751040687119611664453082410782141625701117335311;
+lamda(2)=4.6940911329741745764363917780198120493898967375458;
+lamda(3)=7.8547574382376125648610085827645704578485419292300;
+lamda(4)=10.995540734875466990667349107854702939612972774652;
+lamda(5)=14.137168391046470580917046812551772068603076792975;
+lamda(6)=17.278759532088236333543928414375822085934519635550;
+lamda(7)=20.420352251041250994415811947947837046137288894544;
+lamda(8)=23.561944901806443501520253240198075517031265990051;
+lamda(9)=26.703537555518298805445478738088174009227496691444;
+lamda(10)=29.845130209102817263788730907430405063369916050237;
+lamda(11)=32.986722862692838446168314183853683000367036041646;
+lamda(12)=36.128315516282621834281162204648446323089539352502;
+for k=1:n
+   x    = 1;
+   phin = cos(lamda(k)*x)-cosh(lamda(k)*x)-(cos(lamda(k))+cosh(lamda(k)))/(sin(lamda(k))+sinh(lamda(k)))*...
+        (sin(lamda(k)*x)-sinh(lamda(k)*x));%clamped-free
+   phiend(k) = phin;
+end
+loads = 1;
+loadvector = loads.*phiend;
+IC = getStaticResponse(K, M, F, loadvector);
+%% 
+% Forward simulation with given IC
+
+tf = 100;
+nsteps = 2000;
+outdof = [1 2 n+1];
+redtic = tic;
+traj = <a href="../../../Library/Features/misc/transient_traj_on_auto_ssm.html">transient_traj_on_auto_ssm</a>(DS, resonant_modes, W0, R0, tf, nsteps, outdof, IC);
+timered = toc(redtic)
+fulltic = tic;
+[tInt,zInt] = <a href="../../../Library/Features/Wrappers/time_integration_transient.html">time_integration_transient</a>(DS,0,...
+    'nSteps', nsteps, 'nCycles', ceil(tf/2/pi), ...
+    'integrationMethod','ode45','outdof',outdof,'init',IC);
+timefull = toc(fulltic)
+
+figure;
+subplot(2,1,1)
+plot(traj.time,traj.phy(:,1),'r-','LineWidth',1); hold on
+plot(tInt,zInt(:,1),'bREPLACE_WITH_DASH_DASH','LineWidth',1);
+ylabel('$q_1$','Interpreter',"latex",'FontSize',14);
+set(gca,'FontSize',14); grid on
+xlim([0,min(traj.time(end),tInt(end))]);
+subplot(2,1,2)
+plot(traj.time,traj.phy(:,2),'r-','LineWidth',1); hold on
+plot(tInt,zInt(:,2),'bREPLACE_WITH_DASH_DASH','LineWidth',1);
+xlabel('$\tau$','Interpreter',"latex",'FontSize',14);
+ylabel('$q_2$','Interpreter',"latex",'FontSize',14);
+set(gca,'FontSize',14); grid on
+legend('SSM','Full')
+xlim([0,min(traj.time(end),tInt(end))]);
+
+rhosamp = [0:0.01:0.5];
+plotdofs = [1 2 3];
+<a href="../../../Library/Features/misc/plot_2D_auto_SSM.html">plot_2D_auto_SSM</a>(W0,rhosamp,outdof(plotdofs));
+view([30 30])
+hold on
+plot3(traj.phy(:,plotdofs(1)),traj.phy(:,plotdofs(2)),traj.phy(:,plotdofs(3)),'r-');
+plot3(zInt(:,plotdofs(1)),zInt(:,plotdofs(2)),zInt(:,plotdofs(3)),'bREPLACE_WITH_DASH_DASH');
+%% Forced response - periodic orbit
+
+% add Forcing
+kappas = [-1; 1];
+coeffs = [fext fext]/2;
+epsilon = 0.0006;
+DS.<a href="../../../Library/DynamicalSystem/add_forcing.html">add_forcing</a>(coeffs, kappas, epsilon);
+set(DS.<a href="../../../Library/Features/Options/Options.html">Options</a>,'BaseExcitation',true);
+% set up obervables
+% disp at the free end
+obsfun = @(x,mapx,nmodes) mapx*x(1:nmodes,:);
+obs = @(x) obsfun(x,phiend',n);
+
+% set up FRC options
+freqrange = [0.99 1.01]*imag(D(1));
+set(S.<a href="../../../Library/Features/Options/Options.html">FRCOptions</a>, 'nCycle',500, 'initialSolver', 'fsolve');
+set(S.contOptions, 'PtMX', 300, 'h_max', 0.1);
+set(S.<a href="../../../Library/Features/Options/Options.html">FRCOptions</a>, 'omegaSampStyle', 'cocoBD');
+set(S.<a href="../../../Library/Features/Options/Options.html">FRCOptions</a>, 'outdof',obs,'method','continuation ep','p0',[]);
+S.<a href="../../../Library/Features/Wrappers/cocoWrapper/extract_FRC.html">extract_FRC</a>('freq',freqrange,[3,5,7]);
+figfrc = gcf;
+%%
+% adding backbone curve
+BB = S.<a href="../../../Library/Features/Wrappers/cocoWrapper/extract_backbone.html">extract_backbone</a>(resonant_modes, freqrange, order);
+numPts = numel([BB.Omega]);
+numOutdof = numel([BB.Aout])/numPts;
+Aout = reshape([BB.Aout], [numOutdof, numPts]);
+Aout = Aout';
+figure(figfrc); hold on
+plot([BB.Omega],Aout(:,1),'k-','DisplayName','backbone');
+% Validation using collocation method from COCO
+
+nCycles = 500;
+coco = <a href="../../../Library/Features/Wrappers/cocoWrapper/cocoWrapper.html">cocoWrapper</a>(DS, nCycles, obs);
+set(coco.<a href="../../../Library/Features/Options/Options.html">Options</a>, 'PtMX', 1000, 'NTST',10, 'dir_name', 'bd_ld_v0p01');
+set(coco.<a href="../../../Library/Features/Options/Options.html">Options</a>, 'NAdapt', 0, 'h_max', 200, 'MaxRes', 1);
+coco.initialGuess = 'linear';
+start = tic;
+bd_ld = coco.<a href="../../../Library/Features/Wrappers/cocoWrapper/extract_FRC.html">extract_FRC</a>(freqrange);
+timings.cocoFRCbd_ld = toc(start)
+% Exercies
+%% 
+% * Change flow speed to 0.01 and observe how the forced response curve is affected 
+% by the flow speed. You can find the discussions on the effects in [2].
+##### SOURCE END #####
+--></body></html>

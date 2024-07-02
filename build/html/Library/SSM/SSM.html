@@ -1,0 +1,248 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../../index.html"><img alt="Logo" class="logo" src="../../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>SSM Class</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-09" name="DC.date"/><meta content="SSM.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>SSM Class</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">SSM</a></li><li><a href="#6">Methods</a></li></ul></div><pre class="codeinput"><span class="keyword">classdef</span> SSM &lt; Manifold
+        </pre><h2 id="2">SSM</h2><p>Spectral Submanifold Computation - this forms a subclass of the <tt>Manifold</tt> class and serves for the computation of SSMs. Furthermore a variety of methods are implemented for the analysis of the reduced dynamics on the computed SSMs, and for mapping the results back to the manifold in the full physical system.</p><pre class="codeinput">    properties
+        </pre><pre class="codeinput">       contOptions = <a href="../../Library/Features/Wrappers/cocoOptions.html">cocoOptions</a>(); <span class="comment">% Settings for continuation</span>
+       FRCOptions = <a href="../../Library/Features/Options/FRCOptions.html">FRCOptions</a>();   <span class="comment">% Settings for the computation of the forced response</span>
+        </pre><p>Some methods need explicit access to the non-autonomous manifold and reduced dynamics. The coefficients which characterise these are dependent on the forcing frequency. Thus, in order to keep track of the changing coefficients when using continuation, they are stored and updated directly in the SSM class.</p><pre class="codeinput">       R_1 = []; <span class="comment">% coefficients nonaut reduced dynamics</span>
+       W_1 = []; <span class="comment">% nonautonomoues ssm coefficients</span>
+        </pre><pre class="codeinput">    <span class="keyword">end</span>
+        </pre><h2 id="6">Methods</h2><pre class="codeinput">    methods
+        </pre><p>For the extraction of FRCs in a given parameter (forcing frequency or amplitude) along a given range, the <tt>extract_FRC</tt> functions is provided:</p><pre class="codeinput">        FRC = <a href="../../Library/Features/Wrappers/cocoWrapper/extract_FRC.html">extract_FRC</a>(obj, parName, parRange, order)
+        </pre><p>One of the following three subroutines may be used for the computation of these FRCs, two of them based on continuation. The <tt>level_set</tt> routine analytically finds the periodic orbits for reduced dynamics on a 2D SSM.</p><pre class="codeinput">        varargout = <a href="../../Library/SSM/FRC_cont_ep.html">FRC_cont_ep</a>(obj,oid,modes,order,mFreq,parName,parRange,outdof,varargin);
+        varargout = <a href="../../Library/SSM/FRC_cont_po.html">FRC_cont_po</a>(obj,oid,resModes,order,parRange);
+        [FRC]     = <a href="../../Library/SSM/FRC_level_set.html">FRC_level_set</a>(obj, resMode, order, parName, parRange)
+        </pre><p>If a sweep of FRCs is to be computed for various forcing frequencies, the following functions may be applied. They are based on the routines presented above, and execute them for varying forcing amplitude.</p><pre class="codeinput">        varargout = <a href="../../Library/SSM/SSM_epSweeps.html">SSM_epSweeps</a>(obj,oid,run,lab,epSamps,omRange,outdof,varargin);
+        varargout = <a href="../../Library/SSM/SSM_poSweeps.html">SSM_poSweeps</a>(obj,oid,resonant_modes,order,mFreqs,epSamp,omRange,varargin)
+        FRCs = <a href="../../Library/SSM/SSM_lvlSweeps.html">SSM_lvlSweeps</a>(obj, omRange, epsSamp, ORDER)
+        </pre><p>Backbone curves of dynamical systems can be computed from the ROM on an SSM via:</p><pre class="codeinput">        BB = <a href="../../Library/Features/Wrappers/cocoWrapper/extract_backbone.html">extract_backbone</a>(obj,modes,order,outdof,varargin)
+        </pre><p>The resonance tongue for a given mode of a parametrically excited system, also known as Stability (Ince-Strutt) diagram, can be computed directly from the reduced dynamics. For this families of bifurcations are continued, the method is available via calling</p><pre class="codeinput">        [SD] = <a href="../../Library/Features/Wrappers/cocoWrapper/extract_Stability_Diagram.html">extract_Stability_Diagram</a>(obj,resModes, order, omRange, epsRange, parName, p0, varargin)
+        </pre><p>For the continuation of equilibria of the reduced dynamics an SSM, the coco-based <b>SSM-ep toolbox</b> provides the following functionalities:</p><pre class="codeinput">        varargout = <a href="../../Library/SSM/SSM_isol2ep.html">SSM_isol2ep</a>(obj,oid,modes,order,mFreq,parName,parRange,outdof,varargin);
+        varargout = <a href="../../Library/SSM/SSM_ep2ep.html">SSM_ep2ep</a>(obj,oid,run,lab,parName,parRange,outdof,varargin);
+        varargout = <a href="../../Library/SSM/SSM_BP2ep.html">SSM_BP2ep</a>(obj,oid,run,lab,parName,parRange,outdof,varargin);
+        varargout = <a href="../../Library/SSM/SSM_ep2SN.html">SSM_ep2SN</a>(obj,oid,run,lab,parRange,outdof,varargin);
+        varargout = <a href="../../Library/SSM/SSM_ep2HB.html">SSM_ep2HB</a>(obj,oid,run,lab,parRange,outdof,varargin);
+        </pre><p>For the continuation of periodic orbits of the reduced dynamics an SSM, the coco-based <b>SSM-po toolbox</b> provides the following functionalities:</p><pre class="codeinput">        <a href="../../Library/SSM/SSM_isol2po.html">SSM_isol2po</a>(obj,oid,run,lab,initsol,parName,parRange,outdof,varargin);
+        <a href="../../Library/SSM/SSM_HB2po.html">SSM_HB2po</a>(obj,oid,run,lab,parName,parRange,outdof,varargin);
+        <a href="../../Library/SSM/SSM_po2po.html">SSM_po2po</a>(obj,oid,run,lab,parName,parRange,outdof,varargin);
+        <a href="../../Library/SSM/SSM_BP2po.html">SSM_BP2po</a>(obj,oid,run,lab,parName,parRange,outdof,varargin);
+        <a href="../../Library/SSM/SSM_po2TR.html">SSM_po2TR</a>(obj,oid,run,lab,parRange,outdof,varargin);
+        <a href="../../Library/SSM/SSM_po2SN.html">SSM_po2SN</a>(obj,oid,run,lab,parRange,outdof,varargin);
+        <a href="../../Library/SSM/SSM_po2PD.html">SSM_po2PD</a>(obj,oid,run,lab,parRange,outdof,varargin);
+        </pre><p>For the continuation of invariant tori of the reduced dynamics an SSM, the tor/coco-based <b>SSM-tor toolbox</b> provides the following functionalities:</p><pre class="codeinput">        <a href="../../Library/SSM/SSM_TR2tor.html">SSM_TR2tor</a>(obj,oid,run,lab,parName,parRange,outdof,varargin);
+        <a href="../../Library/SSM/SSM_tor2tor.html">SSM_tor2tor</a>(obj,oid,run,lab,parName,parRange,outdof,varargin);
+        <a href="../../Library/SSM/SSM_BP2tor.html">SSM_BP2tor</a>(obj,oid,run,lab,parName,parRange,outdof,varargin);
+        varargout = <a href="../../Library/SSM/auto_po_solver.html">auto_po_solver</a>(obj,R_0,oid,t0,p0,coordinates);
+        </pre><p>Options for the use of parallel computation are set via the following two functions.</p><pre class="codeinput">        <a href="../../Library/SSM/activate_parallel.html">activate_parallel</a>(obj,varargin);
+        de<a href="../../Library/SSM/activate_parallel.html">activate_parallel</a>(obj);
+        </pre><pre class="codeinput">    <span class="keyword">end</span>
+        </pre><p>The core functionalities for the continuation of reduced dynamics, which are used by the library of functions provided for the user, consists of the following three routines:</p><pre class="codeinput">    methods (Access = protected)
+        FRC = <a href="../../Library/SSM/SSM_cont_ep.html">SSM_cont_ep</a>(obj,type,oid,run,lab,parName,parRange,outdof,varargin);
+        varargout = <a href="../../Library/SSM/SSM_cont_po.html">SSM_cont_po</a>(obj,type,oid,run,lab,initsol,parName,parRange,outdof,varargin);
+        varargout = <a href="../../Library/SSM/SSM_cont_tor.html">SSM_cont_tor</a>(obj,type,oid,run,lab,parName,parRange,outdof,varargin)
+    <span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+        </pre><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% SSM Class
+%
+%%
+classdef SSM < Manifold
+    %% SSM 
+    % Spectral Submanifold Computation - this forms a subclass of the
+    % |Manifold| class and serves for the computation of SSMs.
+    % Furthermore a variety of methods are implemented for the analysis of
+    % the reduced dynamics on the computed SSMs, and for mapping the
+    % results back to the manifold in the full physical system.
+    
+    properties
+       contOptions = <a href="../../Library/Features/Wrappers/cocoOptions.html">cocoOptions</a>(); % Settings for continuation
+       FRCOptions = <a href="../../Library/Features/Options/FRCOptions.html">FRCOptions</a>();   % Settings for the computation of the forced response
+     
+    %%
+    % Some methods need explicit access to the non-autonomous manifold
+    % and reduced dynamics. The coefficients which characterise these are
+    % dependent on the forcing frequency. Thus, in order to keep track of
+    % the changing coefficients when using continuation, they are stored
+    % and updated directly in the SSM class.
+
+       R_1 = []; % coefficients nonaut reduced dynamics
+       W_1 = []; % nonautonomoues ssm coefficients
+    end
+        %% Methods    
+    methods
+
+           
+        %%
+        % For the extraction of FRCs in a given parameter (forcing
+        % frequency or amplitude) along a given range, the |extract_FRC|
+        % functions is provided:
+
+        FRC = <a href="../../Library/Features/Wrappers/cocoWrapper/extract_FRC.html">extract_FRC</a>(obj, parName, parRange, order) 
+
+        %% 
+        % One of the following three subroutines may be used for the computation of these FRCs, two
+        % of them based on continuation. The |level_set| routine
+        % analytically finds the periodic orbits for reduced dynamics on a
+        % 2D SSM.
+        %   
+        varargout = <a href="../../Library/SSM/FRC_cont_ep.html">FRC_cont_ep</a>(obj,oid,modes,order,mFreq,parName,parRange,outdof,varargin);
+        varargout = <a href="../../Library/SSM/FRC_cont_po.html">FRC_cont_po</a>(obj,oid,resModes,order,parRange);
+        [FRC]     = <a href="../../Library/SSM/FRC_level_set.html">FRC_level_set</a>(obj, resMode, order, parName, parRange) 
+            
+        %%
+        % If a sweep of FRCs is to be computed for various forcing
+        % frequencies, the following functions may be applied. They are
+        % based on the routines presented above, and execute them for
+        % varying forcing amplitude.
+
+        varargout = <a href="../../Library/SSM/SSM_epSweeps.html">SSM_epSweeps</a>(obj,oid,run,lab,epSamps,omRange,outdof,varargin);
+        varargout = <a href="../../Library/SSM/SSM_poSweeps.html">SSM_poSweeps</a>(obj,oid,resonant_modes,order,mFreqs,epSamp,omRange,varargin)
+        FRCs = <a href="../../Library/SSM/SSM_lvlSweeps.html">SSM_lvlSweeps</a>(obj, omRange, epsSamp, ORDER)      
+
+        %%
+        % Backbone curves of dynamical systems can be computed from the ROM
+        % on an SSM via:
+
+        BB = <a href="../../Library/Features/Wrappers/cocoWrapper/extract_backbone.html">extract_backbone</a>(obj,modes,order,outdof,varargin)
+        
+    
+        %%
+        % The resonance tongue for a given mode of a parametrically excited system, also known as Stability (Ince-Strutt)
+        % diagram, can be computed directly from the reduced dynamics. For
+        % this families of bifurcations are continued, the method is
+        % available via calling
+
+        [SD] = <a href="../../Library/Features/Wrappers/cocoWrapper/extract_Stability_Diagram.html">extract_Stability_Diagram</a>(obj,resModes, order, omRange, epsRange, parName, p0, varargin)
+               
+        %%
+        % For the continuation of equilibria of the reduced dynamics an
+        % SSM, the coco-based *SSM-ep toolbox*
+        % provides the following functionalities:
+
+        varargout = <a href="../../Library/SSM/SSM_isol2ep.html">SSM_isol2ep</a>(obj,oid,modes,order,mFreq,parName,parRange,outdof,varargin);
+        varargout = <a href="../../Library/SSM/SSM_ep2ep.html">SSM_ep2ep</a>(obj,oid,run,lab,parName,parRange,outdof,varargin);
+        varargout = <a href="../../Library/SSM/SSM_BP2ep.html">SSM_BP2ep</a>(obj,oid,run,lab,parName,parRange,outdof,varargin);
+        varargout = <a href="../../Library/SSM/SSM_ep2SN.html">SSM_ep2SN</a>(obj,oid,run,lab,parRange,outdof,varargin);
+        varargout = <a href="../../Library/SSM/SSM_ep2HB.html">SSM_ep2HB</a>(obj,oid,run,lab,parRange,outdof,varargin);
+
+        %%
+        % For the continuation of periodic orbits of the reduced dynamics an
+        % SSM, the coco-based *SSM-po toolbox*
+        % provides the following functionalities:
+
+        <a href="../../Library/SSM/SSM_isol2po.html">SSM_isol2po</a>(obj,oid,run,lab,initsol,parName,parRange,outdof,varargin);
+        <a href="../../Library/SSM/SSM_HB2po.html">SSM_HB2po</a>(obj,oid,run,lab,parName,parRange,outdof,varargin);
+        <a href="../../Library/SSM/SSM_po2po.html">SSM_po2po</a>(obj,oid,run,lab,parName,parRange,outdof,varargin);
+        <a href="../../Library/SSM/SSM_BP2po.html">SSM_BP2po</a>(obj,oid,run,lab,parName,parRange,outdof,varargin);
+        <a href="../../Library/SSM/SSM_po2TR.html">SSM_po2TR</a>(obj,oid,run,lab,parRange,outdof,varargin);
+        <a href="../../Library/SSM/SSM_po2SN.html">SSM_po2SN</a>(obj,oid,run,lab,parRange,outdof,varargin);
+        <a href="../../Library/SSM/SSM_po2PD.html">SSM_po2PD</a>(obj,oid,run,lab,parRange,outdof,varargin);
+
+        %%
+        % For the continuation of invariant tori of the reduced dynamics an
+        % SSM, the tor/coco-based *SSM-tor toolbox*
+        % provides the following functionalities:
+
+        <a href="../../Library/SSM/SSM_TR2tor.html">SSM_TR2tor</a>(obj,oid,run,lab,parName,parRange,outdof,varargin);
+        <a href="../../Library/SSM/SSM_tor2tor.html">SSM_tor2tor</a>(obj,oid,run,lab,parName,parRange,outdof,varargin);
+        <a href="../../Library/SSM/SSM_BP2tor.html">SSM_BP2tor</a>(obj,oid,run,lab,parName,parRange,outdof,varargin);        
+        varargout = <a href="../../Library/SSM/auto_po_solver.html">auto_po_solver</a>(obj,R_0,oid,t0,p0,coordinates);
+
+        %%
+        % Options for the use of parallel computation are set via the
+        % following two functions.
+
+        <a href="../../Library/SSM/activate_parallel.html">activate_parallel</a>(obj,varargin);
+        de<a href="../../Library/SSM/activate_parallel.html">activate_parallel</a>(obj);
+    end
+    
+    %%
+    % The core functionalities for the continuation of reduced dynamics,
+    % which are used by the library of functions provided for the user,
+    % consists of the following three routines:
+
+    methods (Access = protected)
+        FRC = <a href="../../Library/SSM/SSM_cont_ep.html">SSM_cont_ep</a>(obj,type,oid,run,lab,parName,parRange,outdof,varargin);
+        varargout = <a href="../../Library/SSM/SSM_cont_po.html">SSM_cont_po</a>(obj,type,oid,run,lab,initsol,parName,parRange,outdof,varargin);
+        varargout = <a href="../../Library/SSM/SSM_cont_tor.html">SSM_cont_tor</a>(obj,type,oid,run,lab,parName,parRange,outdof,varargin)
+    end
+end
+
+
+            ##### SOURCE END #####
+        --></body></html></body></html>

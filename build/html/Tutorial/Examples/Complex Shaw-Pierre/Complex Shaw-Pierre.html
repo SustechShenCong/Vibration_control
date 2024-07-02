@@ -1,0 +1,586 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><html><body><div class="banner"><a href="../../../index.html"><img alt="Logo" class="logo" src="../../../logo.png" style="float:right" width="200"/></a></div></body></html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Complex Shaw-Pierre example</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-08-31" name="DC.date"/><meta content="Complex_Shaw_Pierre.m" name="DC.source"/><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Complex Shaw-Pierre example</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#3">Computation in second-order real form</a></li><li><a href="#7">Computation in first-order complex form: <img alt="$\hat{B}=V$" src="Complex_Shaw_Pierre_eq12166609787177123945-Rescaled.png" style="width: 38.4px; height: auto;"/>, <img alt="$\hat{A}=AV$" src="Complex_Shaw_Pierre_eq17317561206905152769-Rescaled.png" style="width: 48.0px; height: auto;"/></a></li><li><a href="#12">Computation in first-order complex form: <img alt="$\hat{B}=I$" src="Complex_Shaw_Pierre_eq07918801037436353612-Rescaled.png" style="width: 34.8px; height: auto;"/>, <img alt="$\hat{A}=\Lambda$" src="Complex_Shaw_Pierre_eq00982967357776160792-Rescaled.png" style="width: 37.199999999999996px; height: auto;"/></a></li></ul></div><p>Here we consider a complex dynamical system and perform SSM reduction for such a model. SSMTool supports both multiindex notation and tensor notation for the computation of SSM. The multiindex notation assumes real dynamical systsem. The tensor notation, however, does not have such an assumption. Here we test the effectiveness of SSM reduction for complex dynamical systems using tensor-notation-based SSM computation.</p><p>We consider a real dynamical system in the following form</p><p><img alt="$\dot{x}=Ax+F(x)$" src="Complex_Shaw_Pierre_eq01481961585482486619-Rescaled.png" style="width: 86.39999999999999px; height: auto;"/></p><p>where <img alt="$x\in\mathbf{R}^n$" src="Complex_Shaw_Pierre_eq05357873867126303569-Rescaled.png" style="width: 40.8px; height: auto;"/>, <img alt="$A\in\mathbf{R}^{n\times n}$" src="Complex_Shaw_Pierre_eq10010111795015367374-Rescaled.png" style="width: 56.4px; height: auto;"/> and <img alt="$F:\mathbf{R}^n\to\mathbf{R}^n$" src="Complex_Shaw_Pierre_eq01061559414530095611-Rescaled.png" style="width: 76.8px; height: auto;"/>. Let <img alt="$V\in\mathbf{C}^{n\times n}$" src="Complex_Shaw_Pierre_eq03750975804426387057-Rescaled.png" style="width: 55.199999999999996px; height: auto;"/> be the eigen-matrix of the linear part of the system such that <img alt="$AV=V\Lambda$" src="Complex_Shaw_Pierre_eq12165895519987479089-Rescaled.png" style="width: 57.599999999999994px; height: auto;"/>, where <img alt="$\Lambda$" src="Complex_Shaw_Pierre_eq01953988110695429122-Rescaled.png" style="width: 9.6px; height: auto;"/> is a diagonal matrix whose diagonal entries are the eigenvalues if <img alt="$A$" src="Complex_Shaw_Pierre_eq08772416954200330719-Rescaled.png" style="width: 9.6px; height: auto;"/> is semi-simple.</p><p>Equivalently, we consider a tranformation <img alt="$x=Vq$" src="Complex_Shaw_Pierre_eq07864841206171095760-Rescaled.png" style="width: 42.0px; height: auto;"/> and then obtain a complex dynamical system in the following form</p><p><img alt="$V\dot{q}=AV q+F(Vq)$" src="Complex_Shaw_Pierre_eq17313864123828894773-Rescaled.png" style="width: 114.0px; height: auto;"/></p><p>In the setup of SSMTool, we have <img alt="$\hat{B}=V\in\mathbf{C}^{n\times n}$" src="Complex_Shaw_Pierre_eq09427825479967976575-Rescaled.png" style="width: 84.0px; height: auto;"/>, <img alt="$\hat{A}=AV\in\mathbf{C}^{n\times n}$" src="Complex_Shaw_Pierre_eq08835455748961194438-Rescaled.png" style="width: 93.6px; height: auto;"/>, and <img alt="$\hat{F}(q):\mathbf{C}^n\mapsto\mathbf{C}^n$" src="Complex_Shaw_Pierre_eq17563912162733762135-Rescaled.png" style="width: 92.39999999999999px; height: auto;"/>.</p><p>In the setting of SSMTool 1.0, the system setup is given as follows</p><p><img alt="$\dot{q}=\Lambda q+V^{-1}F(Vq)$" src="Complex_Shaw_Pierre_eq11568186396812438754-Rescaled.png" style="width: 115.19999999999999px; height: auto;"/></p><p>Here we will calculate SSM for the three versions of the dynamical system using SSMTool 2.0 and SSM for (3) using SSMTool 1.0. Then we will compare the computational results.</p><p>We consider the modified Shaw-Pierre example studied in [1,2]</p><p><img alt="$\ddot{x}_1+c(2\dot{x}_1-\dot{x}_2)+k(2x_1-x_2)+\kappa x_1^3=0$" src="Complex_Shaw_Pierre_eq06825934482688023362-Rescaled.png" style="width: 236.39999999999998px; height: auto;"/>,</p><p><img alt="$\ddot{x}_2+c(2\dot{x}_2-\dot{x}_1)+k(2x_2-x_1)=0$" src="Complex_Shaw_Pierre_eq09061271883241139228-Rescaled.png" style="width: 199.2px; height: auto;"/>.</p><p>We rewrite the above system in first-order form with</p><p><img alt="$$\frac{d}{\textrm{dt}}\left\lbrack \begin{array}{c}x_1 \\x_2 \\\dot{\;x_1
+} \\{\dot{x} }_2 \end{array}\right\rbrack =\left\lbrack \begin{array}{cccc}0
+&amp; 0 &amp; 1 &amp; 0\\0 &amp; 0 &amp; 0 &amp; 1\\-2k &amp; k &amp; -2c &amp; c\\k &amp; -2k &amp; c &amp; -2c\end{array}\right\rbrack
+\left\lbrack \begin{array}{c}x_1 \\x_2 \\\dot{\;x_1 } \\{\dot{x} }_2 \end{array}\right\rbrack
++\left\lbrack \begin{array}{c}0\\0\\-\kappa x_1^3 \\0\end{array}\right\rbrack$$" src="Complex_Shaw_Pierre_eq16130046911488816278-Rescaled.png" style="width: 368.4px; height: auto;"/></p><p>It follows that we obtain <img alt="$V$" src="Complex_Shaw_Pierre_eq15661758725296196826-Rescaled.png" style="width: 9.6px; height: auto;"/> from <img alt="$[V,\Lambda]=\mathrm{eig}(A)$" src="Complex_Shaw_Pierre_eq00739102996919603277-Rescaled.png" style="width: 82.8px; height: auto;"/> and</p><p><img alt="$$\hat{F} \left(q\right)=\left\lbrack \begin{array}{c}0\\0\\-{\kappa \left(V_{11}
+q_1 +V_{12} q_2 +V_{13} q_3 +V_{14} q_4 \right)}^3 \\0\end{array}\right\rbrack$$" src="Complex_Shaw_Pierre_eq06391118503235609679-Rescaled.png" style="width: 273.59999999999997px; height: auto;"/></p><p>In particular, we have <img alt="$(\sum_{i=1}^4 V_{1i}q_i)^3=\sum_{i,j,k}V_{1i}V_{1j}V_{1k}q_i q_j q_k$" src="Complex_Shaw_Pierre_eq15025872567788030064-Rescaled.png" style="width: 206.4px; height: auto;"/>.</p><p>[1] Ponsioen S., Pedergnana T., and Haller G. Automated computation of autonomous spectral submanifolds for nonlinar modal analysis. Journal of Sound and Vibration. (420) 2018 269-295.</p><p>[2] Ponsioen S. and Haller G. SSMTool: a short guide</p><h2 id="3">Computation in second-order real form</h2><p><b>System setup</b></p><pre class="codeinput">clear <span class="string">all</span>
+k = 3; c=0.03; kappa = 0.5;
+mass = eye(2);
+damp = [2*c -c;-c 2*c];
+stiff = [2*k -k;-k 2*k];
+subs = [1 1 1 1];
+vals = kappa;
+F3 = sptensor(subs, vals, [2,2,2,2]);
+DS = <a href="../../../Library/DynamicalSystem/DynamicalSystem.html">DynamicalSystem</a>();
+set(DS,<span class="string">'M'</span>,mass,<span class="string">'C'</span>,damp,<span class="string">'K'</span>,stiff,<span class="string">'fnl'</span>,{[],F3});
+set(DS.<a href="../../../Library/Features/Options/Options.html">Options</a>,<span class="string">'Emax'</span>,5,<span class="string">'Nmax'</span>,10,<span class="string">'notation'</span>,<span class="string">'tensor'</span>)
+<span class="comment">% Linear Modal analysis</span>
+
+[V,D,W] = DS.<a href="../../../Library/DynamicalSystem/linear_spectral_analysis.html">linear_spectral_analysis</a>();
+</pre><pre class="codeoutput">
+ The first 4 nonzero eigenvalues are given as 
+  -0.0150 + 1.7320i
+  -0.0150 - 1.7320i
+  -0.0450 + 2.9997i
+  -0.0450 - 2.9997i
+
+</pre><p><b>SSM computation</b></p><pre class="codeinput">S = <a href="../../../Library/SSM/SSM.html">SSM</a>(DS);
+set(S.<a href="../../../Library/Features/Options/Options.html">Options</a>, <span class="string">'reltol'</span>, 0.5,<span class="string">'notation'</span>,<span class="string">'tensor'</span>);
+resonant_modes = [1 2]; <span class="comment">% choose master spectral subspace</span>
+order = 5;
+S.<a href="../../../Library/Manifold/choose_E.html">choose_E</a>(resonant_modes)
+<span class="comment">% compute autonomous SSM coefficients</span>
+[W_0,R_0] = S.<a href="../../../Library/Manifold/compute_whisker.html">compute_whisker</a>(order);
+</pre><pre class="codeoutput">(near) outer resonance detected for the following combination of master eigenvalues
+     2     0
+     0     2
+
+These are in resonance with the follwing eigenvalues of the slave subspace
+  -0.0450 + 2.9997i
+  -0.0450 - 2.9997i
+
+sigma_out = 3
+(near) inner resonance detected for the following combination of master eigenvalues
+     2     1
+     1     2
+
+These are in resonance with the follwing eigenvalues of the master subspace
+  -0.0150 + 1.7320i
+  -0.0150 - 1.7320i
+
+sigma_in = 3
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Computing autonomous whisker at order 2
+0 (near) inner resonance(s) detected at order 2
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 6.47E-03 MB
+Computing autonomous whisker at order 3
+6 (near) inner resonance(s) detected at order 3
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 1.14E-02 MB
+Computing autonomous whisker at order 4
+0 (near) inner resonance(s) detected at order 4
+Manifold computation time at order 4 = 00:00:00
+Estimated memory usage at order  4 = 1.27E-02 MB
+Computing autonomous whisker at order 5
+20 (near) inner resonance(s) detected at order 5
+Manifold computation time at order 5 = 00:00:00
+Estimated memory usage at order  5 = 3.62E-02 MB
+</pre><p><b>Extraction of backbone curve</b></p><pre class="codeinput">set(S.<a href="../../../Library/Features/Options/Options.html">FRCOptions</a>,<span class="string">'outdof'</span>,1)
+omegaRange = [0.8 1.2]*imag(D(1))
+BB = S.<a href="../../../Library/Features/Wrappers/cocoWrapper/extract_backbone.html">extract_backbone</a>(resonant_modes, omegaRange, order);
+</pre><pre class="codeoutput">
+omegaRange =
+
+    1.3856    2.0784
+
+(near) outer resonance detected for the following combination of master eigenvalues
+     2     0
+     0     2
+
+These are in resonance with the follwing eigenvalues of the slave subspace
+  -0.0450 + 2.9997i
+  -0.0450 - 2.9997i
+
+sigma_out = 3
+(near) inner resonance detected for the following combination of master eigenvalues
+     2     1
+     1     2
+
+These are in resonance with the follwing eigenvalues of the master subspace
+  -0.0150 + 1.7320i
+  -0.0150 - 1.7320i
+
+sigma_in = 3
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Computing autonomous whisker at order 2
+0 (near) inner resonance(s) detected at order 2
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 6.47E-03 MB
+Computing autonomous whisker at order 3
+6 (near) inner resonance(s) detected at order 3
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 1.14E-02 MB
+Computing autonomous whisker at order 4
+0 (near) inner resonance(s) detected at order 4
+Manifold computation time at order 4 = 00:00:00
+Estimated memory usage at order  4 = 1.27E-02 MB
+Computing autonomous whisker at order 5
+20 (near) inner resonance(s) detected at order 5
+Manifold computation time at order 5 = 00:00:00
+Estimated memory usage at order  5 = 3.62E-02 MB
+gamma = 
+  -0.0000 + 0.0385i
+  -0.0000 - 0.0037i
+
+Total time spent on backbone curve computation = 00:00:01
+</pre><img alt="" hspace="5" src="Complex_Shaw_Pierre_01.png" vspace="5"/> <img alt="" hspace="5" src="Complex_Shaw_Pierre_02.png" vspace="5"/> <h2 id="7">Computation in first-order complex form: <img alt="$\hat{B}=V$" src="Complex_Shaw_Pierre_eq12166609787177123945-Rescaled.png" style="width: 38.4px; height: auto;"/>, <img alt="$\hat{A}=AV$" src="Complex_Shaw_Pierre_eq17317561206905152769-Rescaled.png" style="width: 48.0px; height: auto;"/></h2><p><b>System setup</b></p><pre class="codeinput">clear <span class="string">all</span>
+k = 3; c=0.03; kappa = 0.5;
+[A,B,F,V] = build_model(c,k,kappa,<span class="string">'non-diagonal'</span>);
+DS = <a href="../../../Library/DynamicalSystem/DynamicalSystem.html">DynamicalSystem</a>();
+set(DS,<span class="string">'A'</span>,A,<span class="string">'B'</span>,B,<span class="string">'fnl'</span>,F);
+set(DS.<a href="../../../Library/Features/Options/Options.html">Options</a>,<span class="string">'Emax'</span>,5,<span class="string">'Nmax'</span>,10,<span class="string">'notation'</span>,<span class="string">'tensor'</span>)
+<span class="comment">% Linear Modal analysis</span>
+
+[V1,D1,W1] = DS.<a href="../../../Library/DynamicalSystem/linear_spectral_analysis.html">linear_spectral_analysis</a>();
+<span class="comment">% the obtained V1 is not an identity matrix. We overwrite it as an identity</span>
+<span class="comment">% matrix such that the parameterization coordinates are complex conjugate</span>
+<span class="comment">% pairs</span>
+DS.spectrum.V = eye(4);
+DS.spectrum.W = inv(V)';
+DS.spectrum.Lambda = D1;
+</pre><pre class="codeoutput">
+ The first 4 nonzero eigenvalues are given as 
+  -0.0150 + 1.7320i
+  -0.0150 - 1.7320i
+  -0.0450 + 2.9997i
+  -0.0450 - 2.9997i
+
+</pre><p><b>SSM computation</b></p><pre class="codeinput">S = <a href="../../../Library/SSM/SSM.html">SSM</a>(DS);
+set(S.<a href="../../../Library/Features/Options/Options.html">Options</a>, <span class="string">'reltol'</span>, 0.5,<span class="string">'notation'</span>,<span class="string">'tensor'</span>);
+resonant_modes = [1 2]; <span class="comment">% choose master spectral subspace</span>
+order = 5;
+S.<a href="../../../Library/Manifold/choose_E.html">choose_E</a>(resonant_modes)
+<span class="comment">% compute autonomous SSM coefficients</span>
+[W_0c1,R_0c1] = S.<a href="../../../Library/Manifold/compute_whisker.html">compute_whisker</a>(order);
+</pre><pre class="codeoutput">(near) outer resonance detected for the following combination of master eigenvalues
+     2     0
+     0     2
+
+These are in resonance with the follwing eigenvalues of the slave subspace
+  -0.0450 + 2.9997i
+  -0.0450 - 2.9997i
+
+sigma_out = 3
+(near) inner resonance detected for the following combination of master eigenvalues
+     2     1
+     1     2
+
+These are in resonance with the follwing eigenvalues of the master subspace
+  -0.0150 + 1.7320i
+  -0.0150 - 1.7320i
+
+sigma_in = 3
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Computing autonomous whisker at order 2
+0 (near) inner resonance(s) detected at order 2
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 7.59E-03 MB
+Computing autonomous whisker at order 3
+6 (near) inner resonance(s) detected at order 3
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 1.14E-02 MB
+Computing autonomous whisker at order 4
+0 (near) inner resonance(s) detected at order 4
+Manifold computation time at order 4 = 00:00:00
+Estimated memory usage at order  4 = 1.29E-02 MB
+Computing autonomous whisker at order 5
+20 (near) inner resonance(s) detected at order 5
+Manifold computation time at order 5 = 00:00:00
+Estimated memory usage at order  5 = 2.71E-02 MB
+</pre><p><b>Extraction of backbone curve</b></p><pre class="codeinput">gamma = <a href="../../../Library/Features/frc/compute_gamma.html">compute_gamma</a>(R_0c1);
+nOmega = 100; rhoScale = 1; nRho = 100; lambda = S.E.spectrum(1); nt = 128;
+omegaRange = [0.8 1.2]*imag(lambda)
+<span class="comment">% compute backbone</span>
+rho = compute_rho_grid(omegaRange,nOmega,rhoScale,gamma,lambda,nRho);
+[~,b] = <a href="../../../Library/Features/frc/frc_ab.html">frc_ab</a>(rho, 0, gamma, lambda);
+omega = b./rho;
+<span class="comment">% Backbone curves in Physical Coordinates</span>
+phi = linspace(0,2*pi,nt);
+x1 = zeros(numel(rho),1);
+<span class="keyword">for</span> k = 1:numel(rho) <span class="comment">% loop over each fixed point</span>
+    <span class="comment">% periodic response in reduced complex coordinates</span>
+    p = [rho(k)*exp(1i*phi); rho(k)*exp(-1i*phi)];
+    <span class="comment">% periodic response in coordinates q</span>
+    q = zeros(4,nt);
+    <span class="keyword">for</span> j = 1:length(W_0c1)
+        q = q + <a href="../../../Library/Features/misc/expand_multiindex.html">expand_multiindex</a>(W_0c1(j),p); <span class="comment">% q are complex conjugate pairs</span>
+    <span class="keyword">end</span>
+    <span class="comment">% periodic response in real coordnates x = Vq</span>
+    x = V*q;
+    x1(k) = norm(x(1,:),<span class="string">'inf'</span>);
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">gamma = 
+  -0.0000 + 0.0271i
+  -0.0000 - 0.0018i
+
+
+omegaRange =
+
+    1.3856    2.0784
+
+</pre><pre class="codeinput">figure(gcf); hold <span class="string">on</span>
+plot(omega,x1,<span class="string">'ro'</span>);
+legend(<span class="string">'2nd Order Real'</span>, <span class="string">'1st Order Complex'</span>,<span class="string">'Interpreter'</span>,<span class="string">'latex'</span>)
+</pre><img alt="" hspace="5" src="Complex_Shaw_Pierre_03.png" vspace="5"/> <h2 id="12">Computation in first-order complex form: <img alt="$\hat{B}=I$" src="Complex_Shaw_Pierre_eq07918801037436353612-Rescaled.png" style="width: 34.8px; height: auto;"/>, <img alt="$\hat{A}=\Lambda$" src="Complex_Shaw_Pierre_eq00982967357776160792-Rescaled.png" style="width: 37.199999999999996px; height: auto;"/></h2><p><b>Diagonal form</b></p><pre class="codeinput">clear <span class="string">all</span>
+k = 3; c=0.03; kappa = 0.5;
+[A,B,F,V] = build_model(c,k,kappa,<span class="string">'diagonal'</span>);
+DS = <a href="../../../Library/DynamicalSystem/DynamicalSystem.html">DynamicalSystem</a>();
+set(DS,<span class="string">'A'</span>,A,<span class="string">'B'</span>,B,<span class="string">'fnl'</span>,F);
+set(DS.<a href="../../../Library/Features/Options/Options.html">Options</a>,<span class="string">'Emax'</span>,5,<span class="string">'Nmax'</span>,10,<span class="string">'notation'</span>,<span class="string">'tensor'</span>)
+<span class="comment">% Linear Modal analysis</span>
+
+[V2,D2,W2] = DS.<a href="../../../Library/DynamicalSystem/linear_spectral_analysis.html">linear_spectral_analysis</a>();
+</pre><pre class="codeoutput">
+ The first 4 nonzero eigenvalues are given as 
+  -0.0150 + 1.7320i
+  -0.0150 - 1.7320i
+  -0.0450 + 2.9997i
+  -0.0450 - 2.9997i
+
+</pre><p><b>SSM computation</b></p><pre class="codeinput">S = <a href="../../../Library/SSM/SSM.html">SSM</a>(DS);
+set(S.<a href="../../../Library/Features/Options/Options.html">Options</a>, <span class="string">'reltol'</span>, 0.5,<span class="string">'notation'</span>,<span class="string">'tensor'</span>);
+resonant_modes = [1 2]; <span class="comment">% choose master spectral subspace</span>
+order = 5;
+S.<a href="../../../Library/Manifold/choose_E.html">choose_E</a>(resonant_modes)
+<span class="comment">% compute autonomous SSM coefficients</span>
+[W_0c2,R_0c2] = S.<a href="../../../Library/Manifold/compute_whisker.html">compute_whisker</a>(order);
+</pre><pre class="codeoutput">(near) outer resonance detected for the following combination of master eigenvalues
+     2     0
+     0     2
+
+These are in resonance with the follwing eigenvalues of the slave subspace
+  -0.0450 + 2.9997i
+  -0.0450 - 2.9997i
+
+sigma_out = 2
+No (near) inner resonances detected in the (truncated) spectrum
+sigma_in = 2
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Computing autonomous whisker at order 2
+0 (near) inner resonance(s) detected at order 2
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 1.05E-02 MB
+Computing autonomous whisker at order 3
+6 (near) inner resonance(s) detected at order 3
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 1.71E-02 MB
+Computing autonomous whisker at order 4
+0 (near) inner resonance(s) detected at order 4
+Manifold computation time at order 4 = 00:00:00
+Estimated memory usage at order  4 = 1.67E-02 MB
+Computing autonomous whisker at order 5
+20 (near) inner resonance(s) detected at order 5
+Manifold computation time at order 5 = 00:00:00
+Estimated memory usage at order  5 = 4.62E-02 MB
+</pre><p><i><b>You may compare the obtained SSM with that of SSMTool 1.0 at the tutorial. They match well.</b></i></p><pre class="codeinput">gamma = <a href="../../../Library/Features/frc/compute_gamma.html">compute_gamma</a>(R_0c2);
+nOmega = 100; rhoScale = 1; nRho = 100; lambda = S.E.spectrum(1); nt = 128;
+omegaRange = [0.8 1.2]*imag(lambda)
+<span class="comment">% compute backbone</span>
+rho = compute_rho_grid(omegaRange,nOmega,rhoScale,gamma,lambda,nRho);
+[~,b] = <a href="../../../Library/Features/frc/frc_ab.html">frc_ab</a>(rho, 0, gamma, lambda);
+omega12 = b./rho;
+<span class="comment">% Backbone curves in Physical Coordinates</span>
+phi = linspace(0,2*pi,nt);
+x12 = zeros(numel(rho),1);
+<span class="keyword">for</span> k = 1:numel(rho) <span class="comment">% loop over each fixed point</span>
+    <span class="comment">% periodic response in reduced complex coordinates</span>
+    p = [rho(k)*exp(1i*phi); rho(k)*exp(-1i*phi)];
+    <span class="comment">% periodic response in coordinates q</span>
+    q = zeros(4,nt);
+    <span class="keyword">for</span> j = 1:length(W_0c2)
+        q = q + <a href="../../../Library/Features/misc/expand_multiindex.html">expand_multiindex</a>(W_0c2(j),p); <span class="comment">% z are complex conjugate pairs</span>
+    <span class="keyword">end</span>
+    <span class="comment">% periodic response in coordnates x = Vq</span>
+    x = V*q;
+    x12(k) = norm(x(1,:),<span class="string">'inf'</span>);
+<span class="keyword">end</span>
+</pre><pre class="codeoutput">gamma = 
+  -0.0000 + 0.0271i
+  -0.0000 - 0.0018i
+
+
+omegaRange =
+
+    1.3856    2.0784
+
+</pre><pre class="codeinput">figure(gcf); hold <span class="string">on</span>
+plot(omega12,x12,<span class="string">'bd'</span>);
+legend(<span class="string">'2nd order real'</span>, <span class="string">'1st Order Complex'</span>,<span class="string">'1st Order Complex modal'</span>,<span class="string">'Interpreter'</span>,<span class="string">'latex'</span>)
+</pre><img alt="" hspace="5" src="Complex_Shaw_Pierre_04.png" vspace="5"/> <p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+##### SOURCE BEGIN #####
+%% Complex Shaw-Pierre example
+%
+%%
+% Here we consider a complex dynamical system and perform SSM reduction for 
+% such a model. SSMTool supports both multiindex notation and tensor notation 
+% for the computation of SSM. The multiindex notation assumes real dynamical systsem. 
+% The tensor notation, however, does not have such an assumption. Here we test 
+% the effectiveness of SSM reduction for complex dynamical systems using tensor-notation-based 
+% SSM computation.
+% 
+% We consider a real dynamical system in the following form
+% 
+% $\dot{x}=Ax+F(x)$
+% 
+% where $x\in\mathbf{R}^n$, $A\in\mathbf{R}^{n\times n}$ and $F:\mathbf{R}^n\to\mathbf{R}^n$. 
+% Let $V\in\mathbf{C}^{n\times n}$ be the eigen-matrix of the linear part of the 
+% system such that $AV=V\Lambda$, where $\Lambda$ is a diagonal matrix whose diagonal 
+% entries are the eigenvalues if $A$ is semi-simple.
+% 
+% Equivalently, we consider a tranformation $x=Vq$ and then obtain a complex 
+% dynamical system in the following form
+% 
+% $V\dot{q}=AV q+F(Vq)$
+% 
+% In the setup of SSMTool, we have $\hat{B}=V\in\mathbf{C}^{n\times n}$, $\hat{A}=AV\in\mathbf{C}^{n\times 
+% n}$, and $\hat{F}(q):\mathbf{C}^n\mapsto\mathbf{C}^n$.
+% 
+% In the setting of SSMTool 1.0, the system setup is given as follows
+% 
+% $\dot{q}=\Lambda q+V^{-1}F(Vq)$
+% 
+% Here we will calculate SSM for the three versions of the dynamical system using SSMTool 2.0 and SSM for (3) using 
+% SSMTool 1.0. Then we will compare the computational results.
+%% 
+% We consider the modified Shaw-Pierre example studied in [1,2]
+% 
+% $\ddot{x}_1+c(2\dot{x}_1-\dot{x}_2)+k(2x_1-x_2)+\kappa x_1^3=0$,
+% 
+% $\ddot{x}_2+c(2\dot{x}_2-\dot{x}_1)+k(2x_2-x_1)=0$.
+% 
+% We rewrite the above system in first-order form with 
+% 
+% $$\frac{d}{\textrm{dt}}\left\lbrack \begin{array}{c}x_1 \\x_2 \\\dot{\;x_1 
+% } \\{\dot{x} }_2 \end{array}\right\rbrack =\left\lbrack \begin{array}{cccc}0 
+% & 0 & 1 & 0\\0 & 0 & 0 & 1\\-2k & k & -2c & c\\k & -2k & c & -2c\end{array}\right\rbrack 
+% \left\lbrack \begin{array}{c}x_1 \\x_2 \\\dot{\;x_1 } \\{\dot{x} }_2 \end{array}\right\rbrack 
+% +\left\lbrack \begin{array}{c}0\\0\\-\kappa x_1^3 \\0\end{array}\right\rbrack$$
+% 
+% It follows that we obtain $V$ from $[V,\Lambda]=\mathrm{eig}(A)$ and 
+% 
+% $$\hat{F} \left(q\right)=\left\lbrack \begin{array}{c}0\\0\\-{\kappa \left(V_{11} 
+% q_1 +V_{12} q_2 +V_{13} q_3 +V_{14} q_4 \right)}^3 \\0\end{array}\right\rbrack$$
+% 
+% In particular, we have $(\sum_{i=1}^4 V_{1i}q_i)^3=\sum_{i,j,k}V_{1i}V_{1j}V_{1k}q_i 
+% q_j q_k$.
+% 
+% 
+% 
+% [1] Ponsioen S., Pedergnana T., and Haller G. Automated computation of autonomous 
+% spectral submanifolds for nonlinar modal analysis. Journal of Sound and Vibration. 
+% (420) 2018 269-295.
+% 
+% [2] Ponsioen S. and Haller G. SSMTool: a short guide
+%% Computation in second-order real form
+%%
+% *System setup*
+
+clear all
+k = 3; c=0.03; kappa = 0.5;
+mass = eye(2);
+damp = [2*c -c;-c 2*c];
+stiff = [2*k -k;-k 2*k];
+subs = [1 1 1 1];
+vals = kappa;
+F3 = sptensor(subs, vals, [2,2,2,2]);
+DS = <a href="../../../Library/DynamicalSystem/DynamicalSystem.html">DynamicalSystem</a>();
+set(DS,'M',mass,'C',damp,'K',stiff,'fnl',{[],F3});
+set(DS.<a href="../../../Library/Features/Options/Options.html">Options</a>,'Emax',5,'Nmax',10,'notation','tensor')
+% Linear Modal analysis
+
+[V,D,W] = DS.<a href="../../../Library/DynamicalSystem/linear_spectral_analysis.html">linear_spectral_analysis</a>();
+%% 
+% *SSM computation*
+
+S = <a href="../../../Library/SSM/SSM.html">SSM</a>(DS);
+set(S.<a href="../../../Library/Features/Options/Options.html">Options</a>, 'reltol', 0.5,'notation','tensor');
+resonant_modes = [1 2]; % choose master spectral subspace
+order = 5;
+S.<a href="../../../Library/Manifold/choose_E.html">choose_E</a>(resonant_modes)
+% compute autonomous SSM coefficients
+[W_0,R_0] = S.<a href="../../../Library/Manifold/compute_whisker.html">compute_whisker</a>(order);
+%% 
+% *Extraction of backbone curve*
+
+set(S.<a href="../../../Library/Features/Options/Options.html">FRCOptions</a>,'outdof',1)
+omegaRange = [0.8 1.2]*imag(D(1))
+BB = S.<a href="../../../Library/Features/Wrappers/cocoWrapper/extract_backbone.html">extract_backbone</a>(resonant_modes, omegaRange, order);
+%% Computation in first-order complex form: $\hat{B}=V$, $\hat{A}=AV$
+%% 
+% *System setup*
+
+clear all
+k = 3; c=0.03; kappa = 0.5;
+[A,B,F,V] = build_model(c,k,kappa,'non-diagonal');
+DS = <a href="../../../Library/DynamicalSystem/DynamicalSystem.html">DynamicalSystem</a>();
+set(DS,'A',A,'B',B,'fnl',F);
+set(DS.<a href="../../../Library/Features/Options/Options.html">Options</a>,'Emax',5,'Nmax',10,'notation','tensor')
+% Linear Modal analysis
+
+[V1,D1,W1] = DS.<a href="../../../Library/DynamicalSystem/linear_spectral_analysis.html">linear_spectral_analysis</a>();
+% the obtained V1 is not an identity matrix. We overwrite it as an identity
+% matrix such that the parameterization coordinates are complex conjugate
+% pairs
+DS.spectrum.V = eye(4);
+DS.spectrum.W = inv(V)';
+DS.spectrum.Lambda = D1;
+%% 
+% *SSM computation*
+
+S = <a href="../../../Library/SSM/SSM.html">SSM</a>(DS);
+set(S.<a href="../../../Library/Features/Options/Options.html">Options</a>, 'reltol', 0.5,'notation','tensor');
+resonant_modes = [1 2]; % choose master spectral subspace
+order = 5;
+S.<a href="../../../Library/Manifold/choose_E.html">choose_E</a>(resonant_modes)
+% compute autonomous SSM coefficients
+[W_0c1,R_0c1] = S.<a href="../../../Library/Manifold/compute_whisker.html">compute_whisker</a>(order);
+%% 
+% *Extraction of backbone curve*
+
+gamma = <a href="../../../Library/Features/frc/compute_gamma.html">compute_gamma</a>(R_0c1);
+nOmega = 100; rhoScale = 1; nRho = 100; lambda = S.E.spectrum(1); nt = 128;
+omegaRange = [0.8 1.2]*imag(lambda)
+% compute backbone
+rho = compute_rho_grid(omegaRange,nOmega,rhoScale,gamma,lambda,nRho);
+[~,b] = <a href="../../../Library/Features/frc/frc_ab.html">frc_ab</a>(rho, 0, gamma, lambda);
+omega = b./rho;
+% Backbone curves in Physical Coordinates 
+phi = linspace(0,2*pi,nt);
+x1 = zeros(numel(rho),1);
+for k = 1:numel(rho) % loop over each fixed point
+    % periodic response in reduced complex coordinates
+    p = [rho(k)*exp(1i*phi); rho(k)*exp(-1i*phi)];
+    % periodic response in coordinates q
+    q = zeros(4,nt);
+    for j = 1:length(W_0c1)
+        q = q + <a href="../../../Library/Features/misc/expand_multiindex.html">expand_multiindex</a>(W_0c1(j),p); % q are complex conjugate pairs
+    end
+    % periodic response in real coordnates x = Vq
+    x = V*q;
+    x1(k) = norm(x(1,:),'inf');  
+end
+%%
+figure(gcf); hold on
+plot(omega,x1,'ro');
+legend('2nd Order Real', '1st Order Complex','Interpreter','latex')
+%% Computation in first-order complex form: $\hat{B}=I$, $\hat{A}=\Lambda$
+%% 
+% *Diagonal form*
+
+clear all
+k = 3; c=0.03; kappa = 0.5;
+[A,B,F,V] = build_model(c,k,kappa,'diagonal');
+DS = <a href="../../../Library/DynamicalSystem/DynamicalSystem.html">DynamicalSystem</a>();
+set(DS,'A',A,'B',B,'fnl',F);
+set(DS.<a href="../../../Library/Features/Options/Options.html">Options</a>,'Emax',5,'Nmax',10,'notation','tensor')
+% Linear Modal analysis
+
+[V2,D2,W2] = DS.<a href="../../../Library/DynamicalSystem/linear_spectral_analysis.html">linear_spectral_analysis</a>();
+%% 
+% *SSM computation*
+
+S = <a href="../../../Library/SSM/SSM.html">SSM</a>(DS);
+set(S.<a href="../../../Library/Features/Options/Options.html">Options</a>, 'reltol', 0.5,'notation','tensor');
+resonant_modes = [1 2]; % choose master spectral subspace
+order = 5;
+S.<a href="../../../Library/Manifold/choose_E.html">choose_E</a>(resonant_modes)
+% compute autonomous SSM coefficients
+[W_0c2,R_0c2] = S.<a href="../../../Library/Manifold/compute_whisker.html">compute_whisker</a>(order);
+%% 
+% _*You may compare the obtained SSM with that of SSMTool 1.0 at the tutorial. 
+% They match well.*_
+
+gamma = <a href="../../../Library/Features/frc/compute_gamma.html">compute_gamma</a>(R_0c2);
+nOmega = 100; rhoScale = 1; nRho = 100; lambda = S.E.spectrum(1); nt = 128;
+omegaRange = [0.8 1.2]*imag(lambda)
+% compute backbone
+rho = compute_rho_grid(omegaRange,nOmega,rhoScale,gamma,lambda,nRho);
+[~,b] = <a href="../../../Library/Features/frc/frc_ab.html">frc_ab</a>(rho, 0, gamma, lambda);
+omega12 = b./rho;
+% Backbone curves in Physical Coordinates 
+phi = linspace(0,2*pi,nt);
+x12 = zeros(numel(rho),1);
+for k = 1:numel(rho) % loop over each fixed point
+    % periodic response in reduced complex coordinates
+    p = [rho(k)*exp(1i*phi); rho(k)*exp(-1i*phi)];
+    % periodic response in coordinates q
+    q = zeros(4,nt);
+    for j = 1:length(W_0c2)
+        q = q + <a href="../../../Library/Features/misc/expand_multiindex.html">expand_multiindex</a>(W_0c2(j),p); % z are complex conjugate pairs
+    end
+    % periodic response in coordnates x = Vq
+    x = V*q;
+    x12(k) = norm(x(1,:),'inf');  
+end
+%%
+figure(gcf); hold on
+plot(omega12,x12,'bd');
+legend('2nd order real', '1st Order Complex','1st Order Complex modal','Interpreter','latex')
+
+##### SOURCE END #####
+--></body></html>

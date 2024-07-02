@@ -1,0 +1,190 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../../../index.html"><img alt="Logo" class="logo" src="../../../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>Plot analytical domain</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-09" name="DC.date"/><meta content="plot_analytical_domain.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>Plot analytical domain</h1><!--introduction--><!--/introduction--><pre class="codeinput"><span class="keyword">function</span> plot_analytical_domain(appr_order,R_0)
+        </pre><p>Plot domain over which the SSM parametrisation converges, for details see <a href="https://doi.org/10.1007/s11071-019-05023-4">Ponsioen and Haller, 2019</a>.</p><pre class="codeinput"><span class="comment">% Define colormap - grey shades increasing in darkness with higher order approximations.</span>
+color = flip(gray(appr_order-floor(appr_order/2)));
+run_idx = 1;
+<span class="keyword">for</span> order = floor(appr_order/2):appr_order
+    p = zeros(1,1+order);
+    <span class="keyword">for</span> j = 1:order
+        <span class="keyword">if</span> any(any(R_0(j).coeffs))
+            p(j+1) =   real(nonzeros(R_0(j).coeffs(1,:)));
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+    <span class="comment">% Compute roots</span>
+    p_roots = roots(flip(p));
+
+    <span class="comment">% Create plot</span>
+    <span class="keyword">if</span> order &lt; appr_order
+        plot(p_roots, <span class="string">'m.'</span>,<span class="string">'LineWidth'</span>,2,<span class="string">'color'</span>,color(run_idx,:),<span class="string">'MarkerSize'</span>,10,<span class="string">'HandleVisibility'</span>,<span class="string">'off'</span>);
+    <span class="keyword">else</span>
+        plot(p_roots, <span class="string">'m.'</span>,<span class="string">'LineWidth'</span>,2,<span class="string">'DisplayName'</span>,<span class="string">'Roots of a(\rho)'</span>,<span class="string">'color'</span>,<span class="string">'m'</span>,<span class="string">'MarkerSize'</span>,10);
+
+    <span class="keyword">end</span>
+    hold <span class="string">on</span>;
+    run_idx = run_idx+1;
+<span class="keyword">end</span>
+
+title(<span class="string">"Approximation order "</span> + appr_order, <span class="string">'Fontsize'</span>,20);
+legend(<span class="string">'show'</span>,<span class="string">'Fontsize'</span>,20)
+ylabel(<span class="string">'Imaginary part'</span>,<span class="string">'Fontsize'</span>,20);xlabel(<span class="string">'Real part'</span>,<span class="string">'Fontsize'</span>,20);
+
+<span class="comment">% Domain of analyticity as given by mean of the roots on the circle</span>
+<span class="comment">% approximating radius of convergence</span>
+
+<span class="comment">% We assume there are more non persistent zeros that approximate the radius</span>
+<span class="comment">% of convergence than spurious zeros -&gt; therefore the median distance of all</span>
+<span class="comment">% roots will be bigger than the distance of the non spurious zero that is</span>
+<span class="comment">% furthest away from the origin.</span>
+
+<span class="comment">% Take the median distance from origin of all roots</span>
+rho_mean = median(abs(p_roots));
+
+<span class="comment">% Take the mean of all the roots that have bigger distance from zero than</span>
+<span class="comment">% the median distance</span>
+rho = mean(abs(p_roots(abs(p_roots)&gt;rho_mean)));
+
+<span class="keyword">if</span> ~isnan(rho)
+    xlim([-1.5*rho 1.5*rho])
+    ylim([-1.5*rho 1.5*rho])
+<span class="keyword">end</span>
+hold <span class="string">off</span>;
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+        </pre><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% Plot analytical domain
+%
+%%
+function plot_analytical_domain(appr_order,R_0)
+%%
+% Plot domain over which the SSM parametrisation converges, for details see
+% <https://doi.org/10.1007/s11071-019-05023-4 Ponsioen and Haller, 2019>.
+%
+
+% Define colormap - grey shades increasing in darkness with higher order approximations.
+color = flip(gray(appr_order-floor(appr_order/2)));
+run_idx = 1;
+for order = floor(appr_order/2):appr_order
+    p = zeros(1,1+order);
+    for j = 1:order
+        if any(any(R_0(j).coeffs))
+            p(j+1) =   real(nonzeros(R_0(j).coeffs(1,:)));
+        end
+    end
+    
+    % Compute roots
+    p_roots = roots(flip(p));
+    
+    % Create plot
+    if order < appr_order
+        plot(p_roots, 'm.','LineWidth',2,'color',color(run_idx,:),'MarkerSize',10,'HandleVisibility','off');
+    else
+        plot(p_roots, 'm.','LineWidth',2,'DisplayName','Roots of a(\rho)','color','m','MarkerSize',10);
+        
+    end
+    hold on;
+    run_idx = run_idx+1;
+end
+
+title("Approximation order " + appr_order, 'Fontsize',20);
+legend('show','Fontsize',20)
+ylabel('Imaginary part','Fontsize',20);xlabel('Real part','Fontsize',20);
+
+% Domain of analyticity as given by mean of the roots on the circle
+% approximating radius of convergence
+
+% We assume there are more non persistent zeros that approximate the radius
+% of convergence than spurious zeros -> therefore the median distance of all
+% roots will be bigger than the distance of the non spurious zero that is
+% furthest away from the origin.
+
+% Take the median distance from origin of all roots
+rho_mean = median(abs(p_roots));
+
+% Take the mean of all the roots that have bigger distance from zero than
+% the median distance
+rho = mean(abs(p_roots(abs(p_roots)>rho_mean)));
+
+if ~isnan(rho)
+    xlim([-1.5*rho 1.5*rho])
+    ylim([-1.5*rho 1.5*rho])
+end
+hold off;
+end
+            ##### SOURCE END #####
+        --></body></html></body></html>

@@ -1,0 +1,234 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../../index.html"><img alt="Logo" class="logo" src="../../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>Compute Invariance Residual</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-09" name="DC.date"/><meta content="compute_invariance_residual.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>Compute Invariance Residual</h1><pre class="codeinput"><span class="keyword">function</span> y = compute_invariance_<a href="../../Library/DynamicalSystem/residual.html">residual</a>(obj,W0,R0,p,type,varargin)
+        </pre><p>This function calcualte the residuals of points on the computed SSM. It compute the Euclidean norm of residual of the invariance equation for a point on the computed SSM.</p><p>y = compute_invariance_<a href="../../Library/DynamicalSystem/residual.html">residual</a>(obj,W0,R0,p,type,varargin)</p><div><ul><li><tt>W0</tt> - autonomous part of SSM</li></ul></div><div><ul><li><tt>R0</tt> - autonomous part of reduced dynamics on SSM</li></ul></div><div><ul><li><tt>p</tt>  - parameterized coordinates (dimSSM x npts), it can be a single point or a collection points, e.g., a time history</li></ul></div><div><ul><li><tt>type</tt> - auto/nonauto: for auto type, we take invariance equation for autonomous SSM. For nonauto, full invariance equation is considered varargin: [W1,R1] nonautonomous part of SSM and reduced dynamics - needed when type = nonauto</li></ul></div><p><tt>BDW*R=A*W+F(W)+Fext(\Omega t); R=R_auto+R_nonauto</tt></p><pre class="codeinput">npts = size(p,2);
+<span class="keyword">switch</span> type
+    <span class="keyword">case</span> <span class="string">'auto'</span>
+        <span class="comment">% from parameterized p to z in full system</span>
+        z = <a href="../../Library/Features/misc/reduced_to_full_traj.html">reduced_to_full_traj</a>([],p,W0);
+        <span class="comment">% left side</span>
+        DW = 0; R = 0;
+        <span class="keyword">for</span> j = 1:length(W0)
+            DW = DW+<a href="../../Library/Features/misc/expand_multiindex_derivative.html">expand_multiindex_derivative</a>(W0(j),p);
+            R  = R+<a href="../../Library/Features/misc/expand_multiindex.html">expand_multiindex</a>(R0(j),p);
+        <span class="keyword">end</span>
+        lhs = spblkdiag(DW)*R(:);
+        lhs = reshape(lhs,obj.dimSystem,npts);
+        lhs = obj.System.B*real(lhs);
+        <span class="comment">% rhs</span>
+        rhs = obj.System.A*z+obj.System.<a href="../../Library/DynamicalSystem/evaluate_Fnl.html">evaluate_Fnl</a>(z);
+        res = lhs-rhs;
+        y = sqrt(sum(res.^2));
+
+    <span class="keyword">case</span> <span class="string">'nonauto'</span>
+        W1 = varargin{1};
+        R1 = varargin{2}; <span class="comment">% used when high-order nonauto is included</span>
+        omega = obj.System.Omega; t = linspace(0,2*pi/omega,npts);
+        <span class="keyword">if</span> obj.System.order==2
+            epf = obj.System.fext.epsilon;
+        <span class="keyword">else</span>
+            epf = obj.System.Fext.epsilon;
+        <span class="keyword">end</span>
+        z = <a href="../../Library/Features/misc/reduced_to_full_traj.html">reduced_to_full_traj</a>(t,p,W0,W1,epf,omega);
+        <span class="comment">% left side</span>
+        DWp = 0; R = 0;
+        <span class="keyword">for</span> j = 1:length(W0)
+            DWp = DWp+<a href="../../Library/Features/misc/expand_multiindex_derivative.html">expand_multiindex_derivative</a>(W0(j),p);
+            R  = R+<a href="../../Library/Features/misc/expand_multiindex.html">expand_multiindex</a>(R0(j),p);
+        <span class="keyword">end</span>
+        <span class="comment">% leading-order autnomous parat</span>
+        DWphi = 0;
+        <span class="keyword">for</span> i = 1:obj.System.nKappa
+            <span class="comment">% zeroth order</span>
+            R10 = R1(i).R(1);
+            R = R + epf * R10.coeffs * exp(1i * R1(i).kappa * omega * t);
+            W10 = W1(i).W(1);
+            DWphi = DWphi+epf * W10.coeffs * exp(1i * W1(i).kappa * omega * t) * 1i * W1(i).kappa;
+        <span class="keyword">end</span>
+        <span class="comment">% higher-order nonautomous part</span>
+        warning(<span class="string">'\n current implementation only considers leading-order nonautonomous part\n'</span>);
+
+        lhs = spblkdiag(DWp)*R(:);
+        lhs = reshape(lhs,obj.dimSystem,npts);
+        lhs = lhs+DWphi*omega;
+        lhs = obj.System.B*real(lhs);
+        <span class="comment">% rhs</span>
+        rhs = obj.System.A*z+obj.System.<a href="../../Library/DynamicalSystem/evaluate_Fnl.html">evaluate_Fnl</a>(z)+ obj.System.<a href="../../Library/DynamicalSystem/evaluate_Fext.html">evaluate_Fext</a>(t,z);
+        res = lhs-rhs;
+        y = sqrt(sum(res.^2));
+        figure;
+        plot(t,y);
+        xlim([-inf,inf]);
+
+    <span class="keyword">otherwise</span>
+        error(<span class="string">'type should be either auto or nonauto'</span>);
+<span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+        </pre><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% Compute Invariance Residual
+%
+%
+function y = compute_invariance_<a href="../../Library/DynamicalSystem/residual.html">residual</a>(obj,W0,R0,p,type,varargin)
+%% 
+% This function calcualte the residuals of
+% points on the computed SSM. It compute the Euclidean norm of residual of
+% the invariance equation for a point on the computed SSM.
+%
+% y = compute_invariance_<a href="../../Library/DynamicalSystem/residual.html">residual</a>(obj,W0,R0,p,type,varargin)
+%
+% * |W0| - autonomous part of SSM
+%
+% * |R0| - autonomous part of reduced dynamics on SSM
+%
+% * |p|  - parameterized coordinates (dimSSM x npts), it can be a single point
+% or a collection points, e.g., a time history
+% 
+% * |type| - auto/nonauto: for auto type, we take invariance equation for
+% autonomous SSM. For nonauto, full invariance equation is considered
+% varargin: [W1,R1] nonautonomous part of SSM and reduced dynamics - needed
+% when type = nonauto
+%
+%
+% |BDW*R=A*W+F(W)+Fext(\Omega t); R=R_auto+R_nonauto|
+
+npts = size(p,2);
+switch type
+    case 'auto'
+        % from parameterized p to z in full system
+        z = <a href="../../Library/Features/misc/reduced_to_full_traj.html">reduced_to_full_traj</a>([],p,W0);
+        % left side
+        DW = 0; R = 0;
+        for j = 1:length(W0)
+            DW = DW+<a href="../../Library/Features/misc/expand_multiindex_derivative.html">expand_multiindex_derivative</a>(W0(j),p); 
+            R  = R+<a href="../../Library/Features/misc/expand_multiindex.html">expand_multiindex</a>(R0(j),p);
+        end        
+        lhs = spblkdiag(DW)*R(:);
+        lhs = reshape(lhs,obj.dimSystem,npts);
+        lhs = obj.System.B*real(lhs);
+        % rhs
+        rhs = obj.System.A*z+obj.System.<a href="../../Library/DynamicalSystem/evaluate_Fnl.html">evaluate_Fnl</a>(z);
+        res = lhs-rhs;
+        y = sqrt(sum(res.^2));
+        
+    case 'nonauto'
+        W1 = varargin{1}; 
+        R1 = varargin{2}; % used when high-order nonauto is included
+        omega = obj.System.Omega; t = linspace(0,2*pi/omega,npts);
+        if obj.System.order==2
+            epf = obj.System.fext.epsilon;
+        else
+            epf = obj.System.Fext.epsilon;
+        end
+        z = <a href="../../Library/Features/misc/reduced_to_full_traj.html">reduced_to_full_traj</a>(t,p,W0,W1,epf,omega);  
+        % left side
+        DWp = 0; R = 0;
+        for j = 1:length(W0)
+            DWp = DWp+<a href="../../Library/Features/misc/expand_multiindex_derivative.html">expand_multiindex_derivative</a>(W0(j),p); 
+            R  = R+<a href="../../Library/Features/misc/expand_multiindex.html">expand_multiindex</a>(R0(j),p);
+        end
+        % leading-order autnomous parat
+        DWphi = 0;
+        for i = 1:obj.System.nKappa
+            % zeroth order
+            R10 = R1(i).R(1);
+            R = R + epf * R10.coeffs * exp(1i * R1(i).kappa * omega * t);
+            W10 = W1(i).W(1);
+            DWphi = DWphi+epf * W10.coeffs * exp(1i * W1(i).kappa * omega * t) * 1i * W1(i).kappa;
+        end        
+        % higher-order nonautomous part
+        warning('\n current implementation only considers leading-order nonautonomous part\n');
+        
+        lhs = spblkdiag(DWp)*R(:);
+        lhs = reshape(lhs,obj.dimSystem,npts);
+        lhs = lhs+DWphi*omega;
+        lhs = obj.System.B*real(lhs);
+        % rhs
+        rhs = obj.System.A*z+obj.System.<a href="../../Library/DynamicalSystem/evaluate_Fnl.html">evaluate_Fnl</a>(z)+ obj.System.<a href="../../Library/DynamicalSystem/evaluate_Fext.html">evaluate_Fext</a>(t,z);
+        res = lhs-rhs;
+        y = sqrt(sum(res.^2));
+        figure;
+        plot(t,y);
+        xlim([-inf,inf]);
+        
+    otherwise 
+        error('type should be either auto or nonauto');
+end
+
+end
+            ##### SOURCE END #####
+        --></body></html></body></html>

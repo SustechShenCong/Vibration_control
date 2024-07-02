@@ -1,0 +1,507 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../../index.html"><img alt="Logo" class="logo" src="../../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>SSM_POSWEEPS</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-09" name="DC.date"/><meta content="SSM_poSweeps.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>SSM_POSWEEPS</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">SSM_POSWEEPS</a></li><li><a href="#3">results extraction</a></li><li><a href="#4">Visualization of results</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> FRC = SSM_poSweeps(obj,oid,modes,order,epSamp,omRange,varargin)
+        </pre><h2 id="2">SSM_POSWEEPS</h2><p>This function performs a family of continuations of periodic orbits of reduced dynamics. Continuation is performed with varied forcing frequency for each forcing amplitude. The continuation here starts from the guess of an initial solution.</p><p>FRC = SSM_POSWEEPS(OBJ,OID,MODES,ORDER,EPSAMPS,OMRANGE, VARARGIN)</p><div><ul><li><tt>oid</tt>   :      runid of continuation</li></ul></div><div><ul><li><tt>modes</tt>  :      master spectral subspace</li></ul></div><div><ul><li><tt>order</tt>  :      expansion order of SSM</li></ul></div><div><ul><li><tt>epSamp</tt> :      sampled forcing amplitudes for forced response curves</li></ul></div><div><ul><li><tt>omRange</tt>:      continuation domain of forcing frequency, which should be near the               value of natural frequency with index 1</li><li><tt>varargin</tt>:     parameter that can be used to suppres the plot of FRCs</li></ul></div><p>FRC:          Forced Response Curve data struct</p><p>See also: COCO_POSWEEPS, SSM_LVLSWEEPS, SSM_EPSWEEPS</p><pre class="codeinput"><span class="keyword">if</span>~isempty( varargin)
+    plotfrc = varargin{1};
+<span class="keyword">end</span>
+
+outdof = obj.FRCOptions.outdof;
+FRCom  = cell(numel(epSamp),1);
+
+ii = 1;
+<span class="keyword">for</span> ep = epSamp
+    oideps = strcat(oid,num2str(ep));
+    <span class="keyword">if</span> obj.System.order == 1
+        obj.System.Fext.epsilon = ep;
+    <span class="keyword">else</span>
+        obj.System.fext.epsilon = ep;
+    <span class="keyword">end</span>
+
+    FRCom{ii} = <a href="../../Library/SSM/FRC_cont_po.html">FRC_cont_po</a>(obj,oideps,modes,order,omRange);
+    ii = ii +1;
+<span class="keyword">end</span>
+        </pre><h2 id="3">results extraction</h2><pre class="codeinput">FRCom = horzcat(FRCom{:});
+
+<span class="comment">% save results</span>
+FRC = struct();
+FRC.SSMorder   = order;
+FRC.SSMnonAuto = obj.Options.contribNonAuto;
+FRC.FRCom = FRCom;
+FRC.eps = epSamp;
+        </pre><h2 id="4">Visualization of results</h2><pre class="codeinput"><span class="keyword">if</span>~isempty( varargin)
+    <span class="keyword">if</span> plotfrc
+        sweeps_plot(numel(FRCom),FRCom,outdof,order);
+    <span class="keyword">end</span>
+<span class="keyword">else</span>
+   sweeps_plot(numel(FRCom),FRCom,outdof,order);
+<span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">function</span> sweeps_plot(numLabs,FRCom,outdof,order)
+<span class="comment">% Plot FRC in normal coordinates</span>
+thm = struct( <span class="string">'special'</span>, {{<span class="string">'SN'</span>, <span class="string">'HB'</span> , <span class="string">'PD'</span>}});
+thm.SN = {<span class="string">'LineStyle'</span>, <span class="string">'none'</span>, <span class="string">'LineWidth'</span>, 2, <span class="keyword">...</span>
+  <span class="string">'Color'</span>, <span class="string">'cyan'</span>, <span class="string">'Marker'</span>, <span class="string">'o'</span>, <span class="string">'MarkerSize'</span>, 8, <span class="string">'MarkerEdgeColor'</span>, <span class="keyword">...</span>
+  <span class="string">'cyan'</span>, <span class="string">'MarkerFaceColor'</span>, <span class="string">'white'</span>};
+thm.HB = {<span class="string">'LineStyle'</span>, <span class="string">'none'</span>, <span class="string">'LineWidth'</span>, 2, <span class="keyword">...</span>
+  <span class="string">'Color'</span>, <span class="string">'black'</span>, <span class="string">'Marker'</span>, <span class="string">'s'</span>, <span class="string">'MarkerSize'</span>, 8, <span class="string">'MarkerEdgeColor'</span>, <span class="keyword">...</span>
+  <span class="string">'black'</span>, <span class="string">'MarkerFaceColor'</span>, <span class="string">'white'</span>};
+thm.PD = {<span class="string">'LineStyle'</span>, <span class="string">'none'</span>, <span class="string">'LineWidth'</span>, 2, <span class="keyword">...</span>
+  <span class="string">'Color'</span>, <span class="string">'green'</span>, <span class="string">'Marker'</span>, <span class="string">'s'</span>, <span class="string">'MarkerSize'</span>, 8, <span class="string">'MarkerEdgeColor'</span>, <span class="keyword">...</span>
+  <span class="string">'black'</span>, <span class="string">'MarkerFaceColor'</span>, <span class="string">'white'</span>};
+
+
+
+<span class="comment">% Plot FRC in system coordinates</span>
+<span class="comment">% setup legend</span>
+legTypes = zeros(numLabs,1); <span class="comment">% each entry can be 1/2/3 - all stab/all unstab/mix</span>
+<span class="keyword">for</span> k=1:numLabs
+   stab = FRCom{k}.stability;
+   <span class="keyword">if</span> all(stab)
+       legTypes(k) = 1;
+   <span class="keyword">elseif</span> all(~stab)
+       legTypes(k) = 2;
+   <span class="keyword">else</span>
+       legTypes(k) = 3;
+   <span class="keyword">end</span>
+<span class="keyword">end</span>
+legDisp = []; <span class="comment">% figure with legends displayed</span>
+idmix = find(legTypes==3);
+<span class="keyword">if</span> ~isempty(idmix)
+    legDisp = [legDisp idmix(1)];
+<span class="keyword">else</span>
+    idallstab = find(legTypes==1);
+    <span class="keyword">if</span> ~isempty(idallstab)
+        legDisp = [legDisp,idallstab(1)];
+    <span class="keyword">end</span>
+    idallunstab = find(legTypes==2);
+    <span class="keyword">if</span> ~isempty(idallunstab)
+        legDisp = [legDisp,idallunstab(1)];
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+ndof = numel(outdof);
+<span class="keyword">for</span> i=1:ndof
+    <span class="comment">% 2D plot</span>
+    figure; hold <span class="string">on</span>
+    <span class="keyword">for</span> k=1:numLabs
+        om = FRCom{k}.om;
+        Aout = FRCom{k}.Aout(i,:);
+        stab = FRCom{k}.stability;
+        <span class="keyword">if</span> any(legDisp==k)
+            <a href="../../Library/Features/misc/stab_plot.html">stab_plot</a>(om,Aout,stab,order,<span class="string">'blue'</span>);
+        <span class="keyword">else</span>
+            <a href="../../Library/Features/misc/stab_plot.html">stab_plot</a>(om,Aout,stab,order,<span class="string">'blue'</span>,<span class="string">'nolegends'</span>);
+        <span class="keyword">end</span>
+        <span class="comment">% plot special points</span>
+        SNidx = FRCom{k}.SNidx;
+        SNfig = plot(om(SNidx),Aout(SNidx),thm.SN{:});
+        set(get(get(SNfig,<span class="string">'Annotation'</span>),<span class="string">'LegendInformation'</span>),<span class="keyword">...</span>
+            <span class="string">'IconDisplayStyle'</span>,<span class="string">'off'</span>);
+        <span class="comment">%HBidx = FRCom{k}.HBidx;</span>
+        <span class="comment">%HBfig = plot(om(HBidx),Aout(HBidx),thm.HB{:});</span>
+        <span class="comment">%set(get(get(HBfig,'Annotation'),'LegendInformation'),...</span>
+        <span class="comment">%    'IconDisplayStyle','off');</span>
+    <span class="keyword">end</span>
+    xlabel(<span class="string">'$\Omega$'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>,<span class="string">'FontSize'</span>,16);
+    zk = strcat(<span class="string">'$||z_{'</span>,num2str(outdof(i)),<span class="string">'}||_{\infty}$'</span>);
+    ylabel(zk,<span class="string">'Interpreter'</span>,<span class="string">'latex'</span>);
+    set(gca,<span class="string">'FontSize'</span>,14);
+    grid <span class="string">on</span>, axis <span class="string">tight</span>; legend <span class="string">boxoff</span>;
+
+    <span class="comment">% 3D plot</span>
+    figure; hold <span class="string">on</span>
+    <span class="keyword">for</span> k=1:numLabs
+        om = FRCom{k}.om;
+        epsf = FRCom{k}.ep;
+        Aout = FRCom{k}.Aout(i,:);
+        stab = FRCom{k}.stability;
+        <span class="keyword">if</span> any(legDisp==k)
+            <a href="../../Library/SSM/private/stab_plot3.html">stab_plot3</a>(om,epsf,Aout,stab,order);
+        <span class="keyword">else</span>
+            <a href="../../Library/SSM/private/stab_plot3.html">stab_plot3</a>(om,epsf,Aout,stab,order,<span class="string">'nolegends'</span>);
+        <span class="keyword">end</span>
+        <span class="comment">% plot special points</span>
+        SNidx = FRCom{k}.SNidx;
+        SNfig = plot3(om(SNidx),epsf(SNidx),Aout(SNidx),thm.SN{:});
+        set(get(get(SNfig,<span class="string">'Annotation'</span>),<span class="string">'LegendInformation'</span>),<span class="keyword">...</span>
+            <span class="string">'IconDisplayStyle'</span>,<span class="string">'off'</span>);
+        <span class="comment">%HBidx = FRCom{k}.HBidx;</span>
+        <span class="comment">%HBfig = plot3(om(HBidx),epsf(HBidx),Aout(HBidx),thm.HB{:});</span>
+        <span class="comment">%set(get(get(HBfig,'Annotation'),'LegendInformation'),...</span>
+        <span class="comment">%    'IconDisplayStyle','off');</span>
+    <span class="keyword">end</span>
+    xlabel(<span class="string">'$\Omega$'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>,<span class="string">'FontSize'</span>,16);
+    ylabel(<span class="string">'$\epsilon$'</span>,<span class="string">'interpreter'</span>,<span class="string">'latex'</span>,<span class="string">'FontSize'</span>,16);
+    zk = strcat(<span class="string">'$||z_{'</span>,num2str(outdof(i)),<span class="string">'}||_{\infty}$'</span>);
+    zlabel(zk,<span class="string">'Interpreter'</span>,<span class="string">'latex'</span>);
+    set(gca,<span class="string">'FontSize'</span>,14);
+    grid <span class="string">on</span>, axis <span class="string">tight</span>; legend <span class="string">boxoff</span>;
+    view([-1,-1,1]);
+<span class="keyword">end</span>
+
+<span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">function</span> <a href="../../Library/SSM/private/stab_plot3.html">stab_plot3</a>(x,y,z,S,order,varargin)
+<span class="comment">% This function is adapted from stab_plot in coco_plot_bd in coco</span>
+
+II  = 1;
+EI  = numel(x);
+I   = II;
+figs = [];
+stab = [];
+ST = cell(2,1);
+<span class="comment">%ST{1} = {'ro','MarkerSize', 4};</span>
+<span class="comment">%ST{2} = {'bo','MarkerSize', 4};</span>
+ST{1} = {<span class="string">'b--'</span>,<span class="string">'LineWidth'</span>,1.5};
+ST{2} = {<span class="string">'b-'</span>,<span class="string">'LineWidth'</span>,1.5};
+<span class="keyword">while</span> true
+  <span class="keyword">if</span> II&gt;=EI; <span class="keyword">break</span>; <span class="keyword">end</span>
+  [I, I0] = next_index(EI, S, I, II);
+  fig = plot3(x(II:I0), y(II:I0), z(II:I0), ST{S(II)+1}{:});
+  figs = [figs fig];
+  stab = [stab S(II)+1];
+  II = I0;
+<span class="keyword">end</span>
+
+<span class="keyword">if</span> isempty(varargin)
+    Leg = cell(2,1);
+    Leg{1} = strcat(<span class="string">'SSM-$$\mathcal{O}('</span>,num2str(order),<span class="string">')$$ - unstable'</span>);
+    Leg{2} = strcat(<span class="string">'SSM-$$\mathcal{O}('</span>,num2str(order),<span class="string">')$$ - stable'</span>);
+    numSegs = numel(figs);
+    <span class="keyword">if</span> numSegs==1
+        <span class="comment">% add legend</span>
+        legend(Leg{stab(1)},<span class="string">'Interpreter'</span>,<span class="string">'latex'</span>);
+    <span class="keyword">else</span>
+        legend(Leg{stab(1)},Leg{stab(2)},<span class="string">'Interpreter'</span>,<span class="string">'latex'</span>);
+        <span class="keyword">if</span> numSegs&gt;2
+            <span class="comment">% remove repetitive legends from option</span>
+            <span class="keyword">for</span> j=3:numSegs
+                set(get(get(figs(j),<span class="string">'Annotation'</span>),<span class="string">'LegendInformation'</span>),<span class="keyword">...</span>
+                    <span class="string">'IconDisplayStyle'</span>,<span class="string">'off'</span>);
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">else</span>
+    numSegs = numel(figs);
+    <span class="keyword">for</span> j=1:numSegs
+        set(get(get(figs(j),<span class="string">'Annotation'</span>),<span class="string">'LegendInformation'</span>),<span class="keyword">...</span>
+            <span class="string">'IconDisplayStyle'</span>,<span class="string">'off'</span>);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> [I, I0] = next_index(EI, S, I, II)
+<span class="keyword">while</span> (I&lt;EI &amp;&amp; S(II)==S(I)); I=I+1; <span class="keyword">end</span>
+I0 = I;
+<span class="keyword">end</span>
+        </pre><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% SSM_POSWEEPS
+%
+%%
+function FRC = SSM_poSweeps(obj,oid,modes,order,epSamp,omRange,varargin)
+%% SSM_POSWEEPS 
+% This function performs a family of continuations of 
+% periodic orbits of reduced dynamics. Continuation is performed with varied
+% forcing frequency for each forcing amplitude.
+% The continuation here starts from the guess of an initial solution. 
+%
+% FRC = SSM_POSWEEPS(OBJ,OID,MODES,ORDER,EPSAMPS,OMRANGE, VARARGIN)
+%
+% * |oid|   :      runid of continuation
+% 
+% * |modes|  :      master spectral subspace
+% 
+% * |order|  :      expansion order of SSM
+% 
+% * |epSamp| :      sampled forcing amplitudes for forced response curves
+% 
+% * |omRange|:      continuation domain of forcing frequency, which should be near the
+%               value of natural frequency with index 1
+% * |varargin|:     parameter that can be used to suppres the plot of FRCs
+%
+% FRC:          Forced Response Curve data struct
+%
+% See also: COCO_POSWEEPS, SSM_LVLSWEEPS, SSM_EPSWEEPS
+
+if~isempty( varargin)
+    plotfrc = varargin{1}; 
+end
+
+outdof = obj.FRCOptions.outdof;
+FRCom  = cell(numel(epSamp),1);
+
+ii = 1;
+for ep = epSamp
+    oideps = strcat(oid,num2str(ep));
+    if obj.System.order == 1
+        obj.System.Fext.epsilon = ep;
+    else
+        obj.System.fext.epsilon = ep;       
+    end
+
+    FRCom{ii} = <a href="../../Library/SSM/FRC_cont_po.html">FRC_cont_po</a>(obj,oideps,modes,order,omRange);
+    ii = ii +1;
+end
+
+%% results extraction
+
+FRCom = horzcat(FRCom{:});
+
+% save results
+FRC = struct();
+FRC.SSMorder   = order;
+FRC.SSMnonAuto = obj.Options.contribNonAuto;
+FRC.FRCom = FRCom;
+FRC.eps = epSamp;
+
+
+
+%% Visualization of results
+if~isempty( varargin)
+    if plotfrc
+        sweeps_plot(numel(FRCom),FRCom,outdof,order);
+    end
+else
+   sweeps_plot(numel(FRCom),FRCom,outdof,order);
+end
+end
+
+%%
+%
+function sweeps_plot(numLabs,FRCom,outdof,order)
+% Plot FRC in normal coordinates
+thm = struct( 'special', {{'SN', 'HB' , 'PD'}});
+thm.SN = {'LineStyle', 'none', 'LineWidth', 2, ...
+  'Color', 'cyan', 'Marker', 'o', 'MarkerSize', 8, 'MarkerEdgeColor', ...
+  'cyan', 'MarkerFaceColor', 'white'};
+thm.HB = {'LineStyle', 'none', 'LineWidth', 2, ...
+  'Color', 'black', 'Marker', 's', 'MarkerSize', 8, 'MarkerEdgeColor', ...
+  'black', 'MarkerFaceColor', 'white'};
+thm.PD = {'LineStyle', 'none', 'LineWidth', 2, ...
+  'Color', 'green', 'Marker', 's', 'MarkerSize', 8, 'MarkerEdgeColor', ...
+  'black', 'MarkerFaceColor', 'white'};
+
+
+
+% Plot FRC in system coordinates
+% setup legend
+legTypes = zeros(numLabs,1); % each entry can be 1/2/3 - all stab/all unstab/mix
+for k=1:numLabs
+   stab = FRCom{k}.stability;
+   if all(stab)
+       legTypes(k) = 1;
+   elseif all(~stab)
+       legTypes(k) = 2;
+   else
+       legTypes(k) = 3;
+   end
+end
+legDisp = []; % figure with legends displayed
+idmix = find(legTypes==3);
+if ~isempty(idmix)
+    legDisp = [legDisp idmix(1)];
+else
+    idallstab = find(legTypes==1);
+    if ~isempty(idallstab)
+        legDisp = [legDisp,idallstab(1)];
+    end
+    idallunstab = find(legTypes==2);
+    if ~isempty(idallunstab)
+        legDisp = [legDisp,idallunstab(1)];
+    end
+end
+
+ndof = numel(outdof);
+for i=1:ndof
+    % 2D plot
+    figure; hold on
+    for k=1:numLabs
+        om = FRCom{k}.om;
+        Aout = FRCom{k}.Aout(i,:);
+        stab = FRCom{k}.stability;
+        if any(legDisp==k)
+            <a href="../../Library/Features/misc/stab_plot.html">stab_plot</a>(om,Aout,stab,order,'blue');
+        else
+            <a href="../../Library/Features/misc/stab_plot.html">stab_plot</a>(om,Aout,stab,order,'blue','nolegends');
+        end
+        % plot special points
+        SNidx = FRCom{k}.SNidx;
+        SNfig = plot(om(SNidx),Aout(SNidx),thm.SN{:});
+        set(get(get(SNfig,'Annotation'),'LegendInformation'),...
+            'IconDisplayStyle','off');
+        %HBidx = FRCom{k}.HBidx;
+        %HBfig = plot(om(HBidx),Aout(HBidx),thm.HB{:});
+        %set(get(get(HBfig,'Annotation'),'LegendInformation'),...
+        %    'IconDisplayStyle','off');         
+    end    
+    xlabel('$\Omega$','interpreter','latex','FontSize',16);
+    zk = strcat('$||z_{',num2str(outdof(i)),'}||_{\infty}$');
+    ylabel(zk,'Interpreter','latex');
+    set(gca,'FontSize',14);
+    grid on, axis tight; legend boxoff;
+    
+    % 3D plot
+    figure; hold on
+    for k=1:numLabs
+        om = FRCom{k}.om;
+        epsf = FRCom{k}.ep;
+        Aout = FRCom{k}.Aout(i,:);
+        stab = FRCom{k}.stability;
+        if any(legDisp==k)
+            <a href="../../Library/SSM/private/stab_plot3.html">stab_plot3</a>(om,epsf,Aout,stab,order);
+        else
+            <a href="../../Library/SSM/private/stab_plot3.html">stab_plot3</a>(om,epsf,Aout,stab,order,'nolegends');
+        end
+        % plot special points
+        SNidx = FRCom{k}.SNidx;
+        SNfig = plot3(om(SNidx),epsf(SNidx),Aout(SNidx),thm.SN{:});
+        set(get(get(SNfig,'Annotation'),'LegendInformation'),...
+            'IconDisplayStyle','off');
+        %HBidx = FRCom{k}.HBidx;
+        %HBfig = plot3(om(HBidx),epsf(HBidx),Aout(HBidx),thm.HB{:});
+        %set(get(get(HBfig,'Annotation'),'LegendInformation'),...
+        %    'IconDisplayStyle','off');        
+    end
+    xlabel('$\Omega$','interpreter','latex','FontSize',16);
+    ylabel('$\epsilon$','interpreter','latex','FontSize',16);
+    zk = strcat('$||z_{',num2str(outdof(i)),'}||_{\infty}$');
+    zlabel(zk,'Interpreter','latex');
+    set(gca,'FontSize',14);
+    grid on, axis tight; legend boxoff;
+    view([-1,-1,1]);
+end
+
+end
+
+%%
+%
+function <a href="../../Library/SSM/private/stab_plot3.html">stab_plot3</a>(x,y,z,S,order,varargin)
+% This function is adapted from stab_plot in coco_plot_bd in coco
+
+II  = 1;
+EI  = numel(x);
+I   = II;
+figs = [];
+stab = [];
+ST = cell(2,1);
+%ST{1} = {'ro','MarkerSize', 4};
+%ST{2} = {'bo','MarkerSize', 4};
+ST{1} = {'bREPLACE_WITH_DASH_DASH','LineWidth',1.5};
+ST{2} = {'b-','LineWidth',1.5};
+while true
+  if II>=EI; break; end
+  [I, I0] = next_index(EI, S, I, II);
+  fig = plot3(x(II:I0), y(II:I0), z(II:I0), ST{S(II)+1}{:});
+  figs = [figs fig];
+  stab = [stab S(II)+1];
+  II = I0;
+end
+
+if isempty(varargin)
+    Leg = cell(2,1);
+    Leg{1} = strcat('SSM-$$\mathcal{O}(',num2str(order),')$$ - unstable');
+    Leg{2} = strcat('SSM-$$\mathcal{O}(',num2str(order),')$$ - stable');
+    numSegs = numel(figs);
+    if numSegs==1
+        % add legend 
+        legend(Leg{stab(1)},'Interpreter','latex');
+    else
+        legend(Leg{stab(1)},Leg{stab(2)},'Interpreter','latex');
+        if numSegs>2            
+            % remove repetitive legends from option
+            for j=3:numSegs
+                set(get(get(figs(j),'Annotation'),'LegendInformation'),...
+                    'IconDisplayStyle','off');
+            end
+        end     
+    end
+else
+    numSegs = numel(figs);
+    for j=1:numSegs
+        set(get(get(figs(j),'Annotation'),'LegendInformation'),...
+            'IconDisplayStyle','off');
+    end    
+end
+end
+
+function [I, I0] = next_index(EI, S, I, II)
+while (I<EI && S(II)==S(I)); I=I+1; end
+I0 = I;
+end
+
+            ##### SOURCE END #####
+        --></body></html></body></html>

@@ -1,0 +1,1301 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../../index.html"><img alt="Logo" class="logo" src="../../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>COMPUTE_PERTURBED_WHISKER</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-09" name="DC.date"/><meta content="compute_perturbed_whisker.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>COMPUTE_PERTURBED_WHISKER</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#3">Non-autonomous (quasi)periodic perturbation to whiskers of invariant manifolds</a></li><li><a href="#4">System Properties</a></li><li><a href="#5">Solving for coefficients with k=0</a></li><li><a href="#12">Solving for coefficients with k&gt;0</a></li><li><a href="#31">Find zeroth order resonant terms</a></li><li><a href="#33">Find higher order resonant terms</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> [W1, R1] = compute_perturbed_whisker(obj, order,W0,R0,varargin)
+        </pre><p>This function computes the non-autonomous SSM up to order <tt>order</tt>.</p><p>[W1, R1] = COMPUTE_PERTURBED_WHISKER(obj, order,W0,R0,varargin)</p><div><ul><li><tt>obj</tt>:      SSM class object</li></ul></div><div><ul><li><tt>order</tt>:    approximation order up until which SSM is computed, has to be 1           lower than the order up until which <tt>W0</tt> and <tt>R0</tt> are computed.</li></ul></div><div><ul><li><tt>W0</tt>:       autonomous SSM coefficients</li></ul></div><div><ul><li><tt>R0</tt>:       autonomous RD coefficients</li></ul></div><div><ul><li><tt>varargin</tt>: if not stored in the obj class, this can be used to input Omega</li></ul></div><div><ul><li><tt>W1</tt>:       non-autonomous SSM coefficients</li></ul></div><div><ul><li><tt>R1</tt>:       non-autonomous RD coefficients</li></ul></div><p>See also: COMPUTE_WHISKER</p><h2 id="3">Non-autonomous (quasi)periodic perturbation to whiskers of invariant manifolds</h2><p>We consider the mechanical system</p><p><span class="MathJax_Preview"><img alt="$\mathbf{B}\dot{\mathbf{x}} =\mathbf{Ax}+\mathbf{G}(\mathbf{x})+\epsilon\mathbf{F}(\mathbf{\phi}, \mathbf{x})$" src="compute_perturbed_whisker_eq03638100668867591500-Rescaled.png" style="width: 164.4px; height: auto;"/></span><script type="math/tex">\mathbf{B}\dot{\mathbf{x}} =\mathbf{Ax}+\mathbf{G}(\mathbf{x})+\epsilon\mathbf{F}(\mathbf{\phi}, \mathbf{x})</script></p><p><span class="MathJax_Preview"><img alt="$\dot{\mathbf{\phi}}=\mathbf{\Omega}$" src="compute_perturbed_whisker_eq12432953161400475196-Rescaled.png" style="width: 36.0px; height: auto;"/></span><script type="math/tex">\dot{\mathbf{\phi}}=\mathbf{\Omega}</script></p><p>with quasi-periodic forcing.</p><p>In the non-autonomous setting, the SSM and the corresponding reduced dynamics would be parameterized by the angular variables <span class="MathJax_Preview"><img alt="$\mathbf{\phi}$" src="compute_perturbed_whisker_eq00989108787121391203-Rescaled.png" style="width: 7.199999999999999px; height: auto;"/></span><script type="math/tex">\mathbf{\phi}</script>, as well. In general, we may write</p><p><span class="MathJax_Preview"><img alt="$$    \mathbf{W(p,{\mathbf{\phi}})_\epsilon} = \mathbf{W}\mathbf{(p)} + \epsilon \mathbf{X}\mathbf{(p,\mathbf{\phi})}
++ O(\epsilon^2),$$" src="compute_perturbed_whisker_eq11993514486775961691-Rescaled.png" style="width: 220.79999999999998px; height: auto;"/></span><script type="math/tex">    \mathbf{W(p,{\mathbf{\phi}})_\epsilon} = \mathbf{W}\mathbf{(p)} + \epsilon \mathbf{X}\mathbf{(p,\mathbf{\phi})}
++ O(\epsilon^2),</script></p><p><span class="MathJax_Preview"><img alt="$$    \mathbf{R(p,{\mathbf{\phi}})_\epsilon} = \mathbf{R}\mathbf{(p)} + \epsilon \mathbf{S}\mathbf{(p,\mathbf{\phi})}
++ O(\epsilon^2),$$" src="compute_perturbed_whisker_eq05154307473182907834-Rescaled.png" style="width: 208.79999999999998px; height: auto;"/></span><script type="math/tex">    \mathbf{R(p,{\mathbf{\phi}})_\epsilon} = \mathbf{R}\mathbf{(p)} + \epsilon \mathbf{S}\mathbf{(p,\mathbf{\phi})}
++ O(\epsilon^2),</script></p><p>where <span class="MathJax_Preview"><img alt="$\mathbf{T}(\mathbf{p}),\mathbf{P}(\mathbf{p})$" src="compute_perturbed_whisker_eq13404281502669963143-Rescaled.png" style="width: 63.599999999999994px; height: auto;"/></span><script type="math/tex">\mathbf{T}(\mathbf{p}),\mathbf{P}(\mathbf{p})</script> recover the SSM and reduced dynamics coefficients in the unforced limit of <span class="MathJax_Preview"><img alt="$\epsilon=0.$" src="compute_perturbed_whisker_eq03556201273298307741-Rescaled.png" style="width: 32.4px; height: auto;"/></span><script type="math/tex">\epsilon=0.</script></p><p>These functions as well as the nonlinearity and the forcing are expanded in phase space coordinates. The time dependent coefficients of those expansions are furthermore expanded as a Fourier-series. As an example, the Force and the non-autonomous SSM-coefficients are given as</p><p><span class="MathJax_Preview"><img alt="$\mathbf {F}(\mathbf{x},\mathbf{\phi}) =     \left[  f^1(\mathbf{x},\mathbf{\phi}), \cdots ,   f^{2n}(\mathbf{x},\mathbf{\phi})     \right]^T,     \ f^i(\mathbf{x},\mathbf{\phi}) = \sum_{\mathbf{n}\in \mathbf{N}^{2n}} F^i_{\mathbf{n}}(\mathbf{\phi}) \mathbf{x}^\mathbf{n}$" src="compute_perturbed_whisker_eq06100036304293986544-Rescaled.png" style="width: 369.59999999999997px; height: auto;"/></span><script type="math/tex">\mathbf {F}(\mathbf{x},\mathbf{\phi}) =     \left[  f^1(\mathbf{x},\mathbf{\phi}), \cdots ,   f^{2n}(\mathbf{x},\mathbf{\phi})     \right]^T,     \ f^i(\mathbf{x},\mathbf{\phi}) = \sum_{\mathbf{n}\in \mathbf{N}^{2n}} F^i_{\mathbf{n}}(\mathbf{\phi}) \mathbf{x}^\mathbf{n}</script></p><p><span class="MathJax_Preview"><img alt="$F^b_{\mathbf{k}}(\mathbf{\phi}) = \sum_{\mathbf{\eta} \in \mathbf{Z}^k} F^b_{\mathbf{k},\mathbf{\eta} } e^{i\langle \mathbf{\eta},\mathbf{\phi}\rangle}$" src="compute_perturbed_whisker_eq14012595308155783807-Rescaled.png" style="width: 140.4px; height: auto;"/></span><script type="math/tex">F^b_{\mathbf{k}}(\mathbf{\phi}) = \sum_{\mathbf{\eta} \in \mathbf{Z}^k} F^b_{\mathbf{k},\mathbf{\eta} } e^{i\langle \mathbf{\eta},\mathbf{\phi}\rangle}</script></p><p><span class="MathJax_Preview"><img alt="$\mathbf {X}(\mathbf{p},\mathbf{\phi}) =     \left[  X^1(\mathbf{p},\mathbf{\phi}), \cdots ,   X^{2n}(\mathbf{p},\mathbf{\phi})     \right]^T,     \ X^i(\mathbf{p},\mathbf{\phi}) = \sum_{\mathbf{m}\in \mathbf{N}^{l}} X^i_{\mathbf{m}}(\mathbf{\phi}) \mathbf{p}^\mathbf{m}$" src="compute_perturbed_whisker_eq01407618381261492798-Rescaled.png" style="width: 392.4px; height: auto;"/></span><script type="math/tex">\mathbf {X}(\mathbf{p},\mathbf{\phi}) =     \left[  X^1(\mathbf{p},\mathbf{\phi}), \cdots ,   X^{2n}(\mathbf{p},\mathbf{\phi})     \right]^T,     \ X^i(\mathbf{p},\mathbf{\phi}) = \sum_{\mathbf{m}\in \mathbf{N}^{l}} X^i_{\mathbf{m}}(\mathbf{\phi}) \mathbf{p}^\mathbf{m}</script></p><p><span class="MathJax_Preview"><img alt="$X^i_{\mathbf{k}}(\mathbf{\phi}) = \sum_{\mathbf{\eta} \in \mathbf{Z}^k} X^i_{\mathbf{k},\mathbf{\eta} } e^{i\langle \mathbf{\eta},\mathbf{\phi}\rangle}$" src="compute_perturbed_whisker_eq10698513563750806218-Rescaled.png" style="width: 145.2px; height: auto;"/></span><script type="math/tex">X^i_{\mathbf{k}}(\mathbf{\phi}) = \sum_{\mathbf{\eta} \in \mathbf{Z}^k} X^i_{\mathbf{k},\mathbf{\eta} } e^{i\langle \mathbf{\eta},\mathbf{\phi}\rangle}</script></p><p>This leads to the invariane equation</p><p><span class="MathJax_Preview"><img alt="$\mathbf{B}  \bigg( \textrm{D}_\mathbf{p}( \mathbf{W}\mathbf{(p)})\mathbf{S}\mathbf{(p,\mathbf{\phi})} + (\partial_\mathbf{p} \mathbf{X}\mathbf{(p,\mathbf{\phi)})} \mathbf{R}\mathbf{(p)}+(\partial_\mathbf{\phi} \mathbf{X(p,\mathbf{\phi})})   \mathbf{\Omega } \bigg)= \mathbf{A}\mathbf{X}\mathbf{(p,\mathbf{\phi})}+\big[\textrm{D}_\mathbf{x}\mathbf{G} \circ \mathbf{W} (\mathbf{p}) \big]\mathbf{X}(\mathbf{p},\mathbf{\phi})+ \mathbf{F} (\mathbf{\phi},\mathbf{W(p,\mathbf{\phi})})$" src="compute_perturbed_whisker_eq07725963045378223380-Rescaled.png" style="width: 657.6px; height: auto;"/></span><script type="math/tex">\mathbf{B}  \bigg( \textrm{D}_\mathbf{p}( \mathbf{W}\mathbf{(p)})\mathbf{S}\mathbf{(p,\mathbf{\phi})} + (\partial_\mathbf{p} \mathbf{X}\mathbf{(p,\mathbf{\phi)})} \mathbf{R}\mathbf{(p)}+(\partial_\mathbf{\phi} \mathbf{X(p,\mathbf{\phi})})   \mathbf{\Omega } \bigg)= \mathbf{A}\mathbf{X}\mathbf{(p,\mathbf{\phi})}+\big[\textrm{D}_\mathbf{x}\mathbf{G} \circ \mathbf{W} (\mathbf{p}) \big]\mathbf{X}(\mathbf{p},\mathbf{\phi})+ \mathbf{F} (\mathbf{\phi},\mathbf{W(p,\mathbf{\phi})})</script></p><p>The various expansions are plugged into this equation and then the equation is iteratively solved for the coefficients. The functions <span class="MathJax_Preview"><img alt="$\mathbf{W(p),R(p)}$" src="compute_perturbed_whisker_eq08488983174948969773-Rescaled.png" style="width: 69.6px; height: auto;"/></span><script type="math/tex">\mathbf{W(p),R(p)}</script> are already known from the autonomous computation, their coefficients given by <tt>W0</tt> (SSM) and <tt>R0</tt> (reduced dynamics) .</p><p>The external force <span class="MathJax_Preview"><img alt="$\mathbf{F}$" src="compute_perturbed_whisker_eq03148538246847756930-Rescaled.png" style="width: 9.6px; height: auto;"/></span><script type="math/tex">\mathbf{F}</script> is input as a field of the property <tt>System</tt> of the SSM object. Since the equations for different frequency multi-indices decouple and the code is parallelised over these decoupled equations we want to make the read out hirarchy such that the first parameter corresponds to the frequency multi-indices. <tt>System.Fext.data(i)</tt> indices into the <span class="MathJax_Preview"><img alt="$i$" src="compute_perturbed_whisker_eq08984912804010224726-Rescaled.png" style="width: 4.8px; height: auto;"/></span><script type="math/tex">i</script>-th component of the field <tt>data</tt> which is a struct array containing struct arrays. There is one such  contained struct array for each frequency multi-index.</p><p>Every struct now contains two arrays with the coefficients and the spatial multi-indices respectively. The coefficients of the force for the <span class="MathJax_Preview"><img alt="$i$" src="compute_perturbed_whisker_eq08984912804010224726-Rescaled.png" style="width: 4.8px; height: auto;"/></span><script type="math/tex">i</script>-th frequency- and ther order <span class="MathJax_Preview"><img alt="$k$" src="compute_perturbed_whisker_eq12829740475467572519-Rescaled.png" style="width: 7.199999999999999px; height: auto;"/></span><script type="math/tex">k</script> spatial multi-indices and their coefficients are stored in the rows of  <tt>data(i).F_n_k(k).ind</tt> and the columns of <tt>data(i).F_n_k(k).coeffs</tt> . The <span class="MathJax_Preview"><img alt="$i$" src="compute_perturbed_whisker_eq08984912804010224726-Rescaled.png" style="width: 4.8px; height: auto;"/></span><script type="math/tex">i</script>-th frequency multi-index is stored in <tt>data(i).kappa</tt>.</p><p>The non-autonomous SSM and reduced dynamics coefficients are stored analogously. In <tt>W_1(i).W(k).coeffs</tt> the coefficients of the SSM expansion corresponding to <span class="MathJax_Preview"><img alt="$\mathbf{\eta}_i$" src="compute_perturbed_whisker_eq13230773974413188323-Rescaled.png" style="width: 9.6px; height: auto;"/></span><script type="math/tex">\mathbf{\eta}_i</script> and order <span class="MathJax_Preview"><img alt="$k$" src="compute_perturbed_whisker_eq12829740475467572519-Rescaled.png" style="width: 7.199999999999999px; height: auto;"/></span><script type="math/tex">k</script> spatial multi-indices are stored. During the computation the multi-indices are stored in the columns of <tt>W_1(i).W(k).ind</tt> in reverse lexicographic order, upon outputting the resulting coefficients however the storing scheme is reversed, in the output the multi-indices are stored in the rows in lexicographic ordering, the standard way of storing used throughout the software package.</p><p>While in the documentation the frequency multi-indices are called <span class="MathJax_Preview"><img alt="$\mathbf{\eta}$" src="compute_perturbed_whisker_eq12475473977526259342-Rescaled.png" style="width: 7.199999999999999px; height: auto;"/></span><script type="math/tex">\mathbf{\eta}</script> for good distinguishability from spatial multi-indices in the code they are called <tt>kappa</tt>.</p><h2 id="4">System Properties</h2><pre class="codeinput"><span class="keyword">if</span> isempty(varargin) <span class="comment">% FRC_po</span>
+    Omega = obj.System.Omega;       <span class="comment">% has to be column vector since kappas are stored in rows</span>
+<span class="keyword">else</span> <span class="comment">% Parallelised FRC_lvlset</span>
+    Omega = varargin{1};
+<span class="keyword">end</span>
+
+A      = obj.System.A;           <span class="comment">% A matrix</span>
+B      = obj.System.B;           <span class="comment">% B matrix</span>
+N      = obj.dimSystem;          <span class="comment">% full system size</span>
+W_M    = obj.E.adjointBasis ;    <span class="comment">% Right eigenvectors of the modal subspace</span>
+V_M    = obj.E.basis;            <span class="comment">% Left eigenvectors of the modal subspace</span>
+l      = obj.dimManifold;        <span class="comment">% dim(M): M is the master modal subspace</span>
+nKappa = obj.System.nKappa;
+solver = obj.Options.solver;
+
+<span class="comment">% Struct for passing variables to functions</span>
+data.N        = N;
+data.l        = l;
+data.ordering = <span class="string">'revlex'</span>;
+data.F_ord    = numel(obj.System.F);
+
+
+<span class="comment">% Structs for storing coefficients</span>
+<span class="comment">% each column in kappas corresponds to one kappa</span>
+<span class="keyword">if</span> obj.Options.contribNonAuto <span class="comment">% whether to ignore higher order</span>
+    [W1,R1,kappas,data.Fext_ord] = struct_setup(obj,order);
+<span class="keyword">else</span> <span class="comment">%only zeroth order nonautonomous coefficients</span>
+    [W1,R1,kappas,data.Fext_ord] = struct_setup(obj,0);
+<span class="keyword">end</span>
+
+<span class="comment">% As these coefficients depend explicitly on omega at higher orders save it</span>
+<span class="comment">% as property</span>
+W1(1).Omega = Omega;
+R1(1).Omega = Omega;
+        </pre><h2 id="5">Solving for coefficients with k=0</h2><p>The coefficient equation for this case reads</p><p><span class="MathJax_Preview"><img alt="$$\sum_{i=1}^{2n}     \underbrace{    \big(        \mathbf{(A)}_{bi}  - i
+\langle \mathbf{\eta},\mathbf{\Omega }\rangle        \mathbf{B}_{bi}    \big)
+}_{:= (\mathcal{L}_{\mathbf{0},\mathbf{\eta})_{bi}}}    X^i_{\mathbf{0},\mathbf{\eta}}=\sum_{j=1}^{l}
+(\mathbf{Bv}_j)_b      S^j_{\mathbf{0},\mathbf{\eta}}-    F_{b,\mathbf{0},\mathbf{\eta}}$$" src="compute_perturbed_whisker_eq09692225267312748045-Rescaled.png" style="width: 303.59999999999997px; height: auto;"/></span><script type="math/tex">\sum_{i=1}^{2n}     \underbrace{    \big(        \mathbf{(A)}_{bi}  - i
+\langle \mathbf{\eta},\mathbf{\Omega }\rangle        \mathbf{B}_{bi}    \big)
+}_{:= (\mathcal{L}_{\mathbf{0},\mathbf{\eta})_{bi}}}    X^i_{\mathbf{0},\mathbf{\eta}}=\sum_{j=1}^{l}
+(\mathbf{Bv}_j)_b      S^j_{\mathbf{0},\mathbf{\eta}}-    F_{b,\mathbf{0},\mathbf{\eta}}</script></p><pre class="codeinput"><span class="comment">% Finding all force contributions at zeroth order</span>
+[F_0, idx_0] = zeroth_order_forcing(obj);
+        </pre><p><b>Find resonant terms</b></p><pre class="codeinput">[ev_idx, harm_idx,~] = resonant_terms(obj,[],kappas(:,idx_0),Omega,<span class="string">'zero'</span>); <span class="comment">% contains harmonic idx.</span>
+r_ext    = length(ev_idx);
+<span class="keyword">if</span> obj.System.order == 1
+        </pre><p><b>Set reduced dynamics</b></p><p>These sets now determine the bases of the near left kernel of the coefficient matrices <span class="MathJax_Preview"><img alt="$\mathbf{\mathcal{L}_{0,\eta}}$" src="compute_perturbed_whisker_eq06578623226650080580-Rescaled.png" style="width: 22.8px; height: auto;"/></span><script type="math/tex">\mathbf{\mathcal{L}_{0,\eta}}</script> onto which we project the RHS of the coefficient equation and set it equal zero. This gives the explicit expression for the reduced dynamics coefficients.</p><p><span class="MathJax_Preview"><img alt="$S^{e_i}_{\mathbf{0},\mathbf{\eta}_{f_i}}=\langle \mathbf{w}_{e_i}, [F^1_{\mathbf{0},\mathbf{\eta}_{f_i}} \cdots F^{2n}_{\mathbf{0},\mathbf{\eta}_{f_i}}  ]^T      \rangle$" src="compute_perturbed_whisker_eq04676539742943230957-Rescaled.png" style="width: 170.4px; height: auto;"/></span><script type="math/tex">S^{e_i}_{\mathbf{0},\mathbf{\eta}_{f_i}}=\langle \mathbf{w}_{e_i}, [F^1_{\mathbf{0},\mathbf{\eta}_{f_i}} \cdots F^{2n}_{\mathbf{0},\mathbf{\eta}_{f_i}}  ]^T      \rangle</script></p><pre class="codeinput"><span class="keyword">if</span> r_ext
+    Q_0 = sparse(ev_idx,harm_idx,sum(conj(W_M(:,ev_idx)).* F_0(:,idx_0(harm_idx))), l,numel(idx_0));
+    RHS = B*V_M*Q_0 - F_0(:,idx_0);
+<span class="keyword">else</span>
+    Q_0 = sparse(l,nKappa);
+    RHS = - F_0(:,idx_0);
+<span class="keyword">end</span>
+        </pre><p>Solve for the order zeroth order SSM-coefficients W1, R1</p><pre class="codeinput">run_idx = 1;
+<span class="keyword">for</span> j= idx_0
+
+    R1(j).R(1).coeffs = Q_0(:,run_idx);
+    R1(j).R(1).ind    = sparse(l,1);
+    run_idx = run_idx + 1;
+<span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">else</span> <span class="comment">% 2nd order computation</span>
+    M      = obj.System.M;
+    C      = obj.System.C;
+    THETA  = obj.E.adjointBasis(1:(N/2),:);
+    PHI    = obj.E.basis(1:(N/2),:);
+    Lambda_M_vector = obj.E.spectrum;
+    V0     = sparse(N/2,1);
+
+    <span class="keyword">if</span> r_ext
+        [harm_idx_un, ~,i_E_un] = unique(harm_idx.'); <span class="comment">% unique harmonic positions</span>
+
+        Y0_all = sparse(N/2,numel(idx_0));
+        ji = 1;
+        <span class="keyword">for</span> un_harm = harm_idx_un <span class="comment">% Loop over all unique resonant harmonics</span>
+            un_ev = ev_idx((i_E_un == ji)); <span class="comment">% All resonant eigenvalues for this harmonic</span>
+
+            Y0     = - F_0(1:(N/2),un_harm);
+            Y0_all(:,un_harm) = Y0;
+            Lambda_0_Om =  1i * (kappas(:,idx_0(un_harm))*Omega);
+
+            [S0] = reduced_dynamics_second_order(un_ev,[],THETA,PHI,Lambda_M_vector,Lambda_0_Om, M,C,V0,Y0,l,1,0);
+
+            R1(idx_0(un_harm)).R(1).coeffs = sparse(S0);
+            R1(idx_0(un_harm)).R(1).ind    = sparse(l,1);
+            ji = ji +1;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+
+<span class="keyword">if</span> obj.Options.contribNonAuto <span class="comment">% whether to ignore higher order</span>
+        </pre><pre class="codeinput">    kappas_0 = kappas(:,idx_0);
+    [redConj,mapConj] = conj_red(kappas_0, F_0(:,idx_0));
+
+    <span class="comment">% Make use of symmetry of leading order non-autonomous coefficients</span>
+    <span class="keyword">for</span> j = 1:numel(redConj)
+
+        <span class="keyword">if</span> obj.System.order == 1
+            C_j  =  A - 1i*dot(Omega,kappas_0(:,redConj(j)))*B ;
+            W10j = solveinveq(C_j,RHS(:,redConj(j)),solver ); <span class="comment">%lsqminnorm(C_j,RHS(:,redConj(j)));</span>
+            mapj = mapConj{j};
+
+        <span class="keyword">else</span>
+            S0 = R1(j).R(1).coeffs;
+            <span class="keyword">if</span> isempty(S0)
+                S0 = 0;
+            <span class="keyword">end</span>
+
+            Lambda_0_Om =  1i * (kappas(:,redConj(j))*Omega);
+
+            L_k = ( M * ((Lambda_0_Om + Lambda_M_vector.') .* PHI) + C*PHI ) * S0;
+            L_k = L_k +  Y0_all(:,redConj(j));
+
+            C_k = -(obj.System.K + Lambda_0_Om*C + Lambda_0_Om^2 *M );
+
+            w_10    = solveinveq(C_k,L_k,solver);<span class="comment">%lsqminnorm(C_k,L_k);</span>
+
+
+            w_10dot = Lambda_0_Om * w_10 + PHI * S0 + V0;
+
+            W10j = [w_10;w_10dot];
+            mapj = mapConj{j};
+        <span class="keyword">end</span>
+
+        <span class="keyword">switch</span> numel(mapj)
+            <span class="keyword">case</span> 1
+                W1(idx_0(mapj(1))).W(1).coeffs = W10j;
+                W1(idx_0(mapj(1))).W(1).ind    = sparse(l,1);
+            <span class="keyword">case</span> 2
+
+                W1(idx_0(mapj(1))).W(1).coeffs = W10j;
+                W1(idx_0(mapj(2))).W(1).coeffs = conj(W10j);
+
+                W1(idx_0(mapj(1))).W(1).ind    = sparse(l,1);
+                W1(idx_0(mapj(2))).W(1).ind    = sparse(l,1);
+            <span class="keyword">otherwise</span>
+                error(<span class="string">'there exist redundancy in kappa of external forcing'</span>);
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+        </pre><h2 id="12">Solving for coefficients with k&gt;0</h2><p>The coefficient equation for this case reads</p><p><span class="MathJax_Preview"><img alt="$\sum_{i=1}^{2n}     \underbrace{     \bigg(       \mathbf{(A)}_{bi} -        \mathbf{B}_{bi}         \big[            \sum_{j=1}^l k_j  \lambda_{j} +            i\langle \mathbf{\Omega}, \mathbf{\eta} \rangle         \big] \bigg)     }_{:= (\mathcal{L}_{\mathbf{k},\mathbf{\eta}})_{bi}}    X^i_{\mathbf{k},\mathbf{\eta}}\\= \sum_{i=1}^{2n} \mathbf{B}_{bi}\sum_{j=1}^l    \bigg[          \sum_{\mathbf{m}, \mathbf{u}\in \mathbf{N}^l , \ \mathbf{m+u} - \mathbf{\hat{e}}_j = \mathbf{k}} m_j        W^i_{\mathbf{m}}        S^j_{\mathbf{u},\mathbf{\eta}}        + \sum_{\mathbf{m,u} \in \mathbf{N}^l, \ |\mathbf{m}|&lt;k \ \ \mathbf{m+u} - \hat{\mathbf{e}}_j = \mathbf{k}} m_j X^i_{\mathbf{m},\mathbf{\eta}} R^j_{\mathbf{u}}    \bigg] \\  \ \ \ -    \sum_{\mathbf{n}\in \mathbf{N}^{2n}, |\mathbf{n}|&lt;k}F^b_{\mathbf{n},\mathbf{\eta}} \pi_{\mathbf{n,k}}- \sum_{\mathbf{n}\in \mathbf{N} ^{2n}, \ \            |\mathbf{n}| \geq 2}       G^b_{\mathbf{n}}\sigma_{\mathbf{k}, \mathbf{n}, \mathbf{\eta}}$" src="compute_perturbed_whisker_eq13492099095772251209-Rescaled.png" style="width: 1052.3999999999999px; height: auto;"/></span><script type="math/tex">\sum_{i=1}^{2n}     \underbrace{     \bigg(       \mathbf{(A)}_{bi} -        \mathbf{B}_{bi}         \big[            \sum_{j=1}^l k_j  \lambda_{j} +            i\langle \mathbf{\Omega}, \mathbf{\eta} \rangle         \big] \bigg)     }_{:= (\mathcal{L}_{\mathbf{k},\mathbf{\eta}})_{bi}}    X^i_{\mathbf{k},\mathbf{\eta}}\\= \sum_{i=1}^{2n} \mathbf{B}_{bi}\sum_{j=1}^l    \bigg[          \sum_{\mathbf{m}, \mathbf{u}\in \mathbf{N}^l , \ \mathbf{m+u} - \mathbf{\hat{e}}_j = \mathbf{k}} m_j        W^i_{\mathbf{m}}        S^j_{\mathbf{u},\mathbf{\eta}}        + \sum_{\mathbf{m,u} \in \mathbf{N}^l, \ |\mathbf{m}|<k \ \ \mathbf{m+u} - \hat{\mathbf{e}}_j = \mathbf{k}} m_j X^i_{\mathbf{m},\mathbf{\eta}} R^j_{\mathbf{u}}    \bigg] \\  \ \ \ -    \sum_{\mathbf{n}\in \mathbf{N}^{2n}, |\mathbf{n}|<k}F^b_{\mathbf{n},\mathbf{\eta}} \pi_{\mathbf{n,k}}- \sum_{\mathbf{n}\in \mathbf{N} ^{2n}, \ \            |\mathbf{n}| \geq 2}       G^b_{\mathbf{n}}\sigma_{\mathbf{k}, \mathbf{n}, \mathbf{\eta}}</script></p><p>Get autonomous coefficients and composition coefficients in rev. lex. ordering</p><pre class="codeinput">    <span class="keyword">if</span> order&gt;0
+        [W0,R0,data.H] = get_autonomous_coeffs(W0,R0);
+    <span class="keyword">end</span>
+        </pre><p><b>Perform Nonautonomous Calculation</b></p><p>We loop over all orders of spatial multi-indices. Within that there is a loop over all the frequency multi-indices.</p><pre class="codeinput">    <span class="keyword">for</span> i = 1:nKappa
+
+        <span class="keyword">for</span> k = 1:order
+        </pre><p><b>Calculating the RHS</b></p><pre class="codeinput">            <span class="comment">%Forcing and nonlinearity terms</span>
+            [FG]  = Fext_plus_Gnl(obj,data,i,k,W1(i));
+
+            <span class="comment">% Mixed Terms</span>
+            [WR] = W1R0_plus_W0R1(data,k,W0,W1(i),R0,R1(i));
+        </pre><p><b>Find resonant terms</b></p><pre class="codeinput">            [ev_idx, multi_idx,Lambda_K]   = resonant_terms(obj,k,kappas(:,i),Omega,<span class="string">'k'</span>); <span class="comment">% F contains multi-index pos.</span>
+        </pre><p><b>Set reduced dynamics</b></p><pre class="codeinput">            <span class="keyword">if</span> obj.System.order == 1
+                [R1_ik,W1_ik] = first_order_computation(kappas,Omega,W_M,FG,WR,A,B,i,k,ev_idx,multi_idx,l,data,Lambda_K,W0,solver);
+            <span class="keyword">else</span>
+                [R1_ik,W1_ik] = second_order_computation(kappas,Omega,FG,WR,i,k,ev_idx,multi_idx,data,M,C,THETA,PHI,Lambda_K,Lambda_M_vector,obj.System.K,solver);
+            <span class="keyword">end</span>
+
+            R1(i).R(k+1) = R1_ik(k+1);
+            W1(i).W(k+1).coeffs = W1_ik.coeffs;
+
+            <span class="keyword">if</span> l &gt;1
+                W1(i).W(k+1).ind = flip(sortrows(<a href="../../Library/Features/misc/nsumk.html">nsumk</a>(l,k,<span class="string">'nonnegative'</span>)).',2); <span class="comment">%order k multi-indices</span>
+            <span class="keyword">else</span>
+                W1(i).W(k+1).ind = k;
+            <span class="keyword">end</span>
+        </pre><pre class="codeinput">        <span class="keyword">end</span>
+
+        <span class="comment">% Output coefficients in lexicographic ordering, with multi indices stored</span>
+        <span class="comment">% in rows</span>
+        <span class="keyword">for</span> k = 1:order+1 <span class="comment">%index starts at 0</span>
+            W1(i).W(k) = <a href="../../Library/Manifold/private/coeffs_lex2revlex.html">coeffs_lex2revlex</a>(W1(i).W(k),<span class="string">'TaylorCoeff'</span>);
+            R1(i).R(k) = <a href="../../Library/Manifold/private/coeffs_lex2revlex.html">coeffs_lex2revlex</a>(R1(i).R(k),<span class="string">'TaylorCoeff'</span>);
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+
+<span class="keyword">function</span> [W] = solveinveq(C,R,solver)
+<span class="comment">% solves C*W = R for W with given solver</span>
+<span class="keyword">switch</span> solver
+    <span class="keyword">case</span> <span class="string">'lsqminnorm'</span>
+        W = lsqminnorm(C,R);
+    <span class="keyword">case</span> <span class="string">'linsolve'</span>
+        W = linsolve(C,R);
+    <span class="keyword">case</span> <span class="string">'backslash'</span>
+        W = C \R;
+    <span class="keyword">case</span> <span class="string">'pinv'</span>
+        W = pinv(C)*R;
+    <span class="keyword">case</span> <span class="string">'inv'</span>
+        W = inv(C)*R;
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> [R1_ik,W1_ik] = second_order_computation(kappas,Omega,FG,WR,i,k,I,F,data,M,C,THETA,PHI,Lambda_K,Lambda_M_vector,Ksys,solver)
+l = data.l;
+N = data.N;
+
+Ym     = ( C * WR(1:(N/2),:) + M * WR((N/2+1):end,:)) - FG(1:(N/2),:);
+Vm     = WR(1:(N/2),:);
+
+Lambda_K_Om = Lambda_K + 1i * (kappas(:,i)*Omega);
+
+z_k = nchoosek(k+l-1,l-1);
+
+[Rk] = reduced_dynamics_second_order(I,F,THETA,PHI,Lambda_M_vector,Lambda_K_Om, M,C,Vm,Ym,l,z_k,k);
+
+
+w_1i    = zeros(N/2,z_k);
+w_1idot = zeros(N/2,z_k);
+
+<span class="keyword">for</span> f = 1:z_k
+
+    L_k = ( M * ((Lambda_K_Om(f) + Lambda_M_vector.') .* PHI) + C*PHI ) * Rk(:,f);
+    L_k = L_k + Lambda_K_Om(f)*M*Vm + Ym;
+
+    C_k = -(Ksys + Lambda_K_Om(f)*C + Lambda_K_Om(f)^2 *M );
+
+
+    w_1i(:,f)    = solveinveq(C_k,L_k(:,f),solver);
+
+    w_1idot(:,f) = Lambda_K_Om(f) * w_1i(:,f) + PHI * Rk(:,f) + Vm(:,f);
+<span class="keyword">end</span>
+
+W1_ik.coeffs       = [w_1i;w_1idot];
+R1_ik(k+1).coeffs       = sparse(Rk);
+<span class="keyword">if</span> l&gt;1
+    R1_ik(k+1).ind    = flip(sortrows(<a href="../../Library/Features/misc/nsumk.html">nsumk</a>(l,k,<span class="string">'nonnegative'</span>)).',2); <span class="comment">%order k multi-indices</span>
+<span class="keyword">else</span>
+    R1_ik(k+1).ind  = k;
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> [R1_ik,W1_ik] = first_order_computation(kappas,Omega,W_M,FG,WR,A,B,i,k,I,F,l,data,K_lambda,W0,solver)
+        </pre><p>Computes the SSM coeffs and reduced dynamics coefficients using first order implementation</p><pre class="codeinput">R1_ik_coeff     = sum( conj(W_M(:,I)).* ( FG(:,F) - B*(WR(:,F))));
+R1_ik(k+1).coeffs    = sparse(I,F,R1_ik_coeff , l,nchoosek(k+l-1,l-1));
+<span class="keyword">if</span> l &gt; 1
+    R1_ik(k+1).ind    = flip(sortrows(<a href="../../Library/Features/misc/nsumk.html">nsumk</a>(l,k,<span class="string">'nonnegative'</span>)).',2); <span class="comment">%order k multi-indices</span>
+<span class="keyword">else</span>
+    R1_ik(k+1).ind = k;
+<span class="keyword">end</span>
+        </pre><p><b>Solve the coefficient equation for the SSM coefficients</b></p><p>Add <tt>R1</tt> order k contribution to the right hand side</p><pre class="codeinput">RHS                 = B* (WR +  <a href="../../Library/Manifold/private/coeffs_mixed_terms.html">coeffs_mixed_terms</a>(k,1, W0,R1_ik,data,<span class="string">'R1'</span>)) - FG;
+
+<span class="keyword">for</span> j = 1:nchoosek(k+l-1,l-1)
+    C_i = A - B * (K_lambda(j) + 1i * kappas(:,i)*Omega); <span class="comment">% Coefficient matrix</span>
+    W1_ik.coeffs(:,j) = solveinveq(C_i,RHS(:,j),solver);
+<span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+        </pre><p>This function detects complex conjugate relations between forcing. For instance, when <tt>kappa_set = [1,-1,2,3,-3]</tt> and <tt>F_kappa = [1;1;2;3;4]</tt>, it will return <tt>redConj = [1,3,4,5]</tt> with <tt>mapConj = {[1 2],3,4,5}</tt></p><pre class="codeinput"><span class="keyword">function</span> [redConj,mapConj] = conj_red(kappa_set,F_kappa)
+
+redConj = [];
+mapConj = [];
+assert(numel(kappa_set)==numel(unique(kappa_set)),<span class="string">'there exist redundancy in kappa of external forcing'</span>);
+kappa = kappa_set;
+<span class="keyword">while</span> ~isempty(kappa)
+    ka = kappa(1);
+    ka_redConj = find(kappa_set==ka);
+    redConj = [redConj;ka_redConj];
+    <span class="comment">% find the conjugate one if it exists</span>
+    ka_conj = find(kappa_set==-ka);
+    <span class="keyword">if</span> ~isempty(ka_conj) &amp;&amp; norm(conj(F_kappa(:,ka_redConj))-F_kappa(:,ka_conj))&lt;1e-6*norm(F_kappa(:,ka_conj))
+        mapConj = [mapConj, {[ka_redConj,ka_conj]}];
+        kappa = setdiff(kappa,[ka,-ka],<span class="string">'stable'</span>);
+    <span class="keyword">else</span>
+        mapConj = [mapConj, {ka_redConj}];
+        kappa = setdiff(kappa,ka,<span class="string">'stable'</span>);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">function</span> [W1,R1,kappas,Fext_ord] = struct_setup(obj,order)
+<span class="comment">% Function that initialises the structs and some temporary arrays</span>
+
+l = obj.dimManifold;
+N = obj.dimSystem;
+nKappa = obj.System.nKappa;
+k_kappa   = size(obj.System.Fext.data(1).kappa,1);
+kappas    = zeros(k_kappa,nKappa);
+<span class="comment">% intitalise data structures to store coefficients</span>
+idle = repmat(struct(<span class="string">'coeffs'</span>,[],<span class="string">'ind'</span>,[]),order+1  , 1);
+W1  = repmat(struct(<span class="string">'kappa'</span> ,[],<span class="string">'W'</span>,idle,<span class="string">'Omega'</span>,[]),nKappa, 1);
+R1  = repmat(struct(<span class="string">'kappa'</span> ,[],<span class="string">'R'</span>,idle,<span class="string">'Omega'</span>,[]),nKappa, 1);
+
+Fext_ord = zeros(1,nKappa);
+
+<span class="keyword">for</span> i = 1:nKappa
+    Fext_ord(i)  = numel(obj.System.Fext.data(i).F_n_k);
+    kappa = obj.System.Fext.data(i).kappa;
+    W1(i).kappa = kappa;
+    R1(i).kappa = kappa;
+    kappas(:,i)  = kappa;
+
+    W1(i).W(1).coeffs = sparse(N,1);
+    W1(i).W(1).ind    = sparse(l,1);
+    R1(i).R(1).coeffs = sparse(l,1);
+    R1(i).R(1).ind    = sparse(l,1);
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">function</span> [F_0, idx_0]            = zeroth_order_forcing(obj)
+<span class="comment">% Finding all force contributions at zeroth order</span>
+
+nKappa = obj.System.nKappa;
+N         = obj.dimSystem;
+F_0 = zeros(N,nKappa);
+<span class="keyword">for</span> i = 1:nKappa
+    <span class="keyword">if</span> ~isempty(obj.System.Fext.data(i).F_n_k(1).coeffs)
+        F_0(:,i)= obj.System.Fext.data(i).F_n_k(1).coeffs;  <span class="comment">% each column corresponds to one kappa</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+idx_0 = find(any(F_0~=0)); <span class="comment">% index for all kappas that contribute at zeroth order</span>
+<span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">function</span> [W0,R0,H]               = get_autonomous_coeffs(W0,R0)
+<span class="comment">% Sets up the autonomous coefficients used in nonautonomous computation</span>
+
+<span class="comment">%These quantities are all in lexicographic ordering, calculations are carried out in reverse</span>
+<span class="comment">%lexicographic ordering. This is accounted for below.</span>
+
+W0 = <a href="../../Library/Manifold/private/coeffs_lex2revlex.html">coeffs_lex2revlex</a>(W0,<span class="string">'TaylorCoeff'</span>);
+R0 = <a href="../../Library/Manifold/private/coeffs_lex2revlex.html">coeffs_lex2revlex</a>(R0,<span class="string">'TaylorCoeff'</span>);
+
+<span class="comment">%composition coefficients of power series</span>
+[H] = get_composition_coeffs(W0);
+
+<span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">function</span> [H]                     = get_composition_coeffs(W0)
+<span class="comment">% This function reconstructs the composition coefficients for the computed</span>
+<span class="comment">% SSM coefficients</span>
+<span class="comment">%W_0 input in rev-lexicographic ordering, outputs H in rev-lexicographic ordering</span>
+field.ordering = <span class="string">'revlex'</span>;
+
+H = cell(1,numel(W0));
+H{1} = W0(1).coeffs;
+
+<span class="keyword">for</span> k = 2:numel(W0)
+    field.k = k;
+    H{k} = <a href="../../Library/Manifold/private/coeffs_composition.html">coeffs_composition</a>(W0,H,field);
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">function</span> [F]                     = Fext_plus_Gnl(obj,data,i,k,W1)
+<span class="comment">% Computes the forcing and nonlinearity contribution to the order k</span>
+<span class="comment">% invariance equation for kappa_i</span>
+
+z_k = nchoosek(k+data.l-1,data.l-1);
+Force  = sparse(data.N,z_k);
+G_nl   = sparse(data.N,z_k);
+<span class="keyword">if</span> data.l &gt; 1
+    K   = flip(sortrows(<a href="../../Library/Features/misc/nsumk.html">nsumk</a>(data.l,k,<span class="string">'nonnegative'</span>)).',2); <span class="comment">%order k multi-indices</span>
+<span class="keyword">else</span>
+    K = k;
+<span class="keyword">end</span>
+
+<span class="keyword">for</span> n = 2:k+1
+    <span class="comment">% FORCING</span>
+    <span class="comment">%sum to k+1 since index starts at 0 for k=0</span>
+    <span class="keyword">if</span>  n &lt;= data.Fext_ord(i) &amp;&amp; ~isempty(obj.System.Fext.data(i).F_n_k(n).coeffs)
+
+        F_coeff = obj.System.Fext.data(i).F_n_k(n).coeffs;
+        F_ind   = obj.System.Fext.data(i).F_n_k(n).ind.';
+        Force   = Force + F_coeff * <a href="../../Library/Manifold/private/compute_pi.html">compute_pi</a>(F_ind,K, data);
+
+    <span class="keyword">end</span>
+    <span class="comment">% NONLINEARITY</span>
+    <span class="comment">% sum to k+1 since this term includes spatial derivatives</span>
+    <span class="keyword">if</span> n &lt;= data.F_ord &amp;&amp; ~isempty(obj.System.F(n)) &amp;&amp; ~isempty(obj.System.F(n).coeffs)
+        G_nl  = G_nl + obj.System.F(n).coeffs* <span class="keyword">...</span>
+            <a href="../../Library/Manifold/private/compute_sigma.html">compute_sigma</a>(obj.System.F(n).ind.',W1.W,k,data);
+    <span class="keyword">end</span>
+
+<span class="keyword">end</span>
+F = Force + G_nl;
+<span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">function</span> [WR]                    = W1R0_plus_W0R1(data,k,W0,W1,R0,R1)
+<span class="comment">% Computes the contributions of products of SSM and reduced dynamics</span>
+<span class="comment">% coefficients to the order epsilon invariance equation</span>
+
+z_k = nchoosek(k+data.l-1,data.l-1);
+
+W1R0 = sparse(data.N,z_k);
+W0R1 = sparse(data.N,z_k);
+
+<span class="comment">% Terms with order 1 SSM coefficients (in epsilon)</span>
+data.mix = <span class="string">'W1'</span>;
+<span class="keyword">for</span> m = 1:k <span class="comment">%includes the zeroth order of W1</span>
+    <span class="keyword">if</span>  ~isempty(W1.W(m).coeffs)
+        W1R0 = W1R0 + <a href="../../Library/Manifold/private/coeffs_mixed_terms.html">coeffs_mixed_terms</a>(k,m, W1.W, R0,data,<span class="string">'W1'</span>);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="comment">% Terms with order 1 reduced dynamics (in epsilon)</span>
+data.mix = <span class="string">'R1'</span>;
+<span class="keyword">for</span> m = 2:k+1 <span class="comment">% zeroth order in R1, no order k red. dyn.</span>
+    <span class="keyword">if</span> ~isempty(R1.R(k-m+2).coeffs)
+        W0R1 = W0R1 + <a href="../../Library/Manifold/private/coeffs_mixed_terms.html">coeffs_mixed_terms</a>(k,m, W0,R1.R,data,<span class="string">'R1'</span>);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+WR = W0R1+W1R0;
+<span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">function</span> [E, I_k,K_lambda]       = resonant_terms(obj,k,kappa,Omega,order)
+<span class="comment">% This function finds the combinations of frequency multi-indices, master</span>
+<span class="comment">% mode eigenvalues and the spatial multi-indices at zeroth and order k that</span>
+<span class="comment">% lead to internal resonances.</span>
+
+Lambda = obj.E.spectrum;   <span class="comment">% master modes eigenvalues</span>
+l      = obj.dimManifold;
+<span class="comment">% Tolerance for resonances</span>
+ref = min(abs(Lambda));
+abstol = obj.Options.reltol * ref;
+
+<span class="keyword">switch</span> order
+    <span class="keyword">case</span> <span class="string">'zero'</span>
+        </pre><h2 id="31">Find zeroth order resonant terms</h2><p>We determine the near inner resonances of the coefficient matrix where</p><p><span class="MathJax_Preview"><img alt="$$     \lambda_{j} - i\langle \mathbf{\eta}_{f}, \mathbf{\Omega } \rangle\approx
+0, \ e\in \{1,...,l\}, \ f \in\{1,...,K\}$$" src="compute_perturbed_whisker_eq03848402089395114916-Rescaled.png" style="width: 264.0px; height: auto;"/></span><script type="math/tex">     \lambda_{j} - i\langle \mathbf{\eta}_{f}, \mathbf{\Omega } \rangle\approx
+0, \ e\in \{1,...,l\}, \ f \in\{1,...,K\}</script></p><p>holds. The index pairs that fulfill this condition are stored.</p><p><span class="MathJax_Preview"><img alt="$$E := \{ e_1,  ... ,e_{r_{ext}} \in \{1,...,l\}\} \\ F := \{ f_1,  ... ,f_{r_{ext}}
+\in \{1,...,K\}\}$$" src="compute_perturbed_whisker_eq16088425770865005123-Rescaled.png" style="width: 333.59999999999997px; height: auto;"/></span><script type="math/tex">E := \{ e_1,  ... ,e_{r_{ext}} \in \{1,...,l\}\} \\ F := \{ f_1,  ... ,f_{r_{ext}}
+\in \{1,...,K\}\}</script></p><pre class="codeinput">        <span class="comment">% kappa in this case contains all kappas</span>
+        lambda_C_10 =  repmat(Lambda,[1,size(kappa,2)]) - 1i*repmat(kappa*Omega,[l 1]);
+
+        [E, I_k] = find(abs(lambda_C_10)&lt;abstol);
+        K_lambda = [];
+
+        <span class="comment">% I_k contains the frequency index</span>
+        </pre><pre class="codeinput">    <span class="keyword">case</span> <span class="string">'k'</span>
+        </pre><h2 id="33">Find higher order resonant terms</h2><p>The coefficient matrix for frequency multi-index <span class="MathJax_Preview"><img alt="$\mathbf{\eta}$" src="compute_perturbed_whisker_eq12475473977526259342-Rescaled.png" style="width: 7.199999999999999px; height: auto;"/></span><script type="math/tex">\mathbf{\eta}</script> shows singularities if the resonance condition</p><p><span class="MathJax_Preview"><img alt="$$    \lambda_e - \bigg( \sum_{j=1}^l k_j\lambda_j     + i \langle \mathbf{\Omega},
+\mathbf{\eta} \rangle \bigg) \approx 0$$" src="compute_perturbed_whisker_eq06509634904066726950-Rescaled.png" style="width: 175.2px; height: auto;"/></span><script type="math/tex">    \lambda_e - \bigg( \sum_{j=1}^l k_j\lambda_j     + i \langle \mathbf{\Omega},
+\mathbf{\eta} \rangle \bigg) \approx 0</script></p><p>is fulfilled for some <span class="MathJax_Preview"><img alt="$\lambda_e$" src="compute_perturbed_whisker_eq17439629341666507596-Rescaled.png" style="width: 12.0px; height: auto;"/></span><script type="math/tex">\lambda_e</script> in the master subspace. We therefore have to find all such resonant combinations.</p><pre class="codeinput">        <span class="comment">%Find the resonances</span>
+
+        <span class="keyword">if</span> l &gt; 1
+            K = flip(sortrows(<a href="../../Library/Features/misc/nsumk.html">nsumk</a>(l,k,<span class="string">'nonnegative'</span>)).',2); <span class="comment">%order k multi-indices</span>
+        <span class="keyword">else</span>
+            K = k;
+        <span class="keyword">end</span>
+        z_k = size(K,2);
+        <span class="comment">%vector with each element korresponding to summing multi_index k with all master lambdas</span>
+        K_lambda = sum(K .* Lambda);
+        lambda_C_11 = repmat(Lambda,[1,z_k]) - repmat(K_lambda + 1i * (kappa*Omega),[l 1]);
+
+        [E, I_k] = find(abs(lambda_C_11)&lt;abstol); <span class="comment">%I_k indicates the spatial multi-index the resonance corresponds to</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+<span class="keyword">end</span>
+
+
+<span class="keyword">function</span> [Rk] = reduced_dynamics_second_order(I,F,THETA,PHI,Lambda,Lambda_K, M,C,Vm,Ym,l,z_k,order)
+<span class="comment">% I         - Eigenvalue positions that are resonant</span>
+<span class="comment">% F         - Multi-index positions that are resonant for order &gt; 0,</span>
+<span class="comment">%               otherwise the frequency harmonic</span>
+<span class="comment">% Lambda    - vector containing master spectrum</span>
+<span class="comment">% Lambda_K  - sum(Lambda * K + kappa * Omega)</span>
+<span class="comment">% M         - Mass matrix</span>
+<span class="comment">% C         - Damping Matrix</span>
+<span class="comment">% Vm        - Velocity part of the lower order and forcing RHS</span>
+<span class="comment">% Ym        - Displacement part of the lower order and forcing RHS</span>
+<span class="comment">% l         - SSM dimension</span>
+<span class="comment">% z_k       - number of multi-indices at order k</span>
+<span class="comment">% order     - current order of computation</span>
+
+
+Rk = zeros(l,z_k);
+
+<span class="keyword">if</span> order == 0
+
+    THETA_I = THETA(:,I);
+
+    RHS   = -THETA_I' * (Lambda_K*M*Vm +Ym);
+    C_0_r = eye(size(RHS,1)); <span class="comment">% Fix leading order coefficient to exact resonance</span>
+    Rk(I,:) = lsqminnorm(C_0_r,RHS);
+
+<span class="keyword">else</span>
+    <span class="comment">% unique multi indices</span>
+    <span class="keyword">if</span> any(F)
+        [F_un, ~,i_F_un] = unique(F.');
+
+        <span class="comment">% Loop over multi-indices that lead to resonance</span>
+        fi = 1;
+
+        <span class="keyword">for</span> f = F_un
+            I_f = I((i_F_un == fi)); <span class="comment">% All resonant eigenvalues for this multi - index</span>
+            THETA_f = THETA(:,I_f);
+            PHI_f   = PHI(:,I_f);
+
+            RHS   = - Lambda_K(f).*THETA_f' *M*Vm(:,f) -THETA_f'*Ym(:,f);
+            <span class="comment">%C_k_r =  THETA_f' * ( C* PHI_f + M * ((Lambda_K(f) + Lambda(I_f).') .* PHI_f)); %Coefficient Matrix</span>
+            C_k_r = eye(size(RHS,1));
+
+            Rk(I_f,f) = lsqminnorm(C_k_r,RHS);
+
+            fi = fi +1;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+        </pre><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% COMPUTE_PERTURBED_WHISKER 
+%
+%%
+function [W1, R1] = compute_perturbed_whisker(obj, order,W0,R0,varargin)
+%%
+% This function computes the non-autonomous SSM   
+% up to order |order|.
+%
+% [W1, R1] = COMPUTE_PERTURBED_WHISKER(obj, order,W0,R0,varargin)
+%
+% * |obj|:      SSM class object
+% 
+% * |order|:    approximation order up until which SSM is computed, has to be 1
+%           lower than the order up until which |W0| and |R0| are computed.
+% 
+% * |W0|:       autonomous SSM coefficients
+% 
+% * |R0|:       autonomous RD coefficients
+% 
+% * |varargin|: if not stored in the obj class, this can be used to input Omega
+%
+% * |W1|:       non-autonomous SSM coefficients
+% 
+% * |R1|:       non-autonomous RD coefficients
+%
+% See also: COMPUTE_WHISKER
+
+%% Non-autonomous (quasi)periodic perturbation to whiskers of invariant manifolds
+% We consider the mechanical system
+%
+% $\mathbf{B}\dot{\mathbf{x}} =\mathbf{Ax}+\mathbf{G}(\mathbf{x})+\epsilon\mathbf{F}(\mathbf{\phi},
+% \mathbf{x})$
+% 
+% $\dot{\mathbf{\phi}}=\mathbf{\Omega}$
+%
+% with quasi-periodic forcing.
+%
+% In the non-autonomous setting, the SSM and the corresponding reduced dynamics
+% would be parameterized by the angular variables $\mathbf{\phi}$, as well. In
+% general, we may write
+%
+% $$    \mathbf{W(p,{\mathbf{\phi}})_\epsilon} = \mathbf{W}\mathbf{(p)} + \epsilon \mathbf{X}\mathbf{(p,\mathbf{\phi})}
+% + O(\epsilon^2),$$
+%
+% $$    \mathbf{R(p,{\mathbf{\phi}})_\epsilon} = \mathbf{R}\mathbf{(p)} + \epsilon \mathbf{S}\mathbf{(p,\mathbf{\phi})}
+% + O(\epsilon^2),$$
+%
+% where $\mathbf{T}(\mathbf{p}),\mathbf{P}(\mathbf{p})$ recover the SSM and
+% reduced dynamics coefficients in the unforced limit of $\epsilon=0.$
+%
+% These functions as well as the nonlinearity and the forcing are expanded in
+% phase space coordinates. The time dependent coefficients of those expansions
+% are furthermore expanded as a Fourier-series. As an example, the Force and the
+% non-autonomous SSM-coefficients are given as
+%
+% $\mathbf {F}(\mathbf{x},\mathbf{\phi}) =     \left[  f^1(\mathbf{x},\mathbf{\phi}),
+% \cdots ,   f^{2n}(\mathbf{x},\mathbf{\phi})     \right]^T,     \ f^i(\mathbf{x},\mathbf{\phi})
+% = \sum_{\mathbf{n}\in \mathbf{N}^{2n}} F^i_{\mathbf{n}}(\mathbf{\phi}) \mathbf{x}^\mathbf{n}$
+%
+% $F^b_{\mathbf{k}}(\mathbf{\phi}) = \sum_{\mathbf{\eta} \in \mathbf{Z}^k}
+% F^b_{\mathbf{k},\mathbf{\eta} } e^{i\langle \mathbf{\eta},\mathbf{\phi}\rangle}$
+%
+% $\mathbf {X}(\mathbf{p},\mathbf{\phi}) =     \left[  X^1(\mathbf{p},\mathbf{\phi}),
+% \cdots ,   X^{2n}(\mathbf{p},\mathbf{\phi})     \right]^T,     \ X^i(\mathbf{p},\mathbf{\phi})
+% = \sum_{\mathbf{m}\in \mathbf{N}^{l}} X^i_{\mathbf{m}}(\mathbf{\phi}) \mathbf{p}^\mathbf{m}$
+%
+% $X^i_{\mathbf{k}}(\mathbf{\phi}) = \sum_{\mathbf{\eta} \in \mathbf{Z}^k}
+% X^i_{\mathbf{k},\mathbf{\eta} } e^{i\langle \mathbf{\eta},\mathbf{\phi}\rangle}$
+%
+% This leads to the invariane equation
+%
+% $\mathbf{B}  \bigg( \textrm{D}_\mathbf{p}( \mathbf{W}\mathbf{(p)})\mathbf{S}\mathbf{(p,\mathbf{\phi})}
+% + (\partial_\mathbf{p} \mathbf{X}\mathbf{(p,\mathbf{\phi)})} \mathbf{R}\mathbf{(p)}+(\partial_\mathbf{\phi} \mathbf{X(p,\mathbf{\phi})})   \mathbf{\Omega }
+% \bigg)= \mathbf{A}\mathbf{X}\mathbf{(p,\mathbf{\phi})}+\big[\textrm{D}_\mathbf{x}\mathbf{G}
+% \circ \mathbf{W} (\mathbf{p}) \big]\mathbf{X}(\mathbf{p},\mathbf{\phi})+
+% \mathbf{F} (\mathbf{\phi},\mathbf{W(p,\mathbf{\phi})})$
+%
+% The various expansions are plugged into this equation and then the equation
+% is iteratively solved for the coefficients. The functions $\mathbf{W(p),R(p)}$
+% are already known from the autonomous computation, their coefficients given
+% by |W0| (SSM) and |R0| (reduced dynamics) .
+%
+% The external force $\mathbf{F}$ is input as a field of the property |System|
+% of the SSM object. Since the equations for different frequency multi-indices
+% decouple and the code is parallelised over these decoupled equations we want
+% to make the read out hirarchy such that the first parameter corresponds to the
+% frequency multi-indices. |System.Fext.data(i)| indices into the $i$-th
+% component of the field |data| which is a struct array containing struct
+% arrays. There is one such  contained struct array for each frequency multi-index.
+%
+% Every struct now contains two arrays with the coefficients and the spatial
+% multi-indices respectively. The coefficients of the force for the $i$-th frequency-
+% and ther order $k$ spatial multi-indices and their coefficients are stored in
+% the rows of  |data(i).F_n_k(k).ind| and the columns of |data(i).F_n_k(k).coeffs|
+% . The $i$-th frequency multi-index is stored in |data(i).kappa|.
+%
+% The non-autonomous SSM and reduced dynamics coefficients are stored analogously.
+% In |W_1(i).W(k).coeffs| the coefficients of the SSM expansion corresponding
+% to $\mathbf{\eta}_i$ and order $k$ spatial multi-indices are stored. During
+% the computation the multi-indices are stored in the columns of |W_1(i).W(k).ind|
+% in reverse lexicographic order, upon outputting the resulting coefficients however
+% the storing scheme is reversed, in the output the multi-indices are stored in
+% the rows in lexicographic ordering, the standard way of storing used throughout
+% the software package.
+%
+% While in the documentation the frequency multi-indices are called $\mathbf{\eta}$
+% for good distinguishability from spatial multi-indices in the code they are
+% called |kappa|.
+%% System Properties
+
+if isempty(varargin) % FRC_po
+    Omega = obj.System.Omega;       % has to be column vector since kappas are stored in rows
+else % Parallelised FRC_lvlset
+    Omega = varargin{1};
+end
+
+A      = obj.System.A;           % A matrix
+B      = obj.System.B;           % B matrix
+N      = obj.dimSystem;          % full system size
+W_M    = obj.E.adjointBasis ;    % Right eigenvectors of the modal subspace
+V_M    = obj.E.basis;            % Left eigenvectors of the modal subspace
+l      = obj.dimManifold;        % dim(M): M is the master modal subspace
+nKappa = obj.System.nKappa;
+solver = obj.Options.solver;
+
+% Struct for passing variables to functions
+data.N        = N;
+data.l        = l;
+data.ordering = 'revlex';
+data.F_ord    = numel(obj.System.F);
+
+
+% Structs for storing coefficients
+% each column in kappas corresponds to one kappa
+if obj.Options.contribNonAuto % whether to ignore higher order
+    [W1,R1,kappas,data.Fext_ord] = struct_setup(obj,order);
+else %only zeroth order nonautonomous coefficients
+    [W1,R1,kappas,data.Fext_ord] = struct_setup(obj,0);  
+end 
+
+% As these coefficients depend explicitly on omega at higher orders save it
+% as property
+W1(1).Omega = Omega;
+R1(1).Omega = Omega;
+
+%% Solving for coefficients with k=0
+% The coefficient equation for this case reads
+%
+% $$\sum_{i=1}^{2n}     \underbrace{    \big(        \mathbf{(A)}_{bi}  - i
+% \langle \mathbf{\eta},\mathbf{\Omega }\rangle        \mathbf{B}_{bi}    \big)
+% }_{:= (\mathcal{L}_{\mathbf{0},\mathbf{\eta})_{bi}}}    X^i_{\mathbf{0},\mathbf{\eta}}=\sum_{j=1}^{l}
+% (\mathbf{Bv}_j)_b      S^j_{\mathbf{0},\mathbf{\eta}}-    F_{b,\mathbf{0},\mathbf{\eta}}$$
+
+% Finding all force contributions at zeroth order
+[F_0, idx_0] = zeroth_order_forcing(obj);
+%%
+% *Find resonant terms*
+
+[ev_idx, harm_idx,~] = resonant_terms(obj,[],kappas(:,idx_0),Omega,'zero'); % contains harmonic idx.
+r_ext    = length(ev_idx);
+if obj.System.order == 1
+
+%%
+% *Set reduced dynamics*
+%
+% These sets now determine the bases of the near left kernel of the coefficient
+% matrices $\mathbf{\mathcal{L}_{0,\eta}}$ onto which we project the RHS of
+% the coefficient equation and set it equal zero. This gives the explicit expression
+% for the reduced dynamics coefficients.
+%
+% $S^{e_i}_{\mathbf{0},\mathbf{\eta}_{f_i}}=\langle \mathbf{w}_{e_i},
+% [F^1_{\mathbf{0},\mathbf{\eta}_{f_i}} \cdots F^{2n}_{\mathbf{0},\mathbf{\eta}_{f_i}}  ]^T      \rangle$
+%
+
+if r_ext
+    Q_0 = sparse(ev_idx,harm_idx,sum(conj(W_M(:,ev_idx)).* F_0(:,idx_0(harm_idx))), l,numel(idx_0));
+    RHS = B*V_M*Q_0 - F_0(:,idx_0);
+else
+    Q_0 = sparse(l,nKappa);
+    RHS = - F_0(:,idx_0);
+end
+%%
+% Solve for the order zeroth order SSM-coefficients W1, R1
+
+run_idx = 1;
+for j= idx_0    
+
+    R1(j).R(1).coeffs = Q_0(:,run_idx);
+    R1(j).R(1).ind    = sparse(l,1);    
+    run_idx = run_idx + 1;
+end
+
+else % 2nd order computation
+    M      = obj.System.M;
+    C      = obj.System.C;
+    THETA  = obj.E.adjointBasis(1:(N/2),:);
+    PHI    = obj.E.basis(1:(N/2),:);
+    Lambda_M_vector = obj.E.spectrum;
+    V0     = sparse(N/2,1);
+    
+    if r_ext
+        [harm_idx_un, ~,i_E_un] = unique(harm_idx.'); % unique harmonic positions
+        
+        Y0_all = sparse(N/2,numel(idx_0));
+        ji = 1;
+        for un_harm = harm_idx_un % Loop over all unique resonant harmonics
+            un_ev = ev_idx((i_E_un == ji)); % All resonant eigenvalues for this harmonic
+            
+            Y0     = - F_0(1:(N/2),un_harm);
+            Y0_all(:,un_harm) = Y0;
+            Lambda_0_Om =  1i * (kappas(:,idx_0(un_harm))*Omega);
+            
+            [S0] = reduced_dynamics_second_order(un_ev,[],THETA,PHI,Lambda_M_vector,Lambda_0_Om, M,C,V0,Y0,l,1,0);
+            
+            R1(idx_0(un_harm)).R(1).coeffs = sparse(S0);
+            R1(idx_0(un_harm)).R(1).ind    = sparse(l,1);
+            ji = ji +1;
+        end
+    end
+end
+
+
+if obj.Options.contribNonAuto % whether to ignore higher order
+    kappas_0 = kappas(:,idx_0);
+    [redConj,mapConj] = conj_red(kappas_0, F_0(:,idx_0));
+    
+    % Make use of symmetry of leading order non-autonomous coefficients
+    for j = 1:numel(redConj)
+        
+        if obj.System.order == 1
+            C_j  =  A - 1i*dot(Omega,kappas_0(:,redConj(j)))*B ;
+            W10j = solveinveq(C_j,RHS(:,redConj(j)),solver ); %lsqminnorm(C_j,RHS(:,redConj(j)));
+            mapj = mapConj{j};
+            
+        else
+            S0 = R1(j).R(1).coeffs;
+            if isempty(S0)
+                S0 = 0;
+            end
+            
+            Lambda_0_Om =  1i * (kappas(:,redConj(j))*Omega);
+            
+            L_k = ( M * ((Lambda_0_Om + Lambda_M_vector.') .* PHI) + C*PHI ) * S0;
+            L_k = L_k +  Y0_all(:,redConj(j));
+            
+            C_k = -(obj.System.K + Lambda_0_Om*C + Lambda_0_Om^2 *M );
+            
+            w_10    = solveinveq(C_k,L_k,solver);%lsqminnorm(C_k,L_k);
+
+            
+            w_10dot = Lambda_0_Om * w_10 + PHI * S0 + V0;
+            
+            W10j = [w_10;w_10dot];
+            mapj = mapConj{j};
+        end
+        
+        switch numel(mapj)
+            case 1
+                W1(idx_0(mapj(1))).W(1).coeffs = W10j;
+                W1(idx_0(mapj(1))).W(1).ind    = sparse(l,1);
+            case 2
+
+                W1(idx_0(mapj(1))).W(1).coeffs = W10j;
+                W1(idx_0(mapj(2))).W(1).coeffs = conj(W10j);
+                
+                W1(idx_0(mapj(1))).W(1).ind    = sparse(l,1);
+                W1(idx_0(mapj(2))).W(1).ind    = sparse(l,1);
+            otherwise
+                error('there exist redundancy in kappa of external forcing');
+        end
+    end
+    %% Solving for coefficients with k>0
+    % The coefficient equation for this case reads
+    %
+    % $\sum_{i=1}^{2n}     \underbrace{     \bigg(       \mathbf{(A)}_{bi}
+    % -        \mathbf{B}_{bi}         \big[            \sum_{j=1}^l k_j  \lambda_{j}
+    % +            i\langle \mathbf{\Omega}, \mathbf{\eta} \rangle         \big]
+    % \bigg)     }_{:= (\mathcal{L}_{\mathbf{k},\mathbf{\eta}})_{bi}}    X^i_{\mathbf{k},\mathbf{\eta}}\\=
+    % \sum_{i=1}^{2n} \mathbf{B}_{bi}\sum_{j=1}^l    \bigg[          \sum_{\mathbf{m},
+    % \mathbf{u}\in \mathbf{N}^l , \ \mathbf{m+u} - \mathbf{\hat{e}}_j =
+    % \mathbf{k}} m_j        W^i_{\mathbf{m}}        S^j_{\mathbf{u},\mathbf{\eta}}        +
+    % \sum_{\mathbf{m,u} \in \mathbf{N}^l, \ |\mathbf{m}|<k \ \ \mathbf{m+u} - \hat{\mathbf{e}}_j
+    % = \mathbf{k}} m_j X^i_{\mathbf{m},\mathbf{\eta}} R^j_{\mathbf{u}}    \bigg]
+    % \\  \ \ \ -    \sum_{\mathbf{n}\in \mathbf{N}^{2n}, |\mathbf{n}|<k}F^b_{\mathbf{n},\mathbf{\eta}} \pi_{\mathbf{n,k}}- \sum_{\mathbf{n}\in \mathbf{N}
+    % ^{2n}, \ \            |\mathbf{n}| \geq 2}       G^b_{\mathbf{n}}\sigma_{\mathbf{k},
+    % \mathbf{n}, \mathbf{\eta}}$
+    %
+    % Get autonomous coefficients and composition coefficients in rev. lex.
+    % ordering
+    if order>0
+        [W0,R0,data.H] = get_autonomous_coeffs(W0,R0);
+    end
+    %%
+    % *Perform Nonautonomous Calculation*
+    %
+    % We loop over all orders of spatial multi-indices. Within that there is a loop
+    % over all the frequency multi-indices.
+    
+    for i = 1:nKappa
+        
+        for k = 1:order
+            %%
+            % *Calculating the RHS*
+            %
+            
+            %Forcing and nonlinearity terms
+            [FG]  = Fext_plus_Gnl(obj,data,i,k,W1(i));
+            
+            % Mixed Terms
+            [WR] = W1R0_plus_W0R1(data,k,W0,W1(i),R0,R1(i));
+            %% 
+            % *Find resonant terms*
+            
+            [ev_idx, multi_idx,Lambda_K]   = resonant_terms(obj,k,kappas(:,i),Omega,'k'); % F contains multi-index pos.
+            %%
+            % *Set reduced dynamics*
+            
+            if obj.System.order == 1
+                [R1_ik,W1_ik] = first_order_computation(kappas,Omega,W_M,FG,WR,A,B,i,k,ev_idx,multi_idx,l,data,Lambda_K,W0,solver);  
+            else
+                [R1_ik,W1_ik] = second_order_computation(kappas,Omega,FG,WR,i,k,ev_idx,multi_idx,data,M,C,THETA,PHI,Lambda_K,Lambda_M_vector,obj.System.K,solver);
+            end
+            
+            R1(i).R(k+1) = R1_ik(k+1);
+            W1(i).W(k+1).coeffs = W1_ik.coeffs;
+            
+            if l >1
+                W1(i).W(k+1).ind = flip(sortrows(<a href="../../Library/Features/misc/nsumk.html">nsumk</a>(l,k,'nonnegative')).',2); %order k multi-indices
+            else
+                W1(i).W(k+1).ind = k;
+            end
+        end
+        
+        % Output coefficients in lexicographic ordering, with multi indices stored
+        % in rows
+        for k = 1:order+1 %index starts at 0
+            W1(i).W(k) = <a href="../../Library/Manifold/private/coeffs_lex2revlex.html">coeffs_lex2revlex</a>(W1(i).W(k),'TaylorCoeff');
+            R1(i).R(k) = <a href="../../Library/Manifold/private/coeffs_lex2revlex.html">coeffs_lex2revlex</a>(R1(i).R(k),'TaylorCoeff');
+        end
+    end
+    
+
+end
+
+
+
+end
+
+function [W] = solveinveq(C,R,solver)
+% solves C*W = R for W with given solver
+switch solver
+    case 'lsqminnorm'
+        W = lsqminnorm(C,R);
+    case 'linsolve'
+        W = linsolve(C,R);
+    case 'backslash'
+        W = C \R;
+    case 'pinv'
+        W = pinv(C)*R;
+    case 'inv'
+        W = inv(C)*R;
+end
+end
+
+function [R1_ik,W1_ik] = second_order_computation(kappas,Omega,FG,WR,i,k,I,F,data,M,C,THETA,PHI,Lambda_K,Lambda_M_vector,Ksys,solver)
+l = data.l;
+N = data.N;
+
+Ym     = ( C * WR(1:(N/2),:) + M * WR((N/2+1):end,:)) - FG(1:(N/2),:);
+Vm     = WR(1:(N/2),:);
+
+Lambda_K_Om = Lambda_K + 1i * (kappas(:,i)*Omega);
+
+z_k = nchoosek(k+l-1,l-1);
+
+[Rk] = reduced_dynamics_second_order(I,F,THETA,PHI,Lambda_M_vector,Lambda_K_Om, M,C,Vm,Ym,l,z_k,k);
+
+
+w_1i    = zeros(N/2,z_k);
+w_1idot = zeros(N/2,z_k);
+
+for f = 1:z_k
+    
+    L_k = ( M * ((Lambda_K_Om(f) + Lambda_M_vector.') .* PHI) + C*PHI ) * Rk(:,f);
+    L_k = L_k + Lambda_K_Om(f)*M*Vm + Ym;
+    
+    C_k = -(Ksys + Lambda_K_Om(f)*C + Lambda_K_Om(f)^2 *M );
+    
+
+    w_1i(:,f)    = solveinveq(C_k,L_k(:,f),solver);
+
+    w_1idot(:,f) = Lambda_K_Om(f) * w_1i(:,f) + PHI * Rk(:,f) + Vm(:,f);
+end
+
+W1_ik.coeffs       = [w_1i;w_1idot];
+R1_ik(k+1).coeffs       = sparse(Rk);
+if l>1
+    R1_ik(k+1).ind    = flip(sortrows(<a href="../../Library/Features/misc/nsumk.html">nsumk</a>(l,k,'nonnegative')).',2); %order k multi-indices
+else
+    R1_ik(k+1).ind  = k;
+end
+end
+
+function [R1_ik,W1_ik] = first_order_computation(kappas,Omega,W_M,FG,WR,A,B,i,k,I,F,l,data,K_lambda,W0,solver)
+%%
+% Computes the SSM coeffs and reduced dynamics coefficients using first
+% order implementation
+
+R1_ik_coeff     = sum( conj(W_M(:,I)).* ( FG(:,F) - B*(WR(:,F))));
+R1_ik(k+1).coeffs    = sparse(I,F,R1_ik_coeff , l,nchoosek(k+l-1,l-1));
+if l > 1
+    R1_ik(k+1).ind    = flip(sortrows(<a href="../../Library/Features/misc/nsumk.html">nsumk</a>(l,k,'nonnegative')).',2); %order k multi-indices
+else
+    R1_ik(k+1).ind = k;
+end
+%%
+% *Solve the coefficient equation for the SSM coefficients*
+%
+% Add |R1| order k contribution to the right hand side
+
+RHS                 = B* (WR +  <a href="../../Library/Manifold/private/coeffs_mixed_terms.html">coeffs_mixed_terms</a>(k,1, W0,R1_ik,data,'R1')) - FG;
+
+for j = 1:nchoosek(k+l-1,l-1)
+    C_i = A - B * (K_lambda(j) + 1i * kappas(:,i)*Omega); % Coefficient matrix
+    W1_ik.coeffs(:,j) = solveinveq(C_i,RHS(:,j),solver);
+end
+end
+
+%%
+% This function detects complex conjugate relations between forcing. For instance,
+% when |kappa_set = [1,-1,2,3,-3]| and |F_kappa = [1;1;2;3;4]|, it will return
+% |redConj = [1,3,4,5]| with |mapConj = {[1 2],3,4,5}|
+% 
+function [redConj,mapConj] = conj_red(kappa_set,F_kappa)
+
+redConj = [];
+mapConj = [];
+assert(numel(kappa_set)==numel(unique(kappa_set)),'there exist redundancy in kappa of external forcing');
+kappa = kappa_set;
+while ~isempty(kappa)
+    ka = kappa(1);
+    ka_redConj = find(kappa_set==ka);
+    redConj = [redConj;ka_redConj];
+    % find the conjugate one if it exists
+    ka_conj = find(kappa_set==-ka);
+    if ~isempty(ka_conj) && norm(conj(F_kappa(:,ka_redConj))-F_kappa(:,ka_conj))<1e-6*norm(F_kappa(:,ka_conj))
+        mapConj = [mapConj, {[ka_redConj,ka_conj]}];
+        kappa = setdiff(kappa,[ka,-ka],'stable');
+    else
+        mapConj = [mapConj, {ka_redConj}];
+        kappa = setdiff(kappa,ka,'stable');
+    end
+end
+end
+%%
+%
+
+function [W1,R1,kappas,Fext_ord] = struct_setup(obj,order)
+% Function that initialises the structs and some temporary arrays
+
+l = obj.dimManifold;
+N = obj.dimSystem;
+nKappa = obj.System.nKappa;
+k_kappa   = size(obj.System.Fext.data(1).kappa,1);
+kappas    = zeros(k_kappa,nKappa);
+% intitalise data structures to store coefficients
+idle = repmat(struct('coeffs',[],'ind',[]),order+1  , 1);
+W1  = repmat(struct('kappa' ,[],'W',idle,'Omega',[]),nKappa, 1);
+R1  = repmat(struct('kappa' ,[],'R',idle,'Omega',[]),nKappa, 1);
+
+Fext_ord = zeros(1,nKappa);
+
+for i = 1:nKappa
+    Fext_ord(i)  = numel(obj.System.Fext.data(i).F_n_k);
+    kappa = obj.System.Fext.data(i).kappa;
+    W1(i).kappa = kappa;
+    R1(i).kappa = kappa;
+    kappas(:,i)  = kappa;
+    
+    W1(i).W(1).coeffs = sparse(N,1);
+    W1(i).W(1).ind    = sparse(l,1);
+    R1(i).R(1).coeffs = sparse(l,1);
+    R1(i).R(1).ind    = sparse(l,1);
+end
+end
+%%
+%
+%
+%
+
+function [F_0, idx_0]            = zeroth_order_forcing(obj)
+% Finding all force contributions at zeroth order
+
+nKappa = obj.System.nKappa;
+N         = obj.dimSystem;
+F_0 = zeros(N,nKappa);
+for i = 1:nKappa
+    if ~isempty(obj.System.Fext.data(i).F_n_k(1).coeffs)
+        F_0(:,i)= obj.System.Fext.data(i).F_n_k(1).coeffs;  % each column corresponds to one kappa
+    end
+end
+idx_0 = find(any(F_0~=0)); % index for all kappas that contribute at zeroth order
+end
+
+%%
+%
+%
+%
+
+function [W0,R0,H]               = get_autonomous_coeffs(W0,R0)
+% Sets up the autonomous coefficients used in nonautonomous computation
+
+%These quantities are all in lexicographic ordering, calculations are carried out in reverse
+%lexicographic ordering. This is accounted for below.
+
+W0 = <a href="../../Library/Manifold/private/coeffs_lex2revlex.html">coeffs_lex2revlex</a>(W0,'TaylorCoeff');
+R0 = <a href="../../Library/Manifold/private/coeffs_lex2revlex.html">coeffs_lex2revlex</a>(R0,'TaylorCoeff');
+
+%composition coefficients of power series
+[H] = get_composition_coeffs(W0);
+
+end
+%%
+%
+%
+%
+
+function [H]                     = get_composition_coeffs(W0)
+% This function reconstructs the composition coefficients for the computed
+% SSM coefficients
+%W_0 input in rev-lexicographic ordering, outputs H in rev-lexicographic ordering
+field.ordering = 'revlex';
+
+H = cell(1,numel(W0));
+H{1} = W0(1).coeffs;
+
+for k = 2:numel(W0)
+    field.k = k;
+    H{k} = <a href="../../Library/Manifold/private/coeffs_composition.html">coeffs_composition</a>(W0,H,field);
+end
+end
+%%
+%
+%
+%
+
+function [F]                     = Fext_plus_Gnl(obj,data,i,k,W1)
+% Computes the forcing and nonlinearity contribution to the order k
+% invariance equation for kappa_i
+
+z_k = nchoosek(k+data.l-1,data.l-1);
+Force  = sparse(data.N,z_k);
+G_nl   = sparse(data.N,z_k);
+if data.l > 1
+    K   = flip(sortrows(<a href="../../Library/Features/misc/nsumk.html">nsumk</a>(data.l,k,'nonnegative')).',2); %order k multi-indices
+else
+    K = k;
+end
+
+for n = 2:k+1
+    % FORCING
+    %sum to k+1 since index starts at 0 for k=0
+    if  n <= data.Fext_ord(i) && ~isempty(obj.System.Fext.data(i).F_n_k(n).coeffs)
+        
+        F_coeff = obj.System.Fext.data(i).F_n_k(n).coeffs;
+        F_ind   = obj.System.Fext.data(i).F_n_k(n).ind.';
+        Force   = Force + F_coeff * <a href="../../Library/Manifold/private/compute_pi.html">compute_pi</a>(F_ind,K, data);
+        
+    end
+    % NONLINEARITY
+    % sum to k+1 since this term includes spatial derivatives
+    if n <= data.F_ord && ~isempty(obj.System.F(n)) && ~isempty(obj.System.F(n).coeffs)
+        G_nl  = G_nl + obj.System.F(n).coeffs* ...
+            <a href="../../Library/Manifold/private/compute_sigma.html">compute_sigma</a>(obj.System.F(n).ind.',W1.W,k,data);
+    end
+    
+end
+F = Force + G_nl;
+end
+%%
+%
+%
+%
+
+function [WR]                    = W1R0_plus_W0R1(data,k,W0,W1,R0,R1)
+% Computes the contributions of products of SSM and reduced dynamics
+% coefficients to the order epsilon invariance equation
+
+z_k = nchoosek(k+data.l-1,data.l-1);
+
+W1R0 = sparse(data.N,z_k);
+W0R1 = sparse(data.N,z_k);
+
+% Terms with order 1 SSM coefficients (in epsilon)
+data.mix = 'W1';
+for m = 1:k %includes the zeroth order of W1
+    if  ~isempty(W1.W(m).coeffs)
+        W1R0 = W1R0 + <a href="../../Library/Manifold/private/coeffs_mixed_terms.html">coeffs_mixed_terms</a>(k,m, W1.W, R0,data,'W1');
+    end
+end
+
+% Terms with order 1 reduced dynamics (in epsilon)
+data.mix = 'R1';
+for m = 2:k+1 % zeroth order in R1, no order k red. dyn.
+    if ~isempty(R1.R(k-m+2).coeffs)
+        W0R1 = W0R1 + <a href="../../Library/Manifold/private/coeffs_mixed_terms.html">coeffs_mixed_terms</a>(k,m, W0,R1.R,data,'R1');
+    end
+end
+
+WR = W0R1+W1R0;
+end
+%%
+%
+%
+%
+
+function [E, I_k,K_lambda]       = resonant_terms(obj,k,kappa,Omega,order)
+% This function finds the combinations of frequency multi-indices, master
+% mode eigenvalues and the spatial multi-indices at zeroth and order k that
+% lead to internal resonances.
+
+Lambda = obj.E.spectrum;   % master modes eigenvalues
+l      = obj.dimManifold;
+% Tolerance for resonances
+ref = min(abs(Lambda));
+abstol = obj.Options.reltol * ref;
+
+switch order
+    case 'zero'
+        %% Find zeroth order resonant terms
+        % We determine the near inner resonances of the coefficient matrix where
+        %
+        % $$     \lambda_{j} - i\langle \mathbf{\eta}_{f}, \mathbf{\Omega } \rangle\approx
+        % 0, \ e\in \{1,...,l\}, \ f \in\{1,...,K\}$$
+        %
+        % holds. The index pairs that fulfill this condition are stored.
+        %
+        % $$E := \{ e_1,  ... ,e_{r_{ext}} \in \{1,...,l\}\} \\ F := \{ f_1,  ... ,f_{r_{ext}}
+        % \in \{1,...,K\}\}$$
+        
+        % kappa in this case contains all kappas
+        lambda_C_10 =  repmat(Lambda,[1,size(kappa,2)]) - 1i*repmat(kappa*Omega,[l 1]);
+        
+        [E, I_k] = find(abs(lambda_C_10)<abstol);
+        K_lambda = [];
+        
+        % I_k contains the frequency index
+    case 'k'
+        %% Find higher order resonant terms
+        % The coefficient matrix for frequency multi-index $\mathbf{\eta}$ shows singularities
+        % if the resonance condition
+        %
+        % $$    \lambda_e - \bigg( \sum_{j=1}^l k_j\lambda_j     + i \langle \mathbf{\Omega},
+        % \mathbf{\eta} \rangle \bigg) \approx 0$$
+        %
+        % is fulfilled for some $\lambda_e$ in the master subspace. We therefore have
+        % to find all such resonant combinations.
+        
+        %Find the resonances
+        
+        if l > 1
+            K = flip(sortrows(<a href="../../Library/Features/misc/nsumk.html">nsumk</a>(l,k,'nonnegative')).',2); %order k multi-indices
+        else
+            K = k;
+        end
+        z_k = size(K,2);
+        %vector with each element korresponding to summing multi_index k with all master lambdas
+        K_lambda = sum(K .* Lambda);
+        lambda_C_11 = repmat(Lambda,[1,z_k]) - repmat(K_lambda + 1i * (kappa*Omega),[l 1]);
+        
+        [E, I_k] = find(abs(lambda_C_11)<abstol); %I_k indicates the spatial multi-index the resonance corresponds to
+end
+end
+
+
+function [Rk] = reduced_dynamics_second_order(I,F,THETA,PHI,Lambda,Lambda_K, M,C,Vm,Ym,l,z_k,order)
+% I         - Eigenvalue positions that are resonant
+% F         - Multi-index positions that are resonant for order > 0,
+%               otherwise the frequency harmonic
+% Lambda    - vector containing master spectrum
+% Lambda_K  - sum(Lambda * K + kappa * Omega)
+% M         - Mass matrix
+% C         - Damping Matrix
+% Vm        - Velocity part of the lower order and forcing RHS
+% Ym        - Displacement part of the lower order and forcing RHS
+% l         - SSM dimension
+% z_k       - number of multi-indices at order k
+% order     - current order of computation
+
+
+Rk = zeros(l,z_k);
+
+if order == 0
+    
+    THETA_I = THETA(:,I);
+    
+    RHS   = -THETA_I' * (Lambda_K*M*Vm +Ym);
+    C_0_r = eye(size(RHS,1)); % Fix leading order coefficient to exact resonance    
+    Rk(I,:) = lsqminnorm(C_0_r,RHS);
+    
+else
+    % unique multi indices
+    if any(F)
+        [F_un, ~,i_F_un] = unique(F.');
+        
+        % Loop over multi-indices that lead to resonance
+        fi = 1;
+        
+        for f = F_un
+            I_f = I((i_F_un == fi)); % All resonant eigenvalues for this multi - index
+            THETA_f = THETA(:,I_f);
+            PHI_f   = PHI(:,I_f);
+
+            RHS   = - Lambda_K(f).*THETA_f' *M*Vm(:,f) -THETA_f'*Ym(:,f);
+            %C_k_r =  THETA_f' * ( C* PHI_f + M * ((Lambda_K(f) + Lambda(I_f).') .* PHI_f)); %Coefficient Matrix
+            C_k_r = eye(size(RHS,1));
+            
+            Rk(I_f,f) = lsqminnorm(C_k_r,RHS);
+         
+            fi = fi +1;
+        end
+    end
+    
+end
+end
+
+
+            ##### SOURCE END #####
+        --></body></html></body></html>

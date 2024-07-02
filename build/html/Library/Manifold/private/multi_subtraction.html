@@ -1,0 +1,168 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../../../index.html"><img alt="Logo" class="logo" src="../../../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>MULTI_SUBTRACTION</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-09" name="DC.date"/><meta content="multi_subtraction.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>MULTI_SUBTRACTION</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">Subtraction of multi-indices</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> [RES,I_minu,I_subt] = multi_subtraction(MINUEND,SUBTRAHEND,type)
+        </pre><h2 id="2">Subtraction of multi-indices</h2><p>The output is a matrix, containing all columns of <span class="MathJax_Preview"><img alt="$\texttt{MINUEND}$" src="multi_subtraction_eq07327654109241178685-Rescaled.png" style="width: 48.0px; height: auto;"/></span><script type="math/tex">\texttt{MINUEND}</script> subtracted by all columns of <span class="MathJax_Preview"><img alt="$\texttt{SUBTRAHEND}$" src="multi_subtraction_eq09839903714036411493-Rescaled.png" style="width: 68.39999999999999px; height: auto;"/></span><script type="math/tex">\texttt{SUBTRAHEND}</script> that do not lead to columns with negative entries. The matrix <span class="MathJax_Preview"><img alt="$\texttt{I\_g}$" src="multi_subtraction_eq07510945127909672094-Rescaled.png" style="width: 19.2px; height: auto;"/></span><script type="math/tex">\texttt{I\_g}</script> contains in position <span class="MathJax_Preview"><img alt="$j$" src="multi_subtraction_eq06791872479074567463-Rescaled.png" style="width: 6.0px; height: auto;"/></span><script type="math/tex">j</script> the column index of <span class="MathJax_Preview"><img alt="$\texttt{SUBTRAHEND}$" src="multi_subtraction_eq09839903714036411493-Rescaled.png" style="width: 68.39999999999999px; height: auto;"/></span><script type="math/tex">\texttt{SUBTRAHEND}</script> corresponding to the column <span class="MathJax_Preview"><img alt="$j$" src="multi_subtraction_eq06791872479074567463-Rescaled.png" style="width: 6.0px; height: auto;"/></span><script type="math/tex">j</script> of <span class="MathJax_Preview"><img alt="$\texttt{RES}$" src="multi_subtraction_eq15970792368867363433-Rescaled.png" style="width: 20.4px; height: auto;"/></span><script type="math/tex">\texttt{RES}</script>. The same holds for <span class="MathJax_Preview"><img alt="$\texttt{I\_minu}$" src="multi_subtraction_eq09340703479158437717-Rescaled.png" style="width: 39.6px; height: auto;"/></span><script type="math/tex">\texttt{I\_minu}</script>.</p><p>Example:</p><p><span class="MathJax_Preview"><img alt="$\texttt{I\_subt(3) = 1}$" src="multi_subtraction_eq00179535776273438374-Rescaled.png" style="width: 86.39999999999999px; height: auto;"/></span><script type="math/tex">\texttt{I\_subt(3) = 1}</script>, <span class="MathJax_Preview"><img alt="$\texttt{I\_minu(3) = 5}$" src="multi_subtraction_eq09350173701255584132-Rescaled.png" style="width: 87.6px; height: auto;"/></span><script type="math/tex">\texttt{I\_minu(3) = 5}</script> implies that  <span class="MathJax_Preview"><img alt="$\texttt{RES(:,3)} = \texttt{MINUEND(:,5)} - \texttt{SUBTRAHEND(:,1)}$" src="multi_subtraction_eq14972267973139037258-Rescaled.png" style="width: 274.8px; height: auto;"/></span><script type="math/tex">\texttt{RES(:,3)} = \texttt{MINUEND(:,5)} - \texttt{SUBTRAHEND(:,1)}</script>.</p><p>different functionalities for parametrisation multi indices and forcing multi indices</p><pre class="codeinput"><span class="keyword">switch</span> type
+    <span class="keyword">case</span> <span class="string">'Parametrised'</span>
+        minu_sz = size(MINUEND,2);
+        subt_sz = size(SUBTRAHEND,2);
+
+        <span class="comment">% Index of the subtrahends</span>
+        I_subt = reshape(repmat(1:subt_sz,minu_sz,1),1,[]);
+        <span class="comment">% Index of the minuends</span>
+        I_minu = repmat(1:minu_sz,1,subt_sz);
+        RES = MINUEND(:,I_minu)-SUBTRAHEND(:,I_subt);
+
+
+        [~,neg]    = find(RES&lt;0);
+        RES(:,neg)   = []; <span class="comment">%delete columns with negative entries</span>
+        I_subt(:,neg) = [];
+        I_minu(:,neg) = [];
+
+
+    <span class="keyword">case</span> <span class="string">'Physical'</span>
+        <span class="comment">%subtrahend is always identity matrix</span>
+
+        [I_minu,I_subt] = find(MINUEND.');
+        RES =  (MINUEND(:,I_minu)-SUBTRAHEND(:,I_subt));
+<span class="keyword">end</span>
+
+<span class="comment">% Output indices as row vector</span>
+<span class="keyword">if</span> size(I_minu,1)&gt;1
+    I_minu = I_minu.';
+<span class="keyword">end</span>
+
+<span class="keyword">if</span> size(I_subt,1)&gt;1
+    I_subt = I_subt.';
+<span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+        </pre><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% MULTI_SUBTRACTION
+%
+%%
+function [RES,I_minu,I_subt] = multi_subtraction(MINUEND,SUBTRAHEND,type)
+%% Subtraction of multi-indices
+% The output is a matrix, containing all columns of $\texttt{MINUEND}$ subtracted
+% by all columns of $\texttt{SUBTRAHEND}$ that do not lead to columns with negative entries.
+% The matrix $\texttt{I\_g}$ contains in position $j$ the column index of $\texttt{SUBTRAHEND}$
+% corresponding to the column $j$ of $\texttt{RES}$. The same holds for $\texttt{I\_minu}$.
+%
+% Example:
+%
+% $\texttt{I\_subt(3) = 1}$, $\texttt{I\_minu(3) = 5}$ implies that  $\texttt{RES(:,3)}
+% = \texttt{MINUEND(:,5)} - \texttt{SUBTRAHEND(:,1)}$.
+
+%%
+% different functionalities for parametrisation multi indices and forcing multi
+% indices
+switch type
+    case 'Parametrised'
+        minu_sz = size(MINUEND,2);
+        subt_sz = size(SUBTRAHEND,2);
+        
+        % Index of the subtrahends
+        I_subt = reshape(repmat(1:subt_sz,minu_sz,1),1,[]);
+        % Index of the minuends
+        I_minu = repmat(1:minu_sz,1,subt_sz);
+        RES = MINUEND(:,I_minu)-SUBTRAHEND(:,I_subt);
+        
+        
+        [~,neg]    = find(RES<0);
+        RES(:,neg)   = []; %delete columns with negative entries
+        I_subt(:,neg) = [];
+        I_minu(:,neg) = [];
+        
+        
+    case 'Physical'
+        %subtrahend is always identity matrix
+
+        [I_minu,I_subt] = find(MINUEND.');
+        RES =  (MINUEND(:,I_minu)-SUBTRAHEND(:,I_subt));
+end
+
+% Output indices as row vector
+if size(I_minu,1)>1
+    I_minu = I_minu.';
+end
+
+if size(I_subt,1)>1
+    I_subt = I_subt.';
+end
+
+end
+            ##### SOURCE END #####
+        --></body></html></body></html>

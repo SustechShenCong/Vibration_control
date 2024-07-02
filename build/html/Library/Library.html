@@ -1,0 +1,192 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../index.html"><img alt="Logo" class="logo" src="../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>Toolbox Library</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-09" name="DC.date"/><meta content="Library.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>Toolbox Library</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">DynamicalSystem</a></li><li><a href="#3">Manifold</a></li><li><a href="#4">Spectral Submanifolds</a></li><li><a href="#5">Supplemental functionalities</a></li></ul></div><p>At the heart of SSMTool there are three classes, namely</p><div><ul><li>the <a href="DynamicalSystem/DynamicalSystem.html">DynamicalSystem</a> class, for setting up and treating first and second order dynamical systems</li><li>the <a href="Manifold/Manifold.html">Manifold</a> class, for computing invariant manifolds such as SSMs in the phase space of a given dynamical systems</li><li>the <a href="SSM/SSM.html">SSM</a> class, for the computation of SSMs and analysis of the dynamics on them</li></ul></div><p>Each of these classes is responsible for a certain part of the analysis, as displayed in the figure below. Note that the manifold class can be used to compute general type invariant manifolds, such as LSMs as well. In the context of SSM-analysis, it is used as an engine to compute SSMs.</p><p><img alt="" hspace="5" src="SSMToolClasses.png" style="width: 1000px; height: auto;" vspace="5"/> </p><h2 id="2">DynamicalSystem</h2><p>To store a dynamical system the <a href="DynamicalSystem/DynamicalSystem.html">DynamicalSystem</a> is used. Furthermore this class also provides routines for analysing the full dynamical system, and for investigating the (reduced) spectral properties of the  linear part.</p><p><b>Methods</b></p><div><ul><li><a href="DynamicalSystem/add_forcing.html">add_forcing</a></li><li><a href="DynamicalSystem/compute_dfnldx.html">compute_dfnldx</a></li><li><a href="DynamicalSystem/compute_dfnldxd.html">compute_dfnldxd</a></li><li><a href="DynamicalSystem/compute_fext.html">compute_fext</a></li><li><a href="DynamicalSystem/compute_fnl.html">compute_fnl</a></li><li><a href="DynamicalSystem/evaluate_Fext.html">evaluate_Fext</a></li><li><a href="DynamicalSystem/evaluate_Fnl.html">evaluate_Fnl</a></li><li><a href="DynamicalSystem/linear_spectral_analysis.html">Linear Spectral Analysis</a></li></ul></div><h2 id="3">Manifold</h2><p>To compute and store invariant manifolds. the <a href="Manifold/Manifold.html">Manifold</a> class is used. A set of methods are used to solve the invariance equations and compute the manifolds.</p><p><b>Methods</b></p><div><ul><li><a href="Manifold/choose_E.html">choose_E</a></li><li><a href="Manifold/cohomological_solution.html">cohomological_solution</a></li><li><a href="Manifold/compute_analyticity_domain.html">compute_analyticity_domain</a></li><li><a href="Manifold/compute_auto_invariance_error.html">compute_auto_invariance_error</a></li><li><a href="Manifold/compute_invariance_residual.html">compute_invariance_residual</a></li><li><a href="Manifold/compute_perturbed_whisker.html">compute_perturbed_whisker</a></li><li><a href="Manifold/compute_whisker.html">compute_whisker</a></li></ul></div><h2 id="4">Spectral Submanifolds</h2><p>To compute Spectral Submanifolds the <a href="SSM/SSM.html">SSM</a> class is used. It is a subclass of the Manifold class.</p><p><b>Methods</b></p><p>The following methods are provided for the analysis of the reduced dynamics. For directly computing forced response curves, backbone curves and stability diagrams, the following functions are provided</p><div><ul><li><a href="SSM/extract_backbone.html">extract_backbone</a></li><li><a href="SSM/extract_FRC.html">extract_FRC</a></li><li><a href="SSM/FRC_cont_ep.html">FRC_cont_ep</a></li><li><a href="SSM/FRC_cont_po.html">FRC_cont_po</a></li><li><a href="SSM/FRC_level_set.html">FRC_level_set</a></li><li><a href="SSM/SSM_lvlSweeps.html">SSM_lvlSweeps</a></li><li><a href="SSM/extractStability_Diagram.html">extract_Stability_Diagram</a></li></ul></div><p>For the general continuation of the reduced dynamics:</p><div><ul><li><a href="SSM/SSM_BP2ep.html">SSM_BP2ep</a></li><li><a href="SSM/SSM_BP2po.html">SSM_BP2po</a></li><li><a href="SSM/SSM_BP2tor.html">SSM_BP2tor</a></li><li><a href="SSM/SSM_cont_ep.html">SSM_cont_ep</a></li><li><a href="SSM/SSM_cont_po.html">SSM_cont_po</a></li><li><a href="SSM/SSM_cont_tor.html">SSM_cont_tor</a></li><li><a href="SSM/SSM_ep2ep.html">SSM_ep2ep</a></li><li><a href="SSM/SSM_ep2HB.html">SSM_ep2HB</a></li><li><a href="SSM/SSM_ep2SN.html">SSM_ep2SN</a></li><li><a href="SSM/SSM_epSweeps.html">SSM_epSweeps</a></li><li><a href="SSM/SSM_HB2po.html">SSM_HB2po</a></li><li><a href="SSM/SSM_isol2ep.html">SSM_isol2ep</a></li><li><a href="SSM/SSM_isol2po.html">SSM_isol2po</a></li><li><a href="SSM/SSM_po2PD.html">SSM_po2PD</a></li><li><a href="SSM/SSM_po2po.html">SSM_po2po</a></li><li><a href="SSM/SSM_po2SN.html">SSM_po2SN</a></li><li><a href="SSM/SSM_po2TR.html">SSM_po2TR</a></li><li><a href="SSM/SSM_poSweeps.html">SSM_poSweeps</a></li><li><a href="SSM/SSM_tor2tor.html">SSM_tor2tor</a></li><li><a href="SSM/SSM_TR2tor.html">SSM_TR2tor</a></li></ul></div><p>Other methods</p><div><ul><li><a href="SSM/activate_parallel.html">activate_parallel</a></li><li><a href="SSM/auto_po_solver.html">auto_po_solver</a></li><li><a href="SSM/deactivate_parallel.html">deactivate_parallel</a></li></ul></div><h2 id="5">Supplemental functionalities</h2><p>Additional, custom built, functionalities for displaying and analysing the results of an SSM-computation are provided in the <a href="Features/Features.html">Features</a> section.</p><p>Furthermore SSMTool is coupled with the continuation toolbox <a href="https://sourceforge.net/p/cocotools">COCO</a>. A wrapper for this toolbox is provided in</p><p><a href="Features/Wrappers/Wrappers.html">Wrappers</a></p><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% Toolbox Library
+%
+%%
+% At the heart of SSMTool there are three classes, namely 
+% 
+% * the <DynamicalSystem/DynamicalSystem.html DynamicalSystem> class, for setting up and treating first and second order dynamical systems
+% * the <Manifold/Manifold.html Manifold> class, for computing invariant manifolds such as SSMs in the phase space of a given dynamical systems
+% * the <SSM/SSM.html SSM> class, for the computation of SSMs and analysis of the dynamics on them
+%
+% Each of these classes is responsible for a certain part of the analysis,
+% as displayed in the figure below. Note that the manifold class can be
+% used to compute general type invariant manifolds, such as LSMs as well.
+% In the context of SSM-analysis, it is used as an engine to
+% compute SSMs.
+%
+% <<SSMToolClasses.png>>
+
+%% DynamicalSystem
+%
+% To store a dynamical system the <DynamicalSystem/DynamicalSystem.html
+% DynamicalSystem> is used. Furthermore this class also provides routines
+% for analysing the full dynamical system, and for investigating the (reduced) 
+% spectral properties of the  linear part.
+%
+% *Methods*
+%
+% * <DynamicalSystem/add_forcing.html add_forcing>
+% * <DynamicalSystem/compute_dfnldx.html compute_dfnldx>
+% * <DynamicalSystem/compute_dfnldxd.html compute_dfnldxd>
+% * <DynamicalSystem/compute_fext.html compute_fext>
+% * <DynamicalSystem/compute_fnl.html compute_fnl>
+% * <DynamicalSystem/evaluate_Fext.html evaluate_Fext>
+% * <DynamicalSystem/evaluate_Fnl.html evaluate_Fnl>
+% * <DynamicalSystem/linear_spectral_analysis.html Linear Spectral Analysis>
+%
+%
+%
+%% Manifold
+%
+% To compute and store invariant manifolds. the <Manifold/Manifold.html
+% Manifold> class is used. A set of methods are used to solve the
+% invariance equations and compute the manifolds.
+%
+% *Methods*
+%
+% * <Manifold/choose_E.html choose_E>
+% * <Manifold/cohomological_solution.html cohomological_solution>
+% * <Manifold/compute_analyticity_domain.html compute_analyticity_domain>
+% * <Manifold/compute_auto_invariance_error.html compute_auto_invariance_error>
+% * <Manifold/compute_invariance_residual.html compute_invariance_residual>
+% * <Manifold/compute_perturbed_whisker.html compute_perturbed_whisker>
+% * <Manifold/compute_whisker.html compute_whisker>
+% 
+%
+%% Spectral Submanifolds
+%
+% To compute Spectral Submanifolds the <SSM/SSM.html SSM> class is used. It
+% is a subclass of the Manifold class.
+%
+% *Methods*
+%
+% The following methods are provided for the analysis of the reduced
+% dynamics. For directly computing forced response curves, backbone curves and stability diagrams, the following
+% functions are provided
+%
+% * <SSM/extract_backbone.html extract_backbone>
+% * <SSM/extract_FRC.html extract_FRC>
+% * <SSM/FRC_cont_ep.html FRC_cont_ep>
+% * <SSM/FRC_cont_po.html FRC_cont_po>
+% * <SSM/FRC_level_set.html FRC_level_set>
+% * <SSM/SSM_lvlSweeps.html SSM_lvlSweeps>
+% * <SSM/extractStability_Diagram.html extract_Stability_Diagram>
+%
+% For the general continuation of the reduced dynamics:
+%
+% * <SSM/SSM_BP2ep.html SSM_BP2ep>
+% * <SSM/SSM_BP2po.html SSM_BP2po>
+% * <SSM/SSM_BP2tor.html SSM_BP2tor>
+% * <SSM/SSM_cont_ep.html SSM_cont_ep>
+% * <SSM/SSM_cont_po.html SSM_cont_po>
+% * <SSM/SSM_cont_tor.html SSM_cont_tor>
+% * <SSM/SSM_ep2ep.html SSM_ep2ep>
+% * <SSM/SSM_ep2HB.html SSM_ep2HB>
+% * <SSM/SSM_ep2SN.html SSM_ep2SN>
+% * <SSM/SSM_epSweeps.html SSM_epSweeps>
+% * <SSM/SSM_HB2po.html SSM_HB2po>
+% * <SSM/SSM_isol2ep.html SSM_isol2ep>
+% * <SSM/SSM_isol2po.html SSM_isol2po>
+% * <SSM/SSM_po2PD.html SSM_po2PD>
+% * <SSM/SSM_po2po.html SSM_po2po>
+% * <SSM/SSM_po2SN.html SSM_po2SN>
+% * <SSM/SSM_po2TR.html SSM_po2TR>
+% * <SSM/SSM_poSweeps.html SSM_poSweeps>
+% * <SSM/SSM_tor2tor.html SSM_tor2tor>
+% * <SSM/SSM_TR2tor.html SSM_TR2tor>
+%
+% Other methods
+%
+% * <SSM/activate_parallel.html activate_parallel>
+% * <SSM/auto_po_solver.html auto_po_solver>
+% * <SSM/deactivate_parallel.html deactivate_parallel>
+%% Supplemental functionalities
+%
+% Additional, custom built, functionalities for displaying and analysing
+% the results of an SSM-computation are provided in the
+% <Features/Features.html Features> section.
+%
+% Furthermore SSMTool is coupled with the continuation toolbox <https://sourceforge.net/p/cocotools COCO>. A wrapper for this toolbox is provided in 
+%
+% <Features/Wrappers/Wrappers.html Wrappers>
+
+
+            ##### SOURCE END #####
+        --></body></html></body></html>

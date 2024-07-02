@@ -1,0 +1,287 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../../index.html"><img alt="Logo" class="logo" src="../../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>SSM_CONT_TOR</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-09" name="DC.date"/><meta content="SSM_cont_tor.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>SSM_CONT_TOR</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">SSM_CONT_TOR</a></li><li><a href="#3">continuation of equilibrium points in reduced dynamics</a></li><li><a href="#4">extract results of reduced dynamics at sampled frequencies</a></li><li><a href="#5">map torus back to physical system</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> varargout = SSM_cont_tor(obj,type,oid,run,lab,parName,parRange,outdof,varargin)
+        </pre><h2 id="2">SSM_CONT_TOR</h2><p>This function performs continuation of 2D tori of slow dynamics. Each 2D tori corresponds to a 3D torus (quasi-periodic) response in regular time dynamics.</p><p>FRCIRS = SSM_TR2TOR(OBJ,OID,RUN,LAB,PARNAME,PARRANGE,OUTDOF,VARARGIN)</p><div><ul><li><tt>oid</tt>:      runid of current continuation</li></ul></div><div><ul><li><tt>type</tt>:     TR/tor/BP</li></ul></div><div><ul><li><tt>run</tt>:      runid of continuation for saved solution</li></ul></div><div><ul><li><tt>lab</tt>:      label of continuation for saved solution, which must be the           label of a TR/BP point if type=TR/BP</li></ul></div><div><ul><li><tt>parName</tt>:  freq-amp/amp/freq continuation parameter. In the case of           freq-amp, both two parameters are free to change and hence           varrho is fixed. In contrast, varrho is fixed if there is only           one continuation parameter</li></ul></div><div><ul><li><tt>parRange</tt>: continuation domain of parameter, which is given in the form of           {[om1,om2],[f1,f2]} for freq-amp, [f1,f2] for amp and [om1,om2]           for freq. It is noted that the domain [om1,om2] should contain           the natural frequency with index 1 in the mFreq vector</li></ul></div><div><ul><li><tt>outdof</tt>:   output for dof in physical domain</li></ul></div><div><ul><li><tt>varargin</tt>: ['saveICs'] flag for saving the initial point in trajectory</li></ul></div><p>See also: SSM_PO2TR, SSM_TOR2PTOR, SSM_CONT_TOR</p><h2 id="3">continuation of equilibrium points in reduced dynamics</h2><pre class="codeinput">prob = coco_prob();
+prob = coco_set(prob, <span class="string">'tor'</span>, <span class="string">'autonomous'</span>, true, <span class="string">'nOmega'</span>, 0);
+prob = <a href="../../Library/Features/Wrappers/cocoWrapper/cocoSet.html">cocoSet</a>(obj.contOptions,prob);
+runid = coco_get_id(oid, <span class="string">'tor'</span>);
+<span class="keyword">switch</span> type
+    <span class="keyword">case</span> <span class="string">'TR'</span>
+        prob = ode_TR2tor(prob, <span class="string">''</span>, coco_get_id(run, <span class="string">'po'</span>), lab,<span class="keyword">...</span>
+            obj.FRCOptions.torNumSegs, obj.FRCOptions.torRotDiret,<span class="keyword">...</span>
+            obj.FRCOptions.torPurtb);
+        fprintf(<span class="string">'\n Run=''%s'': Continue tori born from TR point with label %d of run %s.\n'</span>, <span class="keyword">...</span>
+          runid, lab, run);
+    <span class="keyword">case</span> <span class="string">'tor'</span>
+        prob = ode_tor2tor(prob, <span class="string">''</span>, coco_get_id(run, <span class="string">'tor'</span>), lab);
+        fprintf(<span class="string">'\n Run=''%s'': Continue tori from label %d of run %s.\n'</span>, <span class="keyword">...</span>
+          runid, lab, run);
+    <span class="keyword">case</span> <span class="string">'BP'</span>
+        prob = ode_BP2tor(prob, <span class="string">''</span>, coco_get_id(run, <span class="string">'tor'</span>), lab);
+        fprintf(<span class="string">'\n Run=''%s'': Continue tori along secondary branch from label %d of run %s.\n'</span>, <span class="keyword">...</span>
+          runid, lab, run);
+    <span class="keyword">otherwise</span>
+        error(<span class="string">'type should be selected from {isol,HB,BP,PO,SN,HB}'</span>);
+<span class="keyword">end</span>
+
+<span class="comment">% read data</span>
+fdata = coco_get_func_data(prob, <span class="string">'tor.bvp.seg1.coll'</span>, <span class="string">'data'</span>);
+<span class="comment">% extract data to fdata.fhan, namely, @(z,p)ode_2mD<a href="../../Library/SSM/SSM.html">SSM</a>(z,p,fdata)</span>
+odedata = functions(fdata.fhan);
+odedata = odedata.workspace{1};
+odedata = functions(odedata.args.fhan);
+odedata = odedata.workspace{1};
+fdata   = odedata.fdata;
+m       = numel(fdata.mFreqs);
+order    = fdata.order;
+ispolar  = fdata.ispolar;
+iNonauto = fdata.iNonauto;
+rNonauto = fdata.rNonauto;
+kNonauto = fdata.kNonauto;
+modes    = fdata.modes;
+mFreqs   = fdata.mFreqs;
+dim      = 2*m;
+wdir     = fullfile(pwd,<span class="string">'data'</span>,<span class="string">'SSM.mat'</span>);
+SSMcoeffs = load(wdir);
+SSMcoeffs = SSMcoeffs.SSMcoeffs;
+W_0 = SSMcoeffs.W_0;
+W_1 = SSMcoeffs.W_1;
+clear(<span class="string">'SSMcoeffs'</span>);
+Nonauto = struct();
+Nonauto.iNonauto = iNonauto;
+Nonauto.rNonauto = rNonauto;
+Nonauto.kNonauto = kNonauto;
+
+<span class="comment">% setup continuation arguments</span>
+<span class="keyword">switch</span> parName
+    <span class="keyword">case</span> <span class="string">'freq-amp'</span>
+        <span class="comment">% varrho is fixed</span>
+        cont_args = {<span class="string">'om'</span>, <span class="string">'eps'</span>, <span class="string">'om1'</span> ,<span class="string">'om2'</span>, <span class="string">'varrho'</span>};
+    <span class="keyword">case</span> <span class="string">'freq'</span>
+        <span class="comment">% varrho is free to vary</span>
+        isomega = true;
+        cont_args = {<span class="string">'om'</span>, <span class="string">'varrho'</span>, <span class="string">'om1'</span>, <span class="string">'om2'</span>, <span class="string">'eps'</span>};
+    <span class="keyword">case</span> <span class="string">'amp'</span>
+        <span class="comment">% varrho is free to vary</span>
+        isomega = false;
+        cont_args = {<span class="string">'eps'</span>, <span class="string">'varrho'</span>, <span class="string">'om1'</span>, <span class="string">'om2'</span>, <span class="string">'om'</span>};
+    <span class="keyword">otherwise</span>
+        error(<span class="string">'Continuation parameter should be freq or amp'</span>);
+<span class="keyword">end</span>
+
+<span class="comment">% coco run</span>
+coco(prob, runid, [], 1, cont_args, parRange);
+        </pre><h2 id="4">extract results of reduced dynamics at sampled frequencies</h2><pre class="codeinput">FRC = <a href="../../Library/SSM/private/tor_reduced_results.html">tor_reduced_results</a>(runid,ispolar,isomega,mFreqs,obj.FRCOptions.nt);
+        </pre><h2 id="5">map torus back to physical system</h2><pre class="codeinput">fprintf(<span class="string">'\n FRCs from =''%s'': generating torus in physical domain.\n'</span>, <span class="keyword">...</span>
+    runid);
+FRCdata = struct();        FRCdata.isomega = isomega;
+FRCdata.mFreqs  = mFreqs;  FRCdata.order  = order;
+FRCdata.ispolar = ispolar; FRCdata.modes  = modes;   FRCdata.dim = dim;
+FRC = FRC_<a href="../../Library/Features/misc/reduced_to_full.html">reduced_to_full</a>(obj,Nonauto,<span class="string">'tor'</span>,FRC,FRCdata,W_0,W_1,outdof,varargin{:});
+varargout{1} = FRC;
+<span class="comment">% write results to hard driver</span>
+fdir = fullfile(pwd,<span class="string">'data'</span>,runid,<span class="string">'SSMtor.mat'</span>);
+save(fdir, <span class="string">'FRC'</span>);
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+        </pre><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% SSM_CONT_TOR
+%
+%%
+function varargout = SSM_cont_tor(obj,type,oid,run,lab,parName,parRange,outdof,varargin)
+%% SSM_CONT_TOR 
+% This function performs continuation of 2D tori of slow
+% dynamics. Each 2D tori corresponds to a 3D torus (quasi-periodic)
+% response in regular time dynamics. 
+%
+% FRCIRS = SSM_TR2TOR(OBJ,OID,RUN,LAB,PARNAME,PARRANGE,OUTDOF,VARARGIN)
+%
+% * |oid|:      runid of current continuation
+% 
+% * |type|:     TR/tor/BP
+% 
+% * |run|:      runid of continuation for saved solution
+% 
+% * |lab|:      label of continuation for saved solution, which must be the
+%           label of a TR/BP point if type=TR/BP
+% 
+% * |parName|:  freq-amp/amp/freq continuation parameter. In the case of
+%           freq-amp, both two parameters are free to change and hence
+%           varrho is fixed. In contrast, varrho is fixed if there is only
+%           one continuation parameter
+% 
+% * |parRange|: continuation domain of parameter, which is given in the form of
+%           {[om1,om2],[f1,f2]} for freq-amp, [f1,f2] for amp and [om1,om2]
+%           for freq. It is noted that the domain [om1,om2] should contain
+%           the natural frequency with index 1 in the mFreq vector
+% 
+% * |outdof|:   output for dof in physical domain
+% 
+% * |varargin|: ['saveICs'] flag for saving the initial point in trajectory
+%
+% See also: SSM_PO2TR, SSM_TOR2PTOR, SSM_CONT_TOR
+
+%% continuation of equilibrium points in reduced dynamics
+prob = coco_prob();
+prob = coco_set(prob, 'tor', 'autonomous', true, 'nOmega', 0);
+prob = <a href="../../Library/Features/Wrappers/cocoWrapper/cocoSet.html">cocoSet</a>(obj.contOptions,prob);
+runid = coco_get_id(oid, 'tor');
+switch type
+    case 'TR'
+        prob = ode_TR2tor(prob, '', coco_get_id(run, 'po'), lab,...
+            obj.FRCOptions.torNumSegs, obj.FRCOptions.torRotDiret,...
+            obj.FRCOptions.torPurtb);
+        fprintf('\n Run=''%s'': Continue tori born from TR point with label %d of run %s.\n', ...
+          runid, lab, run);
+    case 'tor'
+        prob = ode_tor2tor(prob, '', coco_get_id(run, 'tor'), lab);
+        fprintf('\n Run=''%s'': Continue tori from label %d of run %s.\n', ...
+          runid, lab, run);        
+    case 'BP'
+        prob = ode_BP2tor(prob, '', coco_get_id(run, 'tor'), lab);
+        fprintf('\n Run=''%s'': Continue tori along secondary branch from label %d of run %s.\n', ...
+          runid, lab, run);        
+    otherwise
+        error('type should be selected from {isol,HB,BP,PO,SN,HB}');
+end        
+
+% read data 
+fdata = coco_get_func_data(prob, 'tor.bvp.seg1.coll', 'data');
+% extract data to fdata.fhan, namely, @(z,p)ode_2mD<a href="../../Library/SSM/SSM.html">SSM</a>(z,p,fdata)
+odedata = functions(fdata.fhan);
+odedata = odedata.workspace{1};
+odedata = functions(odedata.args.fhan);
+odedata = odedata.workspace{1};
+fdata   = odedata.fdata;
+m       = numel(fdata.mFreqs);
+order    = fdata.order;
+ispolar  = fdata.ispolar;
+iNonauto = fdata.iNonauto;
+rNonauto = fdata.rNonauto;
+kNonauto = fdata.kNonauto;
+modes    = fdata.modes;
+mFreqs   = fdata.mFreqs;
+dim      = 2*m;
+wdir     = fullfile(pwd,'data','SSM.mat');
+SSMcoeffs = load(wdir);
+SSMcoeffs = SSMcoeffs.SSMcoeffs;
+W_0 = SSMcoeffs.W_0;
+W_1 = SSMcoeffs.W_1;
+clear('SSMcoeffs');
+Nonauto = struct();
+Nonauto.iNonauto = iNonauto; 
+Nonauto.rNonauto = rNonauto; 
+Nonauto.kNonauto = kNonauto;
+
+% setup continuation arguments
+switch parName
+    case 'freq-amp'
+        % varrho is fixed
+        cont_args = {'om', 'eps', 'om1' ,'om2', 'varrho'};
+    case 'freq'
+        % varrho is free to vary
+        isomega = true;
+        cont_args = {'om', 'varrho', 'om1', 'om2', 'eps'};
+    case 'amp'
+        % varrho is free to vary
+        isomega = false;
+        cont_args = {'eps', 'varrho', 'om1', 'om2', 'om'};
+    otherwise
+        error('Continuation parameter should be freq or amp');
+end
+
+% coco run
+coco(prob, runid, [], 1, cont_args, parRange);
+
+%% extract results of reduced dynamics at sampled frequencies
+FRC = <a href="../../Library/SSM/private/tor_reduced_results.html">tor_reduced_results</a>(runid,ispolar,isomega,mFreqs,obj.FRCOptions.nt);
+
+%% map torus back to physical system
+fprintf('\n FRCs from =''%s'': generating torus in physical domain.\n', ...
+    runid);
+FRCdata = struct();        FRCdata.isomega = isomega;
+FRCdata.mFreqs  = mFreqs;  FRCdata.order  = order; 
+FRCdata.ispolar = ispolar; FRCdata.modes  = modes;   FRCdata.dim = dim;
+FRC = FRC_<a href="../../Library/Features/misc/reduced_to_full.html">reduced_to_full</a>(obj,Nonauto,'tor',FRC,FRCdata,W_0,W_1,outdof,varargin{:});
+varargout{1} = FRC;
+% write results to hard driver
+fdir = fullfile(pwd,'data',runid,'SSMtor.mat');
+save(fdir, 'FRC');
+end
+
+            ##### SOURCE END #####
+        --></body></html></body></html>

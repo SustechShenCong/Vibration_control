@@ -1,0 +1,383 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../../../index.html"><img alt="Logo" class="logo" src="../../../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>COEFFS_MIXED_TERMS</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-09" name="DC.date"/><meta content="coeffs_mixed_terms.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>COEFFS_MIXED_TERMS</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">Assemble ixed terms in invariance equation</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> [res] = coeffs_mixed_terms(k,m,W,R,field,mix)
+        </pre><h2 id="2">Assemble ixed terms in invariance equation</h2><p>This function computes all the mixed terms of the invariance equation at order <span class="MathJax_Preview"><img alt="$k$" src="coeffs_mixed_terms_eq12829740475467572519-Rescaled.png" style="width: 7.199999999999999px; height: auto;"/></span><script type="math/tex">k</script> for a <span class="MathJax_Preview"><img alt="$l$" src="coeffs_mixed_terms_eq17216086743898025322-Rescaled.png" style="width: 3.5999999999999996px; height: auto;"/></span><script type="math/tex">l</script> dimensional SSM. It is used for nonautonomous computation in revlex ordering and for the autonomous SSM computation in conjugate ordering.</p><pre class="codeinput"><span class="comment">% In the case where the DS is complex then the autonomous computation also</span>
+<span class="comment">% uses the revlex ordering.</span>
+        </pre><pre class="codeinput">N   = field.N;
+l   = field.l;
+
+
+<span class="keyword">switch</span> field.ordering
+    <span class="keyword">case</span> <span class="string">'revlex'</span>
+        z_k = nchoosek(k+l-1,l-1);
+        res = zeros(N,z_k);
+        <span class="keyword">switch</span> mix
+            <span class="comment">% strictly doesnt need distinction since u is the same but due</span>
+            <span class="comment">% to different reasons</span>
+            <span class="keyword">case</span> <span class="string">'R1'</span>
+
+                u = k + 1 - m + 1; <span class="comment">%index into non-autonomous, starts at 0</span>
+
+            <span class="keyword">case</span> <span class="string">'W1'</span>
+
+                u = k + 1 -(m - 1); <span class="comment">%index into autonomous, starts at 1</span>
+            <span class="keyword">case</span> <span class="string">'aut'</span>
+
+                u = k - m + 1; <span class="comment">% In this case there is no zeroth order term</span>
+        <span class="keyword">end</span>
+
+        <span class="keyword">if</span> nnz(W(m).coeffs)&gt;0 &amp;&amp; nnz(R(u).coeffs)&gt;0
+
+            <span class="keyword">if</span> l &gt;1
+                K   = flip(sortrows(<a href="../../../Library/Features/misc/nsumk.html">nsumk</a>(l,k,<span class="string">'nonnegative'</span>)).',2); <span class="comment">%order k multi-indices</span>
+                <span class="keyword">if</span> isfield(W,<span class="string">'ind'</span>) <span class="comment">% nonautonomous computation</span>
+                    M = W(m).ind; <span class="comment">%order m or m+1 (W1)multi-indices</span>
+                    U = R(u).ind; <span class="comment">% order u or u+1 (R1) multi- indices</span>
+                <span class="keyword">else</span> <span class="comment">% autonomous computation</span>
+                    M = flip(sortrows(<a href="../../../Library/Features/misc/nsumk.html">nsumk</a>(l,m,<span class="string">'nonnegative'</span>)).',2); <span class="comment">%order m multi-indices</span>
+                    U = flip(sortrows(<a href="../../../Library/Features/misc/nsumk.html">nsumk</a>(l,u,<span class="string">'nonnegative'</span>)).',2); <span class="comment">%order u multi-indices</span>
+                <span class="keyword">end</span>
+            <span class="keyword">else</span>
+                K = k;
+                <span class="keyword">if</span> isfield(W,<span class="string">'ind'</span>) <span class="comment">% nonautonomous computation</span>
+                    M = W(m).ind; <span class="comment">%order m or m+1 (W1)multi-indices</span>
+                    U = R(u).ind; <span class="comment">% order u or u+1 (R1) multi- indices</span>
+                <span class="keyword">else</span> <span class="comment">% autonomous computation</span>
+                    M = m; <span class="comment">%order m multi-indices</span>
+                    U = u; <span class="comment">%order u multi-indices</span>
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+
+            One = eye(l);
+
+            [MU,I_m,I_u] = <a href="../../../Library/Manifold/private/multi_addition.html">multi_addition</a>(M,U);
+
+            <span class="keyword">for</span> j = 1:l
+
+                <span class="comment">%copy for this run</span>
+                MU_One = MU - One(:,j);
+                I_m_One = I_m;
+                I_u_One = I_u;
+
+                <span class="comment">%remove negative elements</span>
+                [~, neg] = find (MU_One&lt;0);
+                MU_One(:,neg)= [];
+                I_m_One(:,neg)= [];
+                I_u_One(:,neg)= [];
+
+                <span class="comment">%Assemble coefficients</span>
+                Wm = W(m).coeffs(:,I_m_One);
+                mRu = R(u).coeffs(j,I_u_One).* M(j,I_m_One);
+                WR  = Wm .* mRu;
+
+                <span class="comment">%find position of multi-indices in the set K</span>
+                [~,loc_k] = ismember(MU_One.',K.',<span class="string">'rows'</span>);
+
+                <span class="keyword">for</span> f = 1:z_k
+                    <span class="keyword">if</span> any(loc_k==f)
+                        res(:,f) = res(:,f) + sum( WR(:,loc_k==f),2);
+                    <span class="keyword">end</span>
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+
+        <span class="keyword">end</span>
+
+
+    <span class="keyword">case</span> <span class="string">'conjugate'</span>
+        </pre><p>The mixed terms on the right hand side of the invariance equation are given by all contributions of SSM-coefficients that do not have linear order or order <span class="MathJax_Preview"><img alt="$k$" src="coeffs_mixed_terms_eq12829740475467572519-Rescaled.png" style="width: 7.199999999999999px; height: auto;"/></span><script type="math/tex">k</script>.</p><pre class="codeinput">        Z_cci       = field.Z_cci;
+        K           = field.K;
+        revlex2conj = field.revlex2conj;
+        k           = sum(K(:,1));
+        </pre><p>If the system is real we need all lower order conjugate center indices which are stored in <span class="MathJax_Preview"><img alt="$\texttt{Z}$" src="coeffs_mixed_terms_eq17367581535055227724-Rescaled.png" style="width: 6.0px; height: auto;"/></span><script type="math/tex">\texttt{Z}</script>. If the system is not real, only the number of multi-indices at order <span class="MathJax_Preview"><img alt="$k$" src="coeffs_mixed_terms_eq12829740475467572519-Rescaled.png" style="width: 7.199999999999999px; height: auto;"/></span><script type="math/tex">k</script> is needed and thus <span class="MathJax_Preview"><img alt="$\texttt{Z}$" src="coeffs_mixed_terms_eq17367581535055227724-Rescaled.png" style="width: 6.0px; height: auto;"/></span><script type="math/tex">\texttt{Z}</script> is empty.</p><pre class="codeinput">        string = <span class="string">'conjugate'</span>;
+        z_k    = Z_cci(k);
+
+        res = sparse(N,z_k);
+        <span class="comment">% Anti-lex. ordered multi-indices of order u</span>
+        </pre><p>For every one of these order <span class="MathJax_Preview"><img alt="$u$" src="coeffs_mixed_terms_eq15012583454694319273-Rescaled.png" style="width: 7.199999999999999px; height: auto;"/></span><script type="math/tex">u</script> multi-indices, the coefficients <span class="MathJax_Preview"><img alt="$u_j S_{i,\mathbf{u}}R_{j,\mathbf{g}}$" src="coeffs_mixed_terms_eq02120469610469748836-Rescaled.png" style="width: 55.199999999999996px; height: auto;"/></span><script type="math/tex">u_j S_{i,\mathbf{u}}R_{j,\mathbf{g}}</script> are calculated.</p><pre class="codeinput">        M = flip(sortrows(<a href="../../../Library/Features/misc/nsumk.html">nsumk</a>(l,m,<span class="string">'nonnegative'</span>)).',2);
+
+        M = M(:,revlex2conj{m});
+        z_u_2 = Z_cci(m);
+        z_u = nchoosek(m+l-1,l-1);
+        z_g = nchoosek(k-m+1+l-1,l-1);
+
+        <span class="keyword">for</span> j  = 1:l
+        </pre><pre class="codeinput">            ej = (1:l == j).';
+
+            <span class="comment">%find j for using the symmetry in reduced dynamics</span>
+            <span class="keyword">if</span> mod(j,2) == 0
+                jbar = j-1;
+            <span class="keyword">else</span>
+                jbar = j+1;
+            <span class="keyword">end</span>
+        </pre><p>This loop goes over all of the multi-index vectors at order <span class="MathJax_Preview"><img alt="$u$" src="coeffs_mixed_terms_eq15012583454694319273-Rescaled.png" style="width: 7.199999999999999px; height: auto;"/></span><script type="math/tex">u</script>, and in every loop all coefficients of the mixed terms corresponding to $\mathbf{g} = \mathbf{k}_f + \mathbf{e}_j - \mathbf{u}_{index}$are determined for all <span class="MathJax_Preview"><img alt="$f = 1,...z_k$" src="coeffs_mixed_terms_eq03776857550870115065-Rescaled.png" style="width: 60.0px; height: auto;"/></span><script type="math/tex">f = 1,...z_k</script>.</p><pre class="codeinput">            <span class="keyword">for</span> index = 1:size(M,2)
+                <span class="keyword">if</span>  M(j,index) ~= 0
+                    [g,k_idx,~] = <a href="../../../Library/Manifold/private/multi_subtraction.html">multi_subtraction</a>(K+ej,M(:,index),<span class="string">'Parametrised'</span>);
+                    <span class="keyword">if</span> ~isempty (g)
+                        g_idx        =<a href="../../../Library/Manifold/private/multi_index_2_ordering.html">multi_index_2_ordering</a>(g,string,revlex2conj);
+
+                        <span class="comment">% Make use of the Symmetry</span>
+
+                        g_I_a = g_idx &lt;= Z_cci(k+1-m);
+                        term  = sparse(N,size(k_idx,2));
+
+                        <span class="keyword">if</span> index &lt;= z_u_2
+                            term(:,g_I_a)  = M(j,index) * W(m).coeffs(:,index) .* R((k-m+1)).coeffs(j,g_idx(g_I_a));
+                            term(:,~g_I_a) = M(j,index) * W(m).coeffs(:,index) .* conj(R((k-m+1)).coeffs(jbar,z_g-g_idx(~g_I_a)+1));
+                        <span class="keyword">else</span>
+
+                            term(:,g_I_a)  = M(j,index) * conj(W(m).coeffs(:,z_u-index+1)) .* R((k-m+1)).coeffs(j,g_idx(g_I_a));
+                            term(:,~g_I_a) = M(j,index) * conj(W(m).coeffs(:,z_u-index+1)) .* conj(R((k-m+1)).coeffs(jbar,z_g-g_idx(~g_I_a)+1));
+                        <span class="keyword">end</span>
+                        <span class="comment">% Sum contributions</span>
+                        <span class="keyword">for</span> f = unique(k_idx)
+                            res(:,f) = res(:,f) + sum(term(:,k_idx==f),2);
+                        <span class="keyword">end</span>
+                    <span class="keyword">end</span>
+
+                <span class="keyword">end</span>
+            <span class="keyword">end</span>
+        </pre><pre class="codeinput">        <span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+        </pre><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% COEFFS_MIXED_TERMS
+%
+%%
+function [res] = coeffs_mixed_terms(k,m,W,R,field,mix)
+%% Assemble ixed terms in invariance equation
+%
+% This function computes all the mixed terms of the invariance equation at order
+% $k$ for a $l$ dimensional SSM. It is used for nonautonomous computation
+% in revlex ordering and for the autonomous SSM computation in conjugate
+% ordering.
+
+% In the case where the DS is complex then the autonomous computation also
+% uses the revlex ordering.
+%%
+
+N   = field.N;
+l   = field.l;
+
+
+switch field.ordering
+    case 'revlex'
+        z_k = nchoosek(k+l-1,l-1);
+        res = zeros(N,z_k);
+        switch mix
+            % strictly doesnt need distinction since u is the same but due
+            % to different reasons
+            case 'R1'
+                
+                u = k + 1 - m + 1; %index into non-autonomous, starts at 0
+                
+            case 'W1'
+                
+                u = k + 1 -(m - 1); %index into autonomous, starts at 1
+            case 'aut'
+                
+                u = k - m + 1; % In this case there is no zeroth order term
+        end
+        
+        if nnz(W(m).coeffs)>0 && nnz(R(u).coeffs)>0
+            
+            if l >1
+                K   = flip(sortrows(<a href="../../../Library/Features/misc/nsumk.html">nsumk</a>(l,k,'nonnegative')).',2); %order k multi-indices
+                if isfield(W,'ind') % nonautonomous computation
+                    M = W(m).ind; %order m or m+1 (W1)multi-indices
+                    U = R(u).ind; % order u or u+1 (R1) multi- indices
+                else % autonomous computation
+                    M = flip(sortrows(<a href="../../../Library/Features/misc/nsumk.html">nsumk</a>(l,m,'nonnegative')).',2); %order m multi-indices
+                    U = flip(sortrows(<a href="../../../Library/Features/misc/nsumk.html">nsumk</a>(l,u,'nonnegative')).',2); %order u multi-indices
+                end
+            else
+                K = k;
+                if isfield(W,'ind') % nonautonomous computation
+                    M = W(m).ind; %order m or m+1 (W1)multi-indices
+                    U = R(u).ind; % order u or u+1 (R1) multi- indices
+                else % autonomous computation
+                    M = m; %order m multi-indices
+                    U = u; %order u multi-indices
+                end
+            end
+
+            One = eye(l);
+            
+            [MU,I_m,I_u] = <a href="../../../Library/Manifold/private/multi_addition.html">multi_addition</a>(M,U);
+            
+            for j = 1:l
+                
+                %copy for this run
+                MU_One = MU - One(:,j);
+                I_m_One = I_m;
+                I_u_One = I_u;
+                
+                %remove negative elements
+                [~, neg] = find (MU_One<0);
+                MU_One(:,neg)= [];
+                I_m_One(:,neg)= [];
+                I_u_One(:,neg)= [];
+                
+                %Assemble coefficients
+                Wm = W(m).coeffs(:,I_m_One);
+                mRu = R(u).coeffs(j,I_u_One).* M(j,I_m_One);
+                WR  = Wm .* mRu;
+                
+                %find position of multi-indices in the set K
+                [~,loc_k] = ismember(MU_One.',K.','rows');
+                
+                for f = 1:z_k
+                    if any(loc_k==f)
+                        res(:,f) = res(:,f) + sum( WR(:,loc_k==f),2);
+                    end
+                end
+            end
+            
+        end
+        
+        
+    case 'conjugate'
+        %%
+        % The mixed terms on the right hand side of the invariance equation are given
+        % by all contributions of SSM-coefficients that do not have linear order or order
+        % $k$.
+        Z_cci       = field.Z_cci;
+        K           = field.K;
+        revlex2conj = field.revlex2conj;
+        k           = sum(K(:,1));
+        %%
+        % If the system is real we need all lower order conjugate center indices which
+        % are stored in $\texttt{Z}$. If the system is not real, only the number of multi-indices
+        % at order $k$ is needed and thus $\texttt{Z}$ is empty.
+        string = 'conjugate';
+        z_k    = Z_cci(k);
+        
+        res = sparse(N,z_k);
+        % Anti-lex. ordered multi-indices of order u
+        %%
+        % For every one of these order $u$ multi-indices, the coefficients $u_j S_{i,\mathbf{u}}R_{j,\mathbf{g}}$
+        % are calculated.
+        M = flip(sortrows(<a href="../../../Library/Features/misc/nsumk.html">nsumk</a>(l,m,'nonnegative')).',2);
+        
+        M = M(:,revlex2conj{m});
+        z_u_2 = Z_cci(m);
+        z_u = nchoosek(m+l-1,l-1);
+        z_g = nchoosek(k-m+1+l-1,l-1);
+        
+        for j  = 1:l
+            ej = (1:l == j).';
+            
+            %find j for using the symmetry in reduced dynamics
+            if mod(j,2) == 0
+                jbar = j-1;
+            else
+                jbar = j+1;
+            end
+            %%
+            % This loop goes over all of the multi-index vectors at order $u$, and in every
+            % loop all coefficients of the mixed terms corresponding to $\mathbf{g} = \mathbf{k}_f
+            % + \mathbf{e}_j - \mathbf{u}_{index}$are determined for all $f = 1,...z_k$.
+            for index = 1:size(M,2)
+                if  M(j,index) ~= 0
+                    [g,k_idx,~] = <a href="../../../Library/Manifold/private/multi_subtraction.html">multi_subtraction</a>(K+ej,M(:,index),'Parametrised');
+                    if ~isempty (g)
+                        g_idx        =<a href="../../../Library/Manifold/private/multi_index_2_ordering.html">multi_index_2_ordering</a>(g,string,revlex2conj);
+                        
+                        % Make use of the Symmetry
+                        
+                        g_I_a = g_idx <= Z_cci(k+1-m);
+                        term  = sparse(N,size(k_idx,2));
+                        
+                        if index <= z_u_2
+                            term(:,g_I_a)  = M(j,index) * W(m).coeffs(:,index) .* R((k-m+1)).coeffs(j,g_idx(g_I_a));
+                            term(:,~g_I_a) = M(j,index) * W(m).coeffs(:,index) .* conj(R((k-m+1)).coeffs(jbar,z_g-g_idx(~g_I_a)+1));
+                        else
+                            
+                            term(:,g_I_a)  = M(j,index) * conj(W(m).coeffs(:,z_u-index+1)) .* R((k-m+1)).coeffs(j,g_idx(g_I_a));
+                            term(:,~g_I_a) = M(j,index) * conj(W(m).coeffs(:,z_u-index+1)) .* conj(R((k-m+1)).coeffs(jbar,z_g-g_idx(~g_I_a)+1));
+                        end
+                        % Sum contributions
+                        for f = unique(k_idx)
+                            res(:,f) = res(:,f) + sum(term(:,k_idx==f),2);
+                        end
+                    end
+                    
+                end
+            end
+        end
+end
+            ##### SOURCE END #####
+        --></body></html></body></html>

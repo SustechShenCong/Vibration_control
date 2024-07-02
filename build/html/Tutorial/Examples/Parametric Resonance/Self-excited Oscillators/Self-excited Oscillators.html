@@ -1,0 +1,341 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><html><body><div class="banner"><a href="../../../../index.html"><img alt="Logo" class="logo" src="../../../../logo.png" style="float:right" width="200"/></a></div></body></html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>SelfExcitedOscillators</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-02" name="DC.date"/><meta content="SelfExcitedOscillators.m" name="DC.source"/><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Self Excited Oscillators</h1><h2>Contents</h2><div><ul><li><a href="#1">Self Excited Oscillator</a></li><li><a href="#2">Generate model</a></li><li><a href="#3">Dynamical system setup</a></li><li><a href="#4">Add forcing</a></li><li><a href="#5">Linear Modal Analysis</a></li><li><a href="#6">Forced response curves using SSMs</a></li><li><a href="#10">Verification: Collocation using <a href="https://sourceforge.net/p/cocotools/wiki/Home/">coco</a></a></li></ul></div><h2 id="1">Self Excited Oscillators</h2><p>We reproduce results for the example of a 4DOF coupled oscillator system with parametric excitation as given in Szabelski, K. &amp; Warminki, J. <i>Vibration of a Non-Linear Self-Excited System with Two Degrees of Freedomunder External and Parametric Excitation</i>. Nonlinear Dynamics 1997 14:114,23–36 (1 1997). <a href="https://doi.org/10.1023/A:1008227315259">https://doi.org/10.1023/A:1008227315259</a></p><p><img alt="" src="model.png" style="width:30%;"/> </p><p>The negative linear damping with coefficient <img alt="$c$" src="SelfExcitedOscillators_eq10092834284133181525-Rescaled.png" style="width: 10.799999999999999px; height: auto;"/> leads to exponentially growing amplitudes, the effect of which is balanced with positive nonlinear damping with coefficient <img alt="$\gamma$" src="SelfExcitedOscillators_eq17508378523367818359-Rescaled.png" style="width: 14.399999999999999px; height: auto;"/> which starts contributing at significant oscillation amplitudes. Furthermore a nonlinear spring is coupled to the first oscillator. They are connected via a spring which induces parametric excitation via a time-dependent stiffness coefficient.</p><pre class="codeinput">clear <span class="string">all</span>; close <span class="string">all</span>; clc
+</pre><h2 id="2">Generate model</h2><pre class="codeinput">[M,C,K,fnl,fext] = build_model();
+</pre><h2 id="3">Dynamical system setup</h2><p>We consider the forced  and parametrically excited system</p><p><img alt="$$\mathbf{M}\ddot{\mathbf{x}}+\mathbf{C}\dot{\mathbf{x}}+\mathbf{K}\mathbf{x}+\mathbf{f}(\mathbf{x},\dot{\mathbf{x}})=\epsilon\mathbf{g}(\mathbf{x},\dot{\mathbf{x}},\Omega
+t),$$" src="SelfExcitedOscillators_eq06713943434195845010-Rescaled.png" style="width: 466.79999999999995px; height: auto;"/></p><p>which can be written in the first-order form as</p><p><img alt="$$\mathbf{B}\dot{\mathbf{z}}=\mathbf{Az}+\mathbf{F}(\mathbf{z})+\epsilon\mathbf{G}(\mathbf{z},\phi)$$" src="SelfExcitedOscillators_eq16155271348029362642-Rescaled.png" style="width: 318.0px; height: auto;"/></p><p><img alt="$$\dot{\mathbf{\phi}}=\mathbf{\Omega}$$" src="SelfExcitedOscillators_eq16619053923308180078-Rescaled.png" style="width: 70.8px; height: auto;"/></p><p>where</p><p><img alt="$$\mathbf{z}=\left[\begin{array}{c}\mathbf{x}\\\dot{\mathbf{x}}\end{array}\right],\quad\mathbf{A}=\left[\begin{array}{cc}-\mathbf{K}
+&amp; \mathbf{0}\\\mathbf{0} &amp; \mathbf{M}\end{array}\right],\mathbf{B}=\left[\begin{array}{cc}\mathbf{C}
+&amp; \mathbf{M}\\\mathbf{M} &amp; \mathbf{0}\end{array}\right],\quad\quad\mathbf{F}(\mathbf{z})=\left[\begin{array}{c}\mathbf{-\mathbf{f}(\mathbf{x},\dot{\mathbf{x}})}\\\mathbf{0}\end{array}\right],\quad\mathbf{G}(\mathbf{z},\mathbf{\phi})=\left[\begin{array}{c}\mathbf{g}(\mathbf{x,
+\dot{x}},\phi)\\\mathbf{0}\end{array}\right]$$" src="SelfExcitedOscillators_eq12577653640226493624-Rescaled.png" style="width: 1212.0px; height: auto;"/></p><pre class="codeinput"><span class="comment">% Dynamical System</span>
+DS = <a href="../../../../Library/DynamicalSystem/DynamicalSystem.html">DynamicalSystem</a>();
+set(DS,<span class="string">'order'</span>,2)
+set(DS,<span class="string">'M'</span>,M,<span class="string">'C'</span>,C,<span class="string">'K'</span>,K,<span class="string">'fnl'</span>,fnl);
+set(DS.<a href="../../../../Library/Features/Options/Options.html">Options</a>,<span class="string">'Emax'</span>,5,<span class="string">'Nmax'</span>,10,<span class="string">'notation'</span>,<span class="string">'multiindex'</span>)
+</pre><h2 id="4">Add forcing</h2><p>The dynamical system is forced externally and parametrically with <img alt="$\mathbf{g(x},\Omega t) = 4 \mu \left[\begin{array}{cc} k &amp; -k \\ -k &amp;  k \end{array}\right] \cos(2\Omega t) \mathbf{x} +\left[\begin{array}{cc}    q \cos (\Omega t )   \\ 0\end{array}\right]$" src="SelfExcitedOscillators_eq07607213745002297446-Rescaled.png" style="width: 612.0px; height: auto;"/></p><pre class="codeinput">DS.<a href="../../../../Library/DynamicalSystem/add_forcing.html">add_forcing</a>(fext,1e-1);
+</pre><h2 id="5">Linear Modal Analysis</h2><pre class="codeinput"><span class="comment">% Analyse spectrum</span>
+[V,D,W] = DS.<a href="../../../../Library/DynamicalSystem/linear_spectral_analysis.html">linear_spectral_analysis</a>();
+<span class="comment">% Choose Master subspace (perform resonance analysis)</span>
+
+S = <a href="../../../../Library/SSM/SSM.html">SSM</a>(DS);
+set(S.<a href="../../../../Library/Features/Options/Options.html">Options</a>, <span class="string">'reltol'</span>, 0.5,<span class="string">'notation'</span>,<span class="string">'multiindex'</span>)
+
+<span class="comment">%Choose Master subspace</span>
+masterModes = [3,4];
+S.<a href="../../../../Library/Manifold/choose_E.html">choose_E</a>(masterModes);
+</pre><pre class="codeoutput">
+ The first 4 nonzero eigenvalues are given as 
+   0.0037 + 0.5463i
+   0.0037 - 0.5463i
+   0.0013 + 2.5887i
+   0.0013 - 2.5887i
+
+(near) outer resonance detected for the following combination of master eigenvalues
+     1     1
+     1     1
+
+These are in resonance with the follwing eigenvalues of the slave subspace
+   0.0037 + 0.5463i
+   0.0037 - 0.5463i
+
+sigma_out = 2
+sigma_in = 1
+</pre><h2 id="6">Forced response curves using SSMs</h2><p>Obtaining <b>forced response curve</b> in reduced-polar coordinate</p><pre class="codeinput">order = 5; <span class="comment">% Approximation order</span>
+</pre><p>setup options</p><pre class="codeinput">outdof = [1,2];
+set(S.<a href="../../../../Library/Features/Options/Options.html">Options</a>, <span class="string">'reltol'</span>, 0.5,<span class="string">'IRtol'</span>,0.02,<span class="string">'notation'</span>, <span class="string">'multiindex'</span>,<span class="string">'contribNonAuto'</span>,true)
+set(S.<a href="../../../../Library/Features/Options/Options.html">FRCOptions</a>, <span class="string">'nt'</span>, 2^7, <span class="string">'nRho'</span>, 80, <span class="string">'nPar'</span>,600, <span class="string">'nPsi'</span>, 80, <span class="string">'rhoScale'</span>, 4 )
+set(S.<a href="../../../../Library/Features/Options/Options.html">FRCOptions</a>, <span class="string">'method'</span>,<span class="string">'level set'</span>) <span class="comment">% 'continuation ep'</span>
+set(S.<a href="../../../../Library/Features/Options/Options.html">FRCOptions</a>, <span class="string">'outdof'</span>,outdof)
+set(S.<a href="../../../../Library/Features/Options/Options.html">FRCOptions</a>,<span class="string">'coordinates'</span>,<span class="string">'cartesian'</span>)
+</pre><p>choose frequency range around the master mode frequency</p><pre class="codeinput">omega0 = imag(S.E.spectrum(1));
+OmegaRange =omega0*[0.95 1.1];
+</pre><p>Extract forced response curve</p><pre class="codeinput">startFRCSSM = tic;
+FRC = S.<a href="../../../../Library/Features/Wrappers/cocoWrapper/extract_FRC.html">extract_FRC</a>(<span class="string">'freq'</span>,OmegaRange,order);
+figFRC = gcf;
+timings.FRCSSM = toc(startFRCSSM)
+</pre><pre class="codeoutput">*****************************************
+Calculating FRC using SSM with master subspace: [3  4]
+(near) outer resonance detected for the following combination of master eigenvalues
+     1     1
+     1     1
+
+These are in resonance with the follwing eigenvalues of the slave subspace
+   0.0037 + 0.5463i
+   0.0037 - 0.5463i
+
+sigma_out = 2
+sigma_in = 1
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 7.78E-03 MB
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 9.10E-03 MB
+Manifold computation time at order 4 = 00:00:00
+Estimated memory usage at order  4 = 1.13E-02 MB
+Manifold computation time at order 5 = 00:00:00
+Estimated memory usage at order  5 = 1.40E-02 MB
+gamma = 
+  -0.0022 + 0.0038i
+   0.0000 - 0.0000i
+
+Total time spent on FRC computation upto O(5) = 00:00:53
+
+timings = 
+
+  struct with fields:
+
+    FRCSSM: 54.3701
+
+</pre><img alt="" src="SelfExcitedOscillators_01.png" style="width:35%;"/> <img alt="" src="SelfExcitedOscillators_02.png" style="width:35%;"/> <h2 id="10">Verification: Collocation using <a href="https://sourceforge.net/p/cocotools/wiki/Home/">coco</a></h2><p>Dankowicz, H., &amp; Schilder, F. (2013).  <i>Recipes for Continuation,</i> SIAM Philadelphia. <a href="https://doi.org/10.1137/1.9781611972573">https://doi.org/10.1137/1.9781611972573</a></p><pre class="codeinput">nCycles = 10;
+
+coco = <a href="../../../../Library/Features/Wrappers/cocoWrapper/cocoWrapper.html">cocoWrapper</a>(DS, nCycles, outdof);
+set(coco,<span class="string">'initialGuess'</span>,<span class="string">'forward'</span>)
+set(coco.<a href="../../../../Library/Features/Options/Options.html">Options</a>, <span class="string">'NAdapt'</span>, 1);
+set(coco.<a href="../../../../Library/Features/Options/Options.html">Options</a>,<span class="string">'NTST'</span>, 70,<span class="string">'PtMX'</span>,350);
+
+figure(figFRC)
+hold <span class="string">on</span>
+startcoco = tic;
+bd3 = coco.<a href="../../../../Library/Features/Wrappers/cocoWrapper/extract_FRC.html">extract_FRC</a>(OmegaRange);
+timings.cocoFRC = toc(startcoco)
+</pre><pre class="codeoutput">
+ Run='FRC0.1': Continue primary family of periodic orbits.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          2.03e-02  5.35e+00    0.0    0.0    0.0
+   1   1  3.59e-01  9.75e-01  1.30e-02  5.24e+00    0.0    0.0    0.0
+   2   1  5.14e-01  6.26e-01  6.33e-03  5.16e+00    0.0    0.1    0.0
+   3   1  9.78e-01  3.04e-01  1.37e-04  5.10e+00    0.0    0.1    0.0
+   4   1  1.00e+00  6.62e-03  4.22e-11  5.10e+00    0.0    0.2    0.0
+   5   1  1.00e+00  7.63e-09  3.03e-16  5.10e+00    0.1    0.2    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE         omega    po.period          eps         amp1         amp2
+    0  00:00:00   5.0981e+00      1  EP      2.4593e+00   2.5549e+00   1.0000e-01   2.3797e-02   1.1582e-02
+   10  00:00:03   6.8076e+00      2          2.5558e+00   2.4584e+00   1.0000e-01   1.3156e-01   5.7213e-02
+   20  00:00:05   9.8632e+00      3          2.5683e+00   2.4464e+00   1.0000e-01   2.9035e-01   1.2452e-01
+   30  00:00:07   1.2868e+01      4          2.5736e+00   2.4414e+00   1.0000e-01   4.7607e-01   2.0294e-01
+   40  00:00:09   1.5329e+01      5          2.5784e+00   2.4368e+00   1.0000e-01   6.9846e-01   2.9611e-01
+   50  00:00:10   1.9891e+01      6          2.5839e+00   2.4317e+00   1.0000e-01   9.2886e-01   3.9175e-01
+   60  00:00:12   2.4170e+01      7          2.5902e+00   2.4258e+00   1.0000e-01   1.1444e+00   4.7916e-01
+   70  00:00:14   2.7873e+01      8          2.5972e+00   2.4192e+00   1.0000e-01   1.3316e+00   5.5463e-01
+   80  00:00:15   3.0690e+01      9          2.6043e+00   2.4126e+00   1.0000e-01   1.4760e+00   6.1102e-01
+   90  00:00:17   3.2368e+01     10          2.6105e+00   2.4069e+00   1.0000e-01   1.5633e+00   6.4542e-01
+  100  00:00:18   3.2714e+01     11          2.6149e+00   2.4028e+00   1.0000e-01   1.5839e+00   6.5424e-01
+  110  00:00:20   3.1777e+01     12          2.6171e+00   2.4008e+00   1.0000e-01   1.5398e+00   6.3760e-01
+  115  00:00:21   3.0950e+01     13  FP      2.6173e+00   2.4006e+00   1.0000e-01   1.4991e+00   6.2161e-01
+  115  00:00:21   3.0950e+01     14  SN      2.6173e+00   2.4006e+00   1.0000e-01   1.4991e+00   6.2161e-01
+  120  00:00:22   2.9750e+01     15          2.6171e+00   2.4009e+00   1.0000e-01   1.4399e+00   5.9819e-01
+  130  00:00:24   2.6803e+01     16          2.6153e+00   2.4025e+00   1.0000e-01   1.2926e+00   5.3974e-01
+  140  00:00:26   2.3213e+01     17          2.6123e+00   2.4052e+00   1.0000e-01   1.1119e+00   4.6702e-01
+  150  00:00:27   1.9177e+01     18          2.6088e+00   2.4084e+00   1.0000e-01   9.0652e-01   3.8235e-01
+  160  00:00:29   1.4885e+01     19          2.6054e+00   2.4116e+00   1.0000e-01   6.8559e-01   2.9040e-01
+  170  00:00:30   1.0379e+01     20          2.6024e+00   2.4143e+00   1.0000e-01   4.5684e-01   1.9379e-01
+  180  00:00:31   6.4423e+00     21          2.6000e+00   2.4166e+00   1.0000e-01   2.2275e-01   9.3949e-02
+  190  00:00:33   5.7212e+00     22          2.5960e+00   2.4204e+00   1.0000e-01   1.6157e-01   6.7334e-02
+  200  00:00:35   6.3551e+00     23          2.5903e+00   2.4256e+00   1.0000e-01   2.2928e-01   9.5979e-02
+  210  00:00:36   1.0871e+01     24  FP      2.5856e+00   2.4301e+00   1.0000e-01   5.0832e-01   2.1385e-01
+  210  00:00:37   1.0871e+01     25  SN      2.5856e+00   2.4301e+00   1.0000e-01   5.0833e-01   2.1385e-01
+  210  00:00:37   1.1051e+01     26          2.5856e+00   2.4301e+00   1.0000e-01   5.1893e-01   2.1831e-01
+  220  00:00:38   1.5516e+01     27          2.5876e+00   2.4282e+00   1.0000e-01   7.7540e-01   3.2554e-01
+  230  00:00:40   1.9842e+01     28          2.5922e+00   2.4239e+00   1.0000e-01   1.0162e+00   4.2489e-01
+  240  00:00:41   2.5565e+01     29          2.5983e+00   2.4182e+00   1.0000e-01   1.2155e+00   5.0585e-01
+  250  00:00:43   2.8278e+01     30          2.6046e+00   2.4124e+00   1.0000e-01   1.3548e+00   5.6157e-01
+  260  00:00:45   2.9460e+01     31          2.6098e+00   2.4075e+00   1.0000e-01   1.4173e+00   5.8693e-01
+  270  00:00:46   2.8754e+01     32          2.6126e+00   2.4050e+00   1.0000e-01   1.3862e+00   5.7519e-01
+  275  00:00:47   2.7817e+01     33  FP      2.6129e+00   2.4047e+00   1.0000e-01   1.3404e+00   5.5721e-01
+  275  00:00:47   2.7817e+01     34  SN      2.6129e+00   2.4047e+00   1.0000e-01   1.3404e+00   5.5721e-01
+  280  00:00:48   2.6349e+01     35          2.6126e+00   2.4050e+00   1.0000e-01   1.2672e+00   5.2828e-01
+  290  00:00:50   2.2673e+01     36          2.6103e+00   2.4070e+00   1.0000e-01   1.0816e+00   4.5386e-01
+  300  00:00:51   1.8244e+01     37          2.6071e+00   2.4100e+00   1.0000e-01   8.5793e-01   3.6183e-01
+  310  00:00:53   1.3576e+01     38          2.6040e+00   2.4129e+00   1.0000e-01   6.1717e-01   2.6142e-01
+  320  00:00:54   8.7229e+00     39          2.6019e+00   2.4149e+00   1.0000e-01   3.6917e-01   1.5666e-01
+  326  00:00:56   6.4940e+00     40  FP      2.6014e+00   2.4153e+00   1.0000e-01   2.2757e-01   9.6146e-02
+  326  00:00:56   6.4937e+00     41  SN      2.6014e+00   2.4153e+00   1.0000e-01   2.2755e-01   9.6137e-02
+  330  00:00:56   5.5522e+00     42          2.6022e+00   2.4146e+00   1.0000e-01   1.3495e-01   5.6308e-02
+  340  00:00:58   5.2251e+00     43          2.6097e+00   2.4076e+00   1.0000e-01   8.8372e-02   3.6242e-02
+  350  00:00:59   5.0528e+00     44  EP      2.7002e+00   2.3270e+00   1.0000e-01   2.3382e-02   8.7140e-03
+
+timings = 
+
+  struct with fields:
+
+     FRCSSM: 54.3701
+    cocoFRC: 62.2742
+
+</pre><img alt="" src="SelfExcitedOscillators_03.png" style="width:35%;"/> <p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+##### SOURCE BEGIN #####
+%% 4 DOF Parametric Duffing Oscillator
+% We reproduce results for the example of a 2DOF coupled oscillator system with 
+% parametric excitation as given in Szabelski, K. & Warminki, J. _Vibration of 
+% a Non-Linear Self-Excited System with Two Degrees of Freedomunder External and 
+% Parametric Excitation_. Nonlinear Dynamics 1997 14:114,23–36 (1 1997). https://doi.org/10.1023/A:1008227315259 
+% 
+% <<model.png>>
+%
+% The negative linear damping with coefficient $c$ leads to exponentially growing 
+% amplitudes, the effect of which is balanced with positive nonlinear damping 
+% with coefficient $\gamma$ which starts contributing at significant oscillation 
+% amplitudes. Furthermore a nonlinear spring is coupled to the first oscillator. 
+% They are connected via a spring which induces parametric excitation via a time-dependent 
+% stiffness coefficient.
+
+clear all; close all; clc
+%% Generate model
+
+[M,C,K,fnl,fext] = build_model();
+
+%% Dynamical system setup
+% We consider the forced  and parametrically excited system
+% 
+% $$\mathbf{M}\ddot{\mathbf{x}}+\mathbf{C}\dot{\mathbf{x}}+\mathbf{K}\mathbf{x}+\mathbf{f}(\mathbf{x},\dot{\mathbf{x}})=\epsilon\mathbf{g}(\mathbf{x},\dot{\mathbf{x}},\Omega 
+% t),$$
+% 
+% which can be written in the first-order form as 
+% 
+% $$\mathbf{B}\dot{\mathbf{z}}=\mathbf{Az}+\mathbf{F}(\mathbf{z})+\epsilon\mathbf{G}(\mathbf{z},\phi)$$
+% 
+% $$\dot{\mathbf{\phi}}=\mathbf{\Omega}$$
+% 
+% where
+% 
+% $$\mathbf{z}=\left[\begin{array}{c}\mathbf{x}\\\dot{\mathbf{x}}\end{array}\right],\quad\mathbf{A}=\left[\begin{array}{cc}-\mathbf{K} 
+% & \mathbf{0}\\\mathbf{0} & \mathbf{M}\end{array}\right],\mathbf{B}=\left[\begin{array}{cc}\mathbf{C} 
+% & \mathbf{M}\\\mathbf{M} & \mathbf{0}\end{array}\right],\quad\quad\mathbf{F}(\mathbf{z})=\left[\begin{array}{c}\mathbf{-\mathbf{f}(\mathbf{x},\dot{\mathbf{x}})}\\\mathbf{0}\end{array}\right],\quad\mathbf{G}(\mathbf{z},\mathbf{\phi})=\left[\begin{array}{c}\mathbf{g}(\mathbf{x, 
+% \dot{x}},\phi)\\\mathbf{0}\end{array}\right]$$
+
+% Dynamical System
+DS = <a href="../../../../Library/DynamicalSystem/DynamicalSystem.html">DynamicalSystem</a>();
+set(DS,'order',2)
+set(DS,'M',M,'C',C,'K',K,'fnl',fnl);
+set(DS.<a href="../../../../Library/Features/Options/Options.html">Options</a>,'Emax',5,'Nmax',10,'notation','multiindex')
+%% Add forcing
+% The dynamical system is forced externally and parametrically with $\mathbf{g(x},\Omega 
+% t) = 4 \mu \left[\begin{array}{cc} k & -k \\ -k &  k \end{array}\right] \cos(2\Omega 
+% t) \mathbf{x} +\left[\begin{array}{cc}    q \cos (\Omega t )   \\ 0\end{array}\right]$
+
+DS.<a href="../../../../Library/DynamicalSystem/add_forcing.html">add_forcing</a>(fext,1e-1);
+%% Linear Modal Analysis 
+
+% Analyse spectrum
+[V,D,W] = DS.<a href="../../../../Library/DynamicalSystem/linear_spectral_analysis.html">linear_spectral_analysis</a>();
+% Choose Master subspace (perform resonance analysis)
+
+S = <a href="../../../../Library/SSM/SSM.html">SSM</a>(DS);
+set(S.<a href="../../../../Library/Features/Options/Options.html">Options</a>, 'reltol', 0.5,'notation','multiindex')
+
+%Choose Master subspace
+masterModes = [3,4];
+S.<a href="../../../../Library/Manifold/choose_E.html">choose_E</a>(masterModes);
+%% Forced response curves using SSMs
+% Obtaining *forced response curve* in reduced-polar coordinate
+
+order = 5; % Approximation order
+%% 
+% setup options
+
+outdof = [1,2];
+set(S.<a href="../../../../Library/Features/Options/Options.html">Options</a>, 'reltol', 0.5,'IRtol',0.02,'notation', 'multiindex','contribNonAuto',true)
+set(S.<a href="../../../../Library/Features/Options/Options.html">FRCOptions</a>, 'nt', 2^7, 'nRho', 80, 'nPar',600, 'nPsi', 80, 'rhoScale', 4 )
+set(S.<a href="../../../../Library/Features/Options/Options.html">FRCOptions</a>, 'method','level set') % 'continuation ep'
+set(S.<a href="../../../../Library/Features/Options/Options.html">FRCOptions</a>, 'outdof',outdof)
+set(S.<a href="../../../../Library/Features/Options/Options.html">FRCOptions</a>,'coordinates','cartesian')
+%% 
+% choose frequency range around the master mode frequency
+
+
+omega0 = imag(S.E.spectrum(1));
+OmegaRange =omega0*[0.95 1.1];
+%% 
+% Extract forced response curve
+
+startFRCSSM = tic;
+FRC = S.<a href="../../../../Library/Features/Wrappers/cocoWrapper/extract_FRC.html">extract_FRC</a>('freq',OmegaRange,order);
+figFRC = gcf;
+timings.FRCSSM = toc(startFRCSSM)
+%% Verification: Collocation using <https://sourceforge.net/p/cocotools/wiki/Home/ coco>
+% Dankowicz, H., & Schilder, F. (2013).  _Recipes for Continuation,_ SIAM Philadelphia. 
+% https://doi.org/10.1137/1.9781611972573
+
+nCycles = 10;
+
+coco = <a href="../../../../Library/Features/Wrappers/cocoWrapper/cocoWrapper.html">cocoWrapper</a>(DS, nCycles, outdof);
+set(coco,'initialGuess','forward')
+set(coco.<a href="../../../../Library/Features/Options/Options.html">Options</a>, 'NAdapt', 1);
+set(coco.<a href="../../../../Library/Features/Options/Options.html">Options</a>,'NTST', 70,'PtMX',350); 
+
+figure(figFRC)
+hold on
+startcoco = tic;
+bd3 = coco.<a href="../../../../Library/Features/Wrappers/cocoWrapper/extract_FRC.html">extract_FRC</a>(OmegaRange);
+timings.cocoFRC = toc(startcoco)
+##### SOURCE END #####
+--></body></html>

@@ -1,0 +1,320 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../../../../index.html"><img alt="Logo" class="logo" src="../../../../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>Coco Periodic Orbit Sweeps</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-09" name="DC.date"/><meta content="coco_poSweeps.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>Coco Periodic Orbit Sweeps</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">COCO_POSWEEPS</a></li><li><a href="#4">Plot Setting</a></li><li><a href="#5">Prepare COCOdata</a></li><li><a href="#7">Coco Plot</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> bds = coco_poSweeps(obj,epSamp,omRange,varargin)
+        </pre><h2 id="2">COCO_POSWEEPS</h2><p>This function performs continuation of a family of periodic orbits with varying frequency for a given set of sampling forcing amplitudes. For each amplitude the FRC is computed.</p><p>BDS = COCO_POSWEEPS(OBJ,EPSAMP,OMRANGE, varargin)</p><div><ul><li>obj:      instance of DS class</li></ul></div><div><ul><li>epSamp:   Sampling forcing amplitudes</li></ul></div><div><ul><li>omRange:  continuation domain of forcing frequency</li></ul></div><div><ul><li>varargin: parameter that can be used to suppress the plotting of results</li></ul></div><p><b>Output</b></p><div><ul><li>bds:      bifurcation data struct that contains the information on the           continuation problems that are investigated</li></ul></div><p>See also: SSM_POSWEEPS</p><pre class="codeinput"><span class="keyword">if</span>~isempty( varargin)
+    plotfrc = varargin{1};
+<span class="keyword">end</span>
+bds = cell(1,numel(epSamp));
+ii = 1;
+<span class="keyword">for</span> eps = epSamp
+
+    <span class="comment">% Set current epsilon</span>
+    <span class="keyword">if</span> obj.system.order == 1
+        obj.system.Fext.epsilon = eps;
+    <span class="keyword">else</span>
+        obj.system.fext.epsilon = eps;
+    <span class="keyword">end</span>
+
+    <span class="comment">% Reset the initial forcing frequency</span>
+    obj.system.Omega = omRange(1);
+
+    <span class="comment">% Get individual FRCs</span>
+    bds{ii} = obj.<a href="../../../../Library/Features/Wrappers/cocoWrapper/extract_FRC.html">extract_FRC</a>( omRange,false); <span class="comment">%dont plot frcs</span>
+    ii = ii +1;
+<span class="keyword">end</span>
+
+<span class="comment">% Prepare output</span>
+bds = vertcat(bds{:});
+
+<span class="keyword">if</span>~isempty( varargin)
+    <span class="keyword">if</span> plotfrc
+        Sweepplot( bds,obj.outdof);
+    <span class="keyword">end</span>
+<span class="keyword">else</span>
+    Sweepplot( bds,obj.outdof);
+
+<span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+
+<span class="keyword">function</span> Sweepplot( bds,outdof)
+        </pre><h2 id="4">Plot Setting</h2><pre class="codeinput">cocosz = 5 *1.4;
+        </pre><h2 id="5">Prepare COCOdata</h2><pre class="codeinput">numoutdof = numel(outdof);
+nSample = 1;
+
+ampNames = cell(1, numel(numoutdof));
+<span class="keyword">for</span> k = 1:numel(outdof)
+    ampNames{k} = strcat(<span class="string">'amp'</span>,num2str(outdof(k)));
+<span class="keyword">end</span>
+
+omegacc = [];
+epsfcc  = [];
+stabcc = logical([]);
+amp = cell(numoutdof,1);
+
+
+<span class="keyword">for</span> k=1:numel(bds)
+    bd = bds{k};
+
+    omegai = coco_bd_col(bd, <span class="string">'omega'</span>);
+    epsfi = coco_bd_col(bd, <span class="string">'eps'</span>);
+    stabi = coco_bd_col(bd, <span class="string">'eigs'</span>)';
+    stabi = abs(stabi);
+    stabi = all(stabi&lt;1, 2);
+    omegacc = [omegacc, omegai];
+    epsfcc  = [epsfcc, epsfi];
+    stabcc  = [stabcc; stabi];
+    <span class="keyword">for</span> j=1:numoutdof
+        ampj   = coco_bd_col(bd, ampNames{j});
+        amp{j} = [amp{j}, ampj];
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+figure(gcf)
+hold <span class="string">on</span>
+<span class="keyword">if</span> numoutdof &gt; 1
+    <span class="keyword">for</span> i=1:numoutdof
+        </pre><pre class="codeinput">        subplot(numoutdof,1,i); hold <span class="string">on</span>
+        </pre><h2 id="7">Coco Plot</h2><pre class="codeinput">        om = omegacc(~stabcc); am = amp{i}(~stabcc);eps = epsfcc(~stabcc);
+        plot3(om(1:nSample:end), eps(1:nSample:end),am(1:nSample:end), <span class="string">'c*'</span>, <span class="string">'MarkerSize'</span>, cocosz,<span class="string">'DisplayName'</span>,<span class="string">'collocation - unstable'</span>)<span class="comment">%, 'color',[0.9294    0.6941    0.1255] );</span>
+        om = omegacc(stabcc); am = amp{i}(stabcc); eps = epsfcc(stabcc);
+        plot3(om(1:nSample:end),  eps(1:nSample:end),am(1:nSample:end), <span class="string">'g*'</span>,<span class="string">'MarkerSize'</span>, cocosz,<span class="string">'DisplayName'</span>,<span class="string">'collocation - stable'</span>)<span class="comment">%,'color',[0 0 0] );</span>
+        </pre><pre class="codeinput">    <span class="keyword">end</span>
+<span class="keyword">else</span>
+    om = omegacc(~stabcc); am = amp{1}(~stabcc);eps = epsfcc(~stabcc);
+    plot3(om(1:nSample:end), eps(1:nSample:end),am(1:nSample:end), <span class="string">'c*'</span>, <span class="string">'MarkerSize'</span>, cocosz,<span class="string">'DisplayName'</span>,<span class="string">'collocation - unstable'</span>)<span class="comment">%, 'color',[0.9294    0.6941    0.1255] );</span>
+    om = omegacc(stabcc); am = amp{1}(stabcc); eps = epsfcc(stabcc);
+    plot3(om(1:nSample:end),  eps(1:nSample:end),am(1:nSample:end), <span class="string">'g*'</span>,<span class="string">'MarkerSize'</span>, cocosz,<span class="string">'DisplayName'</span>,<span class="string">'collocation - stable'</span>)<span class="comment">%,'color',[0 0 0] );</span>
+
+<span class="keyword">end</span>
+    <span class="comment">%%Labels and Legend</span>
+    <span class="comment">%</span>
+    <span class="comment">%legend(Leg{2:end},  'Interpreter','latex','Location','best');</span>
+    <span class="comment">%xlabel('$\Omega$','interpreter','latex','FontSize',16);</span>
+    <span class="comment">%ylabel('$\mu$','interpreter','latex','FontSize',16);</span>
+    <span class="comment">%zk = strcat('$||z_{',num2str(outdof(i)),'}||_{\infty}$');</span>
+    <span class="comment">%zlabel(zk,'Interpreter','latex');</span>
+    <span class="comment">%%Parameters for figure size, label size, legend size</span>
+    <span class="comment">%set(gca,'fontsize',axis_size)</span>
+
+    <span class="comment">%%Size of window</span>
+    <span class="comment">%set(gcf, 'Position', [0 0 xwidth ywidth])</span>
+
+    <span class="comment">%grid on, axis tight;legend boxoff;</span>
+    <span class="comment">%view([-1,-1,1]);</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+        </pre><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% Coco Periodic Orbit Sweeps
+%
+%%
+function bds = coco_poSweeps(obj,epSamp,omRange,varargin)
+%% COCO_POSWEEPS 
+% 
+% This function performs continuation of a family of periodic
+% orbits with varying frequency for a given set of sampling forcing
+% amplitudes. For each amplitude the FRC is computed.
+%
+% BDS = COCO_POSWEEPS(OBJ,EPSAMP,OMRANGE, varargin)
+%
+% * obj:      instance of DS class
+% 
+% * epSamp:   Sampling forcing amplitudes
+% 
+% * omRange:  continuation domain of forcing frequency
+% 
+% * varargin: parameter that can be used to suppress the plotting of results
+%
+% *Output*
+%
+% * bds:      bifurcation data struct that contains the information on the
+%           continuation problems that are investigated
+%
+% See also: SSM_POSWEEPS
+
+if~isempty( varargin)
+    plotfrc = varargin{1}; 
+end
+bds = cell(1,numel(epSamp));
+ii = 1;
+for eps = epSamp  
+    
+    % Set current epsilon
+    if obj.system.order == 1
+        obj.system.Fext.epsilon = eps;
+    else
+        obj.system.fext.epsilon = eps;
+    end
+    
+    % Reset the initial forcing frequency
+    obj.system.Omega = omRange(1);
+    
+    % Get individual FRCs
+    bds{ii} = obj.<a href="../../../../Library/Features/Wrappers/cocoWrapper/extract_FRC.html">extract_FRC</a>( omRange,false); %dont plot frcs 
+    ii = ii +1;
+end
+
+% Prepare output
+bds = vertcat(bds{:});
+
+if~isempty( varargin)
+    if plotfrc
+        Sweepplot( bds,obj.outdof);
+    end
+else
+    Sweepplot( bds,obj.outdof);
+    
+end
+
+end
+
+function Sweepplot( bds,outdof)
+%% Plot Setting
+cocosz = 5 *1.4;
+
+%% Prepare COCOdata
+numoutdof = numel(outdof);
+nSample = 1;
+
+ampNames = cell(1, numel(numoutdof));
+for k = 1:numel(outdof)
+    ampNames{k} = strcat('amp',num2str(outdof(k)));
+end
+
+omegacc = [];
+epsfcc  = [];
+stabcc = logical([]);
+amp = cell(numoutdof,1);
+
+
+for k=1:numel(bds)
+    bd = bds{k};
+    
+    omegai = coco_bd_col(bd, 'omega');
+    epsfi = coco_bd_col(bd, 'eps');
+    stabi = coco_bd_col(bd, 'eigs')';
+    stabi = abs(stabi);
+    stabi = all(stabi<1, 2);
+    omegacc = [omegacc, omegai];
+    epsfcc  = [epsfcc, epsfi];
+    stabcc  = [stabcc; stabi];
+    for j=1:numoutdof
+        ampj   = coco_bd_col(bd, ampNames{j});
+        amp{j} = [amp{j}, ampj];
+    end
+end
+
+figure(gcf)
+hold on
+if numoutdof > 1
+    for i=1:numoutdof
+        subplot(numoutdof,1,i); hold on
+        
+        %% Coco Plot
+        
+        om = omegacc(~stabcc); am = amp{i}(~stabcc);eps = epsfcc(~stabcc);
+        plot3(om(1:nSample:end), eps(1:nSample:end),am(1:nSample:end), 'c*', 'MarkerSize', cocosz,'DisplayName','collocation - unstable')%, 'color',[0.9294    0.6941    0.1255] );
+        om = omegacc(stabcc); am = amp{i}(stabcc); eps = epsfcc(stabcc);
+        plot3(om(1:nSample:end),  eps(1:nSample:end),am(1:nSample:end), 'g*','MarkerSize', cocosz,'DisplayName','collocation - stable')%,'color',[0 0 0] );
+    end
+else
+    om = omegacc(~stabcc); am = amp{1}(~stabcc);eps = epsfcc(~stabcc);
+    plot3(om(1:nSample:end), eps(1:nSample:end),am(1:nSample:end), 'c*', 'MarkerSize', cocosz,'DisplayName','collocation - unstable')%, 'color',[0.9294    0.6941    0.1255] );
+    om = omegacc(stabcc); am = amp{1}(stabcc); eps = epsfcc(stabcc);
+    plot3(om(1:nSample:end),  eps(1:nSample:end),am(1:nSample:end), 'g*','MarkerSize', cocosz,'DisplayName','collocation - stable')%,'color',[0 0 0] );
+    
+end
+    %%Labels and Legend
+    %
+    %legend(Leg{2:end},  'Interpreter','latex','Location','best');
+    %xlabel('$\Omega$','interpreter','latex','FontSize',16);
+    %ylabel('$\mu$','interpreter','latex','FontSize',16);
+    %zk = strcat('$||z_{',num2str(outdof(i)),'}||_{\infty}$');
+    %zlabel(zk,'Interpreter','latex');
+    %%Parameters for figure size, label size, legend size
+    %set(gca,'fontsize',axis_size)
+    
+    %%Size of window
+    %set(gcf, 'Position', [0 0 xwidth ywidth])
+    
+    %grid on, axis tight;legend boxoff;
+    %view([-1,-1,1]);
+
+end
+
+
+            ##### SOURCE END #####
+        --></body></html></body></html>

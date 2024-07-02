@@ -1,0 +1,361 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../../index.html"><img alt="Logo" class="logo" src="../../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>SSM_CONT_EP</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-09" name="DC.date"/><meta content="SSM_cont_ep.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>SSM_CONT_EP</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">SSM_CONT_EP</a></li><li><a href="#3">continuation of equilibrium points in reduced dynamics</a></li><li><a href="#4">extract results of reduced dynamics at sampled frequencies</a></li><li><a href="#5">FRC in physical domain</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> FRC = SSM_cont_ep(obj,type,oid,run,lab,parName,parRange,outdof,varargin)
+        </pre><h2 id="2">SSM_CONT_EP</h2><p>This function performs continuation of equilibrium points of slow dynamics. Each equilibrium point corresponds to a periodic orbit in the regular time dynamics.</p><p>FRC = ODE_CONT_EP(type, OID, RUN, LAB, PARNAME, PARRANGE, OUTDOF, VARARGIN)</p><div><ul><li><tt>type</tt>:     BP/ep/SN/HB</li></ul></div><div><ul><li><tt>run</tt>:      runid of continuation for saved solution</li></ul></div><div><ul><li><tt>lab</tt>:      label of continuation for saved solution, which must be the label of           a branch point</li></ul></div><div><ul><li><tt>parName</tt>:  amp/freq continuation parameter</li></ul></div><div><ul><li><tt>parRange</tt>: continuation domain of parameter, which should be near the           value of natural frequency with index 1 in the mFreq if continuation           parameter is freq</li></ul></div><div><ul><li><tt>outdof</tt>:   dofs for output in physical domain</li></ul></div><div><ul><li><tt>varargin</tt>: ['saveICs'] flag for saving the initial point in trajectory</li></ul></div><p>See also: SSM_ISOL2EP SSM_EP2EP</p><h2 id="3">continuation of equilibrium points in reduced dynamics</h2><pre class="codeinput">prob = coco_prob();
+prob = <a href="../../Library/Features/Wrappers/cocoWrapper/cocoSet.html">cocoSet</a>(obj.contOptions,prob);
+bif  = false; <span class="comment">% true for SN and HB</span>
+<span class="keyword">switch</span> type
+    <span class="keyword">case</span> <span class="string">'BP'</span>
+        prob = ode_BP2ep(prob, <span class="string">''</span>, coco_get_id(run, <span class="string">'ep'</span>), lab);
+    <span class="keyword">case</span> <span class="string">'ep'</span>
+        prob = ode_ep2ep(prob, <span class="string">''</span>, coco_get_id(run, <span class="string">'ep'</span>), lab);
+    <span class="keyword">case</span> <span class="string">'SN'</span>
+        prob = ode_ep2SN(prob, <span class="string">''</span>, coco_get_id(run, <span class="string">'ep'</span>), lab);
+        bif  = true;
+    <span class="keyword">case</span> <span class="string">'HB'</span>
+        prob = ode_ep2HB(prob, <span class="string">''</span>, coco_get_id(run, <span class="string">'ep'</span>), lab);
+        bif  = true;
+    <span class="keyword">otherwise</span>
+        error(<span class="string">'type should be selected from {BP,ep,SN,HB}'</span>);
+<span class="keyword">end</span>
+
+<span class="comment">% read data</span>
+fdata = coco_get_func_data(prob, <span class="string">'ep'</span>, <span class="string">'data'</span>);
+<span class="comment">% extract data to fdata.fhan, namely, @(z,p)ode_2mD<a href="../../Library/SSM/SSM.html">SSM</a>(z,p,fdata)</span>
+odedata = functions(fdata.fhan);
+odedata = odedata.workspace{1};
+fdata   = odedata.fdata;
+m   = numel(fdata.mFreqs);
+order    = fdata.order;
+ispolar  = fdata.ispolar;
+iNonauto = fdata.iNonauto;
+rNonauto = fdata.rNonauto;
+kNonauto = fdata.kNonauto;
+modes    = fdata.modes;
+mFreqs   = fdata.mFreqs;
+wdir     = fullfile(pwd,<span class="string">'data'</span>,<span class="string">'SSM.mat'</span>);
+SSMcoeffs = load(wdir);
+SSMcoeffs = SSMcoeffs.SSMcoeffs;
+W_0 = SSMcoeffs.W_0;
+W_1 = SSMcoeffs.W_1;
+clear(<span class="string">'SSMcoeffs'</span>);
+Nonauto = struct();
+Nonauto.iNonauto = iNonauto;
+Nonauto.rNonauto = rNonauto;
+Nonauto.kNonauto = kNonauto;
+
+
+<span class="comment">% define monitor functions</span>
+[prob, args1, args2] = <a href="../../Library/SSM/private/monitor_states.html">monitor_states</a>(prob, ispolar, m);
+
+<span class="comment">% setup continuation arguments</span>
+<span class="keyword">if</span> ~bif
+    <span class="keyword">switch</span> parName
+        <span class="keyword">case</span> <span class="string">'freq'</span>
+            isomega = true;
+            cont_args = [{<span class="string">'om'</span>},args1(:)' ,args2(:)',{<span class="string">'eps'</span>}];
+        <span class="keyword">case</span> <span class="string">'amp'</span>
+            isomega = false;
+            cont_args = [{<span class="string">'eps'</span>},args1(:)' ,args2(:)',{<span class="string">'om'</span>}];
+        <span class="keyword">otherwise</span>
+            error(<span class="string">'Continuation parameter should be freq or amp'</span>);
+    <span class="keyword">end</span>
+    <span class="keyword">if</span> strcmp(obj.FRCOptions.sampStyle, <span class="string">'uniform'</span>)
+        <span class="keyword">if</span> isomega
+            nOmega = obj.FRCOptions.nPar;
+            omSamp = linspace(parRange(1),parRange(2), nOmega);
+            prob   = coco_add_event(prob, <span class="string">'UZ'</span>, <span class="string">'om'</span>, omSamp);
+        <span class="keyword">else</span>
+            nEpsilon = obj.FRCOptions.nPar;
+            epSamp = linspace(parRange(1),parRange(2), nEpsilon);
+            prob   = coco_add_event(prob, <span class="string">'UZ'</span>, <span class="string">'eps'</span>, epSamp);
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">else</span>
+    isomega = true;
+    cont_args = [{<span class="string">'om'</span>},{<span class="string">'eps'</span>},args1(:)' ,args2(:)'];
+<span class="keyword">end</span>
+
+runid = coco_get_id(oid, <span class="string">'ep'</span>);
+<span class="comment">% print information of continuation run</span>
+<span class="keyword">switch</span> type
+    <span class="keyword">case</span> <span class="string">'BP'</span>
+        fprintf(<span class="string">'\n Run=''%s'': Continue equilibria along secondary branch from label %d of run %s.\n'</span>, <span class="keyword">...</span>
+          runid, lab, run);
+    <span class="keyword">case</span> <span class="string">'ep'</span>
+        fprintf(<span class="string">'\n Run=''%s'': Continue equilibria from label %d of run %s.\n'</span>, <span class="keyword">...</span>
+          runid, lab, run);
+    <span class="keyword">case</span> <span class="string">'SN'</span>
+        fprintf(<span class="string">'\n Run=''%s'': Continue saddle-node equilibria from label %d of run %s.\n'</span>, <span class="keyword">...</span>
+          runid, lab, run);
+    <span class="keyword">case</span> <span class="string">'HB'</span>
+        fprintf(<span class="string">'\n Run=''%s'': Continue Hopf equilibria from label %d of run %s.\n'</span>, <span class="keyword">...</span>
+          runid, lab, run);
+<span class="keyword">end</span>
+
+<span class="comment">% coco run</span>
+coco(prob, runid, [], 1, cont_args, parRange);
+        </pre><h2 id="4">extract results of reduced dynamics at sampled frequencies</h2><pre class="codeinput"><span class="keyword">if</span> ~bif
+    FRC = <a href="../../Library/SSM/private/ep_reduced_results.html">ep_reduced_results</a>(runid,obj.FRCOptions.sampStyle,ispolar,isomega,args1,args2);
+<span class="keyword">else</span>
+    FRC = <a href="../../Library/SSM/private/ep_reduced_results.html">ep_reduced_results</a>(runid,<span class="string">'cocoBD'</span>,ispolar,[],args1,args2);
+<span class="keyword">end</span>
+        </pre><h2 id="5">FRC in physical domain</h2><pre class="codeinput">FRCdata = struct();        FRCdata.isomega = isomega;
+FRCdata.mFreqs  = mFreqs;  FRCdata.order  = order;
+FRCdata.ispolar = ispolar; FRCdata.modes  = modes;
+FRC = FRC_<a href="../../Library/Features/misc/reduced_to_full.html">reduced_to_full</a>(obj,Nonauto,<span class="string">'ep'</span>,FRC,FRCdata,W_0,W_1,outdof,varargin{:});
+
+<span class="comment">% Plot Plot FRC in system coordinates</span>
+<span class="keyword">if</span> ~bif
+    <span class="keyword">if</span> isomega
+        <a href="../../Library/SSM/private/plot_frc_full.html">plot_frc_full</a>(FRC.om,FRC.Znorm_frc,outdof,FRC.Aout_frc,FRC.st,order,<span class="string">'freq'</span>,<span class="string">'lines'</span>,{FRC.SNidx,FRC.HBidx});
+    <span class="keyword">else</span>
+        <a href="../../Library/SSM/private/plot_frc_full.html">plot_frc_full</a>(FRC.ep,FRC.Znorm_frc,outdof,FRC.Aout_frc,FRC.st,order,<span class="string">'amp'</span>,<span class="string">'lines'</span>,{FRC.SNidx,FRC.HBidx});
+    <span class="keyword">end</span>
+<span class="keyword">else</span>
+    <span class="keyword">if</span> strcmp(type, <span class="string">'SN'</span>)
+        <a href="../../Library/SSM/private/plot3_frc_full.html">plot3_frc_full</a>(FRC.om,FRC.ep,FRC.Znorm_frc,outdof,FRC.Aout_frc,[],order,<span class="string">'lines'</span>,<span class="string">'g-'</span>);
+    <span class="keyword">else</span>
+        <a href="../../Library/SSM/private/plot3_frc_full.html">plot3_frc_full</a>(FRC.om,FRC.ep,FRC.Znorm_frc,outdof,FRC.Aout_frc,[],order,<span class="string">'lines'</span>,<span class="string">'r-'</span>);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+fdir = fullfile(pwd,<span class="string">'data'</span>,runid,<span class="string">'SSMep.mat'</span>);
+save(fdir, <span class="string">'FRC'</span>);
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+        </pre><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% SSM_CONT_EP
+%
+%%
+function FRC = SSM_cont_ep(obj,type,oid,run,lab,parName,parRange,outdof,varargin)
+%% SSM_CONT_EP 
+% This function performs continuation of equilibrium points of
+% slow dynamics. Each equilibrium point corresponds to a periodic orbit in
+% the regular time dynamics.
+%
+% FRC = ODE_CONT_EP(type, OID, RUN, LAB, PARNAME, PARRANGE, OUTDOF, VARARGIN)
+%
+% * |type|:     BP/ep/SN/HB
+% 
+% * |run|:      runid of continuation for saved solution
+% 
+% * |lab|:      label of continuation for saved solution, which must be the label of
+%           a branch point
+% 
+% * |parName|:  amp/freq continuation parameter
+% 
+% * |parRange|: continuation domain of parameter, which should be near the
+%           value of natural frequency with index 1 in the mFreq if continuation
+%           parameter is freq
+% 
+% * |outdof|:   dofs for output in physical domain
+% 
+% * |varargin|: ['saveICs'] flag for saving the initial point in trajectory
+%
+% See also: SSM_ISOL2EP SSM_EP2EP
+
+%% continuation of equilibrium points in reduced dynamics
+prob = coco_prob();
+prob = <a href="../../Library/Features/Wrappers/cocoWrapper/cocoSet.html">cocoSet</a>(obj.contOptions,prob);
+bif  = false; % true for SN and HB
+switch type
+    case 'BP'
+        prob = ode_BP2ep(prob, '', coco_get_id(run, 'ep'), lab);
+    case 'ep'
+        prob = ode_ep2ep(prob, '', coco_get_id(run, 'ep'), lab);
+    case 'SN'
+        prob = ode_ep2SN(prob, '', coco_get_id(run, 'ep'), lab);
+        bif  = true;
+    case 'HB'
+        prob = ode_ep2HB(prob, '', coco_get_id(run, 'ep'), lab);
+        bif  = true;
+    otherwise
+        error('type should be selected from {BP,ep,SN,HB}');
+end
+
+% read data 
+fdata = coco_get_func_data(prob, 'ep', 'data');
+% extract data to fdata.fhan, namely, @(z,p)ode_2mD<a href="../../Library/SSM/SSM.html">SSM</a>(z,p,fdata)
+odedata = functions(fdata.fhan);
+odedata = odedata.workspace{1};
+fdata   = odedata.fdata;
+m   = numel(fdata.mFreqs);
+order    = fdata.order;
+ispolar  = fdata.ispolar;
+iNonauto = fdata.iNonauto;
+rNonauto = fdata.rNonauto;
+kNonauto = fdata.kNonauto;
+modes    = fdata.modes;
+mFreqs   = fdata.mFreqs;
+wdir     = fullfile(pwd,'data','SSM.mat');
+SSMcoeffs = load(wdir);
+SSMcoeffs = SSMcoeffs.SSMcoeffs;
+W_0 = SSMcoeffs.W_0;
+W_1 = SSMcoeffs.W_1;
+clear('SSMcoeffs');
+Nonauto = struct();
+Nonauto.iNonauto = iNonauto; 
+Nonauto.rNonauto = rNonauto; 
+Nonauto.kNonauto = kNonauto;
+
+
+% define monitor functions
+[prob, args1, args2] = <a href="../../Library/SSM/private/monitor_states.html">monitor_states</a>(prob, ispolar, m);
+
+% setup continuation arguments
+if ~bif
+    switch parName
+        case 'freq'
+            isomega = true;
+            cont_args = [{'om'},args1(:)' ,args2(:)',{'eps'}];
+        case 'amp'
+            isomega = false;
+            cont_args = [{'eps'},args1(:)' ,args2(:)',{'om'}];
+        otherwise
+            error('Continuation parameter should be freq or amp');
+    end
+    if strcmp(obj.FRCOptions.sampStyle, 'uniform')
+        if isomega
+            nOmega = obj.FRCOptions.nPar;
+            omSamp = linspace(parRange(1),parRange(2), nOmega);
+            prob   = coco_add_event(prob, 'UZ', 'om', omSamp);
+        else
+            nEpsilon = obj.FRCOptions.nPar;
+            epSamp = linspace(parRange(1),parRange(2), nEpsilon);
+            prob   = coco_add_event(prob, 'UZ', 'eps', epSamp);
+        end        
+    end
+else
+    isomega = true;
+    cont_args = [{'om'},{'eps'},args1(:)' ,args2(:)'];  
+end
+
+runid = coco_get_id(oid, 'ep');
+% print information of continuation run
+switch type
+    case 'BP'
+        fprintf('\n Run=''%s'': Continue equilibria along secondary branch from label %d of run %s.\n', ...
+          runid, lab, run);
+    case 'ep'
+        fprintf('\n Run=''%s'': Continue equilibria from label %d of run %s.\n', ...
+          runid, lab, run);
+    case 'SN'
+        fprintf('\n Run=''%s'': Continue saddle-node equilibria from label %d of run %s.\n', ...
+          runid, lab, run);
+    case 'HB'
+        fprintf('\n Run=''%s'': Continue Hopf equilibria from label %d of run %s.\n', ...
+          runid, lab, run);        
+end
+
+% coco run
+coco(prob, runid, [], 1, cont_args, parRange);
+
+
+%% extract results of reduced dynamics at sampled frequencies
+if ~bif
+    FRC = <a href="../../Library/SSM/private/ep_reduced_results.html">ep_reduced_results</a>(runid,obj.FRCOptions.sampStyle,ispolar,isomega,args1,args2);
+else
+    FRC = <a href="../../Library/SSM/private/ep_reduced_results.html">ep_reduced_results</a>(runid,'cocoBD',ispolar,[],args1,args2); 
+end
+
+%% FRC in physical domain
+FRCdata = struct();        FRCdata.isomega = isomega;
+FRCdata.mFreqs  = mFreqs;  FRCdata.order  = order; 
+FRCdata.ispolar = ispolar; FRCdata.modes  = modes;
+FRC = FRC_<a href="../../Library/Features/misc/reduced_to_full.html">reduced_to_full</a>(obj,Nonauto,'ep',FRC,FRCdata,W_0,W_1,outdof,varargin{:});
+
+% Plot Plot FRC in system coordinates
+if ~bif
+    if isomega
+        <a href="../../Library/SSM/private/plot_frc_full.html">plot_frc_full</a>(FRC.om,FRC.Znorm_frc,outdof,FRC.Aout_frc,FRC.st,order,'freq','lines',{FRC.SNidx,FRC.HBidx});
+    else
+        <a href="../../Library/SSM/private/plot_frc_full.html">plot_frc_full</a>(FRC.ep,FRC.Znorm_frc,outdof,FRC.Aout_frc,FRC.st,order,'amp','lines',{FRC.SNidx,FRC.HBidx});
+    end
+else
+    if strcmp(type, 'SN')
+        <a href="../../Library/SSM/private/plot3_frc_full.html">plot3_frc_full</a>(FRC.om,FRC.ep,FRC.Znorm_frc,outdof,FRC.Aout_frc,[],order,'lines','g-');
+    else
+        <a href="../../Library/SSM/private/plot3_frc_full.html">plot3_frc_full</a>(FRC.om,FRC.ep,FRC.Znorm_frc,outdof,FRC.Aout_frc,[],order,'lines','r-');
+    end
+end
+
+fdir = fullfile(pwd,'data',runid,'SSMep.mat');
+save(fdir, 'FRC');
+end
+            ##### SOURCE END #####
+        --></body></html></body></html>

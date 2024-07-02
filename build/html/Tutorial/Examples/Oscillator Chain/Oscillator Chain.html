@@ -1,0 +1,1328 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><html><body><div class="banner"><a href="../../../index.html"><img alt="Logo" class="logo" src="../../../logo.png" style="float:right" width="200"/></a></div></body></html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Chain of Oscillators</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-08-31" name="DC.date"/><meta content="OscillatorChain_FreqSpan.m" name="DC.source"/><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Chain of Oscillators</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">Example setup</a></li><li><a href="#3">Dynamical System Setup</a></li><li><a href="#7">Forced Response Curve in a Frequency Span</a></li></ul></div><p>We compute SSM compute for an Oscillator Chain with cubic and quadratic nonlinearities</p><p><img alt="" src="Model.png" style="width:35%;"/> </p><pre class="codeinput">clear <span class="string">all</span>; close <span class="string">all</span>; clc
+</pre><h2 id="2">Example setup</h2><pre class="codeinput">n = 10;
+m = 1;
+c = 0.1;
+k = 1;
+kappa2 = 0;
+kappa3 = 0.5;
+[M,C,K,fnl,~] = build_model(n,m,c,k,kappa2,kappa3);
+</pre><h2 id="3">Dynamical System Setup</h2><p>We consider the forced system</p><p><img alt="$$\mathbf{M}\ddot{\mathbf{x}}+\mathbf{C}\dot{\mathbf{x}}+\mathbf{K}\mathbf{x}+\mathbf{f}(\mathbf{x},\dot{\mathbf{x}})=\epsilon\mathbf{f}^{ext}(\mathbf{\Omega}t),$$" src="OscillatorChain_FreqSpan_eq14364002725894292759-Rescaled.png" style="width: 219.6px; height: auto;"/></p><p>which can be written in the first-order form as</p><p><img alt="$$\mathbf{B}\dot{\mathbf{z}}=\mathbf{Az}+\mathbf{F}(\mathbf{z})+\epsilon\mathbf{F}^{ext}(\mathbf{\phi})$$" src="OscillatorChain_FreqSpan_eq13805302309640541471-Rescaled.png" style="width: 158.4px; height: auto;"/></p><p><img alt="$$\dot{\mathbf{\phi}}
+=\mathbf{\Omega}$$" src="OscillatorChain_FreqSpan_eq14336524937821209913-Rescaled.png" style="width: 36.0px; height: auto;"/></p><p>where</p><p><img alt="$\mathbf{z}=\left[\begin{array}{c}\mathbf{x}\\\dot{\mathbf{x}}\end{array}\right],\quad\mathbf{A}=\left[\begin{array}{cc}-\mathbf{K} &amp; \mathbf{0}\\\mathbf{0} &amp; \mathbf{M}\end{array}\right],\mathbf{B}=\left[\begin{array}{cc}\mathbf{C} &amp; \mathbf{M}\\\mathbf{M} &amp; \mathbf{0}\end{array}\right],\quad\quad\mathbf{F}(\mathbf{z})=\left[\begin{array}{c}\mathbf{-\mathbf{f}(\mathbf{x},\dot{\mathbf{x}})}\\\mathbf{0}\end{array}\right],\quad\mathbf{F}^{ext}(\mathbf{z},\mathbf{\phi})=\left[\begin{array}{c}\mathbf{f}^{ext}(\mathbf{\phi})\\\mathbf{0}\end{array}\right]$" src="OscillatorChain_FreqSpan_eq02065934477452524807-Rescaled.png" style="width: 602.4px; height: auto;"/>.</p><pre class="codeinput">DS = <a href="../../../Library/DynamicalSystem/DynamicalSystem.html">DynamicalSystem</a>();
+set(DS,<span class="string">'M'</span>,M,<span class="string">'C'</span>,C,<span class="string">'K'</span>,K,<span class="string">'fnl'</span>,fnl);
+set(DS.<a href="../../../Library/Features/Options/Options.html">Options</a>,<span class="string">'Emax'</span>,5,<span class="string">'Nmax'</span>,10,<span class="string">'notation'</span>,<span class="string">'multiindex'</span>)
+</pre><p><b>Linear Modal analysis</b></p><pre class="codeinput">[V,D,W] = DS.<a href="../../../Library/DynamicalSystem/linear_spectral_analysis.html">linear_spectral_analysis</a>(); <span class="comment">% Linear Modal analysis</span>
+</pre><pre class="codeoutput">Due to high-dimensionality, we compute only the first 5 eigenvalues with the smallest magnitude. These would also be used to compute the spectral quotients
+Assuming a proportional damping hypthesis with symmetric matrices
+modal damping ratio for 1 mode is 1.423148e-02
+modal damping ratio for 2 mode is 2.817326e-02
+modal damping ratio for 3 mode is 4.154150e-02
+modal damping ratio for 4 mode is 5.406408e-02
+modal damping ratio for 5 mode is 6.548607e-02
+
+ The first 10 nonzero eigenvalues are given as 
+  -0.0041 + 0.2846i
+  -0.0041 - 0.2846i
+  -0.0159 + 0.5632i
+  -0.0159 - 0.5632i
+  -0.0345 + 0.8301i
+  -0.0345 - 0.8301i
+  -0.0585 + 1.0797i
+  -0.0585 - 1.0797i
+  -0.0858 + 1.3069i
+  -0.0858 - 1.3069i
+
+</pre><p>We assume periodic forcing of the form</p><p><img alt="$$\mathbf{f}^{ext}(\phi) = \mathbf{f}_0\cos(\phi)=\frac{\mathbf{f}_0}{2}e^{i\phi}
++ \frac{\mathbf{f}_0}{2}e^{-i\phi}  $$" src="OscillatorChain_FreqSpan_eq05163577920011297423-Rescaled.png" style="width: 201.6px; height: auto;"/></p><p>where excitation shape <img alt="$\mathbf{f}_0$" src="OscillatorChain_FreqSpan_eq13794612744649942022-Rescaled.png" style="width: 8.4px; height: auto;"/> is a combination of the first three modes as</p><pre class="codeinput">Phi = real(V(1:10,1:2:end));
+f_0 = 0.2*Phi(:,1)*1+Phi(:,2)*2+Phi(:,3);
+epsilon = 1e-3;
+</pre><p>Fourier coefficients of Forcing</p><pre class="codeinput">kappas = [-1; 1];
+coeffs = [f_0 f_0]/2;
+DS.<a href="../../../Library/DynamicalSystem/add_forcing.html">add_forcing</a>(coeffs, kappas,epsilon);
+</pre><h2 id="7">Forced Response Curve in a Frequency Span</h2><p><b>Choose Master subspace (perform resonance analysis)</b></p><pre class="codeinput">S = <a href="../../../Library/SSM/SSM.html">SSM</a>(DS);
+set(S.<a href="../../../Library/Features/Options/Options.html">Options</a>, <span class="string">'reltol'</span>, 0.1,<span class="string">'notation'</span>,<span class="string">'multiindex'</span>)
+<span class="comment">% set(S.<a href="../../../Library/Features/Options/Options.html">Options</a>, 'reltol', 0.1,'notation','tensor')</span>
+masterModes = [1,2];
+S.<a href="../../../Library/Manifold/choose_E.html">choose_E</a>(masterModes);
+</pre><pre class="codeoutput">(near) outer resonance detected for the following combination of master eigenvalues
+     2     0
+     3     1
+     4     2
+     5     3
+     6     4
+     0     2
+     1     3
+     2     4
+     3     5
+     4     6
+     4     1
+     5     2
+     6     3
+     1     4
+     2     5
+     3     6
+
+These are in resonance with the follwing eigenvalues of the slave subspace
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+
+sigma_out = 21
+(near) inner resonance detected for the following combination of master eigenvalues
+     2     1
+     3     2
+     4     3
+     1     2
+     2     3
+     3     4
+
+These are in resonance with the follwing eigenvalues of the master subspace
+  -0.0041 + 0.2846i
+  -0.0041 + 0.2846i
+  -0.0041 + 0.2846i
+  -0.0041 - 0.2846i
+  -0.0041 - 0.2846i
+  -0.0041 - 0.2846i
+
+sigma_in = 21
+</pre><p><b>Forced response curves using SSMs</b></p><p>Obtaining <b>forced response curve</b> in reduced-polar coordinate</p><pre class="codeinput">order = [3,5,7]; <span class="comment">% Approximation order</span>
+outdof = floor(n/2);
+</pre><p>Setup options:</p><pre class="codeinput">set(S.<a href="../../../Library/Features/Options/Options.html">Options</a>, <span class="string">'reltol'</span>, 1,<span class="string">'IRtol'</span>,0.02,<span class="string">'notation'</span>, <span class="string">'multiindex'</span>,<span class="string">'contribNonAuto'</span>,true)
+set(S.<a href="../../../Library/Features/Options/Options.html">FRCOptions</a>, <span class="string">'nt'</span>, 2^7, <span class="string">'nRho'</span>, 200, <span class="string">'nPar'</span>, 200, <span class="string">'nPsi'</span>, 200, <span class="string">'rhoScale'</span>, 2)
+set(S.<a href="../../../Library/Features/Options/Options.html">FRCOptions</a>, <span class="string">'method'</span>,<span class="string">'continuation ep'</span>)
+set(S.<a href="../../../Library/Features/Options/Options.html">FRCOptions</a>, <span class="string">'outdof'</span>,outdof)
+</pre><p><b>Specify frequency span</b></p><pre class="codeinput">omega = imag(D(1:2:end));
+omegaRange = [0.8*omega(1) 1.2*omega(3)];
+</pre><p><b>Extract forced response curve</b></p><pre class="codeinput">FRC = S.<a href="../../../Library/Features/Wrappers/cocoWrapper/extract_FRC.html">extract_FRC</a>(<span class="string">'freq'</span>,omegaRange,order);
+figFRC = gcf;
+</pre><pre class="codeoutput">*****************************************
+Calculating FRC using SSM with master subspace: [1  2]
+(near) outer resonance detected for the following combination of master eigenvalues
+     2     0
+     2     1
+     3     1
+     3     2
+     4     2
+     4     3
+     5     3
+     5     4
+     6     4
+     0     2
+     1     2
+     1     3
+     2     3
+     2     4
+     3     4
+     3     5
+     4     5
+     4     6
+     2     0
+     3     0
+     3     1
+     4     1
+     4     2
+     5     2
+     5     3
+     6     3
+     6     4
+     0     2
+     0     3
+     1     3
+     1     4
+     2     4
+     2     5
+     3     5
+     3     6
+     4     6
+     3     0
+     4     0
+     4     1
+     5     1
+     5     2
+     6     2
+     6     3
+     7     3
+     0     3
+     0     4
+     1     4
+     1     5
+     2     5
+     2     6
+     3     6
+     3     7
+     4     0
+     5     0
+     5     1
+     6     1
+     6     2
+     7     2
+     7     3
+     0     4
+     0     5
+     1     5
+     1     6
+     2     6
+     2     7
+     3     7
+
+These are in resonance with the follwing eigenvalues of the slave subspace
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+
+sigma_out = 21
+(near) inner resonance detected for the following combination of master eigenvalues
+     2     1
+     3     2
+     4     3
+     5     4
+     1     2
+     2     3
+     3     4
+     4     5
+
+These are in resonance with the follwing eigenvalues of the master subspace
+  -0.0041 + 0.2846i
+  -0.0041 + 0.2846i
+  -0.0041 + 0.2846i
+  -0.0041 + 0.2846i
+  -0.0041 - 0.2846i
+  -0.0041 - 0.2846i
+  -0.0041 - 0.2846i
+  -0.0041 - 0.2846i
+
+sigma_in = 21
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 1.50E-02 MB
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 2.04E-02 MB
+
+ Run='freqSubint1.ep': Continue equilibria along primary branch.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          3.59e-10  6.68e+00    0.0    0.0    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   6.6783e+00      1  EP      2.8460e-01   4.3371e-02   4.7135e+00   1.0000e-03
+   10  00:00:00   8.7791e+00      2          2.3395e-01   3.4577e-03   6.2034e+00   1.0000e-03
+   12  00:00:00   8.7912e+00      3  EP      2.2768e-01   3.0787e-03   6.2121e+00   1.0000e-03
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   6.6783e+00      4  EP      2.8460e-01   4.3371e-02   4.7135e+00   1.0000e-03
+   10  00:00:01   4.5784e+00      5          3.3624e-01   3.3919e-03   3.2199e+00   1.0000e-03
+   20  00:00:01   4.5247e+00      6          4.1702e-01   1.3261e-03   3.1722e+00   1.0000e-03
+   21  00:00:01   4.5239e+00      7  EP      4.2392e-01   1.2605e-03   3.1707e+00   1.0000e-03
+*****************************************
+Calculating FRC using SSM with master subspace: [3  4]
+(near) outer resonance detected for the following combination of master eigenvalues
+     1     1
+     2     1
+     2     2
+     3     2
+     1     1
+     1     2
+     2     2
+     2     3
+     2     0
+     2     1
+     3     1
+     3     2
+     0     2
+     1     2
+     1     3
+     2     3
+     2     0
+     2     1
+     3     1
+     3     2
+     0     2
+     1     2
+     1     3
+     2     3
+     2     0
+     3     0
+     3     1
+     4     1
+     0     2
+     0     3
+     1     3
+     1     4
+
+These are in resonance with the follwing eigenvalues of the slave subspace
+  -0.0041 + 0.2846i
+  -0.0041 + 0.2846i
+  -0.0041 + 0.2846i
+  -0.0041 + 0.2846i
+  -0.0041 - 0.2846i
+  -0.0041 - 0.2846i
+  -0.0041 - 0.2846i
+  -0.0041 - 0.2846i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+
+sigma_out = 5
+(near) inner resonance detected for the following combination of master eigenvalues
+     2     1
+     3     2
+     1     2
+     2     3
+
+These are in resonance with the follwing eigenvalues of the master subspace
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+
+sigma_in = 5
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 1.50E-02 MB
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 2.04E-02 MB
+
+ Run='freqSubint2.ep': Continue equilibria along primary branch.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          4.70e-06  6.72e+00    0.0    0.0    0.0
+   1   1  1.00e+00  2.86e-05  9.59e-13  6.72e+00    0.0    0.0    0.0
+   2   1  1.00e+00  1.36e-12  2.67e-16  6.72e+00    0.0    0.0    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   6.7177e+00      1  EP      5.6324e-01   5.5920e-02   4.7163e+00   1.0000e-03
+   10  00:00:00   8.7402e+00      2          4.2917e-01   6.5752e-03   6.1653e+00   1.0000e-03
+   11  00:00:00   8.7459e+00      3  EP      4.2392e-01   6.3308e-03   6.1697e+00   1.0000e-03
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   6.7177e+00      4  EP      5.6324e-01   5.5920e-02   4.7163e+00   1.0000e-03
+   10  00:00:00   4.7145e+00      5  EP      6.9668e-01   6.6062e-03   3.2600e+00   1.0000e-03
+*****************************************
+Calculating FRC using SSM with master subspace: [5  6]
+(near) outer resonance detected for the following combination of master eigenvalues
+     1     1
+     1     1
+     1     1
+     1     1
+     2     0
+     0     2
+     2     0
+     0     2
+
+These are in resonance with the follwing eigenvalues of the slave subspace
+  -0.0041 + 0.2846i
+  -0.0041 - 0.2846i
+  -0.0159 + 0.5632i
+  -0.0159 - 0.5632i
+  -0.0585 + 1.0797i
+  -0.0585 - 1.0797i
+  -0.0858 + 1.3069i
+  -0.0858 - 1.3069i
+
+sigma_out = 2
+No (near) inner resonances detected in the (truncated) spectrum
+sigma_in = 2
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 1.50E-02 MB
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 2.04E-02 MB
+
+ Run='freqSubint3.ep': Continue equilibria along primary branch.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          1.25e-05  6.77e+00    0.0    0.0    0.0
+   1   1  1.00e+00  2.51e-05  4.80e-11  6.77e+00    0.0    0.0    0.0
+   2   1  1.00e+00  6.78e-11  8.73e-17  6.77e+00    0.0    0.0    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   6.7676e+00      1  EP      8.3010e-01   8.7259e-03   4.7129e+00   1.0000e-03
+    8  00:00:00   8.5845e+00      2  EP      6.9668e-01   2.1851e-03   6.0301e+00   1.0000e-03
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   6.7676e+00      3  EP      8.3010e-01   8.7259e-03   4.7129e+00   1.0000e-03
+    9  00:00:00   4.9380e+00      4  EP      9.9614e-01   1.7760e-03   3.3466e+00   1.0000e-03
+*****************************************
+Calculating FRC using SSM with master subspace: [1  2]
+(near) outer resonance detected for the following combination of master eigenvalues
+     2     0
+     2     1
+     3     1
+     3     2
+     4     2
+     4     3
+     5     3
+     5     4
+     6     4
+     0     2
+     1     2
+     1     3
+     2     3
+     2     4
+     3     4
+     3     5
+     4     5
+     4     6
+     2     0
+     3     0
+     3     1
+     4     1
+     4     2
+     5     2
+     5     3
+     6     3
+     6     4
+     0     2
+     0     3
+     1     3
+     1     4
+     2     4
+     2     5
+     3     5
+     3     6
+     4     6
+     3     0
+     4     0
+     4     1
+     5     1
+     5     2
+     6     2
+     6     3
+     7     3
+     0     3
+     0     4
+     1     4
+     1     5
+     2     5
+     2     6
+     3     6
+     3     7
+     4     0
+     5     0
+     5     1
+     6     1
+     6     2
+     7     2
+     7     3
+     0     4
+     0     5
+     1     5
+     1     6
+     2     6
+     2     7
+     3     7
+
+These are in resonance with the follwing eigenvalues of the slave subspace
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+
+sigma_out = 21
+(near) inner resonance detected for the following combination of master eigenvalues
+     2     1
+     3     2
+     4     3
+     5     4
+     1     2
+     2     3
+     3     4
+     4     5
+
+These are in resonance with the follwing eigenvalues of the master subspace
+  -0.0041 + 0.2846i
+  -0.0041 + 0.2846i
+  -0.0041 + 0.2846i
+  -0.0041 + 0.2846i
+  -0.0041 - 0.2846i
+  -0.0041 - 0.2846i
+  -0.0041 - 0.2846i
+  -0.0041 - 0.2846i
+
+sigma_in = 21
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 1.60E-02 MB
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 2.14E-02 MB
+Manifold computation time at order 4 = 00:00:00
+Estimated memory usage at order  4 = 3.15E-02 MB
+Manifold computation time at order 5 = 00:00:00
+Estimated memory usage at order  5 = 4.41E-02 MB
+
+ Run='freqSubint1.ep': Continue equilibria along primary branch.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          2.21e-17  6.68e+00    0.0    0.0    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   6.6783e+00      1  EP      2.8460e-01   4.3371e-02   4.7135e+00   1.0000e-03
+   10  00:00:00   8.7791e+00      2          2.3395e-01   3.4577e-03   6.2034e+00   1.0000e-03
+   12  00:00:00   8.7912e+00      3  EP      2.2768e-01   3.0787e-03   6.2121e+00   1.0000e-03
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   6.6783e+00      4  EP      2.8460e-01   4.3371e-02   4.7135e+00   1.0000e-03
+   10  00:00:00   4.5784e+00      5          3.3624e-01   3.3919e-03   3.2199e+00   1.0000e-03
+   20  00:00:00   4.5247e+00      6          4.1702e-01   1.3261e-03   3.1722e+00   1.0000e-03
+   21  00:00:00   4.5239e+00      7  EP      4.2392e-01   1.2605e-03   3.1707e+00   1.0000e-03
+*****************************************
+Calculating FRC using SSM with master subspace: [3  4]
+(near) outer resonance detected for the following combination of master eigenvalues
+     1     1
+     2     1
+     2     2
+     3     2
+     1     1
+     1     2
+     2     2
+     2     3
+     2     0
+     2     1
+     3     1
+     3     2
+     0     2
+     1     2
+     1     3
+     2     3
+     2     0
+     2     1
+     3     1
+     3     2
+     0     2
+     1     2
+     1     3
+     2     3
+     2     0
+     3     0
+     3     1
+     4     1
+     0     2
+     0     3
+     1     3
+     1     4
+
+These are in resonance with the follwing eigenvalues of the slave subspace
+  -0.0041 + 0.2846i
+  -0.0041 + 0.2846i
+  -0.0041 + 0.2846i
+  -0.0041 + 0.2846i
+  -0.0041 - 0.2846i
+  -0.0041 - 0.2846i
+  -0.0041 - 0.2846i
+  -0.0041 - 0.2846i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+
+sigma_out = 5
+(near) inner resonance detected for the following combination of master eigenvalues
+     2     1
+     3     2
+     1     2
+     2     3
+
+These are in resonance with the follwing eigenvalues of the master subspace
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+
+sigma_in = 5
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 1.60E-02 MB
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 2.14E-02 MB
+Manifold computation time at order 4 = 00:00:00
+Estimated memory usage at order  4 = 3.15E-02 MB
+Manifold computation time at order 5 = 00:00:00
+Estimated memory usage at order  5 = 4.41E-02 MB
+
+ Run='freqSubint2.ep': Continue equilibria along primary branch.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          5.74e-07  6.72e+00    0.0    0.0    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   6.7177e+00      1  EP      5.6324e-01   5.5921e-02   4.7163e+00   1.0000e-03
+   10  00:00:00   8.7402e+00      2          4.2919e-01   6.5761e-03   6.1653e+00   1.0000e-03
+   11  00:00:00   8.7459e+00      3  EP      4.2392e-01   6.3308e-03   6.1697e+00   1.0000e-03
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   6.7177e+00      4  EP      5.6324e-01   5.5921e-02   4.7163e+00   1.0000e-03
+   10  00:00:00   4.7145e+00      5  EP      6.9668e-01   6.6062e-03   3.2600e+00   1.0000e-03
+*****************************************
+Calculating FRC using SSM with master subspace: [5  6]
+(near) outer resonance detected for the following combination of master eigenvalues
+     1     1
+     1     1
+     1     1
+     1     1
+     2     0
+     0     2
+     2     0
+     0     2
+
+These are in resonance with the follwing eigenvalues of the slave subspace
+  -0.0041 + 0.2846i
+  -0.0041 - 0.2846i
+  -0.0159 + 0.5632i
+  -0.0159 - 0.5632i
+  -0.0585 + 1.0797i
+  -0.0585 - 1.0797i
+  -0.0858 + 1.3069i
+  -0.0858 - 1.3069i
+
+sigma_out = 2
+No (near) inner resonances detected in the (truncated) spectrum
+sigma_in = 2
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 1.60E-02 MB
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 2.14E-02 MB
+Manifold computation time at order 4 = 00:00:00
+Estimated memory usage at order  4 = 3.15E-02 MB
+Manifold computation time at order 5 = 00:00:00
+Estimated memory usage at order  5 = 4.41E-02 MB
+
+ Run='freqSubint3.ep': Continue equilibria along primary branch.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          2.10e-05  6.77e+00    0.0    0.0    0.0
+   1   1  1.00e+00  3.07e-05  2.91e-11  6.77e+00    0.0    0.0    0.0
+   2   1  1.00e+00  4.11e-11  2.25e-16  6.77e+00    0.0    0.0    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   6.7685e+00      1  EP      8.3008e-01   8.7259e-03   4.7135e+00   1.0000e-03
+    8  00:00:00   8.5845e+00      2  EP      6.9668e-01   2.1851e-03   6.0301e+00   1.0000e-03
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   6.7685e+00      3  EP      8.3008e-01   8.7259e-03   4.7135e+00   1.0000e-03
+    9  00:00:00   4.9380e+00      4  EP      9.9614e-01   1.7760e-03   3.3466e+00   1.0000e-03
+*****************************************
+Calculating FRC using SSM with master subspace: [1  2]
+(near) outer resonance detected for the following combination of master eigenvalues
+     2     0
+     2     1
+     3     1
+     3     2
+     4     2
+     4     3
+     5     3
+     5     4
+     6     4
+     0     2
+     1     2
+     1     3
+     2     3
+     2     4
+     3     4
+     3     5
+     4     5
+     4     6
+     2     0
+     3     0
+     3     1
+     4     1
+     4     2
+     5     2
+     5     3
+     6     3
+     6     4
+     0     2
+     0     3
+     1     3
+     1     4
+     2     4
+     2     5
+     3     5
+     3     6
+     4     6
+     3     0
+     4     0
+     4     1
+     5     1
+     5     2
+     6     2
+     6     3
+     7     3
+     0     3
+     0     4
+     1     4
+     1     5
+     2     5
+     2     6
+     3     6
+     3     7
+     4     0
+     5     0
+     5     1
+     6     1
+     6     2
+     7     2
+     7     3
+     0     4
+     0     5
+     1     5
+     1     6
+     2     6
+     2     7
+     3     7
+
+These are in resonance with the follwing eigenvalues of the slave subspace
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+
+sigma_out = 21
+(near) inner resonance detected for the following combination of master eigenvalues
+     2     1
+     3     2
+     4     3
+     5     4
+     1     2
+     2     3
+     3     4
+     4     5
+
+These are in resonance with the follwing eigenvalues of the master subspace
+  -0.0041 + 0.2846i
+  -0.0041 + 0.2846i
+  -0.0041 + 0.2846i
+  -0.0041 + 0.2846i
+  -0.0041 - 0.2846i
+  -0.0041 - 0.2846i
+  -0.0041 - 0.2846i
+  -0.0041 - 0.2846i
+
+sigma_in = 21
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 1.70E-02 MB
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 2.24E-02 MB
+Manifold computation time at order 4 = 00:00:00
+Estimated memory usage at order  4 = 3.25E-02 MB
+Manifold computation time at order 5 = 00:00:00
+Estimated memory usage at order  5 = 4.51E-02 MB
+Manifold computation time at order 6 = 00:00:00
+Estimated memory usage at order  6 = 6.22E-02 MB
+Manifold computation time at order 7 = 00:00:00
+Estimated memory usage at order  7 = 8.40E-02 MB
+
+ Run='freqSubint1.ep': Continue equilibria along primary branch.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          6.06e-19  6.68e+00    0.0    0.0    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   6.6783e+00      1  EP      2.8460e-01   4.3371e-02   4.7135e+00   1.0000e-03
+   10  00:00:00   8.7791e+00      2          2.3395e-01   3.4577e-03   6.2034e+00   1.0000e-03
+   12  00:00:00   8.7912e+00      3  EP      2.2768e-01   3.0787e-03   6.2121e+00   1.0000e-03
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   6.6783e+00      4  EP      2.8460e-01   4.3371e-02   4.7135e+00   1.0000e-03
+   10  00:00:00   4.5784e+00      5          3.3624e-01   3.3919e-03   3.2199e+00   1.0000e-03
+   20  00:00:00   4.5247e+00      6          4.1702e-01   1.3261e-03   3.1722e+00   1.0000e-03
+   21  00:00:00   4.5239e+00      7  EP      4.2392e-01   1.2605e-03   3.1707e+00   1.0000e-03
+*****************************************
+Calculating FRC using SSM with master subspace: [3  4]
+(near) outer resonance detected for the following combination of master eigenvalues
+     1     1
+     2     1
+     2     2
+     3     2
+     1     1
+     1     2
+     2     2
+     2     3
+     2     0
+     2     1
+     3     1
+     3     2
+     0     2
+     1     2
+     1     3
+     2     3
+     2     0
+     2     1
+     3     1
+     3     2
+     0     2
+     1     2
+     1     3
+     2     3
+     2     0
+     3     0
+     3     1
+     4     1
+     0     2
+     0     3
+     1     3
+     1     4
+
+These are in resonance with the follwing eigenvalues of the slave subspace
+  -0.0041 + 0.2846i
+  -0.0041 + 0.2846i
+  -0.0041 + 0.2846i
+  -0.0041 + 0.2846i
+  -0.0041 - 0.2846i
+  -0.0041 - 0.2846i
+  -0.0041 - 0.2846i
+  -0.0041 - 0.2846i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 + 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0345 - 0.8301i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 + 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0585 - 1.0797i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 + 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+  -0.0858 - 1.3069i
+
+sigma_out = 5
+(near) inner resonance detected for the following combination of master eigenvalues
+     2     1
+     3     2
+     1     2
+     2     3
+
+These are in resonance with the follwing eigenvalues of the master subspace
+  -0.0159 + 0.5632i
+  -0.0159 + 0.5632i
+  -0.0159 - 0.5632i
+  -0.0159 - 0.5632i
+
+sigma_in = 5
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 1.70E-02 MB
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 2.24E-02 MB
+Manifold computation time at order 4 = 00:00:00
+Estimated memory usage at order  4 = 3.25E-02 MB
+Manifold computation time at order 5 = 00:00:00
+Estimated memory usage at order  5 = 4.51E-02 MB
+Manifold computation time at order 6 = 00:00:00
+Estimated memory usage at order  6 = 6.22E-02 MB
+Manifold computation time at order 7 = 00:00:00
+Estimated memory usage at order  7 = 8.40E-02 MB
+
+ Run='freqSubint2.ep': Continue equilibria along primary branch.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          2.83e-05  6.72e+00    0.0    0.0    0.0
+   1   1  1.00e+00  8.02e-05  1.88e-11  6.72e+00    0.0    0.0    0.0
+   2   1  1.00e+00  2.66e-11  8.09e-17  6.72e+00    0.0    0.0    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   6.7202e+00      1  EP      5.6321e-01   5.5920e-02   4.7181e+00   1.0000e-03
+   10  00:00:00   8.7391e+00      2          4.3013e-01   6.6218e-03   6.1645e+00   1.0000e-03
+   11  00:00:00   8.7459e+00      3  EP      4.2392e-01   6.3308e-03   6.1697e+00   1.0000e-03
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   6.7202e+00      4  EP      5.6321e-01   5.5920e-02   4.7181e+00   1.0000e-03
+   10  00:00:00   4.7449e+00      5          6.7144e-01   8.1178e-03   3.2873e+00   1.0000e-03
+   13  00:00:00   4.7145e+00      6  EP      6.9668e-01   6.6062e-03   3.2600e+00   1.0000e-03
+*****************************************
+Calculating FRC using SSM with master subspace: [5  6]
+(near) outer resonance detected for the following combination of master eigenvalues
+     1     1
+     1     1
+     1     1
+     1     1
+     2     0
+     0     2
+     2     0
+     0     2
+
+These are in resonance with the follwing eigenvalues of the slave subspace
+  -0.0041 + 0.2846i
+  -0.0041 - 0.2846i
+  -0.0159 + 0.5632i
+  -0.0159 - 0.5632i
+  -0.0585 + 1.0797i
+  -0.0585 - 1.0797i
+  -0.0858 + 1.3069i
+  -0.0858 - 1.3069i
+
+sigma_out = 2
+No (near) inner resonances detected in the (truncated) spectrum
+sigma_in = 2
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 1.70E-02 MB
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 2.24E-02 MB
+Manifold computation time at order 4 = 00:00:00
+Estimated memory usage at order  4 = 3.25E-02 MB
+Manifold computation time at order 5 = 00:00:00
+Estimated memory usage at order  5 = 4.51E-02 MB
+Manifold computation time at order 6 = 00:00:00
+Estimated memory usage at order  6 = 6.22E-02 MB
+Manifold computation time at order 7 = 00:00:00
+Estimated memory usage at order  7 = 8.40E-02 MB
+
+ Run='freqSubint3.ep': Continue equilibria along primary branch.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          1.61e-05  6.77e+00    0.0    0.0    0.0
+   1   1  1.00e+00  2.28e-05  1.78e-12  6.77e+00    0.0    0.0    0.0
+   2   1  1.00e+00  2.52e-12  4.52e-16  6.77e+00    0.0    0.0    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   6.7678e+00      1  EP      8.3010e-01   8.7259e-03   4.7130e+00   1.0000e-03
+    8  00:00:00   8.5845e+00      2  EP      6.9668e-01   2.1851e-03   6.0301e+00   1.0000e-03
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         rho1          th1          eps
+    0  00:00:00   6.7678e+00      3  EP      8.3010e-01   8.7259e-03   4.7130e+00   1.0000e-03
+    9  00:00:00   4.9380e+00      4  EP      9.9614e-01   1.7760e-03   3.3466e+00   1.0000e-03
+Total time spent on FRC computation upto O(3) = 00:00:03
+Total time spent on FRC computation upto O(5) = 00:00:02
+Total time spent on FRC computation upto O(7) = 00:00:01
+</pre><img alt="" hspace="5" src="OscillatorChain_FreqSpan_01.png" vspace="5"/> <img alt="" hspace="5" src="OscillatorChain_FreqSpan_02.png" vspace="5"/> <p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+##### SOURCE BEGIN #####
+%% Chain of Oscillators
+%
+%%
+% We compute SSM compute for an Oscillator Chain with cubic and quadratic nonlinearities
+% 
+% <<Model.png>>
+%
+
+clear all; close all; clc
+%% Example setup
+
+n = 10;
+m = 1;
+c = 0.1;
+k = 1;
+kappa2 = 0;
+kappa3 = 0.5;
+[M,C,K,fnl,~] = build_model(n,m,c,k,kappa2,kappa3);
+%% Dynamical System Setup
+% We consider the forced system
+% 
+% $$\mathbf{M}\ddot{\mathbf{x}}+\mathbf{C}\dot{\mathbf{x}}+\mathbf{K}\mathbf{x}+\mathbf{f}(\mathbf{x},\dot{\mathbf{x}})=\epsilon\mathbf{f}^{ext}(\mathbf{\Omega}t),$$
+% 
+% which can be written in the first-order form as 
+% 
+% $$\mathbf{B}\dot{\mathbf{z}}=\mathbf{Az}+\mathbf{F}(\mathbf{z})+\epsilon\mathbf{F}^{ext}(\mathbf{\phi})$$
+% 
+% $$\dot{\mathbf{\phi}}	
+% =\mathbf{\Omega}$$
+% 
+% where
+% 
+% $\mathbf{z}=\left[\begin{array}{c}\mathbf{x}\\\dot{\mathbf{x}}\end{array}\right],\quad\mathbf{A}=\left[\begin{array}{cc}-\mathbf{K} 
+% & \mathbf{0}\\\mathbf{0} & \mathbf{M}\end{array}\right],\mathbf{B}=\left[\begin{array}{cc}\mathbf{C} 
+% & \mathbf{M}\\\mathbf{M} & \mathbf{0}\end{array}\right],\quad\quad\mathbf{F}(\mathbf{z})=\left[\begin{array}{c}\mathbf{-\mathbf{f}(\mathbf{x},\dot{\mathbf{x}})}\\\mathbf{0}\end{array}\right],\quad\mathbf{F}^{ext}(\mathbf{z},\mathbf{\phi})=\left[\begin{array}{c}\mathbf{f}^{ext}(\mathbf{\phi})\\\mathbf{0}\end{array}\right]$.
+
+DS = <a href="../../../Library/DynamicalSystem/DynamicalSystem.html">DynamicalSystem</a>();
+set(DS,'M',M,'C',C,'K',K,'fnl',fnl);
+set(DS.<a href="../../../Library/Features/Options/Options.html">Options</a>,'Emax',5,'Nmax',10,'notation','multiindex')
+%% 
+% *Linear Modal analysis*
+
+[V,D,W] = DS.<a href="../../../Library/DynamicalSystem/linear_spectral_analysis.html">linear_spectral_analysis</a>(); % Linear Modal analysis
+
+%% 
+% We assume periodic forcing of the form
+% 
+% $$\mathbf{f}^{ext}(\phi) = \mathbf{f}_0\cos(\phi)=\frac{\mathbf{f}_0}{2}e^{i\phi} 
+% + \frac{\mathbf{f}_0}{2}e^{-i\phi}  $$
+% 
+% where excitation shape $\mathbf{f}_0$ is a combination of the first three 
+% modes as
+
+Phi = real(V(1:10,1:2:end));
+f_0 = 0.2*Phi(:,1)*1+Phi(:,2)*2+Phi(:,3);
+epsilon = 1e-3;
+%% 
+% Fourier coefficients of Forcing
+
+kappas = [-1; 1];
+coeffs = [f_0 f_0]/2;
+DS.<a href="../../../Library/DynamicalSystem/add_forcing.html">add_forcing</a>(coeffs, kappas,epsilon);
+%% Forced Response Curve in a Frequency Span
+%%
+% *Choose Master subspace (perform resonance analysis)*
+
+S = <a href="../../../Library/SSM/SSM.html">SSM</a>(DS);
+set(S.<a href="../../../Library/Features/Options/Options.html">Options</a>, 'reltol', 0.1,'notation','multiindex')
+% set(S.<a href="../../../Library/Features/Options/Options.html">Options</a>, 'reltol', 0.1,'notation','tensor')
+masterModes = [1,2]; 
+S.<a href="../../../Library/Manifold/choose_E.html">choose_E</a>(masterModes);
+%% 
+% *Forced response curves using SSMs*
+%
+% Obtaining *forced response curve* in reduced-polar coordinate
+
+order = [3,5,7]; % Approximation order
+outdof = floor(n/2);
+
+%% 
+% Setup options:
+
+set(S.<a href="../../../Library/Features/Options/Options.html">Options</a>, 'reltol', 1,'IRtol',0.02,'notation', 'multiindex','contribNonAuto',true)
+set(S.<a href="../../../Library/Features/Options/Options.html">FRCOptions</a>, 'nt', 2^7, 'nRho', 200, 'nPar', 200, 'nPsi', 200, 'rhoScale', 2)
+set(S.<a href="../../../Library/Features/Options/Options.html">FRCOptions</a>, 'method','continuation ep')
+set(S.<a href="../../../Library/Features/Options/Options.html">FRCOptions</a>, 'outdof',outdof)
+%% 
+% *Specify frequency span*
+
+omega = imag(D(1:2:end));
+omegaRange = [0.8*omega(1) 1.2*omega(3)];
+%% 
+% *Extract forced response curve*
+
+FRC = S.<a href="../../../Library/Features/Wrappers/cocoWrapper/extract_FRC.html">extract_FRC</a>('freq',omegaRange,order);
+figFRC = gcf;
+##### SOURCE END #####
+--></body></html>

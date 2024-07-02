@@ -1,0 +1,174 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../../../index.html"><img alt="Logo" class="logo" src="../../../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>MULTI_NSUMK</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-09" name="DC.date"/><meta content="multi_nsumk.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>MULTI_NSUMK</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">Combinatorics for vectors</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> [g, g_comb,nv_un,nv_ic] = multi_<a href="../../../Library/Features/misc/nsumk.html">nsumk</a>(nv,v)
+        </pre><h2 id="2">Combinatorics for vectors</h2><p>This function finds all combinations of <span class="MathJax_Preview"><img alt="$nv$" src="multi_nsumk_eq05169381113139166567-Rescaled.png" style="width: 14.399999999999999px; height: auto;"/></span><script type="math/tex">nv</script> positive integer vectors adding up to another positive integer vector <span class="MathJax_Preview"><img alt="$\mathbf{v}$" src="multi_nsumk_eq18424963133433540026-Rescaled.png" style="width: 8.4px; height: auto;"/></span><script type="math/tex">\mathbf{v}</script>:</p><p>Let <span class="MathJax_Preview"><img alt="$\mathbf{v} \in \mathbf{N}^l$" src="multi_nsumk_eq12960152308965548019-Rescaled.png" style="width: 38.4px; height: auto;"/></span><script type="math/tex">\mathbf{v} \in \mathbf{N}^l</script>. It finds all combinations consisting of <span class="MathJax_Preview"><img alt="$n$" src="multi_nsumk_eq17555110721583917243-Rescaled.png" style="width: 8.4px; height: auto;"/></span><script type="math/tex">n</script> positive, nonzero integer vectors such that they sum up to</p><p><span class="MathJax_Preview"><img alt="$\mathbf{v}$" src="multi_nsumk_eq18424963133433540026-Rescaled.png" style="width: 8.4px; height: auto;"/></span><script type="math/tex">\mathbf{v}</script>: <span class="MathJax_Preview"><img alt="$\sum_{i=1}^n \mathbf{g}_i = \mathbf{v}$" src="multi_nsumk_eq07663182141997635481-Rescaled.png" style="width: 68.39999999999999px; height: auto;"/></span><script type="math/tex">\sum_{i=1}^n \mathbf{g}_i = \mathbf{v}</script>. All of those combinations are stored as 2D arrays, where the individual columns are filled with thevectors, in column <span class="MathJax_Preview"><img alt="$i$" src="multi_nsumk_eq08984912804010224726-Rescaled.png" style="width: 4.8px; height: auto;"/></span><script type="math/tex">i</script> the vector <span class="MathJax_Preview"><img alt="$\mathbf{g}_i$" src="multi_nsumk_eq14878468363408889454-Rescaled.png" style="width: 10.799999999999999px; height: auto;"/></span><script type="math/tex">\mathbf{g}_i</script> is stored. The various combinations are stacked upon each other in a 3D array, which contains a third dimension with size equal to amount of combinations of vectors that sum up to <span class="MathJax_Preview"><img alt="$\mathbf{v}$" src="multi_nsumk_eq18424963133433540026-Rescaled.png" style="width: 8.4px; height: auto;"/></span><script type="math/tex">\mathbf{v}</script>.</p><p>The result is then stored in a cell array, that contains these combinations for all tuples</p><p><span class="MathJax_Preview"><img alt="$i,j$" src="multi_nsumk_eq06440988289672119797-Rescaled.png" style="width: 16.8px; height: auto;"/></span><script type="math/tex">i,j</script> , corresponding to <span class="MathJax_Preview"><img alt="$\texttt{v(:,i), nv(j)}$" src="multi_nsumk_eq06863690691371548481-Rescaled.png" style="width: 88.8px; height: auto;"/></span><script type="math/tex">\texttt{v(:,i), nv(j)}</script>.</p><pre class="codeinput"><span class="comment">%there can be multiple vectors in v</span>
+
+<span class="comment">% This functionality is needed to construct the forcing contribution</span>
+<span class="comment">% coefficients pi_nk</span>
+        </pre><pre class="codeinput">z_k = size(v,2);
+l = size(v,1);
+S = cell(1,l);
+[nv_un,~,nv_ic] = unique(nv);
+g = cell(z_k,size(nv_un,2));
+g_comb = zeros(z_k,size(nv_un,2));
+n_run = 1;
+<span class="keyword">for</span> n = nv_un
+    <span class="keyword">for</span> f = 1:z_k
+        </pre><pre class="codeinput">        <span class="keyword">for</span> i = 1:l
+            <span class="comment">%special case</span>
+            <span class="keyword">if</span> v(i,f) == 1 &amp;&amp; n == 1
+                S{i} = 1;
+            <span class="keyword">else</span>
+                S{i} = <a href="../../../Library/Features/misc/nsumk.html">nsumk</a>(n,v(i,f),<span class="string">'nonnegative'</span>).' ;
+                <span class="comment">%finds all combinations for each index in v</span>
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+        </pre><p><span class="MathJax_Preview"><img alt="$\texttt{combvec}$" src="multi_nsumk_eq05512132327474813434-Rescaled.png" style="width: 48.0px; height: auto;"/></span><script type="math/tex">\texttt{combvec}</script> finds all possible combinations of the vectors in <span class="MathJax_Preview"><img alt="$\texttt{S}$" src="multi_nsumk_eq17139206355129786139-Rescaled.png" style="width: 6.0px; height: auto;"/></span><script type="math/tex">\texttt{S}</script>.</p><pre class="codeinput">        g_fn = combvec(S{:});
+        g_fn = reshape(g_fn,n,l,[]);
+        g_fn = permute(g_fn,[2 1 3]);
+
+
+        g{f,n_run}  = g_fn;
+        g_comb(f,n_run) = size(g_fn,3);
+        </pre><pre class="codeinput">    <span class="keyword">end</span>
+
+    n_run = n_run +1;
+<span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+        </pre><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% MULTI_NSUMK
+%
+%%
+function [g, g_comb,nv_un,nv_ic] = multi_<a href="../../../Library/Features/misc/nsumk.html">nsumk</a>(nv,v)
+%% Combinatorics for vectors
+% This function finds all combinations of $nv$ positive integer vectors adding 
+% up to another positive integer vector $\mathbf{v}$:
+% 
+% Let $\mathbf{v} \in \mathbf{N}^l$. It finds all combinations consisting of 
+% $n$ positive, nonzero integer vectors such that they sum up to
+% 
+% $\mathbf{v}$: $\sum_{i=1}^n \mathbf{g}_i = \mathbf{v}$. All of those combinations 
+% are stored as 2D arrays, where the individual columns are filled with thevectors, 
+% in column $i$ the vector $\mathbf{g}_i$ is stored. The various combinations 
+% are stacked upon each other in a 3D array, which contains a third dimension 
+% with size equal to amount of combinations of vectors that sum up to $\mathbf{v}$.
+% 
+% The result is then stored in a cell array, that contains these combinations 
+% for all tuples 
+% 
+% $i,j$ , corresponding to $\texttt{v(:,i), nv(j)}$.
+%there can be multiple vectors in v
+
+% This functionality is needed to construct the forcing contribution
+% coefficients pi_nk
+%%
+z_k = size(v,2);
+l = size(v,1);
+S = cell(1,l);
+[nv_un,~,nv_ic] = unique(nv);
+g = cell(z_k,size(nv_un,2));
+g_comb = zeros(z_k,size(nv_un,2));
+n_run = 1;
+for n = nv_un
+    for f = 1:z_k
+        
+        for i = 1:l
+            %special case
+            if v(i,f) == 1 && n == 1
+                S{i} = 1;
+            else
+                S{i} = <a href="../../../Library/Features/misc/nsumk.html">nsumk</a>(n,v(i,f),'nonnegative').' ;
+                %finds all combinations for each index in v
+            end
+        end
+%% 
+% $\texttt{combvec}$ finds all possible combinations of the vectors in $\texttt{S}$.
+        g_fn = combvec(S{:});
+        g_fn = reshape(g_fn,n,l,[]);
+        g_fn = permute(g_fn,[2 1 3]);
+        
+        
+        g{f,n_run}  = g_fn;
+        g_comb(f,n_run) = size(g_fn,3);
+    end
+    
+    n_run = n_run +1;
+end
+end
+            ##### SOURCE END #####
+        --></body></html></body></html>

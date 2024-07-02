@@ -1,0 +1,872 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../../index.html"><img alt="Logo" class="logo" src="../../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>COHOMOLOGICAL_SOLUTION</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-09" name="DC.date"/><meta content="cohomological_solution.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>COHOMOLOGICAL_SOLUTION</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#3">Tensor based computation</a></li><li><a href="#21">Multi-index based computation</a></li><li><a href="#30">Internal functions for computation</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> [W_0i, R_0i,multi_input] = cohomological_solution(obj, i,  W_0, R_0,multi_input,DStype)
+        </pre><p>This function computes the solution of the invariance equation at order i. The function computes the SSM where we solve the invariance equation</p><p><span class="MathJax_Preview"><img alt="$$\mathbf{B}D\mathbf{S}\mathbf{R}=\mathbf{A}\mathbf{S}+\mathbf{F}\circ\mathbf{S}$$" src="cohomological_solution_eq17637779588312150807-Rescaled.png" style="width: 126.0px; height: auto;"/></span><script type="math/tex">\mathbf{B}D\mathbf{S}\mathbf{R}=\mathbf{A}\mathbf{S}+\mathbf{F}\circ\mathbf{S}</script></p><p>of the dynamical system</p><p><span class="MathJax_Preview"><img alt="$\mathbf{B}\dot{\mathbf{z}} = \mathbf{A}\mathbf{z} + \mathbf{F(\mathbf{z})}$" src="cohomological_solution_eq06772255097915378611-Rescaled.png" style="width: 94.8px; height: auto;"/></span><script type="math/tex">\mathbf{B}\dot{\mathbf{z}} = \mathbf{A}\mathbf{z} + \mathbf{F(\mathbf{z})}</script>.</p><h2 id="3">Tensor based computation</h2><p>The SSM is expressed in terms of the expansion</p><p><span class="MathJax_Preview"><img alt="$$\mathbf{S}(\mathbf{p})=\sum_{i=1}^{\Gamma_{S}}\mathbf{S}_{i}\mathbf{p}^{\otimes
+i},$$" src="cohomological_solution_eq01379022256724676330-Rescaled.png" style="width: 100.8px; height: auto;"/></span><script type="math/tex">\mathbf{S}(\mathbf{p})=\sum_{i=1}^{\Gamma_{S}}\mathbf{S}_{i}\mathbf{p}^{\otimes
+i},</script></p><p>where <span class="MathJax_Preview"><img alt="$\mathbf{p}\in\mathbf{C}^m$" src="cohomological_solution_eq02262418156015578099-Rescaled.png" style="width: 43.199999999999996px; height: auto;"/></span><script type="math/tex">\mathbf{p}\in\mathbf{C}^m</script> are parameterization coordinates of the <span class="MathJax_Preview"><img alt="$m$" src="cohomological_solution_eq18216620034067401164-Rescaled.png" style="width: 12.0px; height: auto;"/></span><script type="math/tex">m</script> -dimensional SSM.</p><p>The coefficients at different orders are collected in a cell array <span class="MathJax_Preview"><img alt="$\texttt{S}$" src="cohomological_solution_eq17139206355129786139-Rescaled.png" style="width: 6.0px; height: auto;"/></span><script type="math/tex">\texttt{S}</script> , where <span class="MathJax_Preview"><img alt="$\texttt{S\{i\}}$" src="cohomological_solution_eq06318588760146473248-Rescaled.png" style="width: 26.4px; height: auto;"/></span><script type="math/tex">\texttt{S\{i\}}</script> gives the coefficients at order <span class="MathJax_Preview"><img alt="$\texttt{i}$" src="cohomological_solution_eq18248873306983106716-Rescaled.png" style="width: 6.0px; height: auto;"/></span><script type="math/tex">\texttt{i}</script>, i.e. <span class="MathJax_Preview"><img alt="$\mathbf{S}_{i}$" src="cohomological_solution_eq06739711358936326986-Rescaled.png" style="width: 10.799999999999999px; height: auto;"/></span><script type="math/tex">\mathbf{S}_{i}</script>. These are obtained by solving for <span class="MathJax_Preview"><img alt="$\mathbf{S}_{i}$" src="cohomological_solution_eq06739711358936326986-Rescaled.png" style="width: 10.799999999999999px; height: auto;"/></span><script type="math/tex">\mathbf{S}_{i}</script> in the following equation</p><p><span class="MathJax_Preview"><img alt="$$\mathbf{B}\mathbf{S}_{i}\mathbf{\Lambda}_{\mathcal{M},i}-\mathbf{A}\mathbf{S}_{i}=\underbrace{\sum_{j=2}^{i}\mathbf{F}_{j}\sum_{|\mathbf{p}|=i}\mathbf{S}_{p_{1}}\otimes\dots\otimes\mathbf{S}_{p_{j}}-\mathbf{B}\sum_{j=2}^{i-1}\mathbf{S}_{j}\sum_{|\mathbf{p}|=1}\mathbf{R}_{i+1-j}^{p_{1}}\otimes\dots\otimes\mathbf{R}_{i+1-j}^{p_{j}}}_{\mathbf{L}_{i}}-\mathbf{B}\mathbf{S}_{1}\mathbf{R}_{i}$$" src="cohomological_solution_eq15822050256564018865-Rescaled.png" style="width: 520.8px; height: auto;"/></span><script type="math/tex">\mathbf{B}\mathbf{S}_{i}\mathbf{\Lambda}_{\mathcal{M},i}-\mathbf{A}\mathbf{S}_{i}=\underbrace{\sum_{j=2}^{i}\mathbf{F}_{j}\sum_{|\mathbf{p}|=i}\mathbf{S}_{p_{1}}\otimes\dots\otimes\mathbf{S}_{p_{j}}-\mathbf{B}\sum_{j=2}^{i-1}\mathbf{S}_{j}\sum_{|\mathbf{p}|=1}\mathbf{R}_{i+1-j}^{p_{1}}\otimes\dots\otimes\mathbf{R}_{i+1-j}^{p_{j}}}_{\mathbf{L}_{i}}-\mathbf{B}\mathbf{S}_{1}\mathbf{R}_{i}</script></p><p>where</p><p><span class="MathJax_Preview"><img alt="$$\mathbf{\Lambda}_{\mathcal{M},i}:=\sum_{|\mathbf{p}|=1}\mathbf{\Lambda}_{\mathcal{M}}^{p_{1}}\otimes\dots\otimes\mathbf{\Lambda}_{\mathcal{M}}^{p_{i}}$$" src="cohomological_solution_eq08190273689794386318-Rescaled.png" style="width: 165.6px; height: auto;"/></span><script type="math/tex">\mathbf{\Lambda}_{\mathcal{M},i}:=\sum_{|\mathbf{p}|=1}\mathbf{\Lambda}_{\mathcal{M}}^{p_{1}}\otimes\dots\otimes\mathbf{\Lambda}_{\mathcal{M}}^{p_{i}}</script></p><p>and <span class="MathJax_Preview"><img alt="$\mathbf{\Lambda}_{\mathcal{M}}$" src="cohomological_solution_eq01728858554377397656-Rescaled.png" style="width: 21.599999999999998px; height: auto;"/></span><script type="math/tex">\mathbf{\Lambda}_{\mathcal{M}}</script> is a diagonal (<span class="MathJax_Preview"><img alt="$m\times m$" src="cohomological_solution_eq02885428440799421679-Rescaled.png" style="width: 39.6px; height: auto;"/></span><script type="math/tex">m\times m</script>) matrix containing the eigenvalues of the master modal subspace <span class="MathJax_Preview"><img alt="$\mathcal{M}$" src="cohomological_solution_eq16970155836551808940-Rescaled.png" style="width: 15.6px; height: auto;"/></span><script type="math/tex">\mathcal{M}</script>. The above equation in the vectorized notation is given by</p><p><span class="MathJax_Preview"><img alt="$$\underbrace{\left[\left(\mathbf{\Lambda}_{\mathcal{M},i}^{\top}\otimes\mathbf{B}\right)-\left(\mathbf{I}_{m^{i}}\otimes\mathbf{A}\right)\right]}_{{\mathcal{C}}_{i}}\textrm{vec}\left(\mathbf{S}_{i}\right)=\textrm{vec}\left(\mathbf{L}_{i}\right)-\left(\mathbf{I}_{m^{i}}\otimes\mathbf{B}\mathbf{S}_{1}\right)\textrm{vec}\left(\mathbf{R}_{i}\right)$$" src="cohomological_solution_eq03579440951638808804-Rescaled.png" style="width: 388.8px; height: auto;"/></span><script type="math/tex">\underbrace{\left[\left(\mathbf{\Lambda}_{\mathcal{M},i}^{\top}\otimes\mathbf{B}\right)-\left(\mathbf{I}_{m^{i}}\otimes\mathbf{A}\right)\right]}_{{\mathcal{C}}_{i}}\textrm{vec}\left(\mathbf{S}_{i}\right)=\textrm{vec}\left(\mathbf{L}_{i}\right)-\left(\mathbf{I}_{m^{i}}\otimes\mathbf{B}\mathbf{S}_{1}\right)\textrm{vec}\left(\mathbf{R}_{i}\right)</script></p><p>Here <span class="MathJax_Preview"><img alt="$\textrm{vec}(\mathbf{S}_{i})$" src="cohomological_solution_eq14253547408573198667-Rescaled.png" style="width: 40.8px; height: auto;"/></span><script type="math/tex">\textrm{vec}(\mathbf{S}_{i})</script> just stands for the vectorization operator in MATLAB obtained by the command <span class="MathJax_Preview"><img alt="$\texttt{S\{i\}(:)}$" src="cohomological_solution_eq12982267911334430053-Rescaled.png" style="width: 45.6px; height: auto;"/></span><script type="math/tex">\texttt{S\{i\}(:)}</script>.</p><pre class="codeinput"><span class="keyword">switch</span> obj.Options.notation
+    <span class="keyword">case</span> <span class="string">'tensor'</span>
+        </pre><pre class="codeinput">        Lambda_M = obj.E.spectrum;
+        A = obj.System.A; <span class="comment">% A matrix</span>
+        B = obj.System.B; <span class="comment">% B matrix</span>
+        W_M = obj.E.adjointBasis; <span class="comment">% Right eigenvectors of the modal subspace</span>
+        V_M = obj.E.basis; <span class="comment">% Left eigenvectors of the modal subspace</span>
+        N = obj.dimSystem; <span class="comment">% Full system dimensionality in first-order form</span>
+        F = obj.System.F; <span class="comment">% Full system Nonlinearity coefficients at different orders</span>
+        m = length(Lambda_M); <span class="comment">% dim(M): M is the master modal subspace</span>
+        N_i = N*m^i; <span class="comment">% number of unknown SSM coefficients in the tensor notation at order i</span>
+        ref = min(abs(Lambda_M));
+        <span class="keyword">if</span> ref&lt;1e-10; ref = max(abs(Lambda_M)); <span class="keyword">end</span>
+        abstol = obj.Options.reltol * ref;
+        </pre><p><b>Assemble the coefficient matrix of SSM</b></p><p>Obtaining <span class="MathJax_Preview"><img alt="$\mathbf{\Lambda}_{\mathcal{M},i}:=\sum_{|\mathbf{p}|=1}\mathbf{\Lambda}_{\mathcal{M}}^{p_{1}}\otimes\dots\otimes\mathbf{\Lambda}_{\mathcal{M}}^{p_{i}}$" src="cohomological_solution_eq04791154514164189901-Rescaled.png" style="width: 180.0px; height: auto;"/></span><script type="math/tex">\mathbf{\Lambda}_{\mathcal{M},i}:=\sum_{|\mathbf{p}|=1}\mathbf{\Lambda}_{\mathcal{M}}^{p_{1}}\otimes\dots\otimes\mathbf{\Lambda}_{\mathcal{M}}^{p_{i}}</script></p><p>We assemble it as</p><p><span class="MathJax_Preview"><img alt="$$\mathbf{\Lambda}_{\mathcal{M},i}=\sum_{j=1}^{m}\mathbf{I}_{m}\otimes\dots\otimes\mathbf{I}_m\otimes\mathbf{\Lambda}_{\mathcal{M}}\otimes\mathbf{I}_m\otimes\dots\otimes\mathbf{I}_{m}\,,$$" src="cohomological_solution_eq09455555044633217743-Rescaled.png" style="width: 280.8px; height: auto;"/></span><script type="math/tex">\mathbf{\Lambda}_{\mathcal{M},i}=\sum_{j=1}^{m}\mathbf{I}_{m}\otimes\dots\otimes\mathbf{I}_m\otimes\mathbf{\Lambda}_{\mathcal{M}}\otimes\mathbf{I}_m\otimes\dots\otimes\mathbf{I}_{m}\,,</script></p><p>where each term is a kronecker product of <span class="MathJax_Preview"><img alt="$m$" src="cohomological_solution_eq18216620034067401164-Rescaled.png" style="width: 12.0px; height: auto;"/></span><script type="math/tex">m</script> matrices and <span class="MathJax_Preview"><img alt="$\mathbf{\Lambda}_{\mathcal{M}}$" src="cohomological_solution_eq01728858554377397656-Rescaled.png" style="width: 21.599999999999998px; height: auto;"/></span><script type="math/tex">\mathbf{\Lambda}_{\mathcal{M}}</script> occurs at the <span class="MathJax_Preview"><img alt="$j$" src="cohomological_solution_eq06791872479074567463-Rescaled.png" style="width: 6.0px; height: auto;"/></span><script type="math/tex">j</script> -th location.</p><p>We can show that the diagonal matrix <span class="MathJax_Preview"><img alt="$\mathbf{\Lambda}_{\mathcal{M},i}$" src="cohomological_solution_eq01410667703830310680-Rescaled.png" style="width: 27.599999999999998px; height: auto;"/></span><script type="math/tex">\mathbf{\Lambda}_{\mathcal{M},i}</script> contains <span class="MathJax_Preview"><img alt="$m^i$" src="cohomological_solution_eq18283378044095380511-Rescaled.png" style="width: 14.399999999999999px; height: auto;"/></span><script type="math/tex">m^i</script> non-zero elements  <span class="MathJax_Preview"><img alt="$(\mathbf{\Lambda}_{\mathcal{M},i})_{j(\mathbf{k})} = \lambda_{k_1}+\dots+ \lambda_{k_i},\quad \mathbf{k}\in\mathbf{N}^i$" src="cohomological_solution_eq06158600931116306746-Rescaled.png" style="width: 212.4px; height: auto;"/></span><script type="math/tex">(\mathbf{\Lambda}_{\mathcal{M},i})_{j(\mathbf{k})} = \lambda_{k_1}+\dots+ \lambda_{k_i},\quad \mathbf{k}\in\mathbf{N}^i</script> and <span class="MathJax_Preview"><img alt="${j(\mathbf{k})}$" src="cohomological_solution_eq14175279132470259025-Rescaled.png" style="width: 24.0px; height: auto;"/></span><script type="math/tex">{j(\mathbf{k})}</script> represents the lexicographical bijective indexing of <span class="MathJax_Preview"><img alt="$i$" src="cohomological_solution_eq08984912804010224726-Rescaled.png" style="width: 4.8px; height: auto;"/></span><script type="math/tex">i</script>-tuples taking values from <span class="MathJax_Preview"><img alt="$1,\dots,m$" src="cohomological_solution_eq15257211209965249832-Rescaled.png" style="width: 46.8px; height: auto;"/></span><script type="math/tex">1,\dots,m</script> and is given by the <tt>combinator</tt> function.</p><pre class="codeinput">        disp([<span class="string">'Computing autonomous whisker at order '</span> num2str(i)])
+        combinations = combinator(m,i,<span class="string">'p'</span>,<span class="string">'r'</span>);
+        Lambda_Mi = sum(Lambda_M(combinations),2);
+        </pre><p>Spectrum of <span class="MathJax_Preview"><img alt="$\mathcal{C}_i:=\left[\left(\mathbf{\Lambda}_{\mathcal{M},i}^{\top}\otimes\mathbf{B}\right)-\left(\mathbf{I}_{m^{i}}\otimes\mathbf{A}\right)\right]$" src="cohomological_solution_eq10981965585988729351-Rescaled.png" style="width: 178.79999999999998px; height: auto;"/></span><script type="math/tex">\mathcal{C}_i:=\left[\left(\mathbf{\Lambda}_{\mathcal{M},i}^{\top}\otimes\mathbf{B}\right)-\left(\mathbf{I}_{m^{i}}\otimes\mathbf{A}\right)\right]</script></p><p>The matrix that needs to be inverted for solving the coefficients at the <span class="MathJax_Preview"><img alt="$i$" src="cohomological_solution_eq08984912804010224726-Rescaled.png" style="width: 4.8px; height: auto;"/></span><script type="math/tex">i</script>-th order is given by</p><p><span class="MathJax_Preview"><img alt="$$\mathcal{C}_i:=\left[\left(\mathbf{\Lambda}_{\mathcal{M},i}^{\top}\otimes\mathbf{B}\right)-\left(\mathbf{I}_{m^{i}}\otimes\mathbf{A}\right)\right]$$" src="cohomological_solution_eq17123965705113596086-Rescaled.png" style="width: 178.79999999999998px; height: auto;"/></span><script type="math/tex">\mathcal{C}_i:=\left[\left(\mathbf{\Lambda}_{\mathcal{M},i}^{\top}\otimes\mathbf{B}\right)-\left(\mathbf{I}_{m^{i}}\otimes\mathbf{A}\right)\right]</script></p><p><b>Assemble RHS</b></p><p><span class="MathJax_Preview"><img alt="$$\mathbf{L}_i =\sum_{j=2}^{l}\mathbf{F}_{j}\sum_{|\mathbf{p}|=i}\mathbf{S}_{p_{1}}\otimes\dots\otimes\mathbf{S}_{p_{j}}-\mathbf{B}\sum_{j=2}^{i-1}\mathbf{S}_{j}\sum_{|\mathbf{p}|=1}\mathbf{R}_{i+1-j}^{p_{1}}\otimes\dots\otimes\mathbf{R}_{i+1-j}^{p_{j}}$$" src="cohomological_solution_eq12327119360128350493-Rescaled.png" style="width: 390.0px; height: auto;"/></span><script type="math/tex">\mathbf{L}_i =\sum_{j=2}^{l}\mathbf{F}_{j}\sum_{|\mathbf{p}|=i}\mathbf{S}_{p_{1}}\otimes\dots\otimes\mathbf{S}_{p_{j}}-\mathbf{B}\sum_{j=2}^{i-1}\mathbf{S}_{j}\sum_{|\mathbf{p}|=1}\mathbf{R}_{i+1-j}^{p_{1}}\otimes\dots\otimes\mathbf{R}_{i+1-j}^{p_{j}}</script></p><p>where <span class="MathJax_Preview"><img alt="$l=\min(i,\Gamma_F)$" src="cohomological_solution_eq11611568938283344242-Rescaled.png" style="width: 79.2px; height: auto;"/></span><script type="math/tex">l=\min(i,\Gamma_F)</script> since we need to compute the summation at most up to the order of the nonlinearity in <span class="MathJax_Preview"><img alt="$\mathbf{F}$" src="cohomological_solution_eq03148538246847756930-Rescaled.png" style="width: 9.6px; height: auto;"/></span><script type="math/tex">\mathbf{F}</script>.</p><pre class="codeinput">        SIZE = [N, m*ones(1,i)];
+        FS = sptensor(SIZE);
+        </pre><p>First term</p><pre class="codeinput">        l = min(i,length(F));
+        <span class="keyword">for</span> j = 2:l           <span class="comment">% Outer for loop can be parallelized - l cores</span>
+            <span class="comment">% find values for j positive numbers summing up to i</span>
+            P = <a href="../../Library/Features/misc/nsumk.html">nsumk</a>(j,i,<span class="string">'positive'</span>);
+            FS = FS + <a href="../../Library/Features/misc/tensor_composition.html">tensor_composition</a>(F{j},W_0,P,SIZE);
+        <span class="keyword">end</span>
+        </pre><p>Second term</p><pre class="codeinput">        SR = sptensor(SIZE);
+        <span class="comment">% R_0i = R_0(i:-1:2); % used for parfor</span>
+        <span class="keyword">for</span> j = 2:i-1         <span class="comment">% Outer for loop can be parallelized - i-1 cores</span>
+            P = ones(j,j) + eye(j,j);
+            R_j = {sptensor(speye(m,m)),R_0{i+1-j}};
+            <span class="comment">% R_j = {sptensor(speye(m,m)),R_0i{j}}; % used for parfor</span>
+            SR = SR + <a href="../../Library/Features/misc/tensor_composition.html">tensor_composition</a>(W_0{j},R_j,P,SIZE);
+        <span class="keyword">end</span>
+        <span class="keyword">if</span> m==1 <span class="comment">% tensor_toolbox has issues</span>
+            <span class="keyword">if</span> ~isempty(FS.vals)
+                FS = sparse(FS.subs(:,1), FS.subs(:,2), FS.vals, N_i, 1);
+            <span class="keyword">else</span>
+                FS = sparse(N_i,1);
+            <span class="keyword">end</span>
+
+            <span class="keyword">if</span> ~isempty(SR.vals)
+                SR = sparse(SR.subs(:,1), SR.subs(:,2), SR.vals, N_i, 1);
+            <span class="keyword">else</span>
+                SR = sparse(N_i,1);
+            <span class="keyword">end</span>
+            L_i = FS - B*SR;
+
+        <span class="keyword">else</span>
+        </pre><pre class="codeinput">            L_i = FS - ttm(SR,B,1);
+        </pre><p>Convert <span class="MathJax_Preview"><img alt="$\mathbf{L}_i$" src="cohomological_solution_eq09658735934201345335-Rescaled.png" style="width: 12.0px; height: auto;"/></span><script type="math/tex">\mathbf{L}_i</script> object to sparse vector.</p><pre class="codeinput">            L_i = sptenmat(permute(L_i,[1, ndims(L_i):-1:2]), 1:ndims(L_i));
+            <span class="keyword">if</span> isempty(L_i.vals)
+                L_i = sparse(N_i,1);
+            <span class="keyword">else</span>
+                L_i = sparse(L_i.subs(:,1),L_i.subs(:,2),L_i.vals,N_i,1);
+            <span class="keyword">end</span>
+            L_i = reshape(L_i,N,[]);
+        </pre><pre class="codeinput">        <span class="keyword">end</span>
+        </pre><p><b>Solving for SSM coefficients and Reduced dynamics</b></p><p><span class="MathJax_Preview"><img alt="$${{\mathcal{C}}_{i}}~\textrm{vec}\left(\mathbf{S}_{i}\right)=\textrm{vec}\left(\mathbf{L}_{i}\right)-\underbrace{\left(\mathbf{I}_{m^{i}}\otimes\mathbf{B}\mathbf{S}_{1}\right)}_{{\mathcal{D}}_{i}}\textrm{vec}\left(\mathbf{R}_{i}\right)$$" src="cohomological_solution_eq11753734513394925804-Rescaled.png" style="width: 252.0px; height: auto;"/></span><script type="math/tex">{{\mathcal{C}}_{i}}~\textrm{vec}\left(\mathbf{S}_{i}\right)=\textrm{vec}\left(\mathbf{L}_{i}\right)-\underbrace{\left(\mathbf{I}_{m^{i}}\otimes\mathbf{B}\mathbf{S}_{1}\right)}_{{\mathcal{D}}_{i}}\textrm{vec}\left(\mathbf{R}_{i}\right)</script></p><pre class="codeinput">        W_0i = zeros(N,m^i); <span class="comment">% generally dense</span>
+        R_0i = sparse(m,m^i);
+
+        nRes = 0;
+        paramStyle = obj.Options.paramStyle;
+        <span class="keyword">parfor</span> l = 1:m^i
+        </pre><pre class="codeinput">            lambda_l = Lambda_Mi(l);
+            C_l = lambda_l * B - A;
+            L_il = L_i(:,l);
+        </pre><p>Checking for near-inner resonances.</p><pre class="codeinput">            J = find(abs(lambda_l - Lambda_M)&lt;abstol);
+
+            <span class="keyword">if</span> ~isempty(J)
+                <span class="keyword">switch</span> paramStyle
+                    <span class="keyword">case</span> <span class="string">'normalform'</span>
+        </pre><p>Choosing reduced dynamics using (near-)kernel of <span class="MathJax_Preview"><img alt="$\mathcal{C}_i$" src="cohomological_solution_eq04688698204713148721-Rescaled.png" style="width: 10.799999999999999px; height: auto;"/></span><script type="math/tex">\mathcal{C}_i</script>.</p><pre class="codeinput">                        R_0il = zeros(m,1); <span class="comment">% for slicing use</span>
+                        <span class="keyword">for</span> j = J
+                            w_j = W_M(:,j);
+                            <span class="comment">% R_0i(j,l) = w_j'*L_il;</span>
+                            R_0il(j) = w_j'*L_il;
+                        <span class="keyword">end</span>
+                        R_0i(:,l) = R_0il;
+        </pre><pre class="codeinput">                    <span class="keyword">case</span> <span class="string">'graph'</span>
+                        R_0i(:,l) = W_M'*L_il;
+                <span class="keyword">end</span>
+                b_l = L_il - B * V_M * R_0i(:,l);
+            <span class="keyword">else</span>
+                b_l = L_il;
+            <span class="keyword">end</span>
+            nRes = nRes + numel(J);
+        </pre><p>Obtaining minimum-norm solution for <span class="MathJax_Preview"><img alt="$\mathbf{S}_i$" src="cohomological_solution_eq03804649941828611759-Rescaled.png" style="width: 10.799999999999999px; height: auto;"/></span><script type="math/tex">\mathbf{S}_i</script> using <span class="MathJax_Preview"><img alt="$\texttt{lsqminnorm}$" src="cohomological_solution_eq07715385723170610856-Rescaled.png" style="width: 69.6px; height: auto;"/></span><script type="math/tex">\texttt{lsqminnorm}</script> which performs a complete orthogonal decomposition and is better suited for sparse matrices as opposed to the Moore-Penrose pseudo-inverse (<span class="MathJax_Preview"><img alt="$\texttt{pinv}$" src="cohomological_solution_eq01178302177208045188-Rescaled.png" style="width: 27.599999999999998px; height: auto;"/></span><script type="math/tex">\texttt{pinv}</script>). We would like to use better iterative procedures moving forward, currently lsqlin is not suited for complex data entries.</p><pre class="codeinput">            W_0i(:,l) = lsqminnorm(C_l,b_l);
+        </pre><pre class="codeinput">        <span class="keyword">end</span>
+        disp([num2str(nRes) <span class="string">' (near) inner resonance(s) detected at order '</span> num2str(i)])
+
+        W_0i = reshape(sptensor(W_0i(:)), [N, m*ones(1,i)]);
+        R_0i = reshape(sptensor(R_0i(:)), [m, m*ones(1,i)]);
+        W_0i = permute(W_0i,[1, ndims(W_0i):-1:2]);
+        R_0i = permute(R_0i,[1, ndims(R_0i):-1:2]);
+
+        multi_input =  [];
+        </pre><h2 id="21">Multi-index based computation</h2><p>Details on the computational routine and the expansion can be found in the tutorial on <a href="../../Theory/4.%20SSM-Computation.html">SSM computations</a>.</p><pre class="codeinput">    <span class="keyword">case</span> <span class="string">'multiindex'</span>
+        </pre><pre class="codeinput">        k = i;                      <span class="comment">% convention here: call highest order k instead of i, call SSM dim l instead of m</span>
+        A   = obj.System.A;         <span class="comment">% A matrix</span>
+        B   = obj.System.B;         <span class="comment">% B matrix</span>
+        N   = obj.dimSystem;        <span class="comment">% Full system dimensionality in first-order form</span>
+        l   = numel(obj.E.spectrum);<span class="comment">% dim(M): M is the master modal subspace</span>
+        F   = obj.System.F;         <span class="comment">% Full system Nonlinearity coefficients at different orders</span>
+
+        W_M = multi_input.W_M;      <span class="comment">% Right eigenvectors of the modal subspace</span>
+        H   = multi_input.H;        <span class="comment">% composition coefficients</span>
+
+        <span class="keyword">switch</span> DStype
+            <span class="keyword">case</span> <span class="string">'real'</span>
+        </pre><p><b>Setup for case with symmetries</b></p><pre class="codeinput">            multi_input.ordering = <span class="string">'conjugate'</span>;
+
+            <span class="comment">% Conjugate center index at all orders</span>
+            z_k             = multi_input.Z_cci(k);     <span class="comment">% Highest index that coefficients are computed for in conjugate ordering.</span>
+
+            Lambda_M_vector = multi_input.Lambda_M_vector; <span class="comment">% Vector with master evals sorted by size and imag/real</span>
+            K               = flip(sortrows(<a href="../../Library/Features/misc/nsumk.html">nsumk</a>(l,k,<span class="string">'nonnegative'</span>)).',2);
+            K               = K(:,multi_input.revlex2conj{k});
+            K               = K(:,1:z_k);                  <span class="comment">% Set of order k multi-indices in conjugate ordering up to conjugate center index</span>
+        </pre><pre class="codeinput">            <span class="keyword">case</span> <span class="string">'complex'</span>
+            multi_input.ordering = <span class="string">'revlex'</span>;
+
+            z_k             = multi_input.Z_cci(k);        <span class="comment">% Contains amount of multi-indices for every order</span>
+            Lambda_M_vector = multi_input.Lambda_M_vector; <span class="comment">% Vector with master evals in rev_lex order as in R_0(1)</span>
+            K               = flip(sortrows(<a href="../../Library/Features/misc/nsumk.html">nsumk</a>(l,k,<span class="string">'nonnegative'</span>)).',2); <span class="comment">% Multi-indices in reverse lex. ordering</span>
+            multi_input.k   = k;                           <span class="comment">% Used in coeffs_composition, revlex</span>
+        <span class="keyword">end</span>
+        </pre><p><b>Make input into functions more clear</b></p><p>To make the code picture more clear we unify some input parameters into a field.</p><pre class="codeinput">        multi_input.N = N;
+        multi_input.K = K;
+        </pre><p><b>Assemble RHS</b></p><p>The right hand side terms can be split into three groups, which are be implemented independently.</p><pre class="codeinput">        <span class="comment">% Mixed Terms</span>
+        WR = sparse(N,z_k);
+
+        <span class="keyword">for</span> m = 2:k-1
+            WR = WR - <a href="../../Library/Manifold/private/coeffs_mixed_terms.html">coeffs_mixed_terms</a>(k,m,W_0,R_0,multi_input,<span class="string">'aut'</span>); <span class="comment">% Dependent on ordering, chooses conj, or revlex computation</span>
+        <span class="keyword">end</span>
+
+
+        <span class="comment">% Force composition terms</span>
+
+        <span class="comment">% The composition coefficients of power series</span>
+        H_k  = <a href="../../Library/Manifold/private/coeffs_composition.html">coeffs_composition</a>(W_0,H,multi_input); <span class="comment">% Dependent on ordering, chooses conj, or revlex computation</span>
+        H{k} = H_k;
+        multi_input.H = H;
+
+        <span class="comment">% Nonlinearity terms</span>
+        <span class="comment">%</span>
+        <span class="comment">% Now the nonlinearity contribution for the equation at order k is computed</span>
+        Fn = sparse(N,z_k);
+        <span class="keyword">for</span> n = 2:min(k,multi_input.nl_order) <span class="comment">% k+1 since this term includes a derivative</span>
+            <span class="keyword">if</span> ~isempty(F(n)) &amp;&amp; ~isempty(F(n).coeffs) &amp;&amp; ~isempty(F(n).ind)
+                Fn  = Fn + F(n).coeffs* <span class="keyword">...</span>
+                     <a href="../../Library/Manifold/private/compute_pi.html">compute_pi</a>(F(n).ind.',K,multi_input); <span class="comment">% Dependent on ordering, chooses conj, or revlex computation</span>
+            <span class="keyword">end</span>
+        <span class="keyword">end</span>
+
+        <span class="keyword">if</span> obj.System.order == 1 || obj.System.order == 2 &amp;&amp; strcmp(DStype,<span class="string">'complex'</span>)
+
+            <span class="keyword">if</span> obj.System.order == 2
+                fprintf(<span class="string">'\n Second order SSM computation only supported for real systems, using first order algorithm \n'</span>)
+            <span class="keyword">end</span>
+
+            RHS = B*WR + Fn;
+            RHS = reshape(RHS,N*z_k,1);
+
+            [R_0i,W_0i,H_k] = first_order_computation(RHS,H_k,W_0, multi_input,z_k,l,N, K, Lambda_M_vector, <span class="keyword">...</span>
+                A,B,W_M,obj.Options.reltol,DStype);
+
+        <span class="keyword">else</span> <span class="comment">% 2nd order dynamical system</span>
+            [R_0i,W_0i,H_k] = second_order_computation(obj,WR,Fn,H_k,z_k,l,N, K, Lambda_M_vector);
+
+        <span class="keyword">end</span>
+
+        <span class="comment">% pass on composition coefficients</span>
+        H{k}       = H_k;
+
+        multi_input.H = H;
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+<span class="comment">% estime memory consumption from all variables in the current workspace</span>
+obj.solInfo.memoryEstimate(i) = <a href="../../Library/Features/misc/monitor_memory.html">monitor_memory</a>(<span class="string">'caller'</span>);
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+        </pre><h2 id="30">Internal functions for computation</h2><pre class="codeinput"><span class="keyword">function</span> [R_0i,W_0i,H_k] = second_order_computation(obj,WR,Fn,H_k,z_k,l,N, K, Lambda_M_vector)
+M      = obj.System.M;
+C      = obj.System.C;
+Ym     = -( C * WR(1:(N/2),:) + M * WR((N/2+1):end,:)) - Fn(1:(N/2),:);
+Vm     = - WR(1:(N/2),:);
+
+THETA  = obj.E.adjointBasis(1:(N/2),:);
+PHI    = obj.E.basis(1:(N/2),:);
+
+Lambda_K         = sum(K.*Lambda_M_vector);
+[I,F] = resonance_detection(Lambda_M_vector,Lambda_K,obj.Options.reltol); <span class="comment">% F contains multi-index positions</span>
+
+[Rk] = reduced_dynamics_second_order(I,F,THETA,PHI,C,Lambda_K,Lambda_M_vector, M,Vm,Ym,l,z_k);
+
+w_0i    = zeros(N/2,z_k);
+w_0idot = zeros(N/2,z_k);
+
+<span class="keyword">for</span> f = 1:z_k
+
+    L_k = ( M * ((Lambda_K(f) + Lambda_M_vector.') .* PHI) + C*PHI ) * Rk(:,f);
+    L_k = L_k + Lambda_K(f)*M*Vm + Ym;
+
+    <span class="comment">% Set like for first order system</span>
+
+
+    C_k = -(obj.System.K + Lambda_K(f)*C + Lambda_K(f)^2 *M );
+    w_0i(:,f)    = lsqminnorm(C_k,L_k(:,f));
+    w_0idot(:,f) = Lambda_K(f) * w_0i(:,f) + PHI * Rk(:,f) + Vm(:,f);
+<span class="keyword">end</span>
+
+W_0i       = [w_0i;w_0idot];
+R_0i       = Rk;
+H_k(:,:,1) = W_0i;
+
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> [R_0i,W_0i,H_k] = first_order_computation(RHS,H_k,W_0, multi_input,z_k,l,N, K, Lambda_M_vector, <span class="keyword">...</span>
+                        A,B,W_M,reltol, DStype)
+        </pre><p>Extract the near kernel of the coefficient matrix coordinate directions do not change - we use the evals as in rev. lex ordering - lambda_i has to be multiplied with i-th entry of a multi-index</p><pre class="codeinput">K_Lambda         = sum(K.*Lambda_M_vector);
+[K_k,G_k,innerresonance] = kernel_projection(z_k,Lambda_M_vector,K_Lambda,W_M,reltol);
+
+
+<span class="keyword">if</span> innerresonance
+    <span class="keyword">switch</span> DStype
+        <span class="keyword">case</span> <span class="string">'real'</span>
+            <span class="comment">% here we use S_1 in rev_lex order since G_k is  constructed in rev_lex order for</span>
+            <span class="comment">% correct reduced dynamics (coord directions)</span>
+            W_0_full =<a href="../../Library/Manifold/private/coeffs_conj2full.html">coeffs_conj2full</a>(W_0(1),[],multi_input.Z_cci(1),multi_input.conj2revlex{1},<span class="string">'TaylorCoeffs'</span>);
+            Skron = kron(speye(z_k),B*W_0_full.coeffs);
+        <span class="keyword">case</span> <span class="string">'complex'</span>
+            Skron = kron(speye(z_k),B*W_0(1).coeffs);
+
+    <span class="keyword">end</span>
+
+    R_0i   = G_k.' * K_k' * RHS;
+    RHS   = RHS - Skron*R_0i;
+<span class="keyword">else</span>
+    R_0i   = sparse(l*z_k,1);
+<span class="keyword">end</span>
+
+W_0i    = zeros(N,z_k);
+RHS    = reshape(RHS,N,z_k);
+
+<span class="comment">% Solve the linear system for the SSM-coefficients</span>
+<span class="keyword">parfor</span> f = 1:z_k
+    C_k        = B*K_Lambda(f)-A;
+    W_0i(:,f) = lsqminnorm(C_k,RHS(:,f));
+<span class="keyword">end</span>
+R_0i       = reshape(R_0i,l,[]);
+H_k(:,:,1) = W_0i;
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+        </pre><p>Explicit kernel-construction of the coefficient-matrix This function computes the kernel of the coefficient matrix for eigenvalue pairs that are in resonance as described in the document ''Explicit Kernel Extraction and Proof ofSymmetries of SSM Coefficients - Multi-Indexversion''.</p><pre class="codeinput"><span class="keyword">function</span> [K_k,G_k,innerresonance] = kernel_projection(z_k, Lambda_M_vector, Lambda_Mk_vector, W_M, reltol)
+
+<span class="comment">%SSM dimension</span>
+l         = size(Lambda_M_vector,1);
+<span class="comment">%Compare for all combinations if singularity occurs</span>
+Lambda_Ci = Lambda_M_vector - Lambda_Mk_vector; <span class="comment">% column vector - row vector</span>
+<span class="comment">%threshold below which resonance occurs</span>
+ref       = min(abs(Lambda_M_vector));
+abstol = reltol*ref;
+<span class="comment">%find eigenvalues that trigger resonance</span>
+[I,F]  = find(abs(Lambda_Ci) &lt; abstol); <span class="comment">% I for eigenvalue and F for combination</span>
+r_k = length(I);
+<span class="keyword">if</span> r_k
+    innerresonance = 1;
+
+    <span class="comment">% create E_F, E_I</span>
+    E_F = sparse( F, (1:r_k).', true(r_k,1), z_k, r_k);
+    E_I = sparse( I, (1:r_k).', true(r_k,1), l, r_k);
+
+    <span class="comment">% create K_k, G_k</span>
+    K_k = <a href="../../Library/Features/misc/khatri_rao_product.html">khatri_rao_product</a>(E_F, W_M(:,I));
+    G_k = <a href="../../Library/Features/misc/khatri_rao_product.html">khatri_rao_product</a>(E_F, E_I)';
+<span class="keyword">else</span>
+    innerresonance = 0;
+
+    K_k=[];
+    G_k=[];
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+        </pre><p>Explicit kernel-construction of the coefficient-matrix Detects the indices of eigenvector and multi-indices that lead to singular 2nd order coefficient matrix</p><pre class="codeinput"><span class="keyword">function</span> [I,F] = resonance_detection( Lambda_M_vector, Lambda_Mk_vector, reltol)
+
+<span class="comment">%Compare for all combinations if singularity occurs</span>
+Lambda_Ci = Lambda_M_vector - Lambda_Mk_vector; <span class="comment">% column vector - row vector</span>
+<span class="comment">%threshold below which resonance occurs</span>
+ref       = min(abs(Lambda_M_vector));
+abstol = reltol*ref;
+<span class="comment">%find eigenvalues that trigger resonance</span>
+[I,F]  = find(abs(Lambda_Ci) &lt; abstol); <span class="comment">% I for eigenvalue and F for combination</span>
+<span class="keyword">end</span>
+
+
+<span class="keyword">function</span> [Rk] = reduced_dynamics_second_order(I,F,THETA,PHI,C,Lambda_K,Lambda, M,Vm,Ym,l,z_k)
+<span class="comment">% F - multi-index positions that are resonant</span>
+<span class="comment">% I - Eigenvalue positions that are resonant</span>
+
+Rk = zeros(l,z_k);
+<span class="comment">% unique multi indices</span>
+<span class="keyword">if</span> any(F)
+[F_un, ~,i_F_un] = unique(F.');
+
+<span class="comment">% Loop over multi-indices that lead to resonance</span>
+ii = 1;
+
+<span class="keyword">for</span> f = F_un
+    I_f = I((i_F_un == ii)); <span class="comment">% All resonant eigenvalues for this multi - index</span>
+    THETA_f = THETA(:,I_f);
+
+    <span class="comment">%PHI_f   = PHI(:,I_f);</span>
+    <span class="comment">%C_k_r =  THETA_f' * ( C* PHI_f + M * ((Lambda_K(f) + Lambda(I_f).') .* PHI_f)); %Coefficient Matrix</span>
+    <span class="comment">%RHS   = Lambda_K(f).*-THETA_f' * M*Vm(:,f) +-THETA_f' *(Ym(:,f));</span>
+    <span class="comment">%Rk(I_f,f) = lsqminnorm(C_k_r,RHS);</span>
+
+    <span class="comment">% Set analogous to first order case</span>
+    Rk(I_f,f)= Lambda(I_f) .* -THETA_f'*M*Vm(:,f) + -THETA_f' *Ym(:,f);
+
+
+    ii = ii +1;
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+        </pre><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% COHOMOLOGICAL_SOLUTION
+%
+%%
+function [W_0i, R_0i,multi_input] = cohomological_solution(obj, i,  W_0, R_0,multi_input,DStype)
+%%
+%
+% This function computes the solution of the invariance equation at order i.
+% The function computes the SSM where we solve the invariance equation
+%
+% $$\mathbf{B}D\mathbf{S}\mathbf{R}=\mathbf{A}\mathbf{S}+\mathbf{F}\circ\mathbf{S}$$
+%
+% of the dynamical system
+%
+% $\mathbf{B}\dot{\mathbf{z}} = \mathbf{A}\mathbf{z} + \mathbf{F(\mathbf{z})}$.
+%
+%
+%% Tensor based computation
+%
+% The SSM is expressed in terms of the expansion
+%
+% $$\mathbf{S}(\mathbf{p})=\sum_{i=1}^{\Gamma_{S}}\mathbf{S}_{i}\mathbf{p}^{\otimes
+% i},$$
+%
+% where $\mathbf{p}\in\mathbf{C}^m$ are parameterization coordinates of the
+% $m$ -dimensional SSM.
+%
+% The coefficients at different orders are collected in a cell array $\texttt{S}$
+% , where $\texttt{S\{i\}}$ gives the coefficients at order $\texttt{i}$, i.e.
+% $\mathbf{S}_{i}$. These are obtained by solving for $\mathbf{S}_{i}$ in the
+% following equation
+%
+% $$\mathbf{B}\mathbf{S}_{i}\mathbf{\Lambda}_{\mathcal{M},i}-\mathbf{A}\mathbf{S}_{i}=\underbrace{\sum_{j=2}^{i}\mathbf{F}_{j}\sum_{|\mathbf{p}|=i}\mathbf{S}_{p_{1}}\otimes\dots\otimes\mathbf{S}_{p_{j}}-\mathbf{B}\sum_{j=2}^{i-1}\mathbf{S}_{j}\sum_{|\mathbf{p}|=1}\mathbf{R}_{i+1-j}^{p_{1}}\otimes\dots\otimes\mathbf{R}_{i+1-j}^{p_{j}}}_{\mathbf{L}_{i}}-\mathbf{B}\mathbf{S}_{1}\mathbf{R}_{i}$$
+%
+% where
+%
+% $$\mathbf{\Lambda}_{\mathcal{M},i}:=\sum_{|\mathbf{p}|=1}\mathbf{\Lambda}_{\mathcal{M}}^{p_{1}}\otimes\dots\otimes\mathbf{\Lambda}_{\mathcal{M}}^{p_{i}}$$
+%
+% and $\mathbf{\Lambda}_{\mathcal{M}}$ is a diagonal ($m\times m$) matrix containing
+% the eigenvalues of the master modal subspace $\mathcal{M}$. The above equation
+% in the vectorized notation is given by
+%
+% $$\underbrace{\left[\left(\mathbf{\Lambda}_{\mathcal{M},i}^{\top}\otimes\mathbf{B}\right)-\left(\mathbf{I}_{m^{i}}\otimes\mathbf{A}\right)\right]}_{{\mathcal{C}}_{i}}\textrm{vec}\left(\mathbf{S}_{i}\right)=\textrm{vec}\left(\mathbf{L}_{i}\right)-\left(\mathbf{I}_{m^{i}}\otimes\mathbf{B}\mathbf{S}_{1}\right)\textrm{vec}\left(\mathbf{R}_{i}\right)$$
+%
+% Here $\textrm{vec}(\mathbf{S}_{i})$ just stands for the vectorization
+% operator in MATLAB obtained by the command $\texttt{S\{i\}(:)}$.
+%
+
+switch obj.Options.notation
+    case 'tensor'
+        
+
+        Lambda_M = obj.E.spectrum;
+        A = obj.System.A; % A matrix
+        B = obj.System.B; % B matrix
+        W_M = obj.E.adjointBasis; % Right eigenvectors of the modal subspace
+        V_M = obj.E.basis; % Left eigenvectors of the modal subspace
+        N = obj.dimSystem; % Full system dimensionality in first-order form
+        F = obj.System.F; % Full system Nonlinearity coefficients at different orders
+        m = length(Lambda_M); % dim(M): M is the master modal subspace
+        N_i = N*m^i; % number of unknown SSM coefficients in the tensor notation at order i
+        ref = min(abs(Lambda_M));
+        if ref<1e-10; ref = max(abs(Lambda_M)); end
+        abstol = obj.Options.reltol * ref;
+                
+        %%
+        % *Assemble the coefficient matrix of SSM*
+        %
+        % Obtaining $\mathbf{\Lambda}_{\mathcal{M},i}:=\sum_{|\mathbf{p}|=1}\mathbf{\Lambda}_{\mathcal{M}}^{p_{1}}\otimes\dots\otimes\mathbf{\Lambda}_{\mathcal{M}}^{p_{i}}$
+        %
+        % We assemble it as
+        %
+        % $$\mathbf{\Lambda}_{\mathcal{M},i}=\sum_{j=1}^{m}\mathbf{I}_{m}\otimes\dots\otimes\mathbf{I}_m\otimes\mathbf{\Lambda}_{\mathcal{M}}\otimes\mathbf{I}_m\otimes\dots\otimes\mathbf{I}_{m}\,,$$
+        %
+        % where each term is a kronecker product of $m$ matrices and $\mathbf{\Lambda}_{\mathcal{M}}$
+        % occurs at the $j$ -th location.
+        %
+        % We can show that the diagonal matrix $\mathbf{\Lambda}_{\mathcal{M},i}$ contains
+        % $m^i$ non-zero elements  $(\mathbf{\Lambda}_{\mathcal{M},i})_{j(\mathbf{k})}
+        % = \lambda_{k_1}+\dots+ \lambda_{k_i},\quad \mathbf{k}\in\mathbf{N}^i$ and ${j(\mathbf{k})}$
+        % represents the lexicographical bijective indexing of $i$-tuples taking values
+        % from $1,\dots,m$ and is given by the |combinator| function.
+        %
+        disp(['Computing autonomous whisker at order ' num2str(i)])
+        combinations = combinator(m,i,'p','r');
+        Lambda_Mi = sum(Lambda_M(combinations),2);
+        %%
+        % Spectrum of $\mathcal{C}_i:=\left[\left(\mathbf{\Lambda}_{\mathcal{M},i}^{\top}\otimes\mathbf{B}\right)-\left(\mathbf{I}_{m^{i}}\otimes\mathbf{A}\right)\right]$
+        %%
+        % The matrix that needs to be inverted for solving the coefficients
+        % at the $i$-th order is given by
+        %
+        % $$\mathcal{C}_i:=\left[\left(\mathbf{\Lambda}_{\mathcal{M},i}^{\top}\otimes\mathbf{B}\right)-\left(\mathbf{I}_{m^{i}}\otimes\mathbf{A}\right)\right]$$
+        %% 
+        % *Assemble RHS*
+        %
+        % $$\mathbf{L}_i =\sum_{j=2}^{l}\mathbf{F}_{j}\sum_{|\mathbf{p}|=i}\mathbf{S}_{p_{1}}\otimes\dots\otimes\mathbf{S}_{p_{j}}-\mathbf{B}\sum_{j=2}^{i-1}\mathbf{S}_{j}\sum_{|\mathbf{p}|=1}\mathbf{R}_{i+1-j}^{p_{1}}\otimes\dots\otimes\mathbf{R}_{i+1-j}^{p_{j}}$$
+        %
+        % where $l=\min(i,\Gamma_F)$ since we need to compute the summation at most
+        % up to the order of the nonlinearity in $\mathbf{F}$.
+        SIZE = [N, m*ones(1,i)];
+        FS = sptensor(SIZE);
+        %%
+        % First term
+        l = min(i,length(F));
+        for j = 2:l           % Outer for loop can be parallelized - l cores
+            % find values for j positive numbers summing up to i
+            P = <a href="../../Library/Features/misc/nsumk.html">nsumk</a>(j,i,'positive');
+            FS = FS + <a href="../../Library/Features/misc/tensor_composition.html">tensor_composition</a>(F{j},W_0,P,SIZE);
+        end
+        %%
+        % Second term
+        SR = sptensor(SIZE);
+        % R_0i = R_0(i:-1:2); % used for parfor
+        for j = 2:i-1         % Outer for loop can be parallelized - i-1 cores
+            P = ones(j,j) + eye(j,j);
+            R_j = {sptensor(speye(m,m)),R_0{i+1-j}};
+            % R_j = {sptensor(speye(m,m)),R_0i{j}}; % used for parfor
+            SR = SR + <a href="../../Library/Features/misc/tensor_composition.html">tensor_composition</a>(W_0{j},R_j,P,SIZE);
+        end   
+        if m==1 % tensor_toolbox has issues
+            if ~isempty(FS.vals)
+                FS = sparse(FS.subs(:,1), FS.subs(:,2), FS.vals, N_i, 1);
+            else
+                FS = sparse(N_i,1);
+            end
+            
+            if ~isempty(SR.vals)
+                SR = sparse(SR.subs(:,1), SR.subs(:,2), SR.vals, N_i, 1);
+            else
+                SR = sparse(N_i,1);
+            end
+            L_i = FS - B*SR;
+
+        else
+            L_i = FS - ttm(SR,B,1);
+            %%
+            % Convert $\mathbf{L}_i$ object to sparse vector.
+            L_i = sptenmat(permute(L_i,[1, ndims(L_i):-1:2]), 1:ndims(L_i));
+            if isempty(L_i.vals)
+                L_i = sparse(N_i,1);
+            else
+                L_i = sparse(L_i.subs(:,1),L_i.subs(:,2),L_i.vals,N_i,1);
+            end            
+            L_i = reshape(L_i,N,[]);
+        end
+        %% 
+        % *Solving for SSM coefficients and Reduced dynamics*
+        %
+        % $${{\mathcal{C}}_{i}}~\textrm{vec}\left(\mathbf{S}_{i}\right)=\textrm{vec}\left(\mathbf{L}_{i}\right)-\underbrace{\left(\mathbf{I}_{m^{i}}\otimes\mathbf{B}\mathbf{S}_{1}\right)}_{{\mathcal{D}}_{i}}\textrm{vec}\left(\mathbf{R}_{i}\right)$$
+        %
+        W_0i = zeros(N,m^i); % generally dense
+        R_0i = sparse(m,m^i);        
+
+        nRes = 0;
+        paramStyle = obj.Options.paramStyle;
+        parfor l = 1:m^i
+            lambda_l = Lambda_Mi(l);
+            C_l = lambda_l * B - A;
+            L_il = L_i(:,l);
+
+            %%
+            % Checking for near-inner resonances.
+            J = find(abs(lambda_l - Lambda_M)<abstol);
+            
+            if ~isempty(J)                
+                switch paramStyle
+                    case 'normalform'
+                        %%
+                        % Choosing reduced dynamics using (near-)kernel of
+                        % $\mathcal{C}_i$.
+                        R_0il = zeros(m,1); % for slicing use
+                        for j = J
+                            w_j = W_M(:,j);
+                            % R_0i(j,l) = w_j'*L_il;
+                            R_0il(j) = w_j'*L_il;
+                        end
+                        R_0i(:,l) = R_0il;
+                    case 'graph'
+                        R_0i(:,l) = W_M'*L_il;
+                end                
+                b_l = L_il - B * V_M * R_0i(:,l);
+            else
+                b_l = L_il;
+            end
+            nRes = nRes + numel(J);
+            %%
+            % Obtaining minimum-norm solution for $\mathbf{S}_i$ using $\texttt{lsqminnorm}$
+            % which performs a complete orthogonal decomposition and is better suited for
+            % sparse matrices as opposed to the Moore-Penrose pseudo-inverse ($\texttt{pinv}$).
+            % We would like to use better iterative procedures moving forward, currently lsqlin
+            % is not suited for complex data entries.
+            W_0i(:,l) = lsqminnorm(C_l,b_l);
+        end
+        disp([num2str(nRes) ' (near) inner resonance(s) detected at order ' num2str(i)])
+        
+        W_0i = reshape(sptensor(W_0i(:)), [N, m*ones(1,i)]);
+        R_0i = reshape(sptensor(R_0i(:)), [m, m*ones(1,i)]);
+        W_0i = permute(W_0i,[1, ndims(W_0i):-1:2]);
+        R_0i = permute(R_0i,[1, ndims(R_0i):-1:2]);
+        
+        multi_input =  [];
+
+%% Multi-index based computation      
+%
+% Details on the computational routine and the expansion can be found in
+% the tutorial on <../../Theory/4.%20SSM-Computation.html SSM computations>.
+%
+    case 'multiindex'
+        
+        k = i;                      % convention here: call highest order k instead of i, call SSM dim l instead of m
+        A   = obj.System.A;         % A matrix
+        B   = obj.System.B;         % B matrix
+        N   = obj.dimSystem;        % Full system dimensionality in first-order form
+        l   = numel(obj.E.spectrum);% dim(M): M is the master modal subspace
+        F   = obj.System.F;         % Full system Nonlinearity coefficients at different orders
+
+        W_M = multi_input.W_M;      % Right eigenvectors of the modal subspace
+        H   = multi_input.H;        % composition coefficients
+        
+        switch DStype
+            case 'real'
+            %%
+            % *Setup for case with symmetries*
+            %
+            multi_input.ordering = 'conjugate';
+            
+            % Conjugate center index at all orders
+            z_k             = multi_input.Z_cci(k);     % Highest index that coefficients are computed for in conjugate ordering.
+
+            Lambda_M_vector = multi_input.Lambda_M_vector; % Vector with master evals sorted by size and imag/real
+            K               = flip(sortrows(<a href="../../Library/Features/misc/nsumk.html">nsumk</a>(l,k,'nonnegative')).',2);
+            K               = K(:,multi_input.revlex2conj{k});
+            K               = K(:,1:z_k);                  % Set of order k multi-indices in conjugate ordering up to conjugate center index
+        
+            case 'complex'
+            multi_input.ordering = 'revlex';
+
+            z_k             = multi_input.Z_cci(k);        % Contains amount of multi-indices for every order
+            Lambda_M_vector = multi_input.Lambda_M_vector; % Vector with master evals in rev_lex order as in R_0(1)
+            K               = flip(sortrows(<a href="../../Library/Features/misc/nsumk.html">nsumk</a>(l,k,'nonnegative')).',2); % Multi-indices in reverse lex. ordering
+            multi_input.k   = k;                           % Used in coeffs_composition, revlex 
+        end
+        %%
+        % *Make input into functions more clear*
+        %
+        % To make the code picture more clear we unify some input parameters into a
+        % field.
+        multi_input.N = N;
+        multi_input.K = K;        
+        %%
+        % *Assemble RHS*
+        %
+        % The right hand side terms can be split into three groups, which are be implemented
+        % independently. 
+        
+        % Mixed Terms
+        WR = sparse(N,z_k);
+        
+        for m = 2:k-1
+            WR = WR - <a href="../../Library/Manifold/private/coeffs_mixed_terms.html">coeffs_mixed_terms</a>(k,m,W_0,R_0,multi_input,'aut'); % Dependent on ordering, chooses conj, or revlex computation
+        end
+
+        
+        % Force composition terms
+        
+        % The composition coefficients of power series
+        H_k  = <a href="../../Library/Manifold/private/coeffs_composition.html">coeffs_composition</a>(W_0,H,multi_input); % Dependent on ordering, chooses conj, or revlex computation
+        H{k} = H_k;
+        multi_input.H = H;
+        
+        % Nonlinearity terms
+        %
+        % Now the nonlinearity contribution for the equation at order k is computed
+        Fn = sparse(N,z_k);
+        for n = 2:min(k,multi_input.nl_order) % k+1 since this term includes a derivative
+            if ~isempty(F(n)) && ~isempty(F(n).coeffs) && ~isempty(F(n).ind)
+                Fn  = Fn + F(n).coeffs* ...
+                     <a href="../../Library/Manifold/private/compute_pi.html">compute_pi</a>(F(n).ind.',K,multi_input); % Dependent on ordering, chooses conj, or revlex computation
+            end
+        end       
+        
+        if obj.System.order == 1 || obj.System.order == 2 && strcmp(DStype,'complex')
+            
+            if obj.System.order == 2
+                fprintf('\n Second order SSM computation only supported for real systems, using first order algorithm \n')
+            end
+            
+            RHS = B*WR + Fn;
+            RHS = reshape(RHS,N*z_k,1);
+            
+            [R_0i,W_0i,H_k] = first_order_computation(RHS,H_k,W_0, multi_input,z_k,l,N, K, Lambda_M_vector, ...
+                A,B,W_M,obj.Options.reltol,DStype);
+
+        else % 2nd order dynamical system
+            [R_0i,W_0i,H_k] = second_order_computation(obj,WR,Fn,H_k,z_k,l,N, K, Lambda_M_vector);
+
+        end
+        
+        % pass on composition coefficients
+        H{k}       = H_k;
+        
+        multi_input.H = H;
+end
+% estime memory consumption from all variables in the current workspace
+obj.solInfo.memoryEstimate(i) = <a href="../../Library/Features/misc/monitor_memory.html">monitor_memory</a>('caller');
+end
+
+%% Internal functions for computation
+%
+function [R_0i,W_0i,H_k] = second_order_computation(obj,WR,Fn,H_k,z_k,l,N, K, Lambda_M_vector)
+M      = obj.System.M;
+C      = obj.System.C;
+Ym     = -( C * WR(1:(N/2),:) + M * WR((N/2+1):end,:)) - Fn(1:(N/2),:);
+Vm     = - WR(1:(N/2),:);
+
+THETA  = obj.E.adjointBasis(1:(N/2),:);
+PHI    = obj.E.basis(1:(N/2),:);
+
+Lambda_K         = sum(K.*Lambda_M_vector);
+[I,F] = resonance_detection(Lambda_M_vector,Lambda_K,obj.Options.reltol); % F contains multi-index positions
+
+[Rk] = reduced_dynamics_second_order(I,F,THETA,PHI,C,Lambda_K,Lambda_M_vector, M,Vm,Ym,l,z_k);
+
+w_0i    = zeros(N/2,z_k);
+w_0idot = zeros(N/2,z_k);
+
+for f = 1:z_k
+    
+    L_k = ( M * ((Lambda_K(f) + Lambda_M_vector.') .* PHI) + C*PHI ) * Rk(:,f);
+    L_k = L_k + Lambda_K(f)*M*Vm + Ym;
+    
+    % Set like for first order system
+    
+    
+    C_k = -(obj.System.K + Lambda_K(f)*C + Lambda_K(f)^2 *M );
+    w_0i(:,f)    = lsqminnorm(C_k,L_k(:,f));
+    w_0idot(:,f) = Lambda_K(f) * w_0i(:,f) + PHI * Rk(:,f) + Vm(:,f);
+end
+
+W_0i       = [w_0i;w_0idot];
+R_0i       = Rk;
+H_k(:,:,1) = W_0i;
+
+end
+
+function [R_0i,W_0i,H_k] = first_order_computation(RHS,H_k,W_0, multi_input,z_k,l,N, K, Lambda_M_vector, ...
+                        A,B,W_M,reltol, DStype)
+%%
+% Extract the near kernel of the coefficient matrix
+% coordinate directions do not change - we use the evals as in rev. lex
+% ordering - lambda_i has to be multiplied with i-th entry of a multi-index
+K_Lambda         = sum(K.*Lambda_M_vector);
+[K_k,G_k,innerresonance] = kernel_projection(z_k,Lambda_M_vector,K_Lambda,W_M,reltol);
+
+
+if innerresonance
+    switch DStype
+        case 'real'
+            % here we use S_1 in rev_lex order since G_k is  constructed in rev_lex order for
+            % correct reduced dynamics (coord directions)
+            W_0_full =<a href="../../Library/Manifold/private/coeffs_conj2full.html">coeffs_conj2full</a>(W_0(1),[],multi_input.Z_cci(1),multi_input.conj2revlex{1},'TaylorCoeffs');
+            Skron = kron(speye(z_k),B*W_0_full.coeffs);
+        case 'complex'
+            Skron = kron(speye(z_k),B*W_0(1).coeffs);
+            
+    end
+    
+    R_0i   = G_k.' * K_k' * RHS;
+    RHS   = RHS - Skron*R_0i;
+else
+    R_0i   = sparse(l*z_k,1);
+end
+
+W_0i    = zeros(N,z_k);
+RHS    = reshape(RHS,N,z_k);
+
+% Solve the linear system for the SSM-coefficients
+parfor f = 1:z_k
+    C_k        = B*K_Lambda(f)-A;
+    W_0i(:,f) = lsqminnorm(C_k,RHS(:,f));
+end
+R_0i       = reshape(R_0i,l,[]);
+H_k(:,:,1) = W_0i;
+
+end
+
+%%
+% Explicit kernel-construction of the coefficient-matrix
+% This function computes the kernel of the coefficient matrix for eigenvalue 
+% pairs that are in resonance as described in the document ''Explicit Kernel Extraction 
+% and Proof ofSymmetries of SSM Coefficients - Multi-Indexversion''.
+function [K_k,G_k,innerresonance] = kernel_projection(z_k, Lambda_M_vector, Lambda_Mk_vector, W_M, reltol)
+
+%SSM dimension
+l         = size(Lambda_M_vector,1);
+%Compare for all combinations if singularity occurs
+Lambda_Ci = Lambda_M_vector - Lambda_Mk_vector; % column vector - row vector
+%threshold below which resonance occurs
+ref       = min(abs(Lambda_M_vector));
+abstol = reltol*ref;
+%find eigenvalues that trigger resonance
+[I,F]  = find(abs(Lambda_Ci) < abstol); % I for eigenvalue and F for combination
+r_k = length(I);
+if r_k
+    innerresonance = 1;
+    
+    % create E_F, E_I
+    E_F = sparse( F, (1:r_k).', true(r_k,1), z_k, r_k);
+    E_I = sparse( I, (1:r_k).', true(r_k,1), l, r_k);
+    
+    % create K_k, G_k
+    K_k = <a href="../../Library/Features/misc/khatri_rao_product.html">khatri_rao_product</a>(E_F, W_M(:,I));
+    G_k = <a href="../../Library/Features/misc/khatri_rao_product.html">khatri_rao_product</a>(E_F, E_I)';
+else
+    innerresonance = 0;
+    
+    K_k=[];
+    G_k=[];
+end
+end
+
+%%
+% Explicit kernel-construction of the coefficient-matrix
+% Detects the indices of eigenvector and multi-indices that lead to
+% singular 2nd order coefficient matrix
+
+function [I,F] = resonance_detection( Lambda_M_vector, Lambda_Mk_vector, reltol)
+
+%Compare for all combinations if singularity occurs
+Lambda_Ci = Lambda_M_vector - Lambda_Mk_vector; % column vector - row vector
+%threshold below which resonance occurs
+ref       = min(abs(Lambda_M_vector));
+abstol = reltol*ref;
+%find eigenvalues that trigger resonance
+[I,F]  = find(abs(Lambda_Ci) < abstol); % I for eigenvalue and F for combination
+end
+
+
+function [Rk] = reduced_dynamics_second_order(I,F,THETA,PHI,C,Lambda_K,Lambda, M,Vm,Ym,l,z_k)
+% F - multi-index positions that are resonant
+% I - Eigenvalue positions that are resonant
+
+Rk = zeros(l,z_k);
+% unique multi indices
+if any(F)
+[F_un, ~,i_F_un] = unique(F.');
+
+% Loop over multi-indices that lead to resonance
+ii = 1;
+
+for f = F_un
+    I_f = I((i_F_un == ii)); % All resonant eigenvalues for this multi - index
+    THETA_f = THETA(:,I_f);
+    
+    %PHI_f   = PHI(:,I_f);
+    %C_k_r =  THETA_f' * ( C* PHI_f + M * ((Lambda_K(f) + Lambda(I_f).') .* PHI_f)); %Coefficient Matrix
+    %RHS   = Lambda_K(f).*-THETA_f' * M*Vm(:,f) +-THETA_f' *(Ym(:,f));
+    %Rk(I_f,f) = lsqminnorm(C_k_r,RHS);
+
+    % Set analogous to first order case
+    Rk(I_f,f)= Lambda(I_f) .* -THETA_f'*M*Vm(:,f) + -THETA_f' *Ym(:,f);
+
+    
+    ii = ii +1;
+end
+end
+end
+
+
+            ##### SOURCE END #####
+        --></body></html></body></html>

@@ -1,0 +1,290 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../../../index.html"><img alt="Logo" class="logo" src="../../../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>PLOT3_FRC_FULL</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-11" name="DC.date"/><meta content="plot3_frc_full.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>PLOT3_FRC_FULL</h1><!--introduction--><!--/introduction--><pre class="codeinput"><span class="keyword">function</span> plot3_frc_full(omega,epsilon,Znorm,outdof,Aout,stab,order,varargin)
+        </pre><p>Plot FRC in 3D Plot with axis: omega, epsilon and output at outdof</p><pre class="codeinput"><span class="keyword">if</span> numel(varargin)&gt;0 &amp;&amp; strcmp(varargin{1},<span class="string">'lines'</span>)
+    <span class="comment">% plot by solid and dashed lines (solid/dashed: stable/unstable)</span>
+    <span class="keyword">if</span> numel(varargin)&gt;1 &amp;&amp; strcmp(varargin{2},<span class="string">'BP'</span>)
+        figure(gcf); hold <span class="string">on</span>
+        numOutdof = numel(outdof);
+        <span class="keyword">if</span> numOutdof&gt;1
+            <span class="keyword">for</span> k=1:numOutdof
+               subplot(numOutdof,1,k); hold <span class="string">on</span>
+               <a href="../../../Library/SSM/private/stab_plot3.html">stab_plot3</a>(omega,epsilon,Aout(:,k),stab,order,<span class="string">'nolegends'</span>);
+            <span class="keyword">end</span>
+        <span class="keyword">else</span>
+            <a href="../../../Library/SSM/private/stab_plot3.html">stab_plot3</a>(omega,epsilon,Aout,stab,order,<span class="string">'nolegends'</span>);
+        <span class="keyword">end</span>
+    <span class="keyword">else</span>
+        figure; hold <span class="string">on</span>
+        <span class="keyword">if</span> isempty(stab)
+            plot3(omega,epsilon,Znorm,varargin{2},<span class="string">'LineWidth'</span>,2);
+            leg = strcat(<span class="string">'SSM-$$\mathcal{O}('</span>,num2str(order),<span class="string">')$$'</span>);
+            legend(leg,<span class="string">'Interpreter'</span>,<span class="string">'latex'</span>);
+        <span class="keyword">else</span>
+            <a href="../../../Library/SSM/private/stab_plot3.html">stab_plot3</a>(omega,epsilon,Znorm,stab,order);
+        <span class="keyword">end</span>
+        xlabel(<span class="string">'$\Omega$'</span>,<span class="string">'Interpreter'</span>,<span class="string">'latex'</span>);
+        ylabel(<span class="string">'$\epsilon$'</span>,<span class="string">'Interpreter'</span>,<span class="string">'latex'</span>);
+        zlabel(<span class="string">'$\|\mathbf{z}\|_{L_2}$'</span>,<span class="string">'Interpreter'</span>,<span class="string">'latex'</span>);
+        set(gca,<span class="string">'FontSize'</span>,14);
+        view([50 15]);
+        grid <span class="string">on</span>, axis <span class="string">tight</span>; legend <span class="string">boxoff</span>; box <span class="string">on</span>
+        figure; hold <span class="string">on</span>
+        numOutdof = numel(outdof);
+        <span class="keyword">for</span> k=1:numOutdof
+           subplot(numOutdof,1,k); hold <span class="string">on</span>
+           <span class="keyword">if</span> isempty(stab)
+               plot3(omega,epsilon,Aout(:,k),varargin{2},<span class="string">'LineWidth'</span>,2);
+               legend(leg,<span class="string">'Interpreter'</span>,<span class="string">'latex'</span>);
+           <span class="keyword">else</span>
+               <a href="../../../Library/SSM/private/stab_plot3.html">stab_plot3</a>(omega,epsilon,Aout(:,k),stab,order);
+           <span class="keyword">end</span>
+           zk = strcat(<span class="string">'$||z_{'</span>,num2str(outdof(k)),<span class="string">'}||_{\infty}$'</span>);
+           zlabel(zk,<span class="string">'Interpreter'</span>,<span class="string">'latex'</span>);
+           set(gca,<span class="string">'FontSize'</span>,14);
+           view([50 15]);
+           grid <span class="string">on</span>, axis <span class="string">tight</span>; legend <span class="string">boxoff</span>; box <span class="string">on</span>
+           xlabel(<span class="string">'$\Omega$'</span>,<span class="string">'Interpreter'</span>,<span class="string">'latex'</span>);
+           ylabel(<span class="string">'$\epsilon$'</span>,<span class="string">'Interpreter'</span>,<span class="string">'latex'</span>);
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">else</span>
+    <span class="comment">% plot by blue and red cycles (blue/red: stable/unstable)</span>
+    <span class="comment">% BUG &lt;NEED TO BE FIXED FOR THE CASE OF BP PLOTS&gt;</span>
+    figure();view(3);hold <span class="string">on</span>
+    plot3(omega(stab),epsilon(stab),Znorm(stab),<span class="string">'ob'</span>,<span class="string">'MarkerSize'</span>,4)
+    plot3(omega(~stab),epsilon(~stab),Znorm(~stab),<span class="string">'or'</span>,<span class="string">'MarkerSize'</span>,4)
+
+    xlabel(<span class="string">'$\Omega$'</span>,<span class="string">'Interpreter'</span>,<span class="string">'latex'</span>);
+    ylabel(<span class="string">'$\epsilon$'</span>,<span class="string">'Interpreter'</span>,<span class="string">'latex'</span>);
+    zlabel(<span class="string">'$\|\mathbf{z}\|_{L_2}$'</span>,<span class="string">'Interpreter'</span>,<span class="string">'latex'</span>);
+    <span class="keyword">if</span> all(stab)
+        legend(strcat(<span class="string">'SSM-$$\mathcal{O}('</span>,num2str(order),<span class="string">')$$ - stable'</span>),<span class="keyword">...</span>
+            <span class="string">'Interpreter'</span>,<span class="string">'latex'</span>, <span class="string">'Location'</span>,<span class="string">'best'</span>,<span class="string">'Box'</span>,<span class="string">'off'</span>);
+    <span class="keyword">elseif</span> ~any(stab)
+        legend(strcat(<span class="string">'SSM-$$\mathcal{O}('</span>,num2str(order),<span class="string">')$$ - unstable'</span>),<span class="keyword">...</span>
+            <span class="string">'Interpreter'</span>,<span class="string">'latex'</span>, <span class="string">'Location'</span>,<span class="string">'best'</span>,<span class="string">'Box'</span>,<span class="string">'off'</span>);
+    <span class="keyword">else</span>
+        legend(strcat(<span class="string">'SSM-$$\mathcal{O}('</span>,num2str(order),<span class="string">')$$ - stable'</span>),<span class="keyword">...</span>
+            strcat(<span class="string">'SSM-$$\mathcal{O}('</span>,num2str(order),<span class="string">')$$ - unstable'</span>),<span class="keyword">...</span>
+            <span class="string">'Interpreter'</span>,<span class="string">'latex'</span>, <span class="string">'Location'</span>,<span class="string">'best'</span>,<span class="string">'Box'</span>,<span class="string">'off'</span>);
+    <span class="keyword">end</span>
+    set(gca,<span class="string">'FontSize'</span>,14);
+    grid <span class="string">on</span>, axis <span class="string">tight</span>;view(3);
+
+    figure; hold <span class="string">on</span>
+    numOutdof = numel(outdof);
+    <span class="keyword">for</span> k=1:numOutdof
+       subplot(numOutdof,1,k);view(3);hold <span class="string">on</span>
+       plot3(omega(stab),epsilon(stab),Aout(stab,k),<span class="string">'ob'</span>,<span class="string">'MarkerSize'</span>,4);
+       plot3(omega(~stab),epsilon(~stab),Aout(~stab,k),<span class="string">'or'</span>,<span class="string">'MarkerSize'</span>,4);
+       zk = strcat(<span class="string">'$||z_{'</span>,num2str(outdof(k)),<span class="string">'}||_{\infty}$'</span>);
+       zlabel(zk,<span class="string">'Interpreter'</span>,<span class="string">'latex'</span>);
+       set(gca,<span class="string">'FontSize'</span>,14);
+       grid <span class="string">on</span>, axis <span class="string">tight</span>
+
+
+    xlabel(<span class="string">'$\Omega$'</span>,<span class="string">'Interpreter'</span>,<span class="string">'latex'</span>);
+    ylabel(<span class="string">'$\epsilon$'</span>,<span class="string">'Interpreter'</span>,<span class="string">'latex'</span>);
+    <span class="keyword">if</span> all(stab)
+        legend(strcat(<span class="string">'SSM-$$\mathcal{O}('</span>,num2str(order),<span class="string">')$$ - stable'</span>),<span class="keyword">...</span>
+            <span class="string">'Interpreter'</span>,<span class="string">'latex'</span>, <span class="string">'Location'</span>,<span class="string">'best'</span>,<span class="string">'Box'</span>,<span class="string">'off'</span>);
+    <span class="keyword">elseif</span> ~any(stab)
+        legend(strcat(<span class="string">'SSM-$$\mathcal{O}('</span>,num2str(order),<span class="string">')$$ - unstable'</span>),<span class="keyword">...</span>
+            <span class="string">'Interpreter'</span>,<span class="string">'latex'</span>, <span class="string">'Location'</span>,<span class="string">'best'</span>,<span class="string">'Box'</span>,<span class="string">'off'</span>);
+    <span class="keyword">else</span>
+        legend(strcat(<span class="string">'SSM-$$\mathcal{O}('</span>,num2str(order),<span class="string">')$$ - stable'</span>),<span class="keyword">...</span>
+            strcat(<span class="string">'SSM-$$\mathcal{O}('</span>,num2str(order),<span class="string">')$$ - unstable'</span>),<span class="keyword">...</span>
+            <span class="string">'Interpreter'</span>,<span class="string">'latex'</span>, <span class="string">'Location'</span>,<span class="string">'best'</span>,<span class="string">'Box'</span>,<span class="string">'off'</span>);
+    <span class="keyword">end</span>
+    <span class="keyword">end</span>
+
+
+<span class="keyword">end</span>
+        </pre><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% PLOT3_FRC_FULL
+%
+%%
+function plot3_frc_full(omega,epsilon,Znorm,outdof,Aout,stab,order,varargin)
+%%
+% Plot FRC in 3D Plot with axis: omega, epsilon and output at outdof
+%
+
+if numel(varargin)>0 && strcmp(varargin{1},'lines')
+    % plot by solid and dashed lines (solid/dashed: stable/unstable)
+    if numel(varargin)>1 && strcmp(varargin{2},'BP')
+        figure(gcf); hold on
+        numOutdof = numel(outdof);
+        if numOutdof>1
+            for k=1:numOutdof
+               subplot(numOutdof,1,k); hold on
+               <a href="../../../Library/SSM/private/stab_plot3.html">stab_plot3</a>(omega,epsilon,Aout(:,k),stab,order,'nolegends');
+            end
+        else
+            <a href="../../../Library/SSM/private/stab_plot3.html">stab_plot3</a>(omega,epsilon,Aout,stab,order,'nolegends');
+        end
+    else
+        figure; hold on
+        if isempty(stab)
+            plot3(omega,epsilon,Znorm,varargin{2},'LineWidth',2);
+            leg = strcat('SSM-$$\mathcal{O}(',num2str(order),')$$');
+            legend(leg,'Interpreter','latex');
+        else
+            <a href="../../../Library/SSM/private/stab_plot3.html">stab_plot3</a>(omega,epsilon,Znorm,stab,order);
+        end
+        xlabel('$\Omega$','Interpreter','latex'); 
+        ylabel('$\epsilon$','Interpreter','latex');
+        zlabel('$\|\mathbf{z}\|_{L_2}$','Interpreter','latex'); 
+        set(gca,'FontSize',14);
+        view([50 15]);
+        grid on, axis tight; legend boxoff; box on
+        figure; hold on
+        numOutdof = numel(outdof);
+        for k=1:numOutdof
+           subplot(numOutdof,1,k); hold on
+           if isempty(stab)
+               plot3(omega,epsilon,Aout(:,k),varargin{2},'LineWidth',2);
+               legend(leg,'Interpreter','latex');
+           else
+               <a href="../../../Library/SSM/private/stab_plot3.html">stab_plot3</a>(omega,epsilon,Aout(:,k),stab,order);
+           end
+           zk = strcat('$||z_{',num2str(outdof(k)),'}||_{\infty}$');
+           zlabel(zk,'Interpreter','latex');
+           set(gca,'FontSize',14);
+           view([50 15]);
+           grid on, axis tight; legend boxoff; box on
+           xlabel('$\Omega$','Interpreter','latex'); 
+           ylabel('$\epsilon$','Interpreter','latex');
+        end    
+    end
+else
+    % plot by blue and red cycles (blue/red: stable/unstable)
+    % BUG <NEED TO BE FIXED FOR THE CASE OF BP PLOTS>
+    figure();view(3);hold on 
+    plot3(omega(stab),epsilon(stab),Znorm(stab),'ob','MarkerSize',4) 
+    plot3(omega(~stab),epsilon(~stab),Znorm(~stab),'or','MarkerSize',4)
+     
+    xlabel('$\Omega$','Interpreter','latex'); 
+    ylabel('$\epsilon$','Interpreter','latex'); 
+    zlabel('$\|\mathbf{z}\|_{L_2}$','Interpreter','latex'); 
+    if all(stab)
+        legend(strcat('SSM-$$\mathcal{O}(',num2str(order),')$$ - stable'),...
+            'Interpreter','latex', 'Location','best','Box','off');
+    elseif ~any(stab)
+        legend(strcat('SSM-$$\mathcal{O}(',num2str(order),')$$ - unstable'),...
+            'Interpreter','latex', 'Location','best','Box','off');    
+    else
+        legend(strcat('SSM-$$\mathcal{O}(',num2str(order),')$$ - stable'),...
+            strcat('SSM-$$\mathcal{O}(',num2str(order),')$$ - unstable'),...
+            'Interpreter','latex', 'Location','best','Box','off');
+    end
+    set(gca,'FontSize',14);
+    grid on, axis tight;view(3);
+    
+    figure; hold on
+    numOutdof = numel(outdof);
+    for k=1:numOutdof
+       subplot(numOutdof,1,k);view(3);hold on 
+       plot3(omega(stab),epsilon(stab),Aout(stab,k),'ob','MarkerSize',4);      
+       plot3(omega(~stab),epsilon(~stab),Aout(~stab,k),'or','MarkerSize',4);
+       zk = strcat('$||z_{',num2str(outdof(k)),'}||_{\infty}$');
+       zlabel(zk,'Interpreter','latex');
+       set(gca,'FontSize',14);
+       grid on, axis tight
+
+    
+    xlabel('$\Omega$','Interpreter','latex');
+    ylabel('$\epsilon$','Interpreter','latex'); 
+    if all(stab)
+        legend(strcat('SSM-$$\mathcal{O}(',num2str(order),')$$ - stable'),...
+            'Interpreter','latex', 'Location','best','Box','off');
+    elseif ~any(stab)
+        legend(strcat('SSM-$$\mathcal{O}(',num2str(order),')$$ - unstable'),...
+            'Interpreter','latex', 'Location','best','Box','off');    
+    else
+        legend(strcat('SSM-$$\mathcal{O}(',num2str(order),')$$ - stable'),...
+            strcat('SSM-$$\mathcal{O}(',num2str(order),')$$ - unstable'),...
+            'Interpreter','latex', 'Location','best','Box','off');
+    end
+    end
+         
+
+end
+
+            ##### SOURCE END #####
+        --></body></html></body></html>

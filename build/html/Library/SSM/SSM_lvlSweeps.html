@@ -1,0 +1,530 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../../index.html"><img alt="Logo" class="logo" src="../../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>SSM_LVLSWEEPS</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-09" name="DC.date"/><meta content="SSM_lvlSweeps.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>SSM_LVLSWEEPS</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">SSM_LVLSWEEPS</a></li><li><a href="#4">FRC computation within the subinterval</a></li><li><a href="#9">Grid for evaluation of <span class="MathJax_Preview"><img alt="$\mathbf{r}(rho,psi,Omega)$" src="SSM_lvlSweeps_eq11447224079662444242-Rescaled.png" style="width: 106.8px; height: auto;"/></span><script type="math/tex">\mathbf{r}(rho,psi,Omega)</script></a></li><li><a href="#10">Obtain FRC</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> FRC = SSM_lvlSweeps(obj, omRange, epSamp, ORDER)
+        </pre><h2 id="2">SSM_LVLSWEEPS</h2><p>This function performs a family of continuations of periodic orbits of slow dynamics. Continuation is performed with varied forcing frequency for each forcing amplitude. The continuation here starts from the guess of initial solution.</p><p>FRC = SSM_LVLSWEEPS(OBJ,OMRANGE,EPSAMPS,ORDER)</p><div><ul><li><tt>omRange</tt>:      continuation domain of forcing frequency, which should be near the               value of natural frequency with index 1</li></ul></div><div><ul><li><tt>epSamp</tt> :      sampled forcing amplitudes for forced response curves</li></ul></div><div><ul><li><tt>ORDER</tt>  :      expansion orders of SSM, can be scalar or array</li></ul></div><p>FRC:          FRC data struct</p><p>See also: FRC_LEVEL_SET, SSM_POSWEEPS, SSM_EPSWEEPS</p><pre class="codeinput">totalComputationTime = zeros(size(ORDER));
+
+<span class="keyword">for</span> j = 1:numel(ORDER)
+    order = ORDER(j);
+    startFRC = tic;
+    <span class="keyword">if</span> isempty(obj.System.spectrum)
+        [~,~,~] = obj.System.<a href="../../Library/DynamicalSystem/linear_spectral_analysis.html">linear_spectral_analysis</a>();
+    <span class="keyword">end</span>
+    lambda  = obj.System.spectrum.Lambda;
+    assert(~isreal(lambda),<span class="string">'One or more eigenvalues must be underdamped for FRC computation using SSMs'</span>)
+
+    <span class="comment">% detect resonant eigenvalues in the parameter range</span>
+    <span class="keyword">if</span> obj.System.order == 2
+        assert(~isempty(obj.System.fext.epsilon), <span class="string">'The epsilon field is empty in the dynamical system external forcing'</span>);
+    <span class="keyword">else</span>
+        assert(~isempty(obj.System.Fext.epsilon), <span class="string">'The epsilon field is empty in the dynamical system external forcing'</span>);
+    <span class="keyword">end</span>
+    [resLambda,resFreq] = find_eigs_in_freq_range(omRange,lambda,obj.FRCOptions.resType);
+    <span class="comment">% obtain subintervals around each resonant eigenvalue</span>
+    [parNodes, nSubint] = subdivide_freq_range(omRange, resFreq);
+
+
+
+    FRC = cell(nSubint,1);
+    <span class="keyword">for</span> i=1:nSubint
+        </pre><pre class="codeinput">        <span class="comment">% tune subinterval</span>
+        parSubRange = parNodes(i:i+1)';
+        parSubRange = tune_parameter_range(parSubRange, obj.FRCOptions.frac, i, nSubint);
+
+        <span class="comment">% detect modes resonant with resLambda(i)</span>
+        [resModes,] = <a href="../../Library/SSM/private/detect_resonant_modes.html">detect_resonant_modes</a>(resLambda(i),lambda, obj.Options.IRtol);
+        </pre><h2 id="4">FRC computation within the subinterval</h2><pre class="codeinput">        disp(<span class="string">'*****************************************'</span>);
+        disp([<span class="string">'Calculating FRC using SSM with master subspace: ['</span> num2str(resModes(:).') <span class="string">']'</span>]);
+
+        FRC{i} = lvlSweep(obj,resModes,order,parSubRange,epSamp);
+
+        sweeps_plot(FRC{i},obj.FRCOptions.outdof,order);
+        </pre><pre class="codeinput">    <span class="keyword">end</span>
+<span class="keyword">end</span>
+<span class="comment">% concatenate cell contents as struct arrays</span>
+FRC = cat(1,FRC{:});
+
+totalComputationTime(j) = toc(startFRC);
+
+<span class="keyword">for</span> j = 1:numel(ORDER)
+    disp([<span class="string">'Total time spent on FRC computation upto O('</span> num2str(ORDER(j)) <span class="string">') = '</span> datestr(datenum(0,0,0,0,0,totalComputationTime(j)),<span class="string">'HH:MM:SS'</span>)])
+<span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+
+<span class="keyword">function</span> parRange = tune_parameter_range(parRange, frac, i, nSubint)
+<span class="comment">% amplify the parameter subinterval except on the first and the last nodes.</span>
+<span class="keyword">if</span> i&gt;1
+    parRange(1) = frac(1)*parRange(1);
+<span class="keyword">end</span>
+<span class="keyword">if</span> i&lt;nSubint
+    parRange(2) = frac(2)*parRange(2);
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> [resLambda, resFreq] = find_eigs_in_freq_range(Omega,lambda,resType)
+<span class="keyword">switch</span> resType
+    <span class="keyword">case</span> <span class="string">'1:1'</span>
+        natFreq = imag(lambda);
+        resFreqID = intersect(find(natFreq&gt;Omega(1)), find(natFreq&lt;Omega(end)));
+        resFreq = natFreq(resFreqID);
+        resLambda = lambda(resFreqID);
+    <span class="keyword">case</span> <span class="string">'2:1'</span>  <span class="comment">% Case of subharmonic resonance</span>
+
+        natFreq = imag(lambda);
+        resFreqID = intersect(find(2*natFreq&gt;Omega(1)), find(2*natFreq&lt;Omega(end)));
+        resFreq = natFreq(resFreqID);
+        resLambda = lambda(resFreqID);
+<span class="keyword">end</span>
+<span class="comment">% remove repetitive eigenvalues, e.g., 1:1 internal resonance</span>
+dFreq = resFreq(2:end)-resFreq(1:end-1);
+idrep = abs(dFreq)&lt;1e-3*resFreq(1:end-1);
+resFreq(idrep)   = [];
+resLambda(idrep) = [];
+assert(~isempty(resFreq),<span class="string">'Input frequency range should include at least one  (multiple) natural frequency'</span>); <span class="comment">% we could still program this case</span>
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> [freqNodes, nSubint] = subdivide_freq_range(parRange,resFreq)
+nSubint = numel(resFreq);
+freqNodes = 0.5*(resFreq(1:end-1)+resFreq(2:end)); <span class="comment">% center points of two adjacent resonant modes</span>
+freqNodes = [parRange(1); freqNodes; parRange(2)];
+<span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">function</span> [FRC] = lvlSweep(obj, resModes, order, parRange, epsSamp)
+        </pre><p>See the extract_FRC- level-set function, for details on this routine.</p><pre class="codeinput">dimModes = numel(resModes);
+assert(dimModes==2,<span class="string">'levelset method for FRC extraction is valid only for 2-dimensional SSMs. Please use the continuation method'</span>)
+
+<span class="comment">% compute two dimensional autonomous SSM</span>
+obj.<a href="../../Library/Manifold/choose_E.html">choose_E</a>(resModes)
+[W0, R0] = obj.<a href="../../Library/Manifold/compute_whisker.html">compute_whisker</a>(order);
+
+<span class="comment">% autonomous reduced dynamics coefficients</span>
+gamma  = <a href="../../Library/Features/frc/compute_gamma.html">compute_gamma</a>(R0);
+lambda = obj.E.spectrum(1);
+
+<span class="comment">% get options</span>
+[nt, nRho, nPar, rhoScale, nPsi, outdof, saveIC]  = <span class="keyword">...</span>
+    deal(obj.FRCOptions.nt, obj.FRCOptions.nRho, <span class="keyword">...</span>
+    obj.FRCOptions.nPar, obj.FRCOptions.rhoScale, obj.FRCOptions.nPsi,<span class="keyword">...</span>
+    obj.FRCOptions.outdof, obj.FRCOptions.saveIC);
+
+<span class="comment">% Initialize FRC as a struct array</span>
+par = linspace(parRange(1),parRange(end), nPar);
+nSamp = numel(epsSamp);
+FRC = cell(nPar,nSamp);
+        </pre><h2 id="9">Grid for evaluation of <span class="MathJax_Preview"><img alt="$\mathbf{r}(rho,psi,Omega)$" src="SSM_lvlSweeps_eq11447224079662444242-Rescaled.png" style="width: 106.8px; height: auto;"/></span><script type="math/tex">\mathbf{r}(rho,psi,Omega)</script></h2><pre class="codeinput">Omega_init   = par(1);
+omegaRange   = par;
+
+<span class="comment">% leading-order modal forcing coefficient</span>
+f                    = compute_f(obj,W0,R0,0,Omega_init);
+
+[rho, psi, RHO, PSI] = compute_polar_grid(omegaRange,epsSamp,gamma,lambda,f,rhoScale, nRho, nPsi);
+        </pre><h2 id="10">Obtain FRC</h2><pre class="codeinput"><span class="keyword">parfor</span> j = 1:nPar
+
+    FRCj = FRC{j,:};
+
+    Omega   = par(j);
+
+
+    <span class="comment">% compute non-autonomous SSM coefficients</span>
+    [W1, R1] = obj.<a href="../../Library/Manifold/compute_perturbed_whisker.html">compute_perturbed_whisker</a>(order-1,W0,R0,Omega);
+
+    ii = 1;
+    <span class="keyword">for</span> epsilon = epsSamp
+        <span class="comment">% reduced dynamics on the grid</span>
+        [rhodot, rhopsidot, eta] = <a href="../../Library/SSM/private/compute_reduced_dynamics_2D_polar.html">compute_reduced_dynamics_2D_polar</a>(RHO{ii},PSI{ii}, <span class="keyword">...</span>
+            lambda, gamma, R1,Omega,epsilon);
+
+        <span class="comment">% Numerical computation of fixed points of the reduced dynamics</span>
+        [rho0, psi0] = <a href="../../Library/Features/frc/compute_fixed_points_2D.html">compute_fixed_points_2D</a>(rho{ii}, psi{ii}, rhodot, rhopsidot);
+
+        <span class="comment">% Stabilty calculation</span>
+        stability    = <a href="../../Library/Features/frc/check_stability.html">check_stability</a>(rho0,psi0,gamma,lambda,epsilon,R1);
+
+        <span class="comment">% output data structure</span>
+        FRCj{ii} = <a href="../../Library/SSM/private/compute_output_polar2D.html">compute_output_polar2D</a>(rho0,psi0,stability,epsilon,Omega*ones(size(rho0)),W0,W1,eta,nt, saveIC, outdof);
+        ii = ii+1;
+    <span class="keyword">end</span>
+
+    FRC(j,:) = FRCj;
+<span class="keyword">end</span>
+
+FRC = cat(1,FRC{:});
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+
+<span class="keyword">function</span> [rho, psi, RHO, PSI] = compute_polar_grid(omegaRange,epsSamp,gamma,lambda,f,rhoScale, nRho, nPsi)
+ii = 1;
+<span class="keyword">for</span> epsilon = epsSamp
+    <span class="comment">% *Explicit quadratic approximation of the backbone curve*</span>
+    <span class="comment">%</span>
+    <span class="comment">% $$\rho_{backbone} = \sqrt{\frac{\Omega-\Im(\lambda)}{\Im(\gamma_1)}}$$</span>
+    rhomaxBB = max(real(sqrt((omegaRange - imag(lambda))/imag(gamma(1)))));
+    rhomaxlin = full(abs(epsilon * f/real(lambda)));
+
+    <span class="keyword">if</span> isempty(f)
+        assert( rhomaxBB ~= 0, <span class="string">'Estimation of maximal amplitude failed'</span>)
+        rhomax = rhoScale * rhomaxBB;
+
+    <span class="keyword">else</span>
+        <span class="keyword">if</span> rhomaxBB ~=0
+            <span class="comment">% heuristically choose maximum value of polar radius as follows</span>
+            rhomax = rhoScale * min(rhomaxBB, rhomaxlin);
+        <span class="keyword">else</span>
+            rhomax = rhoScale * rhomaxlin;
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+    <span class="comment">%compute grids</span>
+    rhoi = (rhomax/nRho) * (1:nRho);
+    psii = (2*pi/nPsi) * (0:nPsi-1);
+    [RHOi,PSIi] = meshgrid(rhoi,psii);
+
+    rho{ii} = rhoi;
+    psi{ii} = psii;
+    RHO{ii} = RHOi;
+    PSI{ii} = PSIi;
+    ii = ii+1;
+<span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> [f] = compute_f(obj,W0,R0,order,Omega)
+<span class="comment">% compute non-autonomous SSM coefficients</span>
+[~, R1] = obj.<a href="../../Library/Manifold/compute_perturbed_whisker.html">compute_perturbed_whisker</a>(order-1,W0,R0,Omega);
+f =  nonzeros(R1(1).R(1).coeffs); <span class="comment">% leading-order modal forcing coefficient</span>
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> sweeps_plot(FRCom,outdof,order)
+
+omega = [FRCom.Omega];
+epsilon = [FRCom.epsilon];
+Aout = [FRCom.Aout];
+stab = [FRCom.stability];
+Znorm = [FRCom.Znorm];
+
+numOutdof = numel(outdof);
+numPts    = numel(stab);
+Aout = reshape(Aout, [numOutdof, numPts]);
+Aout = Aout';
+
+<a href="../../Library/SSM/private/plot3_frc_full.html">plot3_frc_full</a>(omega,epsilon,Znorm,outdof,Aout,stab,order)
+
+<span class="keyword">end</span>
+        </pre><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% SSM_LVLSWEEPS
+%
+%%
+function FRC = SSM_lvlSweeps(obj, omRange, epSamp, ORDER)
+%% SSM_LVLSWEEPS 
+% This function performs a family of continuations of
+% periodic orbits of slow dynamics. Continuation is performed with varied
+% forcing frequency for each forcing amplitude.
+% The continuation here starts from the guess of initial solution.
+%
+% FRC = SSM_LVLSWEEPS(OBJ,OMRANGE,EPSAMPS,ORDER)
+%
+% * |omRange|:      continuation domain of forcing frequency, which should be near the
+%               value of natural frequency with index 1
+% 
+% * |epSamp| :      sampled forcing amplitudes for forced response curves
+% 
+% * |ORDER|  :      expansion orders of SSM, can be scalar or array
+%
+% FRC:          FRC data struct
+%
+% See also: FRC_LEVEL_SET, SSM_POSWEEPS, SSM_EPSWEEPS
+
+
+
+totalComputationTime = zeros(size(ORDER));
+
+for j = 1:numel(ORDER)
+    order = ORDER(j);
+    startFRC = tic;
+    if isempty(obj.System.spectrum)
+        [~,~,~] = obj.System.<a href="../../Library/DynamicalSystem/linear_spectral_analysis.html">linear_spectral_analysis</a>();
+    end
+    lambda  = obj.System.spectrum.Lambda;
+    assert(~isreal(lambda),'One or more eigenvalues must be underdamped for FRC computation using SSMs')
+    
+    % detect resonant eigenvalues in the parameter range
+    if obj.System.order == 2
+        assert(~isempty(obj.System.fext.epsilon), 'The epsilon field is empty in the dynamical system external forcing');
+    else
+        assert(~isempty(obj.System.Fext.epsilon), 'The epsilon field is empty in the dynamical system external forcing');
+    end
+    [resLambda,resFreq] = find_eigs_in_freq_range(omRange,lambda,obj.FRCOptions.resType);
+    % obtain subintervals around each resonant eigenvalue
+    [parNodes, nSubint] = subdivide_freq_range(omRange, resFreq);
+    
+    
+    
+    FRC = cell(nSubint,1);
+    for i=1:nSubint
+        % tune subinterval
+        parSubRange = parNodes(i:i+1)';
+        parSubRange = tune_parameter_range(parSubRange, obj.FRCOptions.frac, i, nSubint);
+        
+        % detect modes resonant with resLambda(i)
+        [resModes,] = <a href="../../Library/SSM/private/detect_resonant_modes.html">detect_resonant_modes</a>(resLambda(i),lambda, obj.Options.IRtol);
+        
+        %% FRC computation within the subinterval
+        disp('*****************************************');
+        disp(['Calculating FRC using SSM with master subspace: [' num2str(resModes(:).') ']']);
+        
+        FRC{i} = lvlSweep(obj,resModes,order,parSubRange,epSamp);
+        
+        sweeps_plot(FRC{i},obj.FRCOptions.outdof,order);
+    end
+end
+% concatenate cell contents as struct arrays
+FRC = cat(1,FRC{:});
+
+totalComputationTime(j) = toc(startFRC);
+
+for j = 1:numel(ORDER)
+    disp(['Total time spent on FRC computation upto O(' num2str(ORDER(j)) ') = ' datestr(datenum(0,0,0,0,0,totalComputationTime(j)),'HH:MM:SS')])
+end
+end
+
+function parRange = tune_parameter_range(parRange, frac, i, nSubint)
+% amplify the parameter subinterval except on the first and the last nodes.
+if i>1
+    parRange(1) = frac(1)*parRange(1);
+end
+if i<nSubint
+    parRange(2) = frac(2)*parRange(2);
+end
+end
+
+function [resLambda, resFreq] = find_eigs_in_freq_range(Omega,lambda,resType)
+switch resType
+    case '1:1'
+        natFreq = imag(lambda);
+        resFreqID = intersect(find(natFreq>Omega(1)), find(natFreq<Omega(end)));
+        resFreq = natFreq(resFreqID);
+        resLambda = lambda(resFreqID);
+    case '2:1'  % Case of subharmonic resonance
+        
+        natFreq = imag(lambda);
+        resFreqID = intersect(find(2*natFreq>Omega(1)), find(2*natFreq<Omega(end)));
+        resFreq = natFreq(resFreqID);
+        resLambda = lambda(resFreqID);
+end
+% remove repetitive eigenvalues, e.g., 1:1 internal resonance
+dFreq = resFreq(2:end)-resFreq(1:end-1);
+idrep = abs(dFreq)<1e-3*resFreq(1:end-1);
+resFreq(idrep)   = [];
+resLambda(idrep) = [];
+assert(~isempty(resFreq),'Input frequency range should include at least one  (multiple) natural frequency'); % we could still program this case
+end
+
+function [freqNodes, nSubint] = subdivide_freq_range(parRange,resFreq)
+nSubint = numel(resFreq);
+freqNodes = 0.5*(resFreq(1:end-1)+resFreq(2:end)); % center points of two adjacent resonant modes
+freqNodes = [parRange(1); freqNodes; parRange(2)];
+end
+
+%%
+%
+function [FRC] = lvlSweep(obj, resModes, order, parRange, epsSamp)
+%%
+% See the extract_FRC- level-set function, for details on this routine.
+dimModes = numel(resModes);
+assert(dimModes==2,'levelset method for FRC extraction is valid only for 2-dimensional SSMs. Please use the continuation method')
+
+% compute two dimensional autonomous SSM
+obj.<a href="../../Library/Manifold/choose_E.html">choose_E</a>(resModes)
+[W0, R0] = obj.<a href="../../Library/Manifold/compute_whisker.html">compute_whisker</a>(order);
+
+% autonomous reduced dynamics coefficients
+gamma  = <a href="../../Library/Features/frc/compute_gamma.html">compute_gamma</a>(R0);
+lambda = obj.E.spectrum(1);
+
+% get options
+[nt, nRho, nPar, rhoScale, nPsi, outdof, saveIC]  = ...
+    deal(obj.FRCOptions.nt, obj.FRCOptions.nRho, ...
+    obj.FRCOptions.nPar, obj.FRCOptions.rhoScale, obj.FRCOptions.nPsi,...
+    obj.FRCOptions.outdof, obj.FRCOptions.saveIC);
+
+% Initialize FRC as a struct array
+par = linspace(parRange(1),parRange(end), nPar);
+nSamp = numel(epsSamp);
+FRC = cell(nPar,nSamp);
+
+
+%% Grid for evaluation of $\mathbf{r}(rho,psi,Omega)$
+
+
+Omega_init   = par(1);
+omegaRange   = par;
+
+% leading-order modal forcing coefficient
+f                    = compute_f(obj,W0,R0,0,Omega_init);
+
+[rho, psi, RHO, PSI] = compute_polar_grid(omegaRange,epsSamp,gamma,lambda,f,rhoScale, nRho, nPsi);
+
+%% Obtain FRC
+
+parfor j = 1:nPar
+    
+    FRCj = FRC{j,:};
+    
+    Omega   = par(j);
+    
+    
+    % compute non-autonomous SSM coefficients
+    [W1, R1] = obj.<a href="../../Library/Manifold/compute_perturbed_whisker.html">compute_perturbed_whisker</a>(order-1,W0,R0,Omega);
+    
+    ii = 1;
+    for epsilon = epsSamp
+        % reduced dynamics on the grid
+        [rhodot, rhopsidot, eta] = <a href="../../Library/SSM/private/compute_reduced_dynamics_2D_polar.html">compute_reduced_dynamics_2D_polar</a>(RHO{ii},PSI{ii}, ...
+            lambda, gamma, R1,Omega,epsilon);
+        
+        % Numerical computation of fixed points of the reduced dynamics
+        [rho0, psi0] = <a href="../../Library/Features/frc/compute_fixed_points_2D.html">compute_fixed_points_2D</a>(rho{ii}, psi{ii}, rhodot, rhopsidot);
+        
+        % Stabilty calculation
+        stability    = <a href="../../Library/Features/frc/check_stability.html">check_stability</a>(rho0,psi0,gamma,lambda,epsilon,R1);
+        
+        % output data structure
+        FRCj{ii} = <a href="../../Library/SSM/private/compute_output_polar2D.html">compute_output_polar2D</a>(rho0,psi0,stability,epsilon,Omega*ones(size(rho0)),W0,W1,eta,nt, saveIC, outdof);
+        ii = ii+1;
+    end
+    
+    FRC(j,:) = FRCj;
+end
+
+FRC = cat(1,FRC{:});
+end
+
+function [rho, psi, RHO, PSI] = compute_polar_grid(omegaRange,epsSamp,gamma,lambda,f,rhoScale, nRho, nPsi)
+ii = 1;
+for epsilon = epsSamp
+    % *Explicit quadratic approximation of the backbone curve*
+    %
+    % $$\rho_{backbone} = \sqrt{\frac{\Omega-\Im(\lambda)}{\Im(\gamma_1)}}$$
+    rhomaxBB = max(real(sqrt((omegaRange - imag(lambda))/imag(gamma(1)))));
+    rhomaxlin = full(abs(epsilon * f/real(lambda)));
+    
+    if isempty(f)
+        assert( rhomaxBB ~= 0, 'Estimation of maximal amplitude failed')
+        rhomax = rhoScale * rhomaxBB;
+        
+    else
+        if rhomaxBB ~=0
+            % heuristically choose maximum value of polar radius as follows
+            rhomax = rhoScale * min(rhomaxBB, rhomaxlin);
+        else
+            rhomax = rhoScale * rhomaxlin;
+        end
+    end
+    %compute grids
+    rhoi = (rhomax/nRho) * (1:nRho);
+    psii = (2*pi/nPsi) * (0:nPsi-1);
+    [RHOi,PSIi] = meshgrid(rhoi,psii);
+    
+    rho{ii} = rhoi;
+    psi{ii} = psii;
+    RHO{ii} = RHOi;
+    PSI{ii} = PSIi;
+    ii = ii+1;
+end
+end
+
+function [f] = compute_f(obj,W0,R0,order,Omega)
+% compute non-autonomous SSM coefficients
+[~, R1] = obj.<a href="../../Library/Manifold/compute_perturbed_whisker.html">compute_perturbed_whisker</a>(order-1,W0,R0,Omega);
+f =  nonzeros(R1(1).R(1).coeffs); % leading-order modal forcing coefficient
+end
+
+function sweeps_plot(FRCom,outdof,order)
+
+omega = [FRCom.Omega];
+epsilon = [FRCom.epsilon];
+Aout = [FRCom.Aout];
+stab = [FRCom.stability];
+Znorm = [FRCom.Znorm];
+
+numOutdof = numel(outdof);
+numPts    = numel(stab);
+Aout = reshape(Aout, [numOutdof, numPts]);
+Aout = Aout';
+
+<a href="../../Library/SSM/private/plot3_frc_full.html">plot3_frc_full</a>(omega,epsilon,Znorm,outdof,Aout,stab,order)
+
+end
+
+            ##### SOURCE END #####
+        --></body></html></body></html>

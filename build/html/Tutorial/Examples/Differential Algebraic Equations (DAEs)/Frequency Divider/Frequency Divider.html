@@ -1,0 +1,979 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><html><body><div class="banner"><a href="../../../../index.html"><img alt="Logo" class="logo" src="../../../../logo.png" style="float:right" width="200"/></a></div><html><head><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Geometrically nonlinear L beam model</title><meta content="MATLAB 9.10" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-07-06" name="DC.date"/><meta content="demoFrequencyDividerDoc.m" name="DC.source"/><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+span.typesection { color:#A0522D }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Geometrically nonlinear L beam model</h1><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Generate model</a></li><li><a href="#2">Dynamical system setup</a></li><li><a href="#4">add forcing</a></li><li><a href="#5">Linear Modal analysis and SSM setup</a></li><li><a href="#6">Setup for SSM Computation</a></li><li><a href="#7">SSM_epSweeps:</a></li><li><a href="#8">Check the convergence</a></li><li><a href="#10">Secondary branches</a></li></ul></div><!--introduction--><p>We consider an example as follows. The structure consists of two beams connected via a revolute joint. A harmonic excitation is applied at the midspan of the horizontal beam.</p>
+<img alt="" hspace="5" src="model.png" style="width:20%" vspace="5"/>
+<p>This example is motivated by the internally resonant T-beam structure described here</p><p>Dou, S., Strachan, B. S., Shaw, S. W., &amp; Jensen, J. S. (2015). Structural optimization for nonlinear dynamic response. <i>Philosophical Transactions of the Royal Society A: Mathematical, Physical and Engineering Sciences</i>, <i>373</i>(2051). <a href="https://doi.org/10.1098/RSTA.2014.0408">&lt;https://doi.org/10.1098/RSTA.2014.0408</a>&gt;</p>
+<img alt="" hspace="5" src="modes.png" style="width:50%" vspace="5"/>
+<p>We model this structure as a union of two straight von Karman beams which results in DAE as follows</p><p><img alt="$$M\ddot{q}+C\dot{q}+Kq+G^T\lambda=F^{\mathrm{ext}}\cos\Omega t,\\ Gq=0.$$" src="demoFrequencyDividerDoc_eq11699389174397871615-Rescaled.png" style="width: 258.0px; height: auto;"/></p><p>where</p><p><img alt="$$M=\mathrm{diag}(M_1,M_2),\quad C=\mathrm{diag}(C_1,C_2),\quad K=\mathrm{diag}(K_1,K_2)$$" src="demoFrequencyDividerDoc_eq03768885373688405893-Rescaled.png" style="width: 346.8px; height: auto;"/></p><p>and the linear configuration constraints <img alt="$Gq=0$" src="demoFrequencyDividerDoc_eq06654952336800692949-Rescaled.png" style="width: 40.8px; height: auto;"/> denote the continuity condition of displacements at the joint.</p><p><b>Finite element code taken from the following package:</b></p><p>Jain, S., Marconi, J., Tiso P. (2020). YetAnotherFEcode (Version v1.1). <i>Zenodo</i>. <a href="http://doi.org/10.5281/zenodo.4011282">http://doi.org/10.5281/zenodo.4011282</a></p><h2 id="1">Generate model</h2><pre class="codeinput">clear <span class="string">all</span>
+nElements1 = 10;
+nElements2 = 14;
+[B,A,fnl,fext,outdof] = build_model_1st(nElements1,nElements2);
+n = size(A,1);
+disp([<span class="string">'Phase space dimensionality = '</span> num2str(n)])
+</pre><pre class="codeoutput">Building FE model
+Assembling M,C,K matrices
+Applying boundary conditions
+Getting nonlinearity coefficients
+Loaded tensors from storage
+Total time spent on model assembly = 00:00:09
+Assembling external force vector
+Building FE model
+Assembling M,C,K matrices
+Applying boundary conditions
+Getting nonlinearity coefficients
+Loaded tensors from storage
+Total time spent on model assembly = 00:00:00
+Assembling external force vector
+Phase space dimensionality = 146
+</pre><img alt="" hspace="5" src="demoFrequencyDividerDoc_01.png" style="width:30%" vspace="5"/> <img alt="" hspace="5" src="demoFrequencyDividerDoc_02.png" style="width:30%" vspace="5"/> <img alt="" hspace="5" src="demoFrequencyDividerDoc_03.png" style="width:30%" vspace="5"/> <h2 id="2">Dynamical system setup</h2><pre class="codeinput">DS = <a href="../../../../Library/DynamicalSystem/DynamicalSystem.html">DynamicalSystem</a>();
+set(DS,<span class="string">'B'</span>,B,<span class="string">'A'</span>,A,<span class="string">'fnl'</span>,fnl);
+set(DS.<a href="../../../../Library/Features/Options/Options.html">Options</a>,<span class="string">'Emax'</span>,8,<span class="string">'Nmax'</span>,10,<span class="string">'notation'</span>,<span class="string">'multiindex'</span>)
+</pre><p>due to the added configuration constraints, the updated damping matrix is not propotional anymore</p><pre class="codeinput">set(DS.<a href="../../../../Library/Features/Options/Options.html">Options</a>,<span class="string">'RayleighDamping'</span>,false,<span class="string">'sigma'</span>,0.5);
+</pre><h2 id="4">add forcing</h2><pre class="codeinput">epsilon = 1e-1*1e1;
+kappas = [1; -1];
+coeffs = [fext fext]/2;
+DS.<a href="../../../../Library/DynamicalSystem/add_forcing.html">add_forcing</a>(coeffs, kappas, epsilon);
+</pre><h2 id="5">Linear Modal analysis and SSM setup</h2><pre class="codeinput">[V,D,W] = DS.<a href="../../../../Library/DynamicalSystem/linear_spectral_analysis.html">linear_spectral_analysis</a>();
+</pre><pre class="codeoutput">
+ The first 8 nonzero eigenvalues are given as 
+   1.0e+02 *
+
+  -0.0004 + 0.2266i
+  -0.0004 - 0.2266i
+  -0.0015 + 0.4534i
+  -0.0015 - 0.4534i
+  -0.0039 + 0.7344i
+  -0.0039 - 0.7344i
+  -0.0154 + 1.4693i
+  -0.0154 - 1.4693i
+
+</pre><h2 id="6">Setup for SSM Computation</h2><pre class="codeinput">S = <a href="../../../../Library/SSM/SSM.html">SSM</a>(DS);
+set(S.<a href="../../../../Library/Features/Options/Options.html">Options</a>, <span class="string">'reltol'</span>, 0.5,<span class="string">'notation'</span>,<span class="string">'multiindex'</span>);
+resonant_modes = [1 2 3 4]; <span class="comment">% choose master spectral subspace</span>
+mFreq = [1/2 1];            <span class="comment">% internal resonance relation vector</span>
+order = 5;                  <span class="comment">% SSM expansion order</span>
+</pre><h2 id="7">SSM_epSweeps:</h2><p>continuation of FRC w.r.t <img alt="$\Omega$" src="demoFrequencyDividerDoc_eq01003107565813904020-Rescaled.png" style="width: 8.4px; height: auto;"/> at sampled <img alt="$\{\epsilon_i\}$" src="demoFrequencyDividerDoc_eq09303165061505845224-Rescaled.png" style="width: 21.599999999999998px; height: auto;"/></p><pre class="codeinput">set(S.<a href="../../../../Library/Features/Options/FRCOptions.html">FRCOptions</a>,<span class="string">'sampStyle'</span>, <span class="string">'cocoBD'</span>);                                <span class="comment">% sampling style</span>
+set(S.contOptions, <span class="string">'PtMX'</span>, 200, <span class="string">'h_max'</span>, 50,<span class="string">'h_min'</span>,0.01,<span class="string">'MaxRes'</span>,1);   <span class="comment">% continuation setting</span>
+set(S.<a href="../../../../Library/Features/Options/FRCOptions.html">FRCOptions</a>, <span class="string">'nCycle'</span>,5000, <span class="string">'initialSolver'</span>, <span class="string">'fsolve'</span>);            <span class="comment">% initial solution scheme</span>
+set(S.<a href="../../../../Library/Features/Options/FRCOptions.html">FRCOptions</a>, <span class="string">'coordinates'</span>, <span class="string">'cartesian'</span>);                          <span class="comment">% two coordinate representations</span>
+set(S.<a href="../../../../Library/Features/Options/Options.html">Options</a>,<span class="string">'contribNonAuto'</span>,false);
+epsSamp = [1e-1 5e-1 1]*epsilon;
+freqRange = [0.8 1.2]*imag(D(3));
+S.<a href="../../../../Library/SSM/SSM_epSweeps.html">SSM_epSweeps</a>(<span class="string">'sweeps'</span>,resonant_modes,order,mFreq,epsSamp,freqRange,outdof);
+</pre><pre class="codeoutput">The master subspace contains the following eigenvalues
+ 
+lambda1 == - 0.0366857 + 22.6627i
+ 
+lambda2 == (-0.0366857) - 22.6627i
+ 
+lambda3 == - 0.146825 + 45.3379i
+ 
+lambda4 == (-0.146825) - 45.3379i
+ 
+(near) outer resonance detected for the following combinations of master eigenvalues
+ They are in resonance with the following eigenvalues of the slave subspace 
+ 
+1*lambda1 + 0*lambda2 + 1*lambda3 + 0*lambda4 == - 0.385295 + 73.4437i
+ 
+0*lambda1 + 1*lambda2 + 2*lambda3 + 0*lambda4 == - 0.385295 + 73.4437i
+ 
+3*lambda1 + 0*lambda2 + 0*lambda3 + 0*lambda4 == - 0.385295 + 73.4437i
+.
+.
+.
+
+0*lambda1 + 0*lambda2 + 3*lambda3 + 0*lambda4 == - 1.542136 + 146.927i
+ 
+2*lambda1 + 0*lambda2 + 2*lambda3 + 0*lambda4 == - 1.542136 + 146.927i
+ 
+0*lambda1 + 0*lambda2 + 4*lambda3 + 1*lambda4 == - 1.542136 + 146.927i
+.
+. 
+.
+sigma_out = 42
+(near) inner resonance detected for the following combination of master eigenvalues:
+ 
+0*lambda1 + 1*lambda2 + 1*lambda3 + 0*lambda4 == lambda1
+ 
+1*lambda1 + 0*lambda2 + 1*lambda3 + 1*lambda4 == lambda1
+ 
+2*lambda1 + 1*lambda2 + 0*lambda3 + 0*lambda4 == lambda1
+
+.
+. 
+.
+
+2*lambda1 + 0*lambda2 + 0*lambda3 + 2*lambda4 == lambda4
+ 
+0*lambda1 + 0*lambda2 + 2*lambda3 + 3*lambda4 == lambda4
+ 
+0*lambda1 + 4*lambda2 + 1*lambda3 + 0*lambda4 == lambda4
+ 
+.
+.
+.
+ 
+sigma_in = 42
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 3.31E-01 MB
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 5.97E-01 MB
+Manifold computation time at order 4 = 00:00:00
+Estimated memory usage at order  4 = 1.23E+00 MB
+Manifold computation time at order 5 = 00:00:00
+Estimated memory usage at order  5 = 2.21E+00 MB
+
+Equation solved.
+
+fsolve completed because the vector of function values is near zero
+as measured by the value of the function tolerance, and
+the problem appears regular as measured by the gradient.
+
+
+ Run='sweepseps.ep': Continue equilibria with varied epsilon.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          1.13e-13  9.08e+01    0.0    0.0    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE           eps         Rez1         Rez2         Imz1         Imz2           om
+    0  00:00:00   9.0818e+01      1  EP      1.0000e+00   0.0000e+00  -5.2555e+01   0.0000e+00   1.8253e+01   4.5338e+01
+    1  00:00:01   9.0818e+01      2  UZ      1.0000e+00   0.0000e+00  -5.2555e+01   0.0000e+00   1.8253e+01   4.5338e+01
+    9  00:00:01   7.6159e+01      3  UZ      5.0000e-01   0.0000e+00  -3.9718e+01   0.0000e+00   1.7164e+01   4.5338e+01
+   10  00:00:01   7.0342e+01      4          3.5187e-01   0.0000e+00  -3.4069e+01   0.0000e+00   1.6894e+01   4.5338e+01
+   14  00:00:02   5.5740e+01      5  UZ      1.0000e-01   0.0000e+00  -1.6341e+01   0.0000e+00   1.6083e+01   4.5338e+01
+   15  00:00:02   5.4852e+01      6  EP      9.0000e-02   0.0000e+00  -1.4962e+01   0.0000e+00   1.5898e+01   4.5338e+01
+
+ STEP      TIME        ||U||  LABEL  TYPE           eps         Rez1         Rez2         Imz1         Imz2           om
+    0  00:00:02   9.0818e+01      7  EP      1.0000e+00   0.0000e+00  -5.2555e+01   0.0000e+00   1.8253e+01   4.5338e+01
+    6  00:00:02   9.3229e+01      8  EP      1.1000e+00   0.0000e+00  -5.4548e+01   0.0000e+00   1.8478e+01   4.5338e+01
+
+ Run='sweepseps1.ep': Continue equilibria with varied omega at eps equal to 1.000000e-01.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          4.04e-14  7.19e+01    0.0    0.0    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         Rez1         Rez2         Imz1         Imz2          eps
+    0  00:00:00   7.1850e+01      1  EP      4.5338e+01   0.0000e+00  -1.6341e+01   0.0000e+00   1.6083e+01   1.0000e-01
+   10  00:00:00   6.8814e+01      2          4.5169e+01   0.0000e+00  -1.5642e+01   0.0000e+00   9.0990e+00   1.0000e-01
+   14  00:00:01   6.7264e+01      3  SN      4.5060e+01   0.0000e+00  -1.3945e+01   0.0000e+00   6.1061e+00   1.0000e-01
+   14  00:00:01   6.7264e+01      4  BP      4.5060e+01   0.0000e+00  -1.3945e+01   0.0000e+00   6.1061e+00   1.0000e-01
+   20  00:00:01   6.4071e+01      5          4.4613e+01   0.0000e+00  -7.7568e+00   0.0000e+00   1.4339e+00   1.0000e-01
+   30  00:00:02   6.0000e+01      6          4.2378e+01   0.0000e+00  -2.0270e+00   0.0000e+00   6.5236e-02   1.0000e-01
+   39  00:00:02   5.1303e+01      7  EP      3.6270e+01   0.0000e+00  -6.6304e-01   0.0000e+00  -8.4964e-04   1.0000e-01
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         Rez1         Rez2         Imz1         Imz2          eps
+    0  00:00:03   7.1850e+01      8  EP      4.5338e+01   0.0000e+00  -1.6341e+01   0.0000e+00   1.6083e+01   1.0000e-01
+   10  00:00:03   7.4358e+01      9          4.5472e+01   0.0000e+00  -1.3002e+01   0.0000e+00   2.2974e+01   1.0000e-01
+   20  00:00:03   7.6206e+01     10          4.5619e+01   0.0000e+00  -1.0293e+00   0.0000e+00   2.8661e+01   1.0000e-01
+   30  00:00:04   7.4767e+01     11          4.5688e+01   0.0000e+00   1.1756e+01   0.0000e+00   2.3864e+01   1.0000e-01
+   39  00:00:07   7.1605e+01     12  SN      4.5710e+01   0.0000e+00   1.6032e+01   0.0000e+00   1.4736e+01   1.0000e-01
+   39  00:00:07   7.1605e+01     13  BP      4.5710e+01   0.0000e+00   1.6032e+01   0.0000e+00   1.4736e+01   1.0000e-01
+   40  00:00:07   7.1047e+01     14          4.5715e+01   0.0000e+00   1.6043e+01   0.0000e+00   1.3288e+01   1.0000e-01
+   50  00:00:08   6.7087e+01     15          4.5859e+01   0.0000e+00   1.1429e+01   0.0000e+00   4.0744e+00   1.0000e-01
+   60  00:00:08   6.7304e+01     16          4.7510e+01   0.0000e+00   2.7548e+00   0.0000e+00   2.3559e-01   1.0000e-01
+   70  00:00:09   7.2264e+01     17          5.1088e+01   0.0000e+00   1.0446e+00   0.0000e+00   4.4967e-02   1.0000e-01
+   73  00:00:09   7.6947e+01     18  EP      5.4405e+01   0.0000e+00   6.6269e-01   0.0000e+00   2.2322e-02   1.0000e-01
+
+ Run='sweepseps2.ep': Continue equilibria with varied omega at eps equal to 5.000000e-01.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          8.00e-14  8.86e+01    0.0    0.0    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         Rez1         Rez2         Imz1         Imz2          eps
+    0  00:00:00   8.8631e+01      1  EP      4.5338e+01   0.0000e+00  -3.9718e+01   0.0000e+00   1.7164e+01   5.0000e-01
+   10  00:00:00   7.8907e+01      2          4.4842e+01   0.0000e+00  -3.2250e+01   0.0000e+00   7.8888e+00   5.0000e-01
+   11  00:00:01   7.7406e+01      3  SN      4.4753e+01   0.0000e+00  -3.0766e+01   0.0000e+00   6.8072e+00   5.0000e-01
+   11  00:00:01   7.7406e+01      4  BP      4.4753e+01   0.0000e+00  -3.0766e+01   0.0000e+00   6.8072e+00   5.0000e-01
+   20  00:00:01   6.1003e+01      5          4.2127e+01   0.0000e+00  -9.2614e+00   0.0000e+00   2.7644e-01   5.0000e-01
+   30  00:00:02   5.1756e+01      6          3.6439e+01   0.0000e+00  -3.3767e+00   0.0000e+00  -2.9906e-03   5.0000e-01
+   31  00:00:02   5.1510e+01      7  EP      3.6270e+01   0.0000e+00  -3.3138e+00   0.0000e+00  -3.9698e-03   5.0000e-01
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         Rez1         Rez2         Imz1         Imz2          eps
+    0  00:00:02   8.8631e+01      8  EP      4.5338e+01   0.0000e+00  -3.9718e+01   0.0000e+00   1.7164e+01   5.0000e-01
+   10  00:00:04   9.7345e+01      9          4.5741e+01   0.0000e+00  -4.2266e+01   0.0000e+00   2.9313e+01   5.0000e-01
+   20  00:00:04   1.0972e+02     10          4.6350e+01   0.0000e+00  -3.0721e+01   0.0000e+00   5.4102e+01   5.0000e-01
+   24  00:00:05   1.1268e+02     11  SN      4.6536e+01   0.0000e+00  -1.9906e+01   0.0000e+00   6.1538e+01   5.0000e-01
+   24  00:00:05   1.1268e+02     12  BP      4.6536e+01   0.0000e+00  -1.9906e+01   0.0000e+00   6.1538e+01   5.0000e-01
+   30  00:00:05   1.1431e+02     13          4.6739e+01   0.0000e+00   1.9923e+00   0.0000e+00   6.5914e+01   5.0000e-01
+   37  00:00:06   1.1126e+02     14  FP      4.6815e+01   0.0000e+00   2.5230e+01   0.0000e+00   5.7974e+01   5.0000e-01
+   37  00:00:06   1.1126e+02     15  SN      4.6815e+01   0.0000e+00   2.5230e+01   0.0000e+00   5.7974e+01   5.0000e-01
+   40  00:00:06   1.0817e+02     16          4.6801e+01   0.0000e+00   3.3233e+01   0.0000e+00   5.0556e+01   5.0000e-01
+   50  00:00:07   9.4405e+01     17          4.6646e+01   0.0000e+00   4.0884e+01   0.0000e+00   2.4672e+01   5.0000e-01
+   57  00:00:07   8.4334e+01     18  SN      4.6580e+01   0.0000e+00   3.5173e+01   0.0000e+00   1.2212e+01   5.0000e-01
+   57  00:00:08   8.4334e+01     19  FP      4.6580e+01   0.0000e+00   3.5173e+01   0.0000e+00   1.2212e+01   5.0000e-01
+   60  00:00:08   7.8672e+01     20          4.6623e+01   0.0000e+00   2.9487e+01   0.0000e+00   7.1616e+00   5.0000e-01
+   70  00:00:08   7.0627e+01     21          4.9377e+01   0.0000e+00   7.4628e+00   0.0000e+00   4.1133e-01   5.0000e-01
+   79  00:00:09   7.7085e+01     22  EP      5.4405e+01   0.0000e+00   3.3148e+00   0.0000e+00   1.1198e-01   5.0000e-01
+
+ Run='sweepseps3.ep': Continue equilibria with varied omega at eps equal to 1.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          1.13e-13  1.02e+02    0.0    0.0    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         Rez1         Rez2         Imz1         Imz2          eps
+    0  00:00:00   1.0150e+02      1  EP      4.5338e+01   0.0000e+00  -5.2555e+01   0.0000e+00   1.8253e+01   1.0000e+00
+   10  00:00:00   8.7523e+01      2          4.4589e+01   0.0000e+00  -4.2164e+01   0.0000e+00   7.9790e+00   1.0000e+00
+   11  00:00:01   8.6800e+01      3  SN      4.4545e+01   0.0000e+00  -4.1531e+01   0.0000e+00   7.5837e+00   1.0000e+00
+   11  00:00:01   8.6800e+01      4  BP      4.4545e+01   0.0000e+00  -4.1531e+01   0.0000e+00   7.5837e+00   1.0000e+00
+   20  00:00:01   6.2248e+01      5          4.1396e+01   0.0000e+00  -1.4939e+01   0.0000e+00   3.4828e-01   1.0000e+00
+   29  00:00:02   5.2151e+01      6  EP      3.6270e+01   0.0000e+00  -6.6192e+00   0.0000e+00  -6.2126e-03   1.0000e+00
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         Rez1         Rez2         Imz1         Imz2          eps
+    0  00:00:02   1.0150e+02      7  EP      4.5338e+01   0.0000e+00  -5.2555e+01   0.0000e+00   1.8253e+01   1.0000e+00
+   10  00:00:02   1.1396e+02      8          4.5942e+01   0.0000e+00  -5.7760e+01   0.0000e+00   3.2343e+01   1.0000e+00
+   20  00:00:03   1.3334e+02      9  SN      4.6901e+01   0.0000e+00  -4.8797e+01   0.0000e+00   6.5638e+01   1.0000e+00
+   20  00:00:03   1.3334e+02     10  BP      4.6901e+01   0.0000e+00  -4.8797e+01   0.0000e+00   6.5638e+01   1.0000e+00
+   20  00:00:03   1.3377e+02     11          4.6923e+01   0.0000e+00  -4.8125e+01   0.0000e+00   6.6546e+01   1.0000e+00
+   30  00:00:03   1.4335e+02     12          4.7588e+01   0.0000e+00  -7.5891e+00   0.0000e+00   8.9173e+01   1.0000e+00
+   39  00:00:04   1.3885e+02     13  FP      4.7783e+01   0.0000e+00   3.4986e+01   0.0000e+00   7.8308e+01   1.0000e+00
+   39  00:00:04   1.3885e+02     14  SN      4.7783e+01   0.0000e+00   3.4986e+01   0.0000e+00   7.8308e+01   1.0000e+00
+   40  00:00:04   1.3748e+02     15          4.7781e+01   0.0000e+00   3.9022e+01   0.0000e+00   7.5126e+01   1.0000e+00
+   50  00:00:05   1.1847e+02     16          4.7558e+01   0.0000e+00   5.6828e+01   0.0000e+00   3.9062e+01   1.0000e+00
+   60  00:00:06   9.4802e+01     17          4.7320e+01   0.0000e+00   4.5782e+01   0.0000e+00   1.2572e+01   1.0000e+00
+   61  00:00:06   9.4298e+01     18  SN      4.7320e+01   0.0000e+00   4.5363e+01   0.0000e+00   1.2192e+01   1.0000e+00
+   61  00:00:06   9.4297e+01     19  FP      4.7320e+01   0.0000e+00   4.5362e+01   0.0000e+00   1.2192e+01   1.0000e+00
+   70  00:00:07   7.4074e+01     20          4.8518e+01   0.0000e+00   1.9666e+01   0.0000e+00   1.4874e+00   1.0000e+00
+   80  00:00:08   7.6899e+01     21          5.3916e+01   0.0000e+00   7.0189e+00   0.0000e+00   2.4627e-01   1.0000e+00
+   81  00:00:08   7.7519e+01     22  EP      5.4405e+01   0.0000e+00   6.6381e+00   0.0000e+00   2.2626e-01   1.0000e+00
+
+Calculate FRC in physical domain at epsilon 1.000000e-01
+Calculate FRC in physical domain at epsilon 5.000000e-01
+Calculate FRC in physical domain at epsilon 1
+</pre>
+<h2 id="5">FRCs in reduced coordinates for distinct forcing amplitudes</h2><p> As is evident, only the second mode, which is in resonance with the forcing frequency, is excited in this case.</p>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_04.png" style="width:45%" vspace="5"/> <img alt="" hspace="5" src="demoFrequencyDividerDoc_05.png" style="width:45%" vspace="5"/>
+<p></p>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_06.png" style="width:45%" vspace="5"/> <img alt="" hspace="5" src="demoFrequencyDividerDoc_07.png" style="width:45%" vspace="5"/>
+<p>
+</p>
+<h2 id="5">FRCs in full coordinates for distinct forcing amplitudes</h2>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_08.png" style="width:45%" vspace="5"/> <img alt="" hspace="5" src="demoFrequencyDividerDoc_09.png" style="width:45%" vspace="5"/>
+<p></p>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_10.png" style="width:45%" vspace="5"/> <img alt="" hspace="5" src="demoFrequencyDividerDoc_11.png" style="width:45%" vspace="5"/>
+<h2 id="8">Check the convergence</h2><p>We check for the convergence of the FRC with increasing orders</p><pre class="codeinput">sol = ep_read_solution(<span class="string">'sweepseps1.ep'</span>,1);
+epsilon = sol.p(2);
+kappas = [1; -1];
+coeffs = [fext fext]/2;
+DS.<a href="../../../../Library/DynamicalSystem/add_forcing.html">add_forcing</a>(coeffs, kappas, epsilon);
+omegaRange = [0.95 1.1]*imag(D(3));
+start = tic;
+FRC_O3 = S.<a href="../../../../Library/SSM/SSM_isol2ep.html">SSM_isol2ep</a>(<span class="string">'isol-3'</span>, resonant_modes, order-2, mFreq,<span class="keyword">...</span>
+    <span class="string">'freq'</span>, omegaRange, outdof, {sol.p,sol.x});
+timings.FRC_O3 = toc(start);
+
+start = tic;
+FRC_O5 = S.<a href="../../../../Library/SSM/SSM_isol2ep.html">SSM_isol2ep</a>(<span class="string">'isol-5'</span>, resonant_modes, order, mFreq,<span class="keyword">...</span>
+    <span class="string">'freq'</span>, omegaRange, outdof, {sol.p,sol.x});
+timings.FRC_O5 = toc(start);
+
+start = tic;
+FRC_O7 = S.<a href="../../../../Library/SSM/SSM_isol2ep.html">SSM_isol2ep</a>(<span class="string">'isol-7'</span>, resonant_modes, order+2, mFreq,<span class="keyword">...</span>
+    <span class="string">'freq'</span>, omegaRange, outdof, {sol.p,sol.x});
+timings.FRC_O7 = toc(start);
+
+start = tic;
+FRC_O9 = S.<a href="../../../../Library/SSM/SSM_isol2ep.html">SSM_isol2ep</a>(<span class="string">'isol-9'</span>, resonant_modes, order+4, mFreq,<span class="keyword">...</span>
+    <span class="string">'freq'</span>, omegaRange, outdof, {sol.p,sol.x});
+timings.FRC_O9 = toc(start);
+</pre><pre class="codeoutput">The master subspace contains the following eigenvalues
+ 
+lambda1 == - 0.0366857 + 22.6627i
+ 
+lambda2 == (-0.0366857) - 22.6627i
+ 
+lambda3 == - 0.146825 + 45.3379i
+ 
+lambda4 == (-0.146825) - 45.3379i
+ 
+(near) outer resonance detected for the following combinations of master eigenvalues
+ They are in resonance with the following eigenvalues of the slave subspace 
+ 
+1*lambda1 + 0*lambda2 + 1*lambda3 + 0*lambda4 == - 0.385295 + 73.4437i
+ 
+0*lambda1 + 1*lambda2 + 2*lambda3 + 0*lambda4 == - 0.385295 + 73.4437i
+ 
+.
+.
+.
+
+sigma_out = 42
+(near) inner resonance detected for the following combination of master eigenvalues:
+ 
+0*lambda1 + 1*lambda2 + 1*lambda3 + 0*lambda4 == lambda1
+ 
+1*lambda1 + 0*lambda2 + 1*lambda3 + 1*lambda4 == lambda1
+ 
+.
+.
+.
+
+sigma_in = 42
+
+</pre>
+<h2 id="5">FRCs at order 3</h2>
+<pre>
+
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 3.29E-01 MB
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 5.95E-01 MB
+
+Equation solved.
+
+fsolve completed because the vector of function values is near zero
+as measured by the value of the function tolerance, and
+the problem appears regular as measured by the gradient.
+
+
+ Run='isol-3.ep': Continue equilibria along primary branch.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          6.30e-14  7.18e+01    0.0    0.0    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         Rez1         Rez2         Imz1         Imz2          eps
+    0  00:00:00   7.1802e+01      1  EP      4.5338e+01   0.0000e+00  -1.6328e+01   0.0000e+00   1.5988e+01   1.0000e-01
+   10  00:00:01   6.8780e+01      2          4.5167e+01   0.0000e+00  -1.5607e+01   0.0000e+00   9.0349e+00   1.0000e-01
+   14  00:00:01   6.7268e+01      3  SN      4.5061e+01   0.0000e+00  -1.3949e+01   0.0000e+00   6.1162e+00   1.0000e-01
+   14  00:00:01   6.7268e+01      4  BP      4.5061e+01   0.0000e+00  -1.3949e+01   0.0000e+00   6.1162e+00   1.0000e-01
+   20  00:00:01   6.4049e+01      5          4.4607e+01   0.0000e+00  -7.7050e+00   0.0000e+00   1.4125e+00   1.0000e-01
+   27  00:00:02   6.1026e+01      6  EP      4.3071e+01   0.0000e+00  -2.6411e+00   0.0000e+00   1.2521e-01   1.0000e-01
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         Rez1         Rez2         Imz1         Imz2          eps
+    0  00:00:02   7.1802e+01      7  EP      4.5338e+01   0.0000e+00  -1.6328e+01   0.0000e+00   1.5988e+01   1.0000e-01
+   10  00:00:02   7.4298e+01      8          4.5473e+01   0.0000e+00  -1.3019e+01   0.0000e+00   2.2864e+01   1.0000e-01
+   20  00:00:03   7.6144e+01      9          4.5623e+01   0.0000e+00  -1.0762e+00   0.0000e+00   2.8571e+01   1.0000e-01
+   30  00:00:03   7.4726e+01     10          4.5691e+01   0.0000e+00   1.1723e+01   0.0000e+00   2.3810e+01   1.0000e-01
+   39  00:00:04   7.1719e+01     11  SN      4.5711e+01   0.0000e+00   1.5984e+01   0.0000e+00   1.5062e+01   1.0000e-01
+   39  00:00:04   7.1719e+01     12  BP      4.5711e+01   0.0000e+00   1.5984e+01   0.0000e+00   1.5062e+01   1.0000e-01
+   40  00:00:04   7.1037e+01     13          4.5717e+01   0.0000e+00   1.6025e+01   0.0000e+00   1.3278e+01   1.0000e-01
+   50  00:00:05   6.7096e+01     14          4.5859e+01   0.0000e+00   1.1452e+01   0.0000e+00   4.0949e+00   1.0000e-01
+   60  00:00:05   6.7295e+01     15          4.7504e+01   0.0000e+00   2.7632e+00   0.0000e+00   2.3689e-01   1.0000e-01
+   69  00:00:06   7.0554e+01     16  EP      4.9872e+01   0.0000e+00   1.3241e+00   0.0000e+00   6.6106e-02   1.0000e-01
+
+
+  </pre>
+<h2>FRC in parametrisation space:</h2>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_12.png" style="width:45%" vspace="5"/>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_13.png" style="width:45%" vspace="5"/>
+<h2>FRC in physical space:</h2>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_14.png" style="width:45%" vspace="5"/>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_15.png" style="width:45%" vspace="5"/>
+<h2 id="5">FRCs at order 5</h2>
+<pre>
+
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 3.31E-01 MB
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 5.97E-01 MB
+Manifold computation time at order 4 = 00:00:00
+Estimated memory usage at order  4 = 1.23E+00 MB
+Manifold computation time at order 5 = 00:00:00
+Estimated memory usage at order  5 = 2.21E+00 MB
+
+Equation solved at initial point.
+
+fsolve completed because the vector of function values at the initial point
+is near zero as measured by the value of the function tolerance, and
+the problem appears regular as measured by the gradient.
+
+
+ Run='isol-5.ep': Continue equilibria along primary branch.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          4.04e-14  7.19e+01    0.0    0.0    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         Rez1         Rez2         Imz1         Imz2          eps
+    0  00:00:00   7.1850e+01      1  EP      4.5338e+01   0.0000e+00  -1.6341e+01   0.0000e+00   1.6083e+01   1.0000e-01
+   10  00:00:00   6.8814e+01      2          4.5169e+01   0.0000e+00  -1.5642e+01   0.0000e+00   9.0990e+00   1.0000e-01
+   14  00:00:00   6.7264e+01      3  SN      4.5060e+01   0.0000e+00  -1.3945e+01   0.0000e+00   6.1061e+00   1.0000e-01
+   14  00:00:00   6.7264e+01      4  BP      4.5060e+01   0.0000e+00  -1.3945e+01   0.0000e+00   6.1061e+00   1.0000e-01
+   20  00:00:01   6.4071e+01      5          4.4613e+01   0.0000e+00  -7.7568e+00   0.0000e+00   1.4339e+00   1.0000e-01
+   27  00:00:01   6.1026e+01      6  EP      4.3071e+01   0.0000e+00  -2.6411e+00   0.0000e+00   1.2521e-01   1.0000e-01
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         Rez1         Rez2         Imz1         Imz2          eps
+    0  00:00:01   7.1850e+01      7  EP      4.5338e+01   0.0000e+00  -1.6341e+01   0.0000e+00   1.6083e+01   1.0000e-01
+   10  00:00:01   7.4358e+01      8          4.5472e+01   0.0000e+00  -1.3002e+01   0.0000e+00   2.2974e+01   1.0000e-01
+   20  00:00:02   7.6206e+01      9          4.5619e+01   0.0000e+00  -1.0293e+00   0.0000e+00   2.8661e+01   1.0000e-01
+   30  00:00:03   7.4767e+01     10          4.5688e+01   0.0000e+00   1.1756e+01   0.0000e+00   2.3864e+01   1.0000e-01
+   39  00:00:04   7.1605e+01     11  SN      4.5710e+01   0.0000e+00   1.6032e+01   0.0000e+00   1.4736e+01   1.0000e-01
+   39  00:00:04   7.1605e+01     12  BP      4.5710e+01   0.0000e+00   1.6032e+01   0.0000e+00   1.4736e+01   1.0000e-01
+   40  00:00:04   7.1047e+01     13          4.5715e+01   0.0000e+00   1.6043e+01   0.0000e+00   1.3288e+01   1.0000e-01
+   50  00:00:04   6.7087e+01     14          4.5859e+01   0.0000e+00   1.1429e+01   0.0000e+00   4.0744e+00   1.0000e-01
+   60  00:00:05   6.7304e+01     15          4.7510e+01   0.0000e+00   2.7548e+00   0.0000e+00   2.3559e-01   1.0000e-01
+   69  00:00:06   7.0554e+01     16  EP      4.9872e+01   0.0000e+00   1.3241e+00   0.0000e+00   6.6106e-02   1.0000e-01
+
+</pre>
+<h2>FRC in parametrisation space:</h2>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_16.png" style="width:45%" vspace="5"/>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_17.png" style="width:45%" vspace="5"/>
+<h2>FRC in physical space:</h2>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_18.png" style="width:45%" vspace="5"/>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_19.png" style="width:45%" vspace="5"/>
+<h2 id="5">FRCs at order 7</h2>
+<pre>
+
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 3.35E-01 MB
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 6.01E-01 MB
+Manifold computation time at order 4 = 00:00:00
+Estimated memory usage at order  4 = 1.23E+00 MB
+Manifold computation time at order 5 = 00:00:00
+Estimated memory usage at order  5 = 2.21E+00 MB
+Manifold computation time at order 6 = 00:00:01
+Estimated memory usage at order  6 = 4.02E+00 MB
+Manifold computation time at order 7 = 00:00:04
+Estimated memory usage at order  7 = 6.64E+00 MB
+
+Equation solved.
+
+fsolve completed because the vector of function values is near zero
+as measured by the value of the function tolerance, and
+the problem appears regular as measured by the gradient.
+
+
+ Run='isol-7.ep': Continue equilibria along primary branch.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          1.73e-13  7.18e+01    0.0    0.0    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         Rez1         Rez2         Imz1         Imz2          eps
+    0  00:00:00   7.1849e+01      1  EP      4.5338e+01   0.0000e+00  -1.6341e+01   0.0000e+00   1.6080e+01   1.0000e-01
+   10  00:00:00   6.8813e+01      2          4.5169e+01   0.0000e+00  -1.5641e+01   0.0000e+00   9.0977e+00   1.0000e-01
+   14  00:00:01   6.7264e+01      3  SN      4.5060e+01   0.0000e+00  -1.3945e+01   0.0000e+00   6.1062e+00   1.0000e-01
+   14  00:00:01   6.7264e+01      4  BP      4.5060e+01   0.0000e+00  -1.3945e+01   0.0000e+00   6.1062e+00   1.0000e-01
+   20  00:00:01   6.4071e+01      5          4.4613e+01   0.0000e+00  -7.7561e+00   0.0000e+00   1.4336e+00   1.0000e-01
+   27  00:00:01   6.1026e+01      6  EP      4.3071e+01   0.0000e+00  -2.6411e+00   0.0000e+00   1.2521e-01   1.0000e-01
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         Rez1         Rez2         Imz1         Imz2          eps
+    0  00:00:01   7.1849e+01      7  EP      4.5338e+01   0.0000e+00  -1.6341e+01   0.0000e+00   1.6080e+01   1.0000e-01
+   10  00:00:02   7.4356e+01      8          4.5472e+01   0.0000e+00  -1.3003e+01   0.0000e+00   2.2970e+01   1.0000e-01
+   20  00:00:02   7.6203e+01      9          4.5620e+01   0.0000e+00  -1.0297e+00   0.0000e+00   2.8657e+01   1.0000e-01
+   30  00:00:03   7.4765e+01     10          4.5688e+01   0.0000e+00   1.1757e+01   0.0000e+00   2.3860e+01   1.0000e-01
+   39  00:00:03   7.1607e+01     11  SN      4.5710e+01   0.0000e+00   1.6031e+01   0.0000e+00   1.4742e+01   1.0000e-01
+   39  00:00:03   7.1607e+01     12  BP      4.5710e+01   0.0000e+00   1.6031e+01   0.0000e+00   1.4742e+01   1.0000e-01
+   40  00:00:03   7.1046e+01     13          4.5715e+01   0.0000e+00   1.6042e+01   0.0000e+00   1.3286e+01   1.0000e-01
+   50  00:00:04   6.7087e+01     14          4.5859e+01   0.0000e+00   1.1430e+01   0.0000e+00   4.0745e+00   1.0000e-01
+   60  00:00:04   6.7304e+01     15          4.7510e+01   0.0000e+00   2.7548e+00   0.0000e+00   2.3559e-01   1.0000e-01
+   69  00:00:05   7.0554e+01     16  EP      4.9872e+01   0.0000e+00   1.3241e+00   0.0000e+00   6.6106e-02   1.0000e-01
+  </pre>
+<h2>FRC in parametrisation space:</h2>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_20.png" style="width:45%" vspace="5"/>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_21.png" style="width:45%" vspace="5"/>
+<h2>FRC in physical space:</h2>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_22.png" style="width:45%" vspace="5"/>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_23.png" style="width:45%" vspace="5"/>
+<h2 id="5">FRCs at order 9</h2>
+<pre>
+
+Due to (near) outer resonance, the exisitence of the manifold is questionable and the underlying computation may suffer.
+Attempting manifold computation
+Manifold computation time at order 2 = 00:00:00
+Estimated memory usage at order  2 = 3.41E-01 MB
+Manifold computation time at order 3 = 00:00:00
+Estimated memory usage at order  3 = 6.07E-01 MB
+Manifold computation time at order 4 = 00:00:00
+Estimated memory usage at order  4 = 1.24E+00 MB
+Manifold computation time at order 5 = 00:00:00
+Estimated memory usage at order  5 = 2.22E+00 MB
+Manifold computation time at order 6 = 00:00:01
+Estimated memory usage at order  6 = 4.03E+00 MB
+Manifold computation time at order 7 = 00:00:03
+Estimated memory usage at order  7 = 6.64E+00 MB
+Manifold computation time at order 8 = 00:00:12
+Estimated memory usage at order  8 = 1.08E+01 MB
+Manifold computation time at order 9 = 00:00:31
+Estimated memory usage at order  9 = 1.66E+01 MB
+
+Equation solved.
+
+fsolve completed because the vector of function values is near zero
+as measured by the value of the function tolerance, and
+the problem appears regular as measured by the gradient.
+
+
+ Run='isol-9.ep': Continue equilibria along primary branch.
+
+    STEP   DAMPING               NORMS              COMPUTATION TIMES
+  IT SIT     GAMMA     ||d||     ||f||     ||U||   F(x)  DF(x)  SOLVE
+   0                          6.19e-14  7.18e+01    0.0    0.0    0.0
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         Rez1         Rez2         Imz1         Imz2          eps
+    0  00:00:00   7.1849e+01      1  EP      4.5338e+01   0.0000e+00  -1.6341e+01   0.0000e+00   1.6080e+01   1.0000e-01
+   10  00:00:00   6.8813e+01      2          4.5169e+01   0.0000e+00  -1.5641e+01   0.0000e+00   9.0978e+00   1.0000e-01
+   14  00:00:01   6.7264e+01      3  SN      4.5060e+01   0.0000e+00  -1.3945e+01   0.0000e+00   6.1062e+00   1.0000e-01
+   14  00:00:01   6.7264e+01      4  BP      4.5060e+01   0.0000e+00  -1.3945e+01   0.0000e+00   6.1062e+00   1.0000e-01
+   20  00:00:02   6.4071e+01      5          4.4613e+01   0.0000e+00  -7.7561e+00   0.0000e+00   1.4336e+00   1.0000e-01
+   27  00:00:03   6.1026e+01      6  EP      4.3071e+01   0.0000e+00  -2.6411e+00   0.0000e+00   1.2521e-01   1.0000e-01
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         Rez1         Rez2         Imz1         Imz2          eps
+    0  00:00:03   7.1849e+01      7  EP      4.5338e+01   0.0000e+00  -1.6341e+01   0.0000e+00   1.6080e+01   1.0000e-01
+   10  00:00:04   7.4356e+01      8          4.5472e+01   0.0000e+00  -1.3003e+01   0.0000e+00   2.2970e+01   1.0000e-01
+   20  00:00:04   7.6203e+01      9          4.5620e+01   0.0000e+00  -1.0297e+00   0.0000e+00   2.8657e+01   1.0000e-01
+   30  00:00:05   7.4765e+01     10          4.5688e+01   0.0000e+00   1.1757e+01   0.0000e+00   2.3860e+01   1.0000e-01
+   39  00:00:06   7.1607e+01     11  SN      4.5710e+01   0.0000e+00   1.6031e+01   0.0000e+00   1.4742e+01   1.0000e-01
+   39  00:00:06   7.1607e+01     12  BP      4.5710e+01   0.0000e+00   1.6031e+01   0.0000e+00   1.4742e+01   1.0000e-01
+   40  00:00:06   7.1046e+01     13          4.5715e+01   0.0000e+00   1.6042e+01   0.0000e+00   1.3286e+01   1.0000e-01
+   50  00:00:07   6.7087e+01     14          4.5859e+01   0.0000e+00   1.1430e+01   0.0000e+00   4.0745e+00   1.0000e-01
+   60  00:00:07   6.7304e+01     15          4.7510e+01   0.0000e+00   2.7548e+00   0.0000e+00   2.3559e-01   1.0000e-01
+   69  00:00:08   7.0554e+01     16  EP      4.9872e+01   0.0000e+00   1.3241e+00   0.0000e+00   6.6106e-02   1.0000e-01
+
+
+
+</pre>
+<h2>FRC in parametrisation space:</h2>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_24.png" style="width:45%" vspace="5"/>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_25.png" style="width:45%" vspace="5"/>
+<h2>FRC in physical space:</h2>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_26.png" style="width:45%" vspace="5"/>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_27.png" style="width:45%" vspace="5"/>
+<h2 id="5">Compare FRCs at different orders to check for convergence</h2>
+<pre class="codeinput">FRCs = {FRC_O3,FRC_O5,FRC_O7,FRC_O9};
+thm = struct();
+thm.SN = {<span class="string">'LineStyle'</span>, <span class="string">'none'</span>, <span class="string">'LineWidth'</span>, 2, <span class="keyword">...</span>
+  <span class="string">'Color'</span>, <span class="string">'cyan'</span>, <span class="string">'Marker'</span>, <span class="string">'o'</span>, <span class="string">'MarkerSize'</span>, 8, <span class="string">'MarkerEdgeColor'</span>, <span class="keyword">...</span>
+  <span class="string">'cyan'</span>, <span class="string">'MarkerFaceColor'</span>, <span class="string">'white'</span>};
+thm.HB = {<span class="string">'LineStyle'</span>, <span class="string">'none'</span>, <span class="string">'LineWidth'</span>, 2, <span class="keyword">...</span>
+  <span class="string">'Color'</span>, <span class="string">'black'</span>, <span class="string">'Marker'</span>, <span class="string">'s'</span>, <span class="string">'MarkerSize'</span>, 8, <span class="string">'MarkerEdgeColor'</span>, <span class="keyword">...</span>
+  <span class="string">'black'</span>, <span class="string">'MarkerFaceColor'</span>, <span class="string">'white'</span>};
+color = {<span class="string">'r'</span>,<span class="string">'k'</span>,<span class="string">'m'</span>,<span class="string">'b'</span>,<span class="string">'g'</span>};
+figure;
+ax1 = gca;
+<span class="keyword">for</span> k=1:numel(FRCs)
+    FRC = FRCs{k};
+    SNidx = FRC.SNidx;
+    HBidx = FRC.HBidx;
+    FRC.st = double(FRC.st);
+    FRC.st(HBidx) = nan;
+    FRC.st(SNidx) = nan;
+    <span class="comment">% color</span>
+    ST = cell(2,1);
+    ST{1} = {[color{k},<span class="string">'--'</span>],<span class="string">'LineWidth'</span>,1.5}; <span class="comment">% unstable</span>
+    ST{2} = {[color{k},<span class="string">'-'</span>],<span class="string">'LineWidth'</span>,1.5};  <span class="comment">% stable</span>
+    legs = [<span class="string">'SSM-$\mathcal{O}('</span>,num2str(2*k+1),<span class="string">')$-unstable'</span>];
+    legu = [<span class="string">'SSM-$\mathcal{O}('</span>,num2str(2*k+1),<span class="string">')$-stable'</span>];
+    hold(ax1,<span class="string">'on'</span>);
+    <a href="../../../../Library/Features/misc/plot_stab_lines.html">plot_stab_lines</a>(FRC.om,FRC.Aout_<a href="../../../../Library/Features/frc/frc.html">frc</a>(:,1),FRC.st,ST,legs,legu);
+    SNfig = plot(FRC.om(SNidx),FRC.Aout_<a href="../../../../Library/Features/frc/frc.html">frc</a>(SNidx,1),thm.SN{:});
+    set(get(get(SNfig,<span class="string">'Annotation'</span>),<span class="string">'LegendInformation'</span>),<span class="keyword">...</span>
+    <span class="string">'IconDisplayStyle'</span>,<span class="string">'off'</span>);
+    HBfig = plot(FRC.om(HBidx),FRC.Aout_<a href="../../../../Library/Features/frc/frc.html">frc</a>(HBidx,1),thm.HB{:});
+    set(get(get(HBfig,<span class="string">'Annotation'</span>),<span class="string">'LegendInformation'</span>),<span class="keyword">...</span>
+    <span class="string">'IconDisplayStyle'</span>,<span class="string">'off'</span>);
+    xlabel(<span class="string">'$\Omega$'</span>,<span class="string">'Interpreter'</span>,<span class="string">'latex'</span>);
+    ylabel(<span class="string">'$||u_1||_{\infty}$'</span>,<span class="string">'Interpreter'</span>,<span class="string">'latex'</span>);
+    set(gca,<span class="string">'FontSize'</span>,14);
+    grid <span class="string">on</span>; axis <span class="string">tight</span>;
+<span class="keyword">end</span>
+</pre><img alt="" hspace="5" src="demoFrequencyDividerDoc_28.png" vspace="5"/> <h2 id="10">Secondary branches</h2><p>We observed the FRC converges well at O(5) approximation. Next we perform <b>branch switching</b> of branch points observed in this continuation run.</p><pre class="codeinput">bd = coco_bd_read(<span class="string">'isol-5.ep'</span>);
+BPlabs = coco_bd_labs(bd, <span class="string">'BP'</span>);
+set(S.contOptions, <span class="string">'PtMX'</span>, [100,0]);
+S.<a href="../../../../Library/SSM/SSM_BP2ep.html">SSM_BP2ep</a>(<span class="string">'o5-bp1'</span>,<span class="string">'isol-5'</span>,BPlabs(1),<span class="string">'freq'</span>,omegaRange,outdof);
+</pre><pre class="codeoutput">
+ Run='o5-bp1.ep': Continue equilibria along secondary branch from label 4 of run isol-5.
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         Rez1         Rez2         Imz1         Imz2          eps
+    0  00:00:00   6.7264e+01      1  EP      4.5060e+01   0.0000e+00  -1.3945e+01   0.0000e+00   6.1061e+00   1.0000e-01
+    1  00:00:00   6.7264e+01      2  BP      4.5060e+01  -1.2129e-08  -1.3945e+01  -3.6018e-08   6.1061e+00   1.0000e-01
+    1  00:00:00   6.7264e+01      3  FP      4.5060e+01  -5.0299e-03  -1.3945e+01  -1.4936e-02   6.1061e+00   1.0000e-01
+   10  00:00:00   7.1489e+01      4          4.5138e+01  -5.6239e+00  -1.5238e+01  -1.3442e+01   8.5682e+00   1.0000e-01
+   20  00:00:00   8.2500e+01      5          4.5345e+01  -1.6405e+01  -1.4853e+01  -2.2865e+01   1.8287e+01   1.0000e-01
+   30  00:00:01   8.9415e+01      6          4.5507e+01  -2.6712e+01  -5.8219e+00  -2.2141e+01   2.6249e+01   1.0000e-01
+   40  00:00:01   9.0509e+01      7          4.5601e+01  -3.3631e+01   7.5731e+00  -1.4543e+01   2.4831e+01   1.0000e-01
+   50  00:00:01   8.6057e+01      8          4.5647e+01  -3.4567e+01   1.4129e+01  -3.8929e+00   1.4477e+01   1.0000e-01
+   60  00:00:02   8.1742e+01      9          4.5800e+01  -3.1602e+01   1.0487e+01   1.0082e+01   5.7399e+00   1.0000e-01
+   70  00:00:02   8.0355e+01     10          4.5903e+01  -2.3765e+01   9.8821e+00   2.0860e+01   4.8742e+00   1.0000e-01
+   71  00:00:02   8.0239e+01     11  SN      4.5903e+01  -2.3336e+01   9.9355e+00   2.1093e+01   4.8806e+00   1.0000e-01
+   71  00:00:02   8.0239e+01     12  FP      4.5903e+01  -2.3336e+01   9.9355e+00   2.1093e+01   4.8806e+00   1.0000e-01
+   80  00:00:02   7.7115e+01     13          4.5859e+01  -1.4922e+01   1.1646e+01   2.1947e+01   5.5147e+00   1.0000e-01
+   90  00:00:03   7.3023e+01     14          4.5759e+01  -7.3759e+00   1.4747e+01   1.4901e+01   8.8537e+00   1.0000e-01
+   97  00:00:03   7.1605e+01     15  FP      4.5710e+01  -1.6983e-05   1.6032e+01   3.2550e-05   1.4736e+01   1.0000e-01
+   97  00:00:03   7.1605e+01     16  BP      4.5710e+01   1.1378e-06   1.6032e+01  -2.0113e-06   1.4736e+01   1.0000e-01
+  100  00:00:03   7.1646e+01     17  EP      4.5713e+01   1.9259e+00   1.6045e+01  -3.7193e+00   1.4209e+01   1.0000e-01
+</pre>
+<h2>FRC in parametrisation space:</h2>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_29.png" style="width:45%" vspace="5"/>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_30.png" style="width:45%" vspace="5"/>
+<h2>FRC in physical space:</h2>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_31.png" style="width:45%" vspace="5"/>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_32.png" style="width:45%" vspace="5"/>
+<p>We also perform branch switching at the other BP point. It is expected that the results are the same as the above.</p><pre class="codeinput">S.<a href="../../../../Library/SSM/SSM_BP2ep.html">SSM_BP2ep</a>(<span class="string">'o5-bp2'</span>,<span class="string">'isol-5'</span>,BPlabs(2),<span class="string">'freq'</span>,omegaRange,outdof);
+</pre><pre class="codeoutput">
+
+ Run='o5-bp2.ep': Continue equilibria along secondary branch from label 12 of run isol-5.
+
+ STEP      TIME        ||U||  LABEL  TYPE            om         Rez1         Rez2         Imz1         Imz2          eps
+    0  00:00:00   7.1605e+01      1  EP      4.5710e+01   0.0000e+00   1.6032e+01   0.0000e+00   1.4736e+01   1.0000e-01
+    1  00:00:00   7.1605e+01      2  SN      4.5710e+01   1.4569e-04   1.6032e+01  -2.7785e-04   1.4736e+01   1.0000e-01
+    1  00:00:00   7.1605e+01      3  FP      4.5710e+01   6.6439e-03   1.6032e+01  -1.2671e-02   1.4736e+01   1.0000e-01
+   10  00:00:01   7.1950e+01      4          4.5725e+01   4.5192e+00   1.5840e+01  -9.1033e+00   1.1972e+01   1.0000e-01
+   20  00:00:02   7.7255e+01      5          4.5862e+01   1.5220e+01   1.1561e+01  -2.2038e+01   5.4666e+00   1.0000e-01
+   30  00:00:03   8.0239e+01      6  FP      4.5903e+01   2.3336e+01   9.9355e+00  -2.1093e+01   4.8806e+00   1.0000e-01
+   30  00:00:03   8.0239e+01      7  SN      4.5903e+01   2.3336e+01   9.9355e+00  -2.1093e+01   4.8806e+00   1.0000e-01
+   30  00:00:03   8.0349e+01      8          4.5903e+01   2.3746e+01   9.8844e+00  -2.0871e+01   4.8744e+00   1.0000e-01
+   40  00:00:03   8.1671e+01      9          4.5816e+01   3.1180e+01   1.0218e+01  -1.1358e+01   5.5085e+00   1.0000e-01
+   50  00:00:03   8.5434e+01     10          4.5654e+01   3.4379e+01   1.4132e+01   2.7190e+00   1.3272e+01   1.0000e-01
+   60  00:00:04   9.0281e+01     11          4.5607e+01   3.3986e+01   8.6697e+00   1.3579e+01   2.4098e+01   1.0000e-01
+   70  00:00:04   8.9817e+01     12          4.5520e+01   2.7638e+01  -4.4945e+00   2.1636e+01   2.6633e+01   1.0000e-01
+   80  00:00:05   8.3252e+01     13          4.5361e+01   1.7297e+01  -1.4439e+01   2.3121e+01   1.9122e+01   1.0000e-01
+   90  00:00:06   7.2998e+01     14          4.5165e+01   6.9785e+00  -1.5585e+01   1.5508e+01   9.6126e+00   1.0000e-01
+   98  00:00:06   6.7264e+01     15  FP      4.5060e+01   8.6889e-05  -1.3945e+01   2.6264e-04   6.1061e+00   1.0000e-01
+   98  00:00:06   6.7264e+01     16  BP      4.5060e+01  -3.5952e-06  -1.3945e+01  -6.0548e-06   6.1061e+00   1.0000e-01
+  100  00:00:06   6.8688e+01     17  EP      4.5087e+01  -2.8806e+00  -1.4423e+01  -7.9272e+00   6.8622e+00   1.0000e-01
+</pre>
+<h2>FRC in parametrisation space:</h2>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_33.png" style="width:45%" vspace="5"/>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_34.png" style="width:45%" vspace="5"/>
+<h2>FRC in physical space:</h2>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_35.png" style="width:45%" vspace="5"/>
+<img alt="" hspace="5" src="demoFrequencyDividerDoc_36.png" style="width:45%" vspace="5"/> <h2>FRC with both solution branches</h2><p>Now we are ready to put two branches of solution at the same figure. We collect the data of the two FRCs and plot them on top of each other (please refer to the example in the toolbox for the code).</p><img alt="" hspace="5" src="demoFrequencyDividerDoc_37.png" vspace="5"/> <img alt="" hspace="5" src="demoFrequencyDividerDoc_38.png" vspace="5"/> <img alt="" hspace="5" src="demoFrequencyDividerDoc_39.png" vspace="5"/> <p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2021a</a><br/></p></div><!--
+##### SOURCE BEGIN #####
+%% Geometrically nonlinear L beam model
+% We consider an example as follows. The structure consists of two beams connected 
+% via a revolute joint. A harmonic excitation is applied at the midspan of the 
+% horizontal beam.
+% 
+% 
+% 
+% This example is motivated by the internally resonant T-beam structure described 
+% here
+% 
+% Dou, S., Strachan, B. S., Shaw, S. W., & Jensen, J. S. (2015). Structural 
+% optimization for nonlinear dynamic response. _Philosophical Transactions of 
+% the Royal Society A: Mathematical, Physical and Engineering Sciences_, _373_(2051). 
+% <https://doi.org/10.1098/RSTA.2014.0408 https://doi.org/10.1098/RSTA.2014.0408>
+% 
+% 
+% 
+% We model this structure as a union of two straight von Karman beams which 
+% results in DAE as follows
+% 
+% $$M\ddot{q}+C\dot{q}+Kq+G^T\lambda=F^{\mathrm{ext}}\cos\Omega t,\\ Gq=0.$$
+% 
+% where 
+% 
+% $$M=\mathrm{diag}(M_1,M_2),\quad C=\mathrm{diag}(C_1,C_2),\quad K=\mathrm{diag}(K_1,K_2)$$
+% 
+% and the linear configuration constraints $Gq=0$ denote the continuity condition 
+% of displacements at the joint.
+% 
+% *Finite element code taken from the following package:*
+% 
+% Jain, S., Marconi, J., Tiso P. (2020). YetAnotherFEcode (Version v1.1). _Zenodo_. 
+% <http://doi.org/10.5281/zenodo.4011282 http://doi.org/10.5281/zenodo.4011282>
+%
+%% Generate model
+%
+
+clear all
+nElements1 = 10;
+nElements2 = 14;
+[B,A,fnl,fext,outdof] = build_model_1st(nElements1,nElements2);
+n = size(A,1);
+disp(['Phase space dimensionality = ' num2str(n)])
+
+%% Dynamical system setup 
+%
+
+DS = <a href="../../../../Library/DynamicalSystem/DynamicalSystem.html">DynamicalSystem</a>();
+set(DS,'B',B,'A',A,'fnl',fnl);
+set(DS.<a href="../../../../Library/Features/Options/Options.html">Options</a>,'Emax',8,'Nmax',10,'notation','multiindex')
+
+%%
+% due to the added configuration constraints, 
+% the updated damping matrix is not propotional anymore
+
+set(DS.<a href="../../../../Library/Features/Options/Options.html">Options</a>,'RayleighDamping',false,'sigma',0.5);
+
+%% add forcing
+
+epsilon = 1e-1*1e1;
+kappas = [1; -1];
+coeffs = [fext fext]/2;
+DS.<a href="../../../../Library/DynamicalSystem/add_forcing.html">add_forcing</a>(coeffs, kappas, epsilon);
+
+%% Linear Modal analysis and SSM setup
+
+[V,D,W] = DS.<a href="../../../../Library/DynamicalSystem/linear_spectral_analysis.html">linear_spectral_analysis</a>();
+
+%% Setup for SSM Computation
+%
+%
+
+S = <a href="../../../../Library/SSM/SSM.html">SSM</a>(DS);
+set(S.<a href="../../../../Library/Features/Options/Options.html">Options</a>, 'reltol', 0.5,'notation','multiindex');
+resonant_modes = [1 2 3 4]; % choose master spectral subspace
+mFreq = [1/2 1];            % internal resonance relation vector
+order = 5;                  % SSM expansion order
+
+%% SSM_epSweeps: 
+% continuation of FRC w.r.t $\Omega$ at sampled $\{\epsilon_i\}$
+%
+
+set(S.<a href="../../../../Library/Features/Options/FRCOptions.html">FRCOptions</a>,'sampStyle', 'cocoBD');                                % sampling style
+set(S.contOptions, 'PtMX', 200, 'h_max', 50,'h_min',0.01,'MaxRes',1);   % continuation setting
+set(S.<a href="../../../../Library/Features/Options/FRCOptions.html">FRCOptions</a>, 'nCycle',5000, 'initialSolver', 'fsolve');            % initial solution scheme
+set(S.<a href="../../../../Library/Features/Options/FRCOptions.html">FRCOptions</a>, 'coordinates', 'cartesian');                          % two coordinate representations
+set(S.<a href="../../../../Library/Features/Options/Options.html">Options</a>,'contribNonAuto',false);
+epsSamp = [1e-1 5e-1 1]*epsilon;
+freqRange = [0.8 1.2]*imag(D(3));
+S.<a href="../../../../Library/SSM/SSM_epSweeps.html">SSM_epSweeps</a>('sweeps',resonant_modes,order,mFreq,epsSamp,freqRange,outdof);
+
+%% Check the convergence
+% We check for the convergence of the FRC with increasing orders
+%
+
+sol = ep_read_solution('sweepseps1.ep',1);
+epsilon = sol.p(2);
+kappas = [1; -1];
+coeffs = [fext fext]/2;
+DS.<a href="../../../../Library/DynamicalSystem/add_forcing.html">add_forcing</a>(coeffs, kappas, epsilon);
+omegaRange = [0.95 1.1]*imag(D(3));
+start = tic;
+FRC_O3 = S.<a href="../../../../Library/SSM/SSM_isol2ep.html">SSM_isol2ep</a>('isol-3', resonant_modes, order-2, mFreq,...
+    'freq', omegaRange, outdof, {sol.p,sol.x});
+timings.FRC_O3 = toc(start);
+
+start = tic;
+FRC_O5 = S.<a href="../../../../Library/SSM/SSM_isol2ep.html">SSM_isol2ep</a>('isol-5', resonant_modes, order, mFreq,...
+    'freq', omegaRange, outdof, {sol.p,sol.x});
+timings.FRC_O5 = toc(start);
+
+start = tic;
+FRC_O7 = S.<a href="../../../../Library/SSM/SSM_isol2ep.html">SSM_isol2ep</a>('isol-7', resonant_modes, order+2, mFreq,...
+    'freq', omegaRange, outdof, {sol.p,sol.x});
+timings.FRC_O7 = toc(start);
+
+start = tic;
+FRC_O9 = S.<a href="../../../../Library/SSM/SSM_isol2ep.html">SSM_isol2ep</a>('isol-9', resonant_modes, order+4, mFreq,...
+    'freq', omegaRange, outdof, {sol.p,sol.x});
+timings.FRC_O9 = toc(start);
+
+%%
+% plot results at the same figure
+%
+
+FRCs = {FRC_O3,FRC_O5,FRC_O7,FRC_O9};
+thm = struct();
+thm.SN = {'LineStyle', 'none', 'LineWidth', 2, ...
+  'Color', 'cyan', 'Marker', 'o', 'MarkerSize', 8, 'MarkerEdgeColor', ...
+  'cyan', 'MarkerFaceColor', 'white'};
+thm.HB = {'LineStyle', 'none', 'LineWidth', 2, ...
+  'Color', 'black', 'Marker', 's', 'MarkerSize', 8, 'MarkerEdgeColor', ...
+  'black', 'MarkerFaceColor', 'white'};
+color = {'r','k','m','b','g'};
+figure;
+ax1 = gca;
+for k=1:numel(FRCs)
+    FRC = FRCs{k};
+    SNidx = FRC.SNidx;
+    HBidx = FRC.HBidx;
+    FRC.st = double(FRC.st);
+    FRC.st(HBidx) = nan;
+    FRC.st(SNidx) = nan;
+    % color
+    ST = cell(2,1);
+    ST{1} = {[color{k},'REPLACE_WITH_DASH_DASH'],'LineWidth',1.5}; % unstable
+    ST{2} = {[color{k},'-'],'LineWidth',1.5};  % stable
+    legs = ['SSM-$\mathcal{O}(',num2str(2*k+1),')$-unstable'];
+    legu = ['SSM-$\mathcal{O}(',num2str(2*k+1),')$-stable'];
+    hold(ax1,'on');
+    <a href="../../../../Library/Features/misc/plot_stab_lines.html">plot_stab_lines</a>(FRC.om,FRC.Aout_<a href="../../../../Library/Features/frc/frc.html">frc</a>(:,1),FRC.st,ST,legs,legu);
+    SNfig = plot(FRC.om(SNidx),FRC.Aout_<a href="../../../../Library/Features/frc/frc.html">frc</a>(SNidx,1),thm.SN{:});
+    set(get(get(SNfig,'Annotation'),'LegendInformation'),...
+    'IconDisplayStyle','off');
+    HBfig = plot(FRC.om(HBidx),FRC.Aout_<a href="../../../../Library/Features/frc/frc.html">frc</a>(HBidx,1),thm.HB{:});
+    set(get(get(HBfig,'Annotation'),'LegendInformation'),...
+    'IconDisplayStyle','off');   
+    xlabel('$\Omega$','Interpreter','latex'); 
+    ylabel('$||u_1||_{\infty}$','Interpreter','latex'); 
+    set(gca,'FontSize',14);
+    grid on; axis tight; 
+end
+
+%% Secondary branches
+% We observed the FRC converges well at O(5) approximation. Next we perform 
+% *branch switching* of branch points observed in this continuation run.
+%
+
+bd = coco_bd_read('isol-5.ep');
+BPlabs = coco_bd_labs(bd, 'BP');
+set(S.contOptions, 'PtMX', [100,0]);    
+S.<a href="../../../../Library/SSM/SSM_BP2ep.html">SSM_BP2ep</a>('o5-bp1','isol-5',BPlabs(1),'freq',omegaRange,outdof);
+
+%% 
+% We also perform branch switching at the other BP point. It is expected that 
+% the results are the same as the above.
+%
+
+S.<a href="../../../../Library/SSM/SSM_BP2ep.html">SSM_BP2ep</a>('o5-bp2','isol-5',BPlabs(2),'freq',omegaRange,outdof);
+
+%% 
+% Now we are ready to put two branches of solution at the same figure.
+%
+
+thm = struct();
+thm.SN = {'LineStyle', 'none', 'LineWidth', 2, ...
+  'Color', 'cyan', 'Marker', 'o', 'MarkerSize', 8, 'MarkerEdgeColor', ...
+  'cyan', 'MarkerFaceColor', 'white'};
+thm.HB = {'LineStyle', 'none', 'LineWidth', 2, ...
+  'Color', 'black', 'Marker', 's', 'MarkerSize', 8, 'MarkerEdgeColor', ...
+  'black', 'MarkerFaceColor', 'white'};
+FRC_O5 = load('data/isol-5.ep/SSMep.mat');
+FRC_O5 = FRC_O5.FRC;
+FRCbp = load("data/o5-bp1.ep/SSMep.mat");
+FRCbp = FRCbp.FRC;
+FRCs = {FRC_O5,FRCbp};
+color = {'b','r','m','b','g'};
+for k=1:numel(FRCs)
+    FRC = FRCs{k};
+    SNidx = FRC.SNidx;
+    HBidx = FRC.HBidx;
+    FRC.st = double(FRC.st);
+    FRC.st(HBidx) = nan;
+    FRC.st(SNidx) = nan;
+    % color
+    ST = cell(2,1);
+    ST{1} = {[color{k},'REPLACE_WITH_DASH_DASH'],'LineWidth',1.5}; % unstable
+    ST{2} = {[color{k},'-'],'LineWidth',1.5};  % stable
+    if k==1
+        legs = 'SSM-$\mathcal{O}(5)$-unstable-1st';
+        legu = 'SSM-$\mathcal{O}(5)$-stable-1st';
+    else
+        legs = 'SSM-$\mathcal{O}(5)$-unstable-2nd';
+        legu = 'SSM-$\mathcal{O}(5)$-stable-2nd';        
+    end
+    figure(204); hold on
+    <a href="../../../../Library/Features/misc/plot_stab_lines.html">plot_stab_lines</a>(FRC.om,FRC.Aout_<a href="../../../../Library/Features/frc/frc.html">frc</a>(:,1),FRC.st,ST,legs,legu);
+    SNfig = plot(FRC.om(SNidx),FRC.Aout_<a href="../../../../Library/Features/frc/frc.html">frc</a>(SNidx,1),thm.SN{:});
+    set(get(get(SNfig,'Annotation'),'LegendInformation'),...
+    'IconDisplayStyle','off');
+    HBfig = plot(FRC.om(HBidx),FRC.Aout_<a href="../../../../Library/Features/frc/frc.html">frc</a>(HBidx,1),thm.HB{:});
+    set(get(get(HBfig,'Annotation'),'LegendInformation'),...
+    'IconDisplayStyle','off');   
+    xlabel('$\Omega$','Interpreter','latex'); 
+    ylabel('$||w(x=l_1,y=-0.5l_2)||_{\infty}$','Interpreter','latex'); 
+    set(gca,'FontSize',14);
+    grid on; axis tight; 
+    figure(205); hold on
+    <a href="../../../../Library/Features/misc/plot_stab_lines.html">plot_stab_lines</a>(FRC.om,FRC.Aout_<a href="../../../../Library/Features/frc/frc.html">frc</a>(:,2),FRC.st,ST,legs,legu);
+    SNfig = plot(FRC.om(SNidx),FRC.Aout_<a href="../../../../Library/Features/frc/frc.html">frc</a>(SNidx,2),thm.SN{:});
+    set(get(get(SNfig,'Annotation'),'LegendInformation'),...
+    'IconDisplayStyle','off');
+    HBfig = plot(FRC.om(HBidx),FRC.Aout_<a href="../../../../Library/Features/frc/frc.html">frc</a>(HBidx,2),thm.HB{:});
+    set(get(get(HBfig,'Annotation'),'LegendInformation'),...
+    'IconDisplayStyle','off');   
+    xlabel('$\Omega$','Interpreter','latex'); 
+    ylabel('$||w(x=0.5l_1,y=0)||_{\infty}$','Interpreter','latex'); 
+    set(gca,'FontSize',14);
+    grid on; axis tight;     
+    figure(206); 
+    subplot(2,1,1); hold on
+    <a href="../../../../Library/Features/misc/plot_stab_lines.html">plot_stab_lines</a>(FRC.om,FRC.rho(:,1),FRC.st,ST,legs,legu);
+    SNfig = plot(FRC.om(SNidx),FRC.rho(SNidx,1),thm.SN{:});
+    set(get(get(SNfig,'Annotation'),'LegendInformation'),...
+    'IconDisplayStyle','off');
+    HBfig = plot(FRC.om(HBidx),FRC.rho(HBidx,1),thm.HB{:});
+    set(get(get(HBfig,'Annotation'),'LegendInformation'),...
+    'IconDisplayStyle','off');   
+    ylabel('$\rho_1$','Interpreter','latex'); 
+    set(gca,'FontSize',14);
+    grid on; axis tight; 
+    subplot(2,1,2); hold on
+    <a href="../../../../Library/Features/misc/plot_stab_lines.html">plot_stab_lines</a>(FRC.om,FRC.rho(:,2),FRC.st,ST,legs,legu);
+    SNfig = plot(FRC.om(SNidx),FRC.rho(SNidx,2),thm.SN{:});
+    set(get(get(SNfig,'Annotation'),'LegendInformation'),...
+    'IconDisplayStyle','off');
+    HBfig = plot(FRC.om(HBidx),FRC.rho(HBidx,2),thm.HB{:});
+    set(get(get(HBfig,'Annotation'),'LegendInformation'),...
+    'IconDisplayStyle','off');   
+    xlabel('$\Omega$','Interpreter','latex'); 
+    ylabel('$\rho_2$','Interpreter','latex'); 
+    set(gca,'FontSize',14);
+    grid on; axis tight;     
+end
+##### SOURCE END #####
+--></body></head></html></body></html></html>

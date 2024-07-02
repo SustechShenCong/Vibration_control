@@ -1,0 +1,438 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../../index.html"><img alt="Logo" class="logo" src="../../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>SSM_ISOL2PO</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-09" name="DC.date"/><meta content="SSM_isol2po.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>SSM_ISOL2PO</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">SSM_ISOL2PO</a></li><li><a href="#3">continuation of equilibrium points in reduced dynamics</a></li><li><a href="#4">extract results of reduced dynamics at sampled frequencies</a></li><li><a href="#5">map torus back to physical system</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> SSM_isol2po(obj,oid,run,lab,initsol,parName,parRange,outdof,varargin)
+        </pre><h2 id="2">SSM_ISOL2PO</h2><p>This function performs continuation of periodic orbits of slow dynamics. Each periodic orbit corresponds to a torus (quasi-periodic) response in regular time dynamics. The continuation here starts with an initial guess of periodic orbit. It assumes that ep continuation has been performed with run(id) and the ep solution with label(lab) is read to extract the vector field of the reduced dynamics. Such a vector field will be used in later</p><p>FRCIRS = SSM_HB2PO(OBJ,OID,RUN,LAB,INITSOL,PARNAME,PARRANGE,OUTDOF,VARARGIN)</p><div><ul><li><tt>oid</tt>:      runid of current continuation</li></ul></div><div><ul><li><tt>run</tt>:      runid of continuation for saved solution</li></ul></div><div><ul><li><tt>lab</tt>:      label of continuation for saved solution, which must be the           label of a saddle-node point</li></ul></div><div><ul><li><tt>initsol</tt>:  initial solution, which is a structure (t,x,eps,om)</li></ul></div><div><ul><li><tt>parName</tt>:  amp/freq continuation parameter</li></ul></div><div><ul><li><tt>parRange</tt>: continuation domain of parameter, which should be near the           value of natural frequency with index 1 in the mFreq if continuation           parameter is freq</li></ul></div><div><ul><li><tt>outdof</tt>:   output for dof in physical domain</li></ul></div><div><ul><li><tt>varargin</tt>: ['saveICs'] flag for saving the initial point in trajectory</li></ul></div><p>See also: SSM_EP2HB, SSM_PO2PO</p><h2 id="3">continuation of equilibrium points in reduced dynamics</h2><pre class="codeinput">prob = coco_prob();
+prob = <a href="../../Library/Features/Wrappers/cocoWrapper/cocoSet.html">cocoSet</a>(obj.contOptions,prob);
+[~, data] = ep_read_solution(<span class="string">''</span>, coco_get_id(run, <span class="string">'ep'</span>), lab);
+t0 = initsol.t;
+x0 = initsol.x;
+p0 = [initsol.om;initsol.eps];
+prob = ode_isol2po(prob, <span class="string">''</span>, data.fhan, data.dfdxhan, data.dfdphan, <span class="keyword">...</span>
+  t0, x0, data.pnames, p0);
+
+<span class="comment">% read data</span>
+fdata = coco_get_func_data(prob, <span class="string">'po.orb.coll'</span>, <span class="string">'data'</span>);
+<span class="comment">% extract data to fdata.fhan, namely, @(z,p)ode_2mD<a href="../../Library/SSM/SSM.html">SSM</a>(z,p,fdata)</span>
+odedata = functions(fdata.fhan);
+odedata = odedata.workspace{1};
+fdata   = odedata.fdata;
+m   = numel(fdata.mFreqs);
+<span class="comment">% W_0 = fdata.W_0;</span>
+<span class="comment">% W_1 = fdata.W_1;</span>
+order    = fdata.order;
+ispolar  = fdata.ispolar;
+iNonauto = fdata.iNonauto;
+rNonauto = fdata.rNonauto;
+kNonauto = fdata.kNonauto;
+modes    = fdata.modes;
+mFreqs   = fdata.mFreqs;
+dim      = 2*m;
+wdir     = fullfile(pwd,<span class="string">'data'</span>,<span class="string">'SSM.mat'</span>);
+SSMcoeffs = load(wdir);
+SSMcoeffs = SSMcoeffs.SSMcoeffs;
+W_0 = SSMcoeffs.W_0;
+W_1 = SSMcoeffs.W_1;
+clear(<span class="string">'SSMcoeffs'</span>);
+
+<span class="comment">% setup continuation arguments</span>
+<span class="keyword">switch</span> parName
+    <span class="keyword">case</span> <span class="string">'freq'</span>
+        isomega = true;
+        cont_args = {<span class="string">'om'</span>, <span class="string">'po.period'</span>, <span class="string">'eps'</span>};
+    <span class="keyword">case</span> <span class="string">'amp'</span>
+        isomega = false;
+        cont_args = {<span class="string">'eps'</span>, <span class="string">'po.period'</span>, <span class="string">'om'</span>};
+    <span class="keyword">otherwise</span>
+        error(<span class="string">'Continuation parameter should be freq or amp'</span>);
+<span class="keyword">end</span>
+
+<span class="keyword">if</span> ~isempty(obj.FRCOptions.parSamps)
+    <span class="keyword">if</span> isomega
+        prob = coco_add_event(prob, <span class="string">'PS'</span>,<span class="string">'om'</span>,obj.Options.parSamps);
+    <span class="keyword">else</span>
+        prob = coco_add_event(prob, <span class="string">'PS'</span>,<span class="string">'eps'</span>,obj.Options.parSamps);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+isuniform = false;
+<span class="keyword">if</span> strcmp(obj.FRCOptions.sampStyle, <span class="string">'uniform'</span>)
+    isuniform = true;
+    <span class="keyword">if</span> isomega
+        nOmega = obj.FRCOptions.nPar;
+        omSamp = linspace(parRange(1),parRange(2), nOmega);
+        prob   = coco_add_event(prob, <span class="string">'UZ'</span>, <span class="string">'om'</span>, omSamp);
+    <span class="keyword">else</span>
+        nEpsilon = obj.FRCOptions.nPar;
+        epSamp = linspace(parRange(1),parRange(2), nEpsilon);
+        prob   = coco_add_event(prob, <span class="string">'UZ'</span>, <span class="string">'eps'</span>, epSamp);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+runid = coco_get_id(oid, <span class="string">'po'</span>);
+fprintf(<span class="string">'\n Run=''%s'': Continue periodic orbits with initial solution.\n'</span>, <span class="keyword">...</span>
+  runid);
+
+<span class="comment">% coco run</span>
+coco(prob, runid, [], 1, cont_args, parRange);
+        </pre><h2 id="4">extract results of reduced dynamics at sampled frequencies</h2><pre class="codeinput">FRC = <a href="../../Library/SSM/private/po_reduced_results.html">po_reduced_results</a>(runid,ispolar,isomega,mFreqs,obj.FRCOptions.nt,isuniform);
+        </pre><h2 id="5">map torus back to physical system</h2><pre class="codeinput">fprintf(<span class="string">'\n FRCs from =''%s'': generating torus in physical domain.\n'</span>, <span class="keyword">...</span>
+    runid);
+<span class="comment">% flag for saving ICs (used for numerical integration)</span>
+<span class="keyword">if</span> numel(varargin)==2
+    saveICflag = strcmp(varargin{2},<span class="string">'saveICs'</span>);
+<span class="keyword">elseif</span> numel(varargin)==1
+    saveICflag = strcmp(varargin{1},<span class="string">'saveICs'</span>);
+<span class="keyword">else</span>
+    saveICflag = false;
+<span class="keyword">end</span>
+<span class="keyword">if</span> saveICflag
+    Z0_frc = []; <span class="comment">% initial state</span>
+<span class="keyword">end</span>
+timeFRCPhysicsDomain = tic;
+
+<span class="comment">% Loop around a resonant mode</span>
+nlab = numel(FRC.lab);
+zTr  = cell(nlab,1);
+om   = FRC.om;
+epsf = FRC.ep;
+nSeg = FRC.nSeg;
+noutdof = numel(outdof);
+<span class="keyword">for</span> j = 1:nlab
+    <span class="comment">% compute non-autonomous SSM coefficients</span>
+    obj.System.Omega = om(j);
+    <span class="keyword">if</span> isomega
+        <span class="keyword">switch</span> obj.Options.contribNonAuto
+            <span class="keyword">case</span> <span class="string">'keep'</span>
+                <span class="keyword">if</span> isempty(obj.E)
+                    obj.<a href="../../Library/Manifold/choose_E.html">choose_E</a>(modes);
+                <span class="keyword">end</span>
+
+                [W_1, R_1] = obj.<a href="../../Library/Manifold/compute_perturbed_whisker.html">compute_perturbed_whisker</a>(order);
+
+                R_10 = R_1{1}.coeffs;
+                assert(~isempty(R_10), <span class="string">'Near resonance does not occur, you may tune tol'</span>);
+                f = R_10((kNonauto-1)*2*m+2*iNonauto-1);
+
+                assert(norm(f-rNonauto)&lt;1e-3*norm(f), <span class="string">'inner resonance assumption does not hold'</span>);
+
+                fprintf(<span class="string">'the forcing frequency %.4d is nearly resonant with the eigenvalue %.4d + i%.4d\n'</span>,<span class="keyword">...</span>
+                    om(j), fdata.lamdRe(1),fdata.lamdIm(1))
+            <span class="keyword">case</span> <span class="string">'delete'</span>
+                W_1 = [];
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+    <span class="comment">% Forced response in physical Coordinates</span>
+    qTrj = FRC.qTr{j};
+    tTrj = FRC.tTr{j};
+    nt   = numel(tTrj);
+    numSegs = nSeg(j);
+    Zout_frc = zeros(nt,noutdof,numSegs);
+    <span class="keyword">for</span> k=1:numSegs
+        xbp = qTrj(:,:,k);
+        xbp = xbp';
+        x_comp = xbp(1:2:end-1,:)+1i*xbp(2:2:end,:);
+        state  = zeros(dim, nt); <span class="comment">% state</span>
+        state(1:2:end-1,:) = x_comp;
+        state(2:2:end,:)   = conj(x_comp);
+
+        [~, Zout, ~,Zic] = <a href="../../Library/SSM/private/compute_full_response_traj.html">compute_full_response_traj</a>(W_0, W_1, epsf(j), tTrj, state, om(j), outdof);
+        Zout_<a href="../../Library/Features/frc/frc.html">frc</a>(:,:,k) = Zout';
+    <span class="keyword">end</span>
+
+    zTr{j} = Zout_frc;
+
+    <span class="keyword">if</span> saveICflag
+        Z0_frc = [Z0_frc Zic]; <span class="comment">% initial state</span>
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+        </pre><p>Record output</p><pre class="codeinput">FRC.zTr  = zTr;
+<span class="keyword">if</span> saveICflag
+    FRC.Z0_frc = Z0_frc; <span class="comment">% initial state</span>
+<span class="keyword">end</span>
+FRC.timeFRCPhysicsDomain = toc(timeFRCPhysicsDomain);
+FRC.SSMorder   = order;
+FRC.SSMnonAuto = obj.Options.contribNonAuto;
+FRC.SSMispolar = ispolar;
+
+fdir = fullfile(pwd,<span class="string">'data'</span>,runid,<span class="string">'SSMpo.mat'</span>);
+save(fdir, <span class="string">'FRC'</span>);
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+        </pre><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% SSM_ISOL2PO
+%
+%%
+function SSM_isol2po(obj,oid,run,lab,initsol,parName,parRange,outdof,varargin)
+%% SSM_ISOL2PO 
+% This function performs continuation of periodic orbits of slow
+% dynamics. Each periodic orbit corresponds to a torus (quasi-periodic)
+% response in regular time dynamics. The continuation here starts with an
+% initial guess of periodic orbit. It assumes that ep continuation has been
+% performed with run(id) and the ep solution with label(lab) is read to
+% extract the vector field of the reduced dynamics. Such a vector field
+% will be used in later
+%
+% FRCIRS = SSM_HB2PO(OBJ,OID,RUN,LAB,INITSOL,PARNAME,PARRANGE,OUTDOF,VARARGIN)
+%
+% * |oid|:      runid of current continuation
+% 
+% * |run|:      runid of continuation for saved solution
+% 
+% * |lab|:      label of continuation for saved solution, which must be the
+%           label of a saddle-node point
+% 
+% * |initsol|:  initial solution, which is a structure (t,x,eps,om)
+% 
+% * |parName|:  amp/freq continuation parameter
+% 
+% * |parRange|: continuation domain of parameter, which should be near the
+%           value of natural frequency with index 1 in the mFreq if continuation
+%           parameter is freq
+% 
+% * |outdof|:   output for dof in physical domain
+% 
+% * |varargin|: ['saveICs'] flag for saving the initial point in trajectory
+%
+% See also: SSM_EP2HB, SSM_PO2PO
+
+%% continuation of equilibrium points in reduced dynamics
+prob = coco_prob();
+prob = <a href="../../Library/Features/Wrappers/cocoWrapper/cocoSet.html">cocoSet</a>(obj.contOptions,prob);
+[~, data] = ep_read_solution('', coco_get_id(run, 'ep'), lab);
+t0 = initsol.t;
+x0 = initsol.x;
+p0 = [initsol.om;initsol.eps];
+prob = ode_isol2po(prob, '', data.fhan, data.dfdxhan, data.dfdphan, ...
+  t0, x0, data.pnames, p0);
+
+% read data 
+fdata = coco_get_func_data(prob, 'po.orb.coll', 'data');
+% extract data to fdata.fhan, namely, @(z,p)ode_2mD<a href="../../Library/SSM/SSM.html">SSM</a>(z,p,fdata)
+odedata = functions(fdata.fhan);
+odedata = odedata.workspace{1};
+fdata   = odedata.fdata;
+m   = numel(fdata.mFreqs);
+% W_0 = fdata.W_0;
+% W_1 = fdata.W_1;
+order    = fdata.order;
+ispolar  = fdata.ispolar;
+iNonauto = fdata.iNonauto;
+rNonauto = fdata.rNonauto;
+kNonauto = fdata.kNonauto;
+modes    = fdata.modes;
+mFreqs   = fdata.mFreqs;
+dim      = 2*m;
+wdir     = fullfile(pwd,'data','SSM.mat');
+SSMcoeffs = load(wdir);
+SSMcoeffs = SSMcoeffs.SSMcoeffs;
+W_0 = SSMcoeffs.W_0;
+W_1 = SSMcoeffs.W_1;
+clear('SSMcoeffs');
+
+% setup continuation arguments
+switch parName
+    case 'freq'
+        isomega = true;
+        cont_args = {'om', 'po.period', 'eps'};
+    case 'amp'
+        isomega = false;
+        cont_args = {'eps', 'po.period', 'om'};
+    otherwise
+        error('Continuation parameter should be freq or amp');
+end
+
+if ~isempty(obj.FRCOptions.parSamps)
+    if isomega
+        prob = coco_add_event(prob, 'PS','om',obj.Options.parSamps);
+    else
+        prob = coco_add_event(prob, 'PS','eps',obj.Options.parSamps);
+    end
+end
+
+isuniform = false;
+if strcmp(obj.FRCOptions.sampStyle, 'uniform')
+    isuniform = true;
+    if isomega
+        nOmega = obj.FRCOptions.nPar;
+        omSamp = linspace(parRange(1),parRange(2), nOmega);
+        prob   = coco_add_event(prob, 'UZ', 'om', omSamp);
+    else
+        nEpsilon = obj.FRCOptions.nPar;
+        epSamp = linspace(parRange(1),parRange(2), nEpsilon);
+        prob   = coco_add_event(prob, 'UZ', 'eps', epSamp);
+    end        
+end
+
+runid = coco_get_id(oid, 'po');
+fprintf('\n Run=''%s'': Continue periodic orbits with initial solution.\n', ...
+  runid);
+
+% coco run
+coco(prob, runid, [], 1, cont_args, parRange);
+
+
+%% extract results of reduced dynamics at sampled frequencies
+FRC = <a href="../../Library/SSM/private/po_reduced_results.html">po_reduced_results</a>(runid,ispolar,isomega,mFreqs,obj.FRCOptions.nt,isuniform);
+
+%% map torus back to physical system
+fprintf('\n FRCs from =''%s'': generating torus in physical domain.\n', ...
+    runid);
+% flag for saving ICs (used for numerical integration)
+if numel(varargin)==2
+    saveICflag = strcmp(varargin{2},'saveICs');
+elseif numel(varargin)==1
+    saveICflag = strcmp(varargin{1},'saveICs');
+else
+    saveICflag = false;
+end
+if saveICflag
+    Z0_frc = []; % initial state
+end
+timeFRCPhysicsDomain = tic;
+
+% Loop around a resonant mode
+nlab = numel(FRC.lab);
+zTr  = cell(nlab,1);
+om   = FRC.om;
+epsf = FRC.ep;
+nSeg = FRC.nSeg;
+noutdof = numel(outdof);
+for j = 1:nlab
+    % compute non-autonomous SSM coefficients
+    obj.System.Omega = om(j);
+    if isomega
+        switch obj.Options.contribNonAuto
+            case 'keep'
+                if isempty(obj.E)
+                    obj.<a href="../../Library/Manifold/choose_E.html">choose_E</a>(modes);
+                end
+
+                [W_1, R_1] = obj.<a href="../../Library/Manifold/compute_perturbed_whisker.html">compute_perturbed_whisker</a>(order);
+
+                R_10 = R_1{1}.coeffs;
+                assert(~isempty(R_10), 'Near resonance does not occur, you may tune tol');
+                f = R_10((kNonauto-1)*2*m+2*iNonauto-1);
+
+                assert(norm(f-rNonauto)<1e-3*norm(f), 'inner resonance assumption does not hold');
+
+                fprintf('the forcing frequency %.4d is nearly resonant with the eigenvalue %.4d + i%.4d\n',...
+                    om(j), fdata.lamdRe(1),fdata.lamdIm(1))
+            case 'delete'
+                W_1 = [];
+        end
+    end
+    % Forced response in physical Coordinates
+    qTrj = FRC.qTr{j};
+    tTrj = FRC.tTr{j};
+    nt   = numel(tTrj);
+    numSegs = nSeg(j);
+    Zout_frc = zeros(nt,noutdof,numSegs);
+    for k=1:numSegs
+        xbp = qTrj(:,:,k);
+        xbp = xbp';
+        x_comp = xbp(1:2:end-1,:)+1i*xbp(2:2:end,:);
+        state  = zeros(dim, nt); % state
+        state(1:2:end-1,:) = x_comp;
+        state(2:2:end,:)   = conj(x_comp);
+        
+        [~, Zout, ~,Zic] = <a href="../../Library/SSM/private/compute_full_response_traj.html">compute_full_response_traj</a>(W_0, W_1, epsf(j), tTrj, state, om(j), outdof);
+        Zout_<a href="../../Library/Features/frc/frc.html">frc</a>(:,:,k) = Zout';
+    end
+    
+    zTr{j} = Zout_frc;
+
+    if saveICflag
+        Z0_frc = [Z0_frc Zic]; % initial state
+    end  
+end
+%% 
+% Record output
+FRC.zTr  = zTr;
+if saveICflag
+    FRC.Z0_frc = Z0_frc; % initial state
+end
+FRC.timeFRCPhysicsDomain = toc(timeFRCPhysicsDomain);
+FRC.SSMorder   = order;
+FRC.SSMnonAuto = obj.Options.contribNonAuto;
+FRC.SSMispolar = ispolar;
+
+fdir = fullfile(pwd,'data',runid,'SSMpo.mat');
+save(fdir, 'FRC');
+end
+
+            ##### SOURCE END #####
+        --></body></html></body></html>

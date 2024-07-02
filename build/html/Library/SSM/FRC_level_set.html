@@ -1,0 +1,414 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../../index.html"><img alt="Logo" class="logo" src="../../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>FRC: Level-Set method</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-09" name="DC.date"/><meta content="FRC_level_set.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>FRC: Level-Set method</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">FRC level-set method</a></li><li><a href="#3">Grid for evaluation of <span class="MathJax_Preview"><img alt="$\mathbf{r}(rho,psi,Omega)$" src="FRC_level_set_eq11447224079662444242-Rescaled.png" style="width: 106.8px; height: auto;"/></span><script type="math/tex">\mathbf{r}(rho,psi,Omega)</script></a></li><li><a href="#4">Obtain FRC</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> [FRC] = FRC_level_set(obj, resModes, order, parName, parRange)
+        </pre><h2 id="2">FRC level-set method</h2><p>This function extracts the steady-state amplitude, phase shift and frequency</p><p>for periodically forced systems from <b>Forced response curves</b>. Current implementation assumes forcing of the form <span class="MathJax_Preview"><img alt="$\mathbf{F}_0\cos(m\Omega t) = \mathbf{F}_m^{ext}e^{\iota m\Omega t}+\bar{\mathbf{F}}_m^{ext}e^{-\iota m\Omega t}$" src="FRC_level_set_eq09984087832573214292-Rescaled.png" style="width: 213.6px; height: auto;"/></span><script type="math/tex">\mathbf{F}_0\cos(m\Omega t) = \mathbf{F}_m^{ext}e^{\iota m\Omega t}+\bar{\mathbf{F}}_m^{ext}e^{-\iota m\Omega t}</script>. For two-dimensional SSMs, we use the normal form of paramaterization, where we choose the following form of autonomous reduced dynamics as</p><p><span class="MathJax_Preview"><img alt="$$\mathbf{R}_{0}(\mathbf{p})=\left[\begin{array}{c}\lambda p\\\bar{\lambda}\bar{p}\end{array}\right]+\sum_{j=1}^{M}\left[\begin{array}{c}\gamma_{j}p^{j+1}\bar{p}^{j}\\\bar{\gamma}_{j}p^{j}\bar{p}^{j+1}\end{array}\right],$$" src="FRC_level_set_eq08701743399208904152-Rescaled.png" style="width: 211.2px; height: auto;"/></span><script type="math/tex">\mathbf{R}_{0}(\mathbf{p})=\left[\begin{array}{c}\lambda p\\\bar{\lambda}\bar{p}\end{array}\right]+\sum_{j=1}^{M}\left[\begin{array}{c}\gamma_{j}p^{j+1}\bar{p}^{j}\\\bar{\gamma}_{j}p^{j}\bar{p}^{j+1}\end{array}\right],</script></p><p>and assuming that the <span class="MathJax_Preview"><img alt="$m$" src="FRC_level_set_eq18216620034067401164-Rescaled.png" style="width: 12.0px; height: auto;"/></span><script type="math/tex">m</script>-th harmonic of forcing frequency is nearly resonant with the modal subspace eigenvalues, i.e., <span class="MathJax_Preview"><img alt="$\lambda-\iota m\Omega,\bar{\lambda}+\iota m\Omega\approx0$" src="FRC_level_set_eq01090749953718557318-Rescaled.png" style="width: 129.6px; height: auto;"/></span><script type="math/tex">\lambda-\iota m\Omega,\bar{\lambda}+\iota m\Omega\approx0</script>. Denoting <span class="MathJax_Preview"><img alt="$\mathbf{W}_{\mathcal{M}}=[\mathbf{w},\,\bar{\mathbf{w}}]\in\mathbf{C}^{N\times2}$" src="FRC_level_set_eq11559379472127510870-Rescaled.png" style="width: 129.6px; height: auto;"/></span><script type="math/tex">\mathbf{W}_{\mathcal{M}}=[\mathbf{w},\,\bar{\mathbf{w}}]\in\mathbf{C}^{N\times2}</script>, we obtain the leading-order, non-autonomous reduced dynamics using the normal form parametrization as</p><p><span class="MathJax_Preview"><img alt="$$\mathbf{R}_{1,0}(\phi)=\left[\begin{array}{c}\mathbf{w}^{\star}\mathbf{F}_{m}^{ext}e^{\iota
+m\phi}\\\mathbf{\bar{w}}^{\star}\bar{\mathbf{F}}_{m}^{ext}e^{-\iota m\phi}\end{array}\right],\quad
+\dot{\phi}=\Omega$$" src="FRC_level_set_eq03986938442892099031-Rescaled.png" style="width: 213.6px; height: auto;"/></span><script type="math/tex">\mathbf{R}_{1,0}(\phi)=\left[\begin{array}{c}\mathbf{w}^{\star}\mathbf{F}_{m}^{ext}e^{\iota
+m\phi}\\\mathbf{\bar{w}}^{\star}\bar{\mathbf{F}}_{m}^{ext}e^{-\iota m\phi}\end{array}\right],\quad
+\dot{\phi}=\Omega</script></p><p>We are able to explicitly express the <b>forced response curve</b> as the zero level set of the functions</p><p><span class="MathJax_Preview"><img alt="$$\mathcal{G}^{\pm}(\rho,\Omega,|f|):=b(\rho,m\Omega)\rho\pm\sqrt{|f|^{2}-\left[a(\rho)\right]^{2}},$$" src="FRC_level_set_eq01015662870337875341-Rescaled.png" style="width: 253.2px; height: auto;"/></span><script type="math/tex">\mathcal{G}^{\pm}(\rho,\Omega,|f|):=b(\rho,m\Omega)\rho\pm\sqrt{|f|^{2}-\left[a(\rho)\right]^{2}},</script></p><p>where</p><p><span class="MathJax_Preview"><img alt="$$a(\rho)=\sum_{j=1}^{M}\Re(\gamma_{j})\rho^{2j+1}+\rho\Re(\lambda)$$" src="FRC_level_set_eq01806355817008243989-Rescaled.png" style="width: 172.79999999999998px; height: auto;"/></span><script type="math/tex">a(\rho)=\sum_{j=1}^{M}\Re(\gamma_{j})\rho^{2j+1}+\rho\Re(\lambda)</script></p><p><span class="MathJax_Preview"><img alt="$$b(\rho,m\Omega)=\sum_{j=1}^{M}\Im(\gamma_{j})\rho^{2j}+\Im(\lambda)-m\Omega$$" src="FRC_level_set_eq11947100253870448727-Rescaled.png" style="width: 216.0px; height: auto;"/></span><script type="math/tex">b(\rho,m\Omega)=\sum_{j=1}^{M}\Im(\gamma_{j})\rho^{2j}+\Im(\lambda)-m\Omega</script></p><p><span class="MathJax_Preview"><img alt="$$f= \epsilon\frac{\mathbf{w}^* \mathbf{F}_0}{2}$$" src="FRC_level_set_eq05307506127892065936-Rescaled.png" style="width: 63.599999999999994px; height: auto;"/></span><script type="math/tex">f= \epsilon\frac{\mathbf{w}^* \mathbf{F}_0}{2}</script></p><p>[FRC] = FRC_level_set(obj, resModes, order, parName, parRange)</p><div><ul><li><tt>obj</tt>:      instance of SSM class</li></ul></div><div><ul><li><tt>resModes</tt>: mode pair over which SSM is constructed</li></ul></div><div><ul><li><tt>order</tt>:    approximation order up until which SSM is computed</li></ul></div><div><ul><li><tt>parName</tt>:  parameter name in which FRC is constructed</li></ul></div><div><ul><li><tt>parRange</tt>: range of said parameter</li></ul></div><div><ul><li><tt>FRC</tt>:      Forced Response Curve data struct</li></ul></div><p>See also: EXTRACT_FRC, FRC_CONTEP, FRC_CONTPO</p><pre class="codeinput">dimModes = numel(resModes);
+assert(dimModes==2,<span class="string">'levelset method for FRC extraction is valid only for 2-dimensional SSMs. Please use the continuation method'</span>)
+
+<span class="comment">% compute two dimensional autonomous SSM</span>
+obj.<a href="../../Library/Manifold/choose_E.html">choose_E</a>(resModes)
+[W0, R0] = obj.<a href="../../Library/Manifold/compute_whisker.html">compute_whisker</a>(order);
+
+<span class="comment">% autonomous reduced dynamics coefficients</span>
+gamma  = <a href="../../Library/Features/frc/compute_gamma.html">compute_gamma</a>(R0);
+lambda = obj.E.spectrum(1);
+
+<span class="comment">% get options</span>
+[nt, nRho, nPar, rhoScale, nPsi, outdof, saveIC]  = <span class="keyword">...</span>
+    deal(obj.FRCOptions.nt, obj.FRCOptions.nRho, <span class="keyword">...</span>
+    obj.FRCOptions.nPar, obj.FRCOptions.rhoScale, obj.FRCOptions.nPsi,<span class="keyword">...</span>
+    obj.FRCOptions.outdof, obj.FRCOptions.saveIC);
+
+<span class="comment">% Initialize FRC as a struct array</span>
+par = linspace(parRange(1),parRange(end), nPar);
+FRC = cell(nPar,1);
+        </pre><h2 id="3">Grid for evaluation of <span class="MathJax_Preview"><img alt="$\mathbf{r}(rho,psi,Omega)$" src="FRC_level_set_eq11447224079662444242-Rescaled.png" style="width: 106.8px; height: auto;"/></span><script type="math/tex">\mathbf{r}(rho,psi,Omega)</script></h2><pre class="codeinput"><span class="keyword">switch</span> lower(parName)
+    <span class="keyword">case</span> <span class="string">'freq'</span> <span class="comment">% vary Omega keeping epsilon constant</span>
+        Omega_init   = par(1);
+        omegaRange   = par;
+        epsilon_init = obj.System.Fext.epsilon;
+
+    <span class="keyword">case</span> <span class="string">'amp'</span> <span class="comment">% vary epsilon keeping Omega constant</span>
+        Omega_init   = obj.System.Omega;
+        omegaRange   = Omega_init;
+        epsilon_init = max(parRange); <span class="comment">% biggest epsilon for constructing grid</span>
+<span class="keyword">end</span>
+
+<span class="comment">% leading-order modal forcing coefficient</span>
+f                    = compute_f(obj,W0,R0,Omega_init);
+
+[rho, psi, RHO, PSI] = compute_polar_grid(omegaRange,epsilon_init,gamma,lambda,f,rhoScale, nRho, nPsi);
+        </pre><h2 id="4">Obtain FRC</h2><pre class="codeinput">BaseExcitation = obj.System.Options.BaseExcitation;
+
+<span class="comment">% For parallel loop without contribNonAuto</span>
+<span class="keyword">if</span> ~obj.Options.contribNonAuto
+    <span class="keyword">if</span> obj.FRCOptions.omDepNonAuto
+        [~, R1_Auto] = obj.<a href="../../Library/Manifold/compute_perturbed_whisker.html">compute_perturbed_whisker</a>(order-1,W0,R0,par(1));
+    <span class="keyword">else</span>    <span class="comment">% ignore dependence of coefficients on omega</span>
+        [~, R1_Auto] = obj.<a href="../../Library/Manifold/compute_perturbed_whisker.html">compute_perturbed_whisker</a>(order-1,W0,R0,obj.FRCOptions.omDepNonAutoVal);
+    <span class="keyword">end</span>
+<span class="keyword">else</span>
+    R1_Auto = [];
+
+    <span class="keyword">if</span> obj.FRCOptions.omDepNonAuto <span class="comment">% Recompute ROM for every Omega</span>
+        R1_Nonauto = [];
+        W1_Nonauto = [];
+    <span class="keyword">else</span> <span class="comment">% ignore dependence of coefficients on omega</span>
+        [W1_NonAuto, R1_NonAuto] = obj.<a href="../../Library/Manifold/compute_perturbed_whisker.html">compute_perturbed_whisker</a>(order-1,W0,R0,obj.FRCOptions.omDepNonAutoVal);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">for</span> j = 1:nPar
+    Omega   = [];  <span class="comment">% To avoid 'Uninitialized Temporaries' warning of Parallel Computing Toolbox</span>
+    epsilon = [];
+
+    <span class="comment">% setup parameters</span>
+    <span class="keyword">switch</span> lower(parName)
+        <span class="keyword">case</span> <span class="string">'freq'</span> <span class="comment">% vary Omega keeping epsilon constant</span>
+            Omega   = par(j);
+            epsilon = epsilon_init;
+        <span class="keyword">case</span> <span class="string">'amp'</span>  <span class="comment">% vary epsilon keeping Omega constant</span>
+            epsilon = par(j);
+            Omega   = Omega_init;
+    <span class="keyword">end</span>
+
+    <span class="keyword">if</span> BaseExcitation
+        epsilon = epsilon*Omega^2;
+    <span class="keyword">end</span>
+
+    <span class="keyword">if</span> obj.Options.contribNonAuto
+        <span class="comment">% compute non-autonomous SSM coefficients</span>
+        <span class="keyword">if</span> obj.FRCOptions.omDepNonAuto
+            [W1_NonAuto, R1_NonAuto] = obj.<a href="../../Library/Manifold/compute_perturbed_whisker.html">compute_perturbed_whisker</a>(order-1,W0,R0,Omega);
+        <span class="keyword">end</span>
+        R1 = R1_NonAuto;
+        W1 = W1_NonAuto;
+    <span class="keyword">else</span>
+        W1 = [];
+        R1 = R1_Auto;
+    <span class="keyword">end</span>
+
+
+    <span class="comment">% reduced dynamics on the grid</span>
+    [rhodot, rhopsidot, eta] = <a href="../../Library/SSM/private/compute_reduced_dynamics_2D_polar.html">compute_reduced_dynamics_2D_polar</a>(RHO,PSI, <span class="keyword">...</span>
+        lambda, gamma, R1,Omega,epsilon);
+
+    <span class="comment">% Numerical computation of fixed points of the reduced dynamics</span>
+    [rho0, psi0] = <a href="../../Library/Features/frc/compute_fixed_points_2D.html">compute_fixed_points_2D</a>(rho, psi, rhodot, rhopsidot);
+
+    <span class="comment">% Stabilty calculation</span>
+    stability    = <a href="../../Library/Features/frc/check_stability.html">check_stability</a>(rho0,psi0,gamma,lambda,epsilon,R1);
+
+    <span class="comment">% output data structure</span>
+    FRC{j} = <a href="../../Library/SSM/private/compute_output_polar2D.html">compute_output_polar2D</a>(rho0,psi0,stability,epsilon,Omega*ones(size(rho0)),W0,W1,eta,nt, saveIC, outdof);
+<span class="keyword">end</span>
+
+FRC = cat(1,FRC{:});
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">function</span> [rho, psi, RHO, PSI] = compute_polar_grid(omegaRange,epsilon,gamma,lambda,f,rhoScale, nRho, nPsi)
+        </pre><p><b>Explicit quadratic approximation of the backbone curve</b></p><p><span class="MathJax_Preview"><img alt="$$\rho_{backbone} = \sqrt{\frac{\Omega-\Im(\lambda)}{\Im(\gamma_1)}}$$" src="FRC_level_set_eq08481158541239770140-Rescaled.png" style="width: 132.0px; height: auto;"/></span><script type="math/tex">\rho_{backbone} = \sqrt{\frac{\Omega-\Im(\lambda)}{\Im(\gamma_1)}}</script></p><pre class="codeinput">rhomaxBB = max(real(sqrt((omegaRange - imag(lambda))/imag(gamma(1)))));
+rhomaxlin = full(abs(epsilon * f/real(lambda)));
+
+<span class="keyword">if</span> isempty(f)
+    assert( rhomaxBB ~= 0, <span class="string">'Estimation of maximal amplitude failed'</span>)
+    rhomax = rhoScale * rhomaxBB;
+<span class="keyword">else</span>
+    <span class="keyword">if</span> rhomaxBB ~=0
+        <span class="comment">% heuristically choose maximum value of polar radius as follows</span>
+        rhomax = rhoScale * min(rhomaxBB, rhomaxlin);
+    <span class="keyword">else</span>
+        rhomax = rhoScale * rhomaxlin;
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+<span class="comment">%compute grids</span>
+rho = (rhomax/nRho) * (1:nRho);
+psi = (2*pi/nPsi) * (0:nPsi-1);
+[RHO,PSI] = meshgrid(rho,psi);
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+
+<span class="keyword">function</span> [f] = compute_f(obj,W0,R0,Omega)
+    <span class="comment">% compute non-autonomous SSM coefficients</span>
+    [~, R1] = obj.<a href="../../Library/Manifold/compute_perturbed_whisker.html">compute_perturbed_whisker</a>(0,W0,R0,Omega);
+    f =  nonzeros(R1(1).R(1).coeffs); <span class="comment">% leading-order modal forcing coefficient</span>
+<span class="keyword">end</span>
+        </pre><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% FRC: Level-Set method
+%
+%%
+function [FRC] = FRC_level_set(obj, resModes, order, parName, parRange)
+%% FRC level-set method
+% 
+% This function extracts the steady-state amplitude, phase shift and frequency
+%
+% for periodically forced systems from *Forced response curves*. Current implementation
+% assumes forcing of the form $\mathbf{F}_0\cos(m\Omega t) = \mathbf{F}_m^{ext}e^{\iota
+% m\Omega t}+\bar{\mathbf{F}}_m^{ext}e^{-\iota m\Omega t}$. For two-dimensional
+% SSMs, we use the normal form of paramaterization, where we choose the following
+% form of autonomous reduced dynamics as
+%
+% $$\mathbf{R}_{0}(\mathbf{p})=\left[\begin{array}{c}\lambda p\\\bar{\lambda}\bar{p}\end{array}\right]+\sum_{j=1}^{M}\left[\begin{array}{c}\gamma_{j}p^{j+1}\bar{p}^{j}\\\bar{\gamma}_{j}p^{j}\bar{p}^{j+1}\end{array}\right],$$
+%
+% and assuming that the $m$-th harmonic of forcing frequency is nearly resonant
+% with the modal subspace eigenvalues, i.e., $\lambda-\iota m\Omega,\bar{\lambda}+\iota
+% m\Omega\approx0$. Denoting $\mathbf{W}_{\mathcal{M}}=[\mathbf{w},\,\bar{\mathbf{w}}]\in\mathbf{C}^{N\times2}$,
+% we obtain the leading-order, non-autonomous reduced dynamics using the normal
+% form parametrization as
+%
+% $$\mathbf{R}_{1,0}(\phi)=\left[\begin{array}{c}\mathbf{w}^{\star}\mathbf{F}_{m}^{ext}e^{\iota
+% m\phi}\\\mathbf{\bar{w}}^{\star}\bar{\mathbf{F}}_{m}^{ext}e^{-\iota m\phi}\end{array}\right],\quad
+% \dot{\phi}=\Omega$$
+%
+% We are able to explicitly express the *forced response curve* as the zero
+% level set of the functions
+%
+% $$\mathcal{G}^{\pm}(\rho,\Omega,|f|):=b(\rho,m\Omega)\rho\pm\sqrt{|f|^{2}-\left[a(\rho)\right]^{2}},$$
+%
+% where
+%
+% $$a(\rho)=\sum_{j=1}^{M}\Re(\gamma_{j})\rho^{2j+1}+\rho\Re(\lambda)$$
+%
+% $$b(\rho,m\Omega)=\sum_{j=1}^{M}\Im(\gamma_{j})\rho^{2j}+\Im(\lambda)-m\Omega$$
+%
+% $$f= \epsilon\frac{\mathbf{w}^* \mathbf{F}_0}{2}$$
+%
+% [FRC] = FRC_level_set(obj, resModes, order, parName, parRange)
+%
+% * |obj|:      instance of SSM class
+% 
+% * |resModes|: mode pair over which SSM is constructed
+% 
+% * |order|:    approximation order up until which SSM is computed
+% 
+% * |parName|:  parameter name in which FRC is constructed
+% 
+% * |parRange|: range of said parameter
+%
+% * |FRC|:      Forced Response Curve data struct
+%
+% See also: EXTRACT_FRC, FRC_CONTEP, FRC_CONTPO
+
+dimModes = numel(resModes);
+assert(dimModes==2,'levelset method for FRC extraction is valid only for 2-dimensional SSMs. Please use the continuation method')
+
+% compute two dimensional autonomous SSM
+obj.<a href="../../Library/Manifold/choose_E.html">choose_E</a>(resModes)
+[W0, R0] = obj.<a href="../../Library/Manifold/compute_whisker.html">compute_whisker</a>(order);
+
+% autonomous reduced dynamics coefficients
+gamma  = <a href="../../Library/Features/frc/compute_gamma.html">compute_gamma</a>(R0);
+lambda = obj.E.spectrum(1);
+
+% get options
+[nt, nRho, nPar, rhoScale, nPsi, outdof, saveIC]  = ...
+    deal(obj.FRCOptions.nt, obj.FRCOptions.nRho, ...
+    obj.FRCOptions.nPar, obj.FRCOptions.rhoScale, obj.FRCOptions.nPsi,...
+    obj.FRCOptions.outdof, obj.FRCOptions.saveIC);
+
+% Initialize FRC as a struct array
+par = linspace(parRange(1),parRange(end), nPar);
+FRC = cell(nPar,1);
+
+
+%% Grid for evaluation of $\mathbf{r}(rho,psi,Omega)$
+
+switch lower(parName)
+    case 'freq' % vary Omega keeping epsilon constant
+        Omega_init   = par(1);        
+        omegaRange   = par;
+        epsilon_init = obj.System.Fext.epsilon;
+
+    case 'amp' % vary epsilon keeping Omega constant
+        Omega_init   = obj.System.Omega;
+        omegaRange   = Omega_init;
+        epsilon_init = max(parRange); % biggest epsilon for constructing grid
+end
+
+% leading-order modal forcing coefficient
+f                    = compute_f(obj,W0,R0,Omega_init);
+
+[rho, psi, RHO, PSI] = compute_polar_grid(omegaRange,epsilon_init,gamma,lambda,f,rhoScale, nRho, nPsi);
+
+%% Obtain FRC
+BaseExcitation = obj.System.Options.BaseExcitation;
+
+% For parallel loop without contribNonAuto
+if ~obj.Options.contribNonAuto
+    if obj.FRCOptions.omDepNonAuto
+        [~, R1_Auto] = obj.<a href="../../Library/Manifold/compute_perturbed_whisker.html">compute_perturbed_whisker</a>(order-1,W0,R0,par(1));
+    else    % ignore dependence of coefficients on omega
+        [~, R1_Auto] = obj.<a href="../../Library/Manifold/compute_perturbed_whisker.html">compute_perturbed_whisker</a>(order-1,W0,R0,obj.FRCOptions.omDepNonAutoVal);
+    end
+else
+    R1_Auto = [];
+    
+    if obj.FRCOptions.omDepNonAuto % Recompute ROM for every Omega
+        R1_Nonauto = [];
+        W1_Nonauto = [];
+    else % ignore dependence of coefficients on omega
+        [W1_NonAuto, R1_NonAuto] = obj.<a href="../../Library/Manifold/compute_perturbed_whisker.html">compute_perturbed_whisker</a>(order-1,W0,R0,obj.FRCOptions.omDepNonAutoVal);        
+    end
+end
+
+for j = 1:nPar
+    Omega   = [];  % To avoid 'Uninitialized Temporaries' warning of Parallel Computing Toolbox
+    epsilon = [];
+    
+    % setup parameters
+    switch lower(parName)
+        case 'freq' % vary Omega keeping epsilon constant
+            Omega   = par(j);
+            epsilon = epsilon_init;
+        case 'amp'  % vary epsilon keeping Omega constant
+            epsilon = par(j);
+            Omega   = Omega_init;
+    end
+
+    if BaseExcitation
+        epsilon = epsilon*Omega^2;
+    end
+    
+    if obj.Options.contribNonAuto
+        % compute non-autonomous SSM coefficients
+        if obj.FRCOptions.omDepNonAuto
+            [W1_NonAuto, R1_NonAuto] = obj.<a href="../../Library/Manifold/compute_perturbed_whisker.html">compute_perturbed_whisker</a>(order-1,W0,R0,Omega);
+        end
+        R1 = R1_NonAuto;
+        W1 = W1_NonAuto;
+    else        
+        W1 = [];
+        R1 = R1_Auto;
+    end
+
+        
+    % reduced dynamics on the grid
+    [rhodot, rhopsidot, eta] = <a href="../../Library/SSM/private/compute_reduced_dynamics_2D_polar.html">compute_reduced_dynamics_2D_polar</a>(RHO,PSI, ...
+        lambda, gamma, R1,Omega,epsilon);
+
+    % Numerical computation of fixed points of the reduced dynamics
+    [rho0, psi0] = <a href="../../Library/Features/frc/compute_fixed_points_2D.html">compute_fixed_points_2D</a>(rho, psi, rhodot, rhopsidot);
+
+    % Stabilty calculation
+    stability    = <a href="../../Library/Features/frc/check_stability.html">check_stability</a>(rho0,psi0,gamma,lambda,epsilon,R1);
+        
+    % output data structure
+    FRC{j} = <a href="../../Library/SSM/private/compute_output_polar2D.html">compute_output_polar2D</a>(rho0,psi0,stability,epsilon,Omega*ones(size(rho0)),W0,W1,eta,nt, saveIC, outdof);
+end
+
+FRC = cat(1,FRC{:});
+end
+
+%%
+%
+function [rho, psi, RHO, PSI] = compute_polar_grid(omegaRange,epsilon,gamma,lambda,f,rhoScale, nRho, nPsi)
+%%
+% *Explicit quadratic approximation of the backbone curve*
+%
+% $$\rho_{backbone} = \sqrt{\frac{\Omega-\Im(\lambda)}{\Im(\gamma_1)}}$$
+%
+rhomaxBB = max(real(sqrt((omegaRange - imag(lambda))/imag(gamma(1)))));
+rhomaxlin = full(abs(epsilon * f/real(lambda)));
+
+if isempty(f)
+    assert( rhomaxBB ~= 0, 'Estimation of maximal amplitude failed')
+    rhomax = rhoScale * rhomaxBB;
+else
+    if rhomaxBB ~=0
+        % heuristically choose maximum value of polar radius as follows
+        rhomax = rhoScale * min(rhomaxBB, rhomaxlin);
+    else
+        rhomax = rhoScale * rhomaxlin;
+    end
+end
+%compute grids
+rho = (rhomax/nRho) * (1:nRho);
+psi = (2*pi/nPsi) * (0:nPsi-1);
+[RHO,PSI] = meshgrid(rho,psi);
+end
+
+function [f] = compute_f(obj,W0,R0,Omega)
+    % compute non-autonomous SSM coefficients
+    [~, R1] = obj.<a href="../../Library/Manifold/compute_perturbed_whisker.html">compute_perturbed_whisker</a>(0,W0,R0,Omega);
+    f =  nonzeros(R1(1).R(1).coeffs); % leading-order modal forcing coefficient
+end
+
+
+            ##### SOURCE END #####
+        --></body></html></body></html>

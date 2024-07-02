@@ -1,0 +1,622 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+
+<html><body><div class="banner"><a href="../../../../index.html"><img alt="Logo" class="logo" src="../../../../logo.png" style="float:right" width="200"/></a></div><html><head>
+<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+<script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>Extract FRC from initial condition</title><meta content="MATLAB 9.14" name="generator"/><link href="http://purl.org/dc/elements/1.1/" rel="schema.DC"/><meta content="2023-09-09" name="DC.date"/><meta content="extract_FRC_fromIC.m" name="DC.source"/><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>Extract FRC from initial condition</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">EXTRACT_FRC_FROMIC</a></li><li><a href="#3">initial setup</a></li><li><a href="#4">continuation excitation frequency</a></li><li><a href="#5">0 dim run to find Periodic Orbit with given Frequency</a></li><li><a href="#6">normal run</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> bds = extract_FRC_fromIC(obj, omega_range,IC,omegaIC, varargin)
+        </pre><h2 id="2">EXTRACT_FRC_FROMIC</h2><p>This function extracts the Frequency Response Curve in a given frequency span using continution package COCO and starting with a given initial condition. This enables continuation of specific branches of response</p><p>bds = EXTRACT_FRC_FROMIC(obj, omega_range,IC,omegaIC, varargin)</p><div><ul><li>obj:      SSM class object</li></ul></div><div><ul><li>omega_range:           range over which FRC is computed</li></ul></div><div><ul><li>IC:       initial condition of periodic orbit</li></ul></div><div><ul><li>omegaIC:  frequency of the initial periodic orbit</li></ul></div><div><ul><li>varargin: flags to determine whether continuation is to be carried out in           epsilon or omega and if FRC is to be plotted</li></ul></div><p><b>Output</b></p><div><ul><li>bds:      bifurcation data struct that contains the information on the           continuation problems that are investigated</li></ul></div><p>See also: EXTRACT_FRC</p><pre class="codeinput"><span class="comment">% flag for parName and plotting</span>
+<span class="keyword">if</span> numel(varargin)==2
+        epsflag = true;
+        PlotFRC = varargin{2};
+<span class="keyword">elseif</span> numel(varargin)==1
+    <span class="keyword">if</span> islogical(varargin{1})
+        PlotFRC = varargin{1};
+        epsflag = false;
+    <span class="keyword">else</span>
+        PlotFRC = true;
+        epsflag = true;
+    <span class="keyword">end</span>
+<span class="keyword">else</span>
+    epsflag = false;
+    PlotFRC = true;
+<span class="keyword">end</span>
+        </pre><h2 id="3">initial setup</h2><pre class="codeinput">dir_name = obj.Options.dir_name;
+N = obj.system.N;
+n = obj.system.n;
+omega0 = omegaIC;
+T0     = 2*pi/omega0*obj.periodsRatio;
+tf     = obj.nCycles*T0;
+outdof = obj.outdof;
+epsilon = obj.system.Fext.epsilon;
+
+<span class="keyword">if</span> isempty(obj.system.Omega)
+    obj.system.Omega = omega0;
+<span class="keyword">end</span>
+assert(numel(obj.system.Omega)==1, <span class="string">'coco run assumes single freq component'</span>);
+
+<span class="comment">% Initial Guess</span>
+odefun = @(t,x) obj.<a href="../../../../Library/Features/Wrappers/cocoWrapper/ode_het.html">ode_het</a>(t,x,[omega0;epsilon]);
+
+options = odeset(<span class="string">'RelTol'</span>, 1e-9, <span class="string">'AbsTol'</span>,1e-9);
+[t0, x0] = ode45(odefun, [0 T0], IC.', options);    <span class="comment">% steady state</span>
+        </pre><h2 id="4">continuation excitation frequency</h2><p>setup coco</p><pre class="codeinput">prob = coco_prob();
+prob = <a href="../../../../Library/Features/Wrappers/cocoWrapper/cocoSet.html">cocoSet</a>(obj, prob);
+prob = coco_set(prob, <span class="string">'ode'</span>, <span class="string">'autonomous'</span>, false);
+prob = coco_set(prob, <span class="string">'ode'</span>, <span class="string">'vectorized'</span>, true);
+odefun = @(t,x,p) obj.<a href="../../../../Library/Features/Wrappers/cocoWrapper/ode_het.html">ode_het</a>(t,x,p);
+funcs = {odefun};
+
+coll_args = {funcs{:}, t0, x0, {<span class="string">'omega'</span>,<span class="string">'eps'</span>}, [omega0,epsilon]};   <span class="comment">%#ok&lt;CCAT&gt;</span>
+prob = ode_isol2po(prob, <span class="string">''</span>, coll_args{:});
+[data, uidx] = coco_get_func_data(prob, <span class="string">'po.orb.coll'</span>, <span class="string">'data'</span>, <span class="string">'uidx'</span>);
+maps = data.coll_seg.maps;
+omData = struct();
+omData.periodsRatio = obj.periodsRatio;
+prob = coco_add_func(prob, <span class="string">'OmegaT'</span>, @OmegaT, @OmegaT_du, omData, <span class="string">'zero'</span>,<span class="keyword">...</span>
+    <span class="string">'uidx'</span>, [uidx(maps.T_idx), uidx(maps.p_idx(1))]);
+
+<span class="comment">% track amplitude of outdof</span>
+ampdata.dof  = outdof;
+ampdata.zdim = N;
+numoutdof = numel(outdof);
+ampNames = cell(1, numel(numoutdof));
+<span class="keyword">for</span> k = 1:numel(outdof)
+   ampNames{k} = strcat(<span class="string">'amp'</span>,num2str(outdof(k)));
+<span class="keyword">end</span>
+prob = coco_add_func(prob, <span class="string">'amp'</span>, @amplitude, ampdata, <span class="string">'regular'</span>, ampNames,<span class="keyword">...</span>
+    <span class="string">'uidx'</span>, uidx(maps.xbp_idx), <span class="string">'remesh'</span>, @amplitude_remesh);
+<span class="keyword">if</span> ~epsflag
+    cont_args = {1, {<span class="string">'omega'</span> <span class="string">'po.period'</span> <span class="string">'eps'</span> ampNames{:}}, [omega_range(1) omega_range(end)]};
+<span class="keyword">else</span>
+    eps_range = varargin{1};
+    cont_args = {1, {<span class="string">'eps'</span> <span class="string">'omega'</span> ampNames{:}}, [eps_range(1) eps_range(2)]};
+<span class="keyword">end</span>
+runname = strcat(<span class="string">'FRC'</span>,num2str(epsilon));
+
+runid = coco_get_id(dir_name, runname);
+fprintf(<span class="string">'\n Run=''%s'': Continue primary family of periodic orbits.\n'</span>, <span class="keyword">...</span>
+  runid);
+        </pre><h2 id="5">0 dim run to find Periodic Orbit with given Frequency</h2><pre class="codeinput">cont_args = {0, {<span class="string">'omega'</span> <span class="string">'po.period'</span> <span class="string">'eps'</span> ampNames{:}}, [omega_range(1) omega_range(end)]};
+
+bdinit    = coco(prob, runid, [], cont_args{:});
+        </pre><h2 id="6">normal run</h2><pre class="codeinput"><span class="keyword">if</span> ~epsflag
+    cont_args = {1, {<span class="string">'omega'</span> <span class="string">'po.period'</span> <span class="string">'eps'</span> ampNames{:}}, [omega_range(1) omega_range(end)]};
+<span class="keyword">else</span>
+    eps_range = varargin{1};
+    cont_args = {1, {<span class="string">'eps'</span> <span class="string">'omega'</span> ampNames{:}}, [eps_range(1) eps_range(2)]};
+<span class="keyword">end</span>
+
+EPlab = coco_bd_labs(bdinit, <span class="string">'EP'</span>);
+runname = strcat(<span class="string">'FRC0'</span>,num2str(epsilon));
+runid0 = coco_get_id(dir_name, runname);
+
+prob = coco_prob();
+prob = <a href="../../../../Library/Features/Wrappers/cocoWrapper/cocoSet.html">cocoSet</a>(obj, prob);
+prob = coco_set(prob, <span class="string">'ode'</span>, <span class="string">'autonomous'</span>, false);
+prob = coco_set(prob, <span class="string">'ode'</span>, <span class="string">'vectorized'</span>, true);
+prob = ode_po2po(prob, <span class="string">''</span>, runid, EPlab(1));
+[data, uidx] = coco_get_func_data(prob, <span class="string">'po.orb.coll'</span>, <span class="string">'data'</span>, <span class="string">'uidx'</span>);
+maps = data.coll_seg.maps;
+prob = coco_add_func(prob, <span class="string">'OmegaT'</span>, @OmegaT, @OmegaT_du, omData, <span class="string">'zero'</span>,<span class="keyword">...</span>
+    <span class="string">'uidx'</span>, [uidx(maps.T_idx), uidx(maps.p_idx(1))]);
+prob = coco_add_func(prob, <span class="string">'amp'</span>, @amplitude, ampdata, <span class="string">'regular'</span>, ampNames,<span class="keyword">...</span>
+    <span class="string">'uidx'</span>, uidx(maps.xbp_idx), <span class="string">'remesh'</span>, @amplitude_remesh);
+bd0 = coco(prob, runid0, [], cont_args{:});
+
+<span class="comment">% continuation along secondary branch if branch points are detected along</span>
+<span class="comment">% the continuation above.</span>
+
+<span class="keyword">if</span> obj.branchSwitch
+    BPlab = coco_bd_labs(bd0, <span class="string">'BP'</span>);
+    numBP = numel(BPlab);
+    bds = cell(numBP+1,1);
+    runids = cell(numBP+1,1);
+    bds{1} = bd0;
+    runids{1} = runid;
+    <span class="keyword">for</span> k=1:numBP
+        runidk = coco_get_id(runid, num2str(k));
+        prob = coco_prob();
+        prob = <a href="../../../../Library/Features/Wrappers/cocoWrapper/cocoSet.html">cocoSet</a>(obj, prob);
+        prob = coco_set(prob, <span class="string">'ode'</span>, <span class="string">'autonomous'</span>, false);
+        prob = coco_set(prob, <span class="string">'ode'</span>, <span class="string">'vectorized'</span>, true);
+        prob = ode_BP2po(prob, <span class="string">''</span>, runid, BPlab(k));
+        [data, uidx] = coco_get_func_data(prob, <span class="string">'po.orb.coll'</span>, <span class="string">'data'</span>, <span class="string">'uidx'</span>);
+        maps = data.coll_seg.maps;
+        prob = coco_add_func(prob, <span class="string">'OmegaT'</span>, @OmegaT, @OmegaT_du, omData, <span class="string">'zero'</span>,<span class="keyword">...</span>
+            <span class="string">'uidx'</span>, [uidx(maps.T_idx), uidx(maps.p_idx(1))]);
+        prob = coco_add_func(prob, <span class="string">'amp'</span>, @amplitude, ampdata, <span class="string">'regular'</span>, ampNames,<span class="keyword">...</span>
+            <span class="string">'uidx'</span>, uidx(maps.xbp_idx), <span class="string">'remesh'</span>, @amplitude_remesh);
+        fprintf(<span class="string">'\n Run=''%s'': Continue equilibria along secondary branch.\n'</span>, <span class="keyword">...</span>
+                  runidk);
+        bdk = coco(prob, runidk, [], cont_args{:});
+        bds{k+1} = bdk;
+        runids{k+1} = runidk;
+    <span class="keyword">end</span>
+<span class="keyword">else</span>
+    numBP = 0;
+    bds = {bd0};
+    runids = {runid};
+<span class="keyword">end</span>
+
+
+<span class="comment">% result visualization</span>
+<span class="comment">% extract results</span>
+omega = [];
+epsf  = [];
+stab = logical([]);
+amp = cell(numoutdof,1);
+<span class="keyword">for</span> i=1:numBP+1
+    bd = bds{i};
+    omegai = coco_bd_col(bd, <span class="string">'omega'</span>);
+    epsfi = coco_bd_col(bd, <span class="string">'eps'</span>);
+    stabi = coco_bd_col(bd, <span class="string">'eigs'</span>)';
+    stabi = abs(stabi);
+    stabi = all(stabi&lt;1, 2);
+    omega = [omega, omegai];
+    epsf  = [epsf, epsfi];
+    stab  = [stab; stabi];
+    <span class="keyword">for</span> j=1:numoutdof
+        ampj   = coco_bd_col(bd, ampNames{j});
+        amp{j} = [amp{j}, ampj];
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+
+<span class="keyword">if</span> PlotFRC
+
+    ustabc = [0.4660    0.6740    0.1880];
+    stabc = [0.3010    0.7450    0.9330];
+<span class="comment">% plot results</span>
+figure(gcf); hold <span class="string">on</span>
+<span class="keyword">if</span> numoutdof&gt;1
+    <span class="keyword">for</span> k=1:numoutdof
+        subplot(numoutdof,1,k); hold <span class="string">on</span>
+        <span class="keyword">if</span> ~epsflag
+            plot(omega(stab), amp{k}(stab), <span class="string">'*'</span>,<span class="string">'color'</span>,stabc, <span class="string">'MarkerSize'</span>, 6,<span class="string">'LineWidth'</span>,2,<span class="string">'DisplayName'</span>,<span class="string">'COCO-stable'</span>);
+            plot(omega(~stab), amp{k}(~stab), <span class="string">'*'</span>,<span class="string">'color'</span>,ustabc, <span class="string">'MarkerSize'</span>, 6,<span class="string">'LineWidth'</span>,2,<span class="string">'DisplayName'</span>,<span class="string">'COCO-unstable'</span>);
+        <span class="keyword">else</span>
+            plot(epsf(stab), amp{k}(stab), <span class="string">'*'</span>,<span class="string">'color'</span>,stabc, <span class="string">'MarkerSize'</span>, 6,<span class="string">'LineWidth'</span>,2,<span class="string">'DisplayName'</span>,<span class="string">'COCO-stable'</span>);
+            plot(epsf(~stab), amp{k}(~stab), <span class="string">'*'</span>,<span class="string">'color'</span>,ustabc, <span class="string">'MarkerSize'</span>, 6,<span class="string">'LineWidth'</span>,2,<span class="string">'DisplayName'</span>,<span class="string">'COCO-unstable'</span>);
+        <span class="keyword">end</span>
+    <span class="keyword">end</span>
+<span class="keyword">else</span>
+    <span class="keyword">if</span> ~epsflag
+        plot(omega(stab), amp{1}(stab), <span class="string">'*'</span>,<span class="string">'color'</span>,stabc, <span class="string">'MarkerSize'</span>, 6,<span class="string">'LineWidth'</span>,2,<span class="string">'DisplayName'</span>,<span class="string">'COCO-stable'</span>);
+        plot(omega(~stab), amp{1}(~stab), <span class="string">'*'</span>,<span class="string">'color'</span>,ustabc, <span class="string">'MarkerSize'</span>, 6,<span class="string">'LineWidth'</span>,2,<span class="string">'DisplayName'</span>,<span class="string">'COCO-unstable'</span>);
+    <span class="keyword">else</span>
+        plot(epsf(stab), amp{1}(stab), <span class="string">'*'</span>,<span class="string">'color'</span>,stabc, <span class="string">'MarkerSize'</span>, 6,<span class="string">'LineWidth'</span>,2,<span class="string">'DisplayName'</span>,<span class="string">'COCO-stable'</span>);
+        plot(epsf(~stab), amp{1}(~stab), <span class="string">'*'</span>,<span class="string">'color'</span>,ustabc, <span class="string">'MarkerSize'</span>, 6,<span class="string">'LineWidth'</span>,2,<span class="string">'DisplayName'</span>,<span class="string">'COCO-unstable'</span>);
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+legend(<span class="string">'show'</span>);
+<span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+
+
+
+<span class="keyword">function</span> [data, y] = OmegaT(prob, data, u) <span class="comment">%#ok&lt;INUSL&gt;</span>
+y = u(1)*u(2)-2*pi*data.periodsRatio; <span class="comment">% omega*T = 2*pi</span>
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> [data, J] = OmegaT_du(prob, data, u) <span class="comment">%#ok&lt;INUSL&gt;</span>
+J = [u(2) u(1)];
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> [data, y] = amplitude(prob, data, u) <span class="comment">%#ok&lt;INUSL&gt;</span>
+
+xbp = reshape(u, data.zdim, []);
+y = xbp(data.dof,:);
+y = max(abs(y),[],2);
+
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> [prob, status, xtr] = amplitude_remesh(prob, data, chart, old_u, old_V) <span class="comment">%#ok&lt;INUSD&gt;</span>
+
+[colldata, uidx] = coco_get_func_data(prob, <span class="string">'po.orb.coll'</span>, <span class="string">'data'</span>, <span class="string">'uidx'</span>);
+maps = colldata.coll_seg.maps;
+xtr    = [];
+prob   = coco_change_func(prob, data, <span class="string">'uidx'</span>, uidx(maps.xbp_idx));
+status = <span class="string">'success'</span>;
+
+<span class="keyword">end</span>
+
+
+
+<span class="keyword">function</span> y = ode_het_dfdx(t, x, p)
+
+x1 = x(1,:);
+x2 = x(2,:);
+p1 = p(1,:);
+
+y(1,:) = x2;
+y(2,:) = -x2-p1.*x1+cos(t);
+
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> y = ode_het_dfdp(t, x, p)
+
+x1 = x(1,:);
+x2 = x(2,:);
+p1 = p(1,:);
+
+y(1,:) = x2;
+y(2,:) = -x2-p1.*x1+cos(t);
+
+<span class="keyword">end</span>
+
+<span class="keyword">function</span> y = ode_het_dfdt(t, x, p)
+
+x1 = x(1,:);
+x2 = x(2,:);
+p1 = p(1,:);
+
+y(1,:) = x2;
+y(2,:) = -x2-p1.*x1+cos(t);
+
+<span class="keyword">end</span>
+        </pre><p class="footer"><br/><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB® R2023a</a><br/></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% Extract FRC from initial condition
+%
+%%
+function bds = extract_FRC_fromIC(obj, omega_range,IC,omegaIC, varargin)
+%% EXTRACT_FRC_FROMIC 
+% 
+% This function extracts the Frequency Response Curve in a given
+% frequency span using continution package COCO and starting with a given
+% initial condition. This enables continuation of specific branches of
+% response
+%
+% bds = EXTRACT_FRC_FROMIC(obj, omega_range,IC,omegaIC, varargin)
+%
+% * obj:      SSM class object
+% 
+% * omega_range:
+%           range over which FRC is computed
+% 
+% * IC:       initial condition of periodic orbit
+% 
+% * omegaIC:  frequency of the initial periodic orbit
+% 
+% * varargin: flags to determine whether continuation is to be carried out in
+%           epsilon or omega and if FRC is to be plotted
+%
+% *Output*
+%
+% * bds:      bifurcation data struct that contains the information on the
+%           continuation problems that are investigated
+%
+% See also: EXTRACT_FRC
+
+% flag for parName and plotting
+if numel(varargin)==2
+        epsflag = true;
+        PlotFRC = varargin{2};
+elseif numel(varargin)==1
+    if islogical(varargin{1})
+        PlotFRC = varargin{1};
+        epsflag = false;
+    else
+        PlotFRC = true;
+        epsflag = true;
+    end
+else
+    epsflag = false;
+    PlotFRC = true;
+end
+
+%% initial setup
+dir_name = obj.Options.dir_name;
+N = obj.system.N;
+n = obj.system.n;
+omega0 = omegaIC;
+T0     = 2*pi/omega0*obj.periodsRatio;
+tf     = obj.nCycles*T0;
+outdof = obj.outdof;
+epsilon = obj.system.Fext.epsilon;
+
+if isempty(obj.system.Omega)
+    obj.system.Omega = omega0;
+end
+assert(numel(obj.system.Omega)==1, 'coco run assumes single freq component');
+
+% Initial Guess
+odefun = @(t,x) obj.<a href="../../../../Library/Features/Wrappers/cocoWrapper/ode_het.html">ode_het</a>(t,x,[omega0;epsilon]);
+
+options = odeset('RelTol', 1e-9, 'AbsTol',1e-9);
+[t0, x0] = ode45(odefun, [0 T0], IC.', options);    % steady state
+
+%% continuation excitation frequency
+% setup coco
+prob = coco_prob();
+prob = <a href="../../../../Library/Features/Wrappers/cocoWrapper/cocoSet.html">cocoSet</a>(obj, prob);
+prob = coco_set(prob, 'ode', 'autonomous', false);
+prob = coco_set(prob, 'ode', 'vectorized', true);
+odefun = @(t,x,p) obj.<a href="../../../../Library/Features/Wrappers/cocoWrapper/ode_het.html">ode_het</a>(t,x,p);
+funcs = {odefun};
+
+coll_args = {funcs{:}, t0, x0, {'omega','eps'}, [omega0,epsilon]};   %#ok<CCAT>
+prob = ode_isol2po(prob, '', coll_args{:});
+[data, uidx] = coco_get_func_data(prob, 'po.orb.coll', 'data', 'uidx');
+maps = data.coll_seg.maps;
+omData = struct();
+omData.periodsRatio = obj.periodsRatio;
+prob = coco_add_func(prob, 'OmegaT', @OmegaT, @OmegaT_du, omData, 'zero',...
+    'uidx', [uidx(maps.T_idx), uidx(maps.p_idx(1))]);
+
+% track amplitude of outdof
+ampdata.dof  = outdof;
+ampdata.zdim = N;
+numoutdof = numel(outdof);
+ampNames = cell(1, numel(numoutdof));
+for k = 1:numel(outdof)
+   ampNames{k} = strcat('amp',num2str(outdof(k)));
+end
+prob = coco_add_func(prob, 'amp', @amplitude, ampdata, 'regular', ampNames,...
+    'uidx', uidx(maps.xbp_idx), 'remesh', @amplitude_remesh);
+if ~epsflag
+    cont_args = {1, {'omega' 'po.period' 'eps' ampNames{:}}, [omega_range(1) omega_range(end)]};
+else
+    eps_range = varargin{1};
+    cont_args = {1, {'eps' 'omega' ampNames{:}}, [eps_range(1) eps_range(2)]};
+end
+runname = strcat('FRC',num2str(epsilon));
+
+runid = coco_get_id(dir_name, runname);
+fprintf('\n Run=''%s'': Continue primary family of periodic orbits.\n', ...
+  runid);
+
+
+%% 0 dim run to find Periodic Orbit with given Frequency
+cont_args = {0, {'omega' 'po.period' 'eps' ampNames{:}}, [omega_range(1) omega_range(end)]};
+
+bdinit    = coco(prob, runid, [], cont_args{:});
+
+%% normal run
+if ~epsflag
+    cont_args = {1, {'omega' 'po.period' 'eps' ampNames{:}}, [omega_range(1) omega_range(end)]};
+else
+    eps_range = varargin{1};
+    cont_args = {1, {'eps' 'omega' ampNames{:}}, [eps_range(1) eps_range(2)]};
+end
+
+EPlab = coco_bd_labs(bdinit, 'EP');
+runname = strcat('FRC0',num2str(epsilon));
+runid0 = coco_get_id(dir_name, runname);
+
+prob = coco_prob();
+prob = <a href="../../../../Library/Features/Wrappers/cocoWrapper/cocoSet.html">cocoSet</a>(obj, prob);
+prob = coco_set(prob, 'ode', 'autonomous', false);
+prob = coco_set(prob, 'ode', 'vectorized', true);
+prob = ode_po2po(prob, '', runid, EPlab(1));
+[data, uidx] = coco_get_func_data(prob, 'po.orb.coll', 'data', 'uidx');
+maps = data.coll_seg.maps;
+prob = coco_add_func(prob, 'OmegaT', @OmegaT, @OmegaT_du, omData, 'zero',...
+    'uidx', [uidx(maps.T_idx), uidx(maps.p_idx(1))]);
+prob = coco_add_func(prob, 'amp', @amplitude, ampdata, 'regular', ampNames,...
+    'uidx', uidx(maps.xbp_idx), 'remesh', @amplitude_remesh);
+bd0 = coco(prob, runid0, [], cont_args{:});
+
+% continuation along secondary branch if branch points are detected along
+% the continuation above.
+
+if obj.branchSwitch
+    BPlab = coco_bd_labs(bd0, 'BP');
+    numBP = numel(BPlab);
+    bds = cell(numBP+1,1);
+    runids = cell(numBP+1,1);
+    bds{1} = bd0;
+    runids{1} = runid;
+    for k=1:numBP
+        runidk = coco_get_id(runid, num2str(k));
+        prob = coco_prob();
+        prob = <a href="../../../../Library/Features/Wrappers/cocoWrapper/cocoSet.html">cocoSet</a>(obj, prob);
+        prob = coco_set(prob, 'ode', 'autonomous', false);
+        prob = coco_set(prob, 'ode', 'vectorized', true);
+        prob = ode_BP2po(prob, '', runid, BPlab(k));
+        [data, uidx] = coco_get_func_data(prob, 'po.orb.coll', 'data', 'uidx');
+        maps = data.coll_seg.maps;
+        prob = coco_add_func(prob, 'OmegaT', @OmegaT, @OmegaT_du, omData, 'zero',...
+            'uidx', [uidx(maps.T_idx), uidx(maps.p_idx(1))]);
+        prob = coco_add_func(prob, 'amp', @amplitude, ampdata, 'regular', ampNames,...
+            'uidx', uidx(maps.xbp_idx), 'remesh', @amplitude_remesh);
+        fprintf('\n Run=''%s'': Continue equilibria along secondary branch.\n', ...
+                  runidk);
+        bdk = coco(prob, runidk, [], cont_args{:});
+        bds{k+1} = bdk;
+        runids{k+1} = runidk;
+    end
+else
+    numBP = 0;
+    bds = {bd0};
+    runids = {runid};
+end
+
+
+% result visualization
+% extract results
+omega = [];
+epsf  = [];
+stab = logical([]);
+amp = cell(numoutdof,1);
+for i=1:numBP+1
+    bd = bds{i};
+    omegai = coco_bd_col(bd, 'omega');
+    epsfi = coco_bd_col(bd, 'eps');
+    stabi = coco_bd_col(bd, 'eigs')';
+    stabi = abs(stabi);
+    stabi = all(stabi<1, 2);
+    omega = [omega, omegai];
+    epsf  = [epsf, epsfi];
+    stab  = [stab; stabi];
+    for j=1:numoutdof
+        ampj   = coco_bd_col(bd, ampNames{j});
+        amp{j} = [amp{j}, ampj];
+    end
+end
+
+if PlotFRC
+    
+    ustabc = [0.4660    0.6740    0.1880];
+    stabc = [0.3010    0.7450    0.9330];
+% plot results
+figure(gcf); hold on
+if numoutdof>1
+    for k=1:numoutdof
+        subplot(numoutdof,1,k); hold on
+        if ~epsflag
+            plot(omega(stab), amp{k}(stab), '*','color',stabc, 'MarkerSize', 6,'LineWidth',2,'DisplayName','COCO-stable');
+            plot(omega(~stab), amp{k}(~stab), '*','color',ustabc, 'MarkerSize', 6,'LineWidth',2,'DisplayName','COCO-unstable');
+        else
+            plot(epsf(stab), amp{k}(stab), '*','color',stabc, 'MarkerSize', 6,'LineWidth',2,'DisplayName','COCO-stable');
+            plot(epsf(~stab), amp{k}(~stab), '*','color',ustabc, 'MarkerSize', 6,'LineWidth',2,'DisplayName','COCO-unstable');
+        end
+    end
+else
+    if ~epsflag
+        plot(omega(stab), amp{1}(stab), '*','color',stabc, 'MarkerSize', 6,'LineWidth',2,'DisplayName','COCO-stable');
+        plot(omega(~stab), amp{1}(~stab), '*','color',ustabc, 'MarkerSize', 6,'LineWidth',2,'DisplayName','COCO-unstable');
+    else
+        plot(epsf(stab), amp{1}(stab), '*','color',stabc, 'MarkerSize', 6,'LineWidth',2,'DisplayName','COCO-stable');
+        plot(epsf(~stab), amp{1}(~stab), '*','color',ustabc, 'MarkerSize', 6,'LineWidth',2,'DisplayName','COCO-unstable');
+    end
+end
+legend('show');
+end
+end
+
+
+
+function [data, y] = OmegaT(prob, data, u) %#ok<INUSL>
+y = u(1)*u(2)-2*pi*data.periodsRatio; % omega*T = 2*pi
+end
+
+function [data, J] = OmegaT_du(prob, data, u) %#ok<INUSL>
+J = [u(2) u(1)];
+end
+
+function [data, y] = amplitude(prob, data, u) %#ok<INUSL>
+
+xbp = reshape(u, data.zdim, []);
+y = xbp(data.dof,:);
+y = max(abs(y),[],2);
+
+end
+
+function [prob, status, xtr] = amplitude_remesh(prob, data, chart, old_u, old_V) %#ok<INUSD>
+
+[colldata, uidx] = coco_get_func_data(prob, 'po.orb.coll', 'data', 'uidx');
+maps = colldata.coll_seg.maps;
+xtr    = [];
+prob   = coco_change_func(prob, data, 'uidx', uidx(maps.xbp_idx));
+status = 'success';
+
+end
+
+
+
+function y = ode_het_dfdx(t, x, p)
+
+x1 = x(1,:);
+x2 = x(2,:);
+p1 = p(1,:);
+
+y(1,:) = x2;
+y(2,:) = -x2-p1.*x1+cos(t);
+
+end
+
+function y = ode_het_dfdp(t, x, p)
+
+x1 = x(1,:);
+x2 = x(2,:);
+p1 = p(1,:);
+
+y(1,:) = x2;
+y(2,:) = -x2-p1.*x1+cos(t);
+
+end
+
+function y = ode_het_dfdt(t, x, p)
+
+x1 = x(1,:);
+x2 = x(2,:);
+p1 = p(1,:);
+
+y(1,:) = x2;
+y(2,:) = -x2-p1.*x1+cos(t);
+
+end
+
+            ##### SOURCE END #####
+        --></body></html></body></html>

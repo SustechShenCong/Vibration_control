@@ -1,0 +1,176 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><body><div class="banner"><a href="../../../index.html"><img src="../../../logo.png" alt="Logo" class="logo" width="200" style="float:right"></a></div><html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script><!--
+
+                    This HTML was auto-generated from MATLAB code.
+                    To make changes, update the MATLAB code and republish this document.
+                --><title>Expand multi-index</title><meta name="generator" content="MATLAB 9.14"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2023-09-09"><meta name="DC.source" content="expand_multiindex.m"><style type="text/css">
+            html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+            html { min-height:100%; margin-bottom:1px; }
+            html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+            html body td { vertical-align:top; text-align:left; }
+
+            h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+            h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+            h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+            a { color:#005fce; text-decoration:none; }
+            a:hover { color:#005fce; text-decoration:underline; }
+            a:visited { color:#004aa0; text-decoration:none; }
+
+            p { padding:0px; margin:0px 0px 20px; }
+            img { padding:0px; margin:0px 0px 20px; border:none; }
+            p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; }
+
+            ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+            ul li { padding:0px; margin:0px 0px 7px 0px; }
+            ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+            ul li ol li { list-style:decimal; }
+            ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+            ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+            ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+            ol li ol li { list-style-type:lower-alpha; }
+            ol li ul { padding-top:7px; }
+            ol li ul li { list-style:square; }
+
+            .content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+            pre, code { font-size:12px; }
+            tt { font-size: 1.2em; }
+            pre { margin:0px 0px 20px; }
+            pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+            pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+            pre.error { color:red; }
+
+            @media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+            span.keyword { color:#0000FF }
+            span.comment { color:#228B22 }
+            span.string { color:#A020F0 }
+            span.untermstring { color:#B20000 }
+            span.syscmd { color:#B28C00 }
+            span.typesection { color:#A0522D }
+
+            .footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+            .footer p { margin:0px; }
+            .footer a { color:#878787; }
+            .footer a:hover { color:#878787; text-decoration:underline; }
+            .footer a:visited { color:#878787; }
+
+            table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+            table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+            .center {
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+              }
+
+
+
+        </style></head><body><div class="content"><h1>Expand multi-index</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">EXPAND_MULTIINDEX</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> S = expand_multiindex(M,P)
+        </pre><h2 id="2">EXPAND_MULTIINDEX</h2><p>This function returns the multi-index expansion <span class="MathJax_Preview"><img src="expand_multiindex_eq17705281529142768610.png" alt="$\mathbf{S}$"></span><script type="math/tex">\mathbf{S}</script> for the multi-index pair <span class="MathJax_Preview"><img src="expand_multiindex_eq13030466804107072224.png" alt="$(\mathbf{C},\mathbf{I})$"></span><script type="math/tex">(\mathbf{C},\mathbf{I})</script> over the column vectors in the matrix <span class="MathJax_Preview"><img src="expand_multiindex_eq03194365893117817788.png" alt="$\mathbf{P}=[\mathbf{p}_1,\dots,\mathbf{p}_{n_t}]\in \bf{R}^{n\times n_t}$"></span><script type="math/tex">\mathbf{P}=[\mathbf{p}_1,\dots,\mathbf{p}_{n_t}]\in \bf{R}^{n\times n_t}</script>, where the coefficients and indices <span class="MathJax_Preview"><img src="expand_multiindex_eq02684745837512514058.png" alt="$\mathbf{C},\mathbf{I}$"></span><script type="math/tex">\mathbf{C},\mathbf{I}</script> are fields of the data structure M.</p><p><span class="MathJax_Preview"><img src="expand_multiindex_eq14724498414701557796.png" alt="$$ \mathbf{s}_j = \mathbf{C} (\mathbf{p}_j)^{\mathbf{I}},\quad j=1,\dots,n_t$$"></span><script type="math/tex"> \mathbf{s}_j = \mathbf{C} (\mathbf{p}_j)^{\mathbf{I}},\quad j=1,\dots,n_t</script></p><p><span class="MathJax_Preview"><img src="expand_multiindex_eq15442571015977404340.png" alt="$$\mathbf{S}=[\mathbf{s}_1,\dots,\mathbf{s}_{n_t}]$$"></span><script type="math/tex">\mathbf{S}=[\mathbf{s}_1,\dots,\mathbf{s}_{n_t}]</script></p><pre class="codeinput"><span class="keyword">if</span> isempty(M.ind)
+    S = 0;
+<span class="keyword">else</span>
+    nt = size(P,2);
+    C = M.coeffs;
+    I = M.ind;
+    n_I = size(I,1);
+    <span class="comment">% evaluate monomials</span>
+    P_I = prod(kron(P.',ones(n_I,1)) .^ repmat(I,nt,1),2);
+    <span class="comment">% evaluate polynomials</span>
+    S = C*reshape(P_I,[],nt);
+<span class="keyword">end</span>
+        </pre><pre class="codeinput"><span class="keyword">end</span>
+
+<span class="comment">% % loop version</span>
+<span class="comment">% function S = expand_multiindex(M,P)</span>
+<span class="comment">% %  EXPAND_MULTIINDEX This function returns the multi-index expansion $\mathbf{S}$ for the multi-index</span>
+<span class="comment">% % pair $(\mathbf{C},\mathbf{I})$ over the column vectors in the matrix $\mathbf{P}=[\mathbf{p}_1,\dots,\mathbf{p}_{n_t}]\in</span>
+<span class="comment">% % \mathbb{R}^{n\times n_t}$, where $\mathbf{C},\mathbf{I}$ are fields of</span>
+<span class="comment">% % the data structure M.</span>
+<span class="comment">% %</span>
+<span class="comment">% % $\mathbf{s}_j = \mathbf{C} (\mathbf{p}_j)^{\mathbf{I}},\quad j=1,\dots,n_t$,</span>
+<span class="comment">% %</span>
+<span class="comment">% % $$\mathbf{S}=[\mathbf{s}_1,\dots,\mathbf{s}_{n_t}]$$</span>
+<span class="comment">% if isempty(M.ind)</span>
+<span class="comment">%     S = 0;</span>
+<span class="comment">% else</span>
+<span class="comment">%     n_I = size(I,1);</span>
+<span class="comment">%     nt = size(P,2);</span>
+<span class="comment">%     C = M.coeffs;</span>
+<span class="comment">%     I = M.ind;</span>
+<span class="comment">%</span>
+<span class="comment">%     Pprod=zeros(n_I,nt);</span>
+<span class="comment">%     for j = 1:nt</span>
+<span class="comment">%         Pj = repmat(P(:,j).',[n_I,1]);</span>
+<span class="comment">%         Pprod(:,j) = prod(Pj.^I,2);</span>
+<span class="comment">%     end</span>
+<span class="comment">%     S = C*Pprod;</span>
+<span class="comment">% end</span>
+<span class="comment">% end</span>
+        </pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2023a</a><br></p></div><!--
+            ##### SOURCE BEGIN #####
+            %% Expand multi-index
+%
+%%
+function S = expand_multiindex(M,P)
+%% EXPAND_MULTIINDEX 
+%
+% This function returns the multi-index expansion $\mathbf{S}$ for the multi-index
+% pair $(\mathbf{C},\mathbf{I})$ over the column vectors in the matrix 
+% $\mathbf{P}=[\mathbf{p}_1,\dots,\mathbf{p}_{n_t}]\in
+% \bf{R}^{n\times n_t}$, where the coefficients and indices $\mathbf{C},\mathbf{I}$ are fields of
+% the data structure M.
+%
+% $$ \mathbf{s}_j = \mathbf{C} (\mathbf{p}_j)^{\mathbf{I}},\quad j=1,\dots,n_t$$
+%
+% $$\mathbf{S}=[\mathbf{s}_1,\dots,\mathbf{s}_{n_t}]$$
+%
+if isempty(M.ind)
+    S = 0;
+else
+    nt = size(P,2);
+    C = M.coeffs;
+    I = M.ind;
+    n_I = size(I,1);
+    % evaluate monomials
+    P_I = prod(kron(P.',ones(n_I,1)) .^ repmat(I,nt,1),2);
+    % evaluate polynomials
+    S = C*reshape(P_I,[],nt);
+end
+end
+
+% % loop version
+% function S = expand_multiindex(M,P)
+% %  EXPAND_MULTIINDEX This function returns the multi-index expansion $\mathbf{S}$ for the multi-index
+% % pair $(\mathbf{C},\mathbf{I})$ over the column vectors in the matrix $\mathbf{P}=[\mathbf{p}_1,\dots,\mathbf{p}_{n_t}]\in
+% % \mathbb{R}^{n\times n_t}$, where $\mathbf{C},\mathbf{I}$ are fields of
+% % the data structure M.
+% %
+% % $\mathbf{s}_j = \mathbf{C} (\mathbf{p}_j)^{\mathbf{I}},\quad j=1,\dots,n_t$,
+% %
+% % $$\mathbf{S}=[\mathbf{s}_1,\dots,\mathbf{s}_{n_t}]$$
+% if isempty(M.ind)
+%     S = 0;
+% else
+%     n_I = size(I,1);
+%     nt = size(P,2);
+%     C = M.coeffs;
+%     I = M.ind;
+%     
+%     Pprod=zeros(n_I,nt);
+%     for j = 1:nt
+%         Pj = repmat(P(:,j).',[n_I,1]);
+%         Pprod(:,j) = prod(Pj.^I,2);
+%     end
+%     S = C*Pprod;
+% end
+% end
+            ##### SOURCE END #####
+        --></body></html></body></html>
