@@ -19,12 +19,17 @@ for k = 1:linModes
     A = diag(Lamhat(2*k-1:2*k));
     B = W' * Bext;
     % C        = eye(size(A)); % two kind of observation matrix C
-    C        = zeros(length(outdof),size(DS.M,1));
-    C(1,outdof(1)) = 1;
-    C(2,outdof(2)) = 1;
+    % C        = zeros(length(outdof),size(DS.M,1));
+    % C(1,outdof(1)) = 1;
+    % C(2,outdof(2)) = 1;
+    C        = zeros(1,size(DS.M,1));
+    C(1,outdof(2)) = 1;
+    % C(2,outdof(2)) = 1;
+
     C        = [C,   zeros(size(C))];
     C        = C * V;
-    D        = zeros(length(outdof),size(B,2));
+    % D        = zeros(length(outdof),size(B,2));
+    D        = zeros(1,size(B,2));
     sys      = ss(A,B,C,D);
     
     LX = lyap(A,B*B');
