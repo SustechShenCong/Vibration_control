@@ -64,6 +64,7 @@ for i = 1:length(DCGain_)
 end
 
 figure; hold on
+subplot(1,2,1)
 % plot(HSV_per,'k-',"LineWidth",1)
 bar([2,3,4], HSV_per,'Linewidth',0.5,"FaceColor","b",'Edgecolor',"none","FaceAlpha",0.85)
 % plot([0, length(HSV_per)], [0.95, 0.95], 'k--')
@@ -72,28 +73,34 @@ zk = strcat('Normalized MHSV');
 % zk = strcat('$Displacement Propotion$');
 ylabel(zk,'Interpreter','latex');
 % title('HSV of each DOFs - 2D reduction')
-set(gca,'FontSize',18);
 grid on, axis tight
 % legend('Hankle Singular Value','Interpreter',"latex"); legend boxoff
 set(gca,'FontSize',18); grid on, axis tight
 box on
 ylim([0,1])
 xticks([2, 3, 4])
+set(gca, 'LineWidth', 2);
+% set(gcf, 'Position', [0 0 500 400]);
+% % print('-depsc', 'OscillatorChain_outdof5_woFeedback.eps')
+% print -djpeg -r300 Fluid_MHSVs2.jpg;
 
 
-figure; hold on
+% figure; hold on
+subplot(1,2,2)
 % plot(DC_per,'k-',"LineWidth",1)
 bar([2,3,4], DC_per,'Linewidth',0.5,"FaceColor",	"b",'Edgecolor',"none","FaceAlpha",0.85)
 xlabel('Number of mode pair','Interpreter',"latex")
 zk = strcat('Normalized DCgain');
 ylabel(zk,'Interpreter','latex');
-set(gca,'FontSize',18);
 grid on, axis tight
 set(gca,'FontSize',18); grid on, axis tight
 ylim([0,1])
 box on
 xticks([2, 3, 4])
-
+set(gca, 'LineWidth', 2);
+set(gcf, 'Position', [0 0 700 450]);
+% print('-depsc', 'OscillatorChain_outdof5_woFeedback.eps')
+print -djpeg -r300 Fluid_DCGains2.jpg;
 
 res{1} = HSV_per;
 % res{1} = [];

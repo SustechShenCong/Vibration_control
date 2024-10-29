@@ -68,12 +68,18 @@ zk = strcat('Normalized MHSV');
 % zk = strcat('$Displacement Propotion$');
 ylabel(zk,'Interpreter','latex');
 % title('HSV of each DOFs - 2D reduction')
-set(gca,'FontSize',18);
+set(gca,'FontSize',24);
 grid on, axis tight
 % legend('Hankle Singular Value','Interpreter',"latex"); legend boxoff
-set(gca,'FontSize',18); grid on, axis tight
+set(gca,'FontSize',24); grid on, axis tight
 box on
 ylim([0,1])
+
+set(gca, 'LineWidth', 2);
+set(gcf, 'Position', [0 0 600 500]);
+% print('-depsc', 'OscillatorChain_ControlPolicy_outdof5_woFeedback.eps')
+print -djpeg -r300 VonShell_HSVs.jpg;
+
 
 figure; hold on
 % plot(DC_per,'k-',"LineWidth",1)
@@ -84,12 +90,18 @@ zk = strcat('Normalized DCgain');
 % zk = strcat('$Displacement Propotion$');
 ylabel(zk,'Interpreter','latex');
 % title('DCGain of each DOFs - 2D reduction')
-set(gca,'FontSize',18);
+set(gca,'FontSize',24);
 grid on, axis tight
 % legend('DCGain','Interpreter',"latex"); legend boxoff
-set(gca,'FontSize',18); grid on, axis tight
+set(gca,'FontSize',24); grid on, axis tight
 ylim([0,1])
 box on
+
+set(gca, 'LineWidth', 2);
+set(gcf, 'Position', [0 0 600 500]);
+% print('-depsc', 'OscillatorChain_ControlPolicy_outdof5_woFeedback.eps')
+print -djpeg -r300 VonShell_DCGains.jpg;
+
 
 disp('MHSV sum of the first 2 pair')
 disp(sum(HSV_per(1:2)))

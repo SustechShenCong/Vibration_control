@@ -60,6 +60,8 @@ for i = 2:length(DCGain_)
 end
 
 figure; hold on
+
+% subplot(1,2,1)
 % plot(HSV_per,'k-',"LineWidth",1)
 bar(HSV_per,'Linewidth',0.5,"FaceColor","b",'Edgecolor',"none","FaceAlpha",0.85)
 % plot([0, length(HSV_per)], [0.95, 0.95], 'k--')
@@ -68,14 +70,21 @@ zk = strcat('Normalized MHSV');
 % zk = strcat('$Displacement Propotion$');
 ylabel(zk,'Interpreter','latex');
 % title('HSV of each DOFs - 2D reduction')
-set(gca,'FontSize',18);
+set(gca,'FontSize',24);
 grid on, axis tight
 % legend('Hankle Singular Value','Interpreter',"latex"); legend boxoff
-set(gca,'FontSize',18); grid on, axis tight
+set(gca,'FontSize',24); grid on, axis tight
 box on
 ylim([0,1])
 
+set(gca, 'LineWidth', 2);
+set(gcf, 'Position', [0 0 600 500]);
+% print('-depsc', 'OscillatorChain_ControlPolicy_outdof5_woFeedback.eps')
+% print -djpeg -r300 NACAWingHSVs.jpg;
+
+
 figure; hold on
+% subplot(1,2,2)
 % plot(DC_per,'k-',"LineWidth",1)
 bar(DC_per,'Linewidth',0.5,"FaceColor",	"b",'Edgecolor',"none","FaceAlpha",0.85)
 % plot([0, length(HSV_per)], [0.95, 0.95], 'k--')
@@ -84,12 +93,19 @@ zk = strcat('Normalized DCgain');
 % zk = strcat('$Displacement Propotion$');
 ylabel(zk,'Interpreter','latex');
 % title('DCGain of each DOFs - 2D reduction')
-set(gca,'FontSize',18);
+set(gca,'FontSize',24);
 grid on, axis tight
 % legend('DCGain','Interpreter',"latex"); legend boxoff
-set(gca,'FontSize',18); grid on, axis tight
+set(gca,'FontSize',24); grid on, axis tight
 ylim([0,1])
 box on
+
+set(gca, 'LineWidth', 2);
+set(gcf, 'Position', [0 0 600 500]);
+% print('-depsc', 'OscillatorChain_ControlPolicy_outdof5_woFeedback.eps')
+% print -djpeg -r300 NACAWingDCGains.jpg;
+% print -djpeg -r300 NACAWingDCGains_MHSVs.jpg;
+
 
 disp('MHSV sum of the first 2 pair')
 disp(sum(HSV_per(1:2)))

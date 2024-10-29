@@ -62,7 +62,7 @@ title(['Mode ' num2str(mod) ', Frequency = ' num2str(omega(mod)/(2*pi)) ' Hz'] )
 
 %% Damping matrix
 disp('Using Rayleigh damping')
-W =   omega(1:2);
+W = omega(1:2);
 a = [W(1) 1/W(1);W(2) 1/W(2)]\[0.004;0.004];
 C = a(2) * M + a(1) * K;
 % C = C * 1000;
