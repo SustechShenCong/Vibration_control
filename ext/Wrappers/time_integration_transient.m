@@ -73,7 +73,7 @@ switch integrationMethod
 end
 
 % save output
-save('traj.mat','x0', 't0','Omega')
+% save('traj.mat','x0', 't0','Omega')
 
 varargout{1} = t0(1:samp:end);
 if outdof(1)>0

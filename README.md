@@ -1,6 +1,6 @@
 # SSM-VIB-CONTROL: Active vibration control of nonlinear flexible structures via reduction on spectral submanifolds
 
-This repo provides the code implementation of the SSM-based control design framework proposed in [1]. Examples reported in [1] are also included in this repo.
+This repo provides the code implementation of the SSM-based control design framework proposed in [xx]. Examples reported in [xx] are also included in this repo.
 
 ## Dependencies
 This repo is based on SSMTool 2.3
