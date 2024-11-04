@@ -29,7 +29,7 @@ addpath(fullfile(maindir, 'src', 'frc'));
 
 addpath(fullfile(maindir, 'src', 'vibcontrol'));
 
-addpath(fullfile(maindir, 'build'));
+% addpath(fullfile(maindir, 'build'));
 end
 
 
