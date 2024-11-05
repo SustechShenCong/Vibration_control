@@ -55,7 +55,6 @@ K = MyAssembly.constrain_matrix(K);
 % C = MyAssembly.constrain_matrix(C);
 
 
-
 %% Eigenvalue problem
 disp('Solving undamped eigenvalue problem')
 n_VMs = 5; % first n_VMs modes with lowest frequency calculated 
@@ -79,7 +78,6 @@ disp(a)
 %% external force assembly
 disp('Assembling external force vector')
 outcoord = [l/2,b/4]; % output coordinate
-% outdir = 328; % transverse displacement
 outdir = 3; % transverse displacement
 dist = vecnorm(MyMesh.nodes(:,1:2) - repmat(outcoord,[MyMesh.nNodes,1]),2,2);
 [~,outnode] = min(dist);

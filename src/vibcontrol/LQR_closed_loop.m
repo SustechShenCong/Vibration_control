@@ -30,9 +30,9 @@ q0   = Uhat'*DS.B*X0;
 nonode = @(t,p) auto_red_dyn(p,autData);
 option = odeset('RelTol',1e-8,'AbsTol',1e-10);
 % forward simulation of reduced dynamics
-tic 
+% tic 
 [~,pt] = ode45(nonode,tspan,p0,option);
-toc
+% toc
 % evaluation of W(p), bQ(t), and bM(t)
 pt    = transpose(pt);
 zauto = reduced_to_full_traj([],pt,Wmap);
@@ -53,9 +53,9 @@ timeRt = tic;
 % Pt     = flipud(Pt); % flip time order
 
 dPfun  = @(t,x) RiccatiEqs(t,x,Lamhat,Bhat,Q2,Rhat); % minus sign for backward simulation
-tic 
+% tic 
 [~,Pt] = ode15s(dPfun,fliplr(tspan),M2(:),option);      % backward，P(t1) = M2, but in this case, we don't obtain what P(t1) is ? ? ?
-toc
+% toc
 Pt     = flipud(Pt);
 
 fprintf('Time for backward simulation of Riccati ODE is %d\n',toc(timeRt));
@@ -69,9 +69,9 @@ Ptau   = @(tau) Ptfun(t1-tau); % transformation: t=t0+s=t1-tau
 bQtau  = @(tau) bQt(t1-tau);
 btau   = @(tau) bt(t1-tau);
 dsfun  = @(tau,x) -compsEqs(tau,x,Ptau,Bhat,Rhat,Lamhat,bQtau,btau);
-tic
+% tic
 [~,st] = ode15s(dsfun,tspan-t0,-bM(:,end),option);
-toc
+% toc
 st     = flipud(st); % flip time order
 % stfun  = @(t) (interp1(tspan,st,t)).';
 stfunt = griddedInterpolant(tspan,st); stfun =  @(t) stfunt(t).';
