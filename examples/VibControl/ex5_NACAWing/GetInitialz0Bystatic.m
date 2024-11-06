@@ -1,29 +1,39 @@
-function z0 = GetInitialz0Bystatic(DS)
+function z0 = GetInitialz0Bystatic(DS,tol,max_iter)
+
     % use Gaussian Elimination to get inverse of K
-    u  = [10000; 10000];
-    G  = zeros(size(DS.K)); % inverse of K, called flexibility
-    for i = 1:size(DS.K,2)
-        ei     = zeros(size(DS.K,1),1);
-        ei(i,1)= 1;
-        G(:,i) = Gaussian_Elim(K,ei);
-    end
+    u  = [10000; 2000];
+   
+    G  = DS.K^-1;
+    % G  = zeros(size(DS.K)); % inverse of K, called flexibility
+    % for i = 1:size(DS.K,2)
+    %     ei     = zeros(size(DS.K,1),1);
+    %     ei(i,1)= 1;
+    %     G(:,i) = Gaussian_Elim(DS.K,ei,max_iter);
+    % end
     x0  = DS.epsilon*G*DS.D*u; % initial of Newton's method
     xk  = Inf(size(x0));
     xk1 = x0;
     dxk = zeros(size(xk));
-    tol = 0.0001;
+    % tol = 0.0001;
     % use Newton's method to calculate z0
-    while max(abs(xk-xk1)) > tol
+    i      = 1;
+    while (max(abs(xk-xk1)) > tol) && (i<=max_iter)
         xk     =  xk1;
-        %%%%%%%%%%%% fnl dfnldx need to be calculated %%%%%%%%%%%% ?????
-        %%%%%%%%%%%% 未完成部分 %%%%%%%%%%%%
+        % X(K+1)=X(K)-g(X(K))/g'(X(K+1))
         gxk    =  DS.K*xk + DS.compute_fnl(xk,dxk) - DS.epsilon*DS.D*u;
         dfnl   =  DS.compute_dfnldx(xk,dxk);         % built-in method
-        dgxkdx =  DS.K + dfnl(xk,dxk);
+        dgxkdx =  DS.K + dfnl;
         % g'_k * s_k = g_k
-        sk     =  Gram_Schmidt(dgxkdx,gxk);
-        xk1    =  xk - sk;  % hard to calculate large matrix inverse, use Gaussian method
+        % sk     =  Gram_Schmidt(dgxkdx,gxk);
+        sk     = dgxkdx^-1*gxk;
+
+        xk1   =  xk - sk;  % hard to calculate large matrix inverse, use Gaussian method
+        i       = i + 1;
     end
+    disp("iteration number")
+    disp(i)
+    disp("max abs error=")
+    disp(max(abs(xk-xk1)))
     z0 = xk1;
 end
 
